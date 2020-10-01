@@ -3,22 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
-    // SharedPreferences.getInstance().then(
-    //   (prefs) {
-    // var darkModeOn = prefs.getBool('darkMode') ?? true;
-    var darkModeOn = true;
-    runApp(
-      ChangeNotifierProvider<ThemeNotifier>(
-        create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
-        child: MyApp(),
-      ),
+    SharedPreferences.getInstance().then(
+      (prefs) {
+        var darkModeOn = prefs.getBool('darkMode') ?? false;
+        runApp(
+          ChangeNotifierProvider<ThemeNotifier>(
+            create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
+            child: MyApp(),
+          ),
+        );
+      },
     );
-    // },
-    // );
   });
 }
 
