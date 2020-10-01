@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:roboclub_flutter/helper/themes.dart';
+import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/provider/theme_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
+    SharedPreferences.getInstance().then(
+      (prefs) {
+        var darkModeOn = prefs.getBool('darkMode') ?? false;
+        runApp(
+          ChangeNotifierProvider<ThemeNotifier>(
+            create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
+            child: MyApp(),
+          ),
+        );
+      },
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      title: 'AMURoboclub',
+      debugShowCheckedModeBanner: false,
+      theme: themeNotifier.getTheme(),
+      // darkTheme: darkTheme,
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
