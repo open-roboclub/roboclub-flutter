@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'screens/splash.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
@@ -14,7 +16,7 @@ void main() {
         runApp(
           ChangeNotifierProvider<ThemeNotifier>(
             create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
-            child: MyApp(),
+            child: Splash(),
           ),
         );
       },
