@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: false,isNotification: true),
+      appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: true,isNotification: true),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
