@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
+import 'package:roboclub_flutter/widget/appBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import './widget/appBar.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
@@ -57,9 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: true,isNotification: true),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
