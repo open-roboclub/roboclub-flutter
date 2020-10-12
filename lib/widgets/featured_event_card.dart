@@ -4,6 +4,15 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 class FeaturedEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Define
+    Map<String, Color> _colors = {
+      "card": Theme.of(context).cardColor,
+      "label": Theme.of(context).splashColor,
+    };
+    Map<String, TextStyle> _textstyle = {
+      "location": Theme.of(context).textTheme.subtitle1,
+      "label": Theme.of(context).primaryTextTheme.subtitle1,
+    };
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     return Padding(
@@ -13,7 +22,7 @@ class FeaturedEventCard extends StatelessWidget {
         width: vpW * 0.6,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).cardColor,
+          color: _colors['card'],
           boxShadow: [
             BoxShadow(
               color: Colors.black54,
@@ -44,7 +53,7 @@ class FeaturedEventCard extends StatelessWidget {
                 Text(
                   'Place',
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: _textstyle['location'],
                 )
               ],
             ),
@@ -61,12 +70,12 @@ class FeaturedEventCard extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(0),
                   ),
-                  color: Theme.of(context).splashColor,
+                  color: _colors['label'],
                 ),
                 child: Center(
                   child: Text(
                     'Ongoing',
-                    style: Theme.of(context).primaryTextTheme.subtitle1,
+                    style: _textstyle['label'],
                   ),
                 ),
               ),

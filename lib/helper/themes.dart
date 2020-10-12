@@ -472,19 +472,22 @@ final ThemeData lightTheme = ThemeData(
     secondarySelectedColor: Color(0x3d673ad6),
     selectedColor: Color(0x3d000000),
     shape: StadiumBorder(
-        side: BorderSide(
-      color: Color(0xff000000),
-      width: 0,
-      style: BorderStyle.none,
-    )),
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
   ),
   dialogTheme: DialogTheme(
-      shape: StadiumBorder(
-          side: BorderSide(
-    color: Color(0xff000000),
-    width: 0,
-    style: BorderStyle.none,
-  ))),
+    shape: StadiumBorder(
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
+  ),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -973,10 +976,12 @@ final ThemeData darkTheme = ThemeData(
     )),
   ),
   dialogTheme: DialogTheme(
-      shape: StadiumBorder(
-          side: BorderSide(
-    color: Color(0xff000000),
-    width: 0,
-    style: BorderStyle.none,
-  ))),
+    shape: StadiumBorder(
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
+  ),
 );
