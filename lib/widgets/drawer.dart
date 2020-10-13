@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/screens/about_screen.dart';
+import 'package:roboclub_flutter/screens/admin_screen.dart';
+import 'package:roboclub_flutter/screens/contributor_screen.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
+import 'package:roboclub_flutter/screens/feedback_screen.dart';
+import 'package:roboclub_flutter/screens/project_screen.dart';
+import 'package:roboclub_flutter/screens/team_screen.dart';
+import 'package:roboclub_flutter/screens/tutorial_screen.dart';
 
 Drawer appdrawer(context, {String page}) {
   var vpH = getViewportHeight(context);
@@ -9,16 +16,68 @@ Drawer appdrawer(context, {String page}) {
   var activeColor = Theme.of(context).primaryColor;
   var inActiveColor = Theme.of(context).unselectedWidgetColor;
 
+  Widget _getScreen(String title) {
+    switch (title) {
+      case "Events":
+        {
+          return EventScreen();
+        }
+        break;
+      case "Projects":
+        {
+          return ProjectScreen();
+        }
+        break;
+      case "Teams":
+        {
+          return TeamScreen();
+        }
+        break;
+      case "Tutorials":
+        {
+          return TutorialScreen();
+        }
+        break;
+      case "Contributors":
+        {
+          return ContributorScreen();
+        }
+        break;
+      case "Admin Panel":
+        {
+          return AdminScreen();
+        }
+        break;
+      case "Feedback":
+        {
+          return FeedbackScreen();
+        }
+        break;
+      case "About us":
+        {
+          return AboutScreen();
+        }
+        break;
+      default:
+        {
+          return EventScreen();
+        }
+        break;
+    }
+  }
+
   Widget _tileBuilder(IconData icon, String title, bool isActive) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pop();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EventScreen(),
-          ),
-        );
+        if (title != page) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => _getScreen(title),
+            ),
+          );
+        }
       },
       child: ListTile(
         leading: Icon(
@@ -59,8 +118,8 @@ Drawer appdrawer(context, {String page}) {
         _tileBuilder(CustomIcons.admin, "Admin Panel", page == "Admin Panel"),
         Divider(
           thickness: 2,
-          indent: 12,
-          endIndent: 12,
+          indent: vpW * 0.04,
+          endIndent: vpW * 0.04,
         ),
         SizedBox(
           height: vpH * 0.05,
