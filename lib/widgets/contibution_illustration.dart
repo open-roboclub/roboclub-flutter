@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../helper/dimensions.dart';
 
-class ContriCard extends StatelessWidget {
+class ContriIllustrationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -24,6 +24,19 @@ class ContriCard extends StatelessWidget {
                 ),
               ],
         ),
+        child: Column(
+          children:[
+            Padding(padding: EdgeInsets.all(15.0),
+            child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.orange[300],decoration: TextDecoration.underline,)),
+            ),
+            Padding(padding: EdgeInsets.all(15.0),
+            child: Text("Thank you for all the people who contributed in making AMURoboclub what it is today. We couldn't have reached this place without your support."),
+            ),
+            Padding(padding: EdgeInsets.all(15.0),
+            child: Image.asset('assets/img/contri.png'),) 
+          ]
+        ),
+        
           ),
         );
   }
