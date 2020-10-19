@@ -30,9 +30,9 @@ class _ContributorScreenState extends State<ContributorScreen> {
           child: Column(
             children: [
                Padding(
-                padding: EdgeInsets.all(15.0),
+                padding: EdgeInsets.all(10.0),
                 child: Container(
-                  height: vpH * 0.28,
+                  height: vpH * 0.25,
                   width: vpW * 0.85,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -77,7 +77,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
                 
               ),
               Container(
-                height: vpH *0.8,
+                height: vpH *0.6,
                 width: vpW,
                 child: true
                     ? ListView.builder(
