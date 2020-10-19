@@ -14,10 +14,10 @@ class _AdminScreenState extends State<AdminScreen> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: appdrawer(context, page: "Admin"),
+        drawer: appdrawer(context, page: "Admin Panel"),
         appBar: appBar(
           context,
-          strTitle: "Admin",
+          strTitle: "Admin Panel",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,

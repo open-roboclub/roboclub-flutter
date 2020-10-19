@@ -14,7 +14,7 @@ class _AboutScreenState extends State<AboutScreen> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: appdrawer(context, page: "About Us"),
+        drawer: appdrawer(context, page: "About us"),
         appBar: appBar(
           context,
           strTitle: "About Us",

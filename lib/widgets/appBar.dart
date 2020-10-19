@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/screens/notification_screen.dart';
 
 AppBar appBar(context,
     {String strTitle,
@@ -8,8 +9,20 @@ AppBar appBar(context,
     GlobalKey<ScaffoldState> scaffoldKey}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
-  var iconcolor = Theme.of(context).primaryColorLight;
+  var iconcolor = isDrawer ? Theme.of(context).primaryColorLight : Colors.black;
   var bgcolor = Theme.of(context).primaryColor;
+  var titlestyle = isDrawer
+      ? TextStyle(
+          fontFamily: "Signatra",
+          fontSize: vpH * 0.03,
+          fontWeight: FontWeight.bold,
+        )
+      : TextStyle(
+          fontFamily: "Signatra",
+          fontSize: vpH * 0.035,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        );
 
   return AppBar(
     toolbarHeight: vpH * 0.098,
@@ -23,29 +36,36 @@ AppBar appBar(context,
             },
           )
         : IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back_ios),
             color: iconcolor,
-            iconSize: vpW * 0.10,
+            iconSize: vpW * 0.08,
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
     title: Text(
       strTitle,
-      style: TextStyle(
-        fontFamily: "Signatra",
-        fontSize: vpH * 0.03,
-      ),
+      style: titlestyle,
     ),
     actions: [
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: isNotification
-            ? Icon(Icons.notifications, color: iconcolor, size: vpW * 0.080)
+            ? IconButton(
+                icon: Icon(Icons.notifications),
+                color: iconcolor,
+                iconSize: vpW * 0.080,
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationScreen(),
+                  ),
+                ),
+              )
             : null,
       ),
     ],
-    backgroundColor: bgcolor,
+    backgroundColor: isDrawer ? bgcolor : Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(20.0),
