@@ -9,10 +9,10 @@ class ContriCard extends StatelessWidget {
     TextStyle _titlestyle =
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return  Padding(
-          padding: EdgeInsets.all(25.0),
+          padding: EdgeInsets.all(20.0),
           child: Container(
             height: vpH * 0.13,
-            width: vpW * 0.85,
+            width: vpW * 0.90,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
@@ -25,7 +25,7 @@ class ContriCard extends StatelessWidget {
               ],
              ),
              child:Column(children: [
-             Padding(padding: EdgeInsets.all(15.0),
+             Padding(padding: EdgeInsets.all(10.0),
              child:Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -30,10 +30,10 @@ class _ContributorScreenState extends State<ContributorScreen> {
           child: Column(
             children: [
                Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(15.0),
                 child: Container(
                   height: vpH * 0.25,
-                  width: vpW * 0.85,
+                  width: vpW * 0.90,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
