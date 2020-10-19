@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/screens/notifications_screen.dart';
 
 AppBar appBar(context,
     {String strTitle,
@@ -41,7 +42,16 @@ AppBar appBar(context,
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: isNotification
-            ? Icon(Icons.notifications, color: iconcolor, size: vpW * 0.080)
+            ? IconButton(
+            icon: Icon(Icons.notifications),
+            color: iconcolor,
+            iconSize: vpW * 0.080,
+            onPressed: ()=>Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (BuildContext context)=>NotificationScreen()
+                          )),
+          )
             : null,
       ),
     ],
