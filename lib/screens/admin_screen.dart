@@ -19,10 +19,10 @@ class _AdminScreenState extends State<AdminScreen> {
       child: Scaffold(
         backgroundColor: Colors.blueGrey[100],
         key: _scaffoldKey,
-        drawer: appdrawer(context, page: "Admin"),
+        drawer: appdrawer(context, page: "Admin Panel"),
         appBar: appBar(
           context,
-          strTitle: "Admin",
+          strTitle: "Admin Panel",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
