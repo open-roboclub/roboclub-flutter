@@ -30,9 +30,9 @@ class _ContributorScreenState extends State<ContributorScreen> {
           child: Column(
             children: [
                Padding(
-                padding: EdgeInsets.all(25.0),
+                padding: EdgeInsets.all(15.0),
                 child: Container(
-                  height: vpH * 0.30,
+                  height: vpH * 0.28,
                   width: vpW * 0.85,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -40,37 +40,38 @@ class _ContributorScreenState extends State<ContributorScreen> {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.blueGrey[200],
-                        // offset: Offset(2, 2),
                         blurRadius: 5.0,
-                        // spreadRadius: 1.0,
                         offset: Offset(0.0, 0.75)
                       ),
-                    ],
-              ),
-              child: Column(
-                children:[
-                  Padding(padding: EdgeInsets.all(10.0),
-                  child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.orange[300],fontSize: 25.0)),
+                      ],
+                    ),
+                    child: Column( 
+                      children:[
+                        Padding(padding: EdgeInsets.all(10.0),
+                        child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.orange[400],fontSize: 28.0)),
+                        ),
+                        Padding(
+                          padding:EdgeInsets.symmetric(horizontal:10.0),
+                          child:Container(
+                          height:1.8,
+                          width:300.0,
+                          color:Colors.orange[400],),
+                          ),
+                        Row(children: [
+                          Expanded(child: 
+                            Padding(padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                            child: Text("Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support",style:TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0)),
+                            ),
+                            ),
+                          Expanded(child: 
+                            Padding(padding: EdgeInsets.all(5.0),
+                            child:Image.asset('assets/img/contri.png'))
+                          ),
+                          ])   
+                        ]),
+                    
                   ),
-                  Padding(padding: EdgeInsets.all(15.0),
-                  child: Text("Thank you for all the people who contributed in making AMURoboclub what it is today.",style:TextStyle(fontWeight: FontWeight.bold,)),
-                  ),
-                  Row(children: [
-                    Expanded(child: 
-                    Padding(padding: EdgeInsets.all(10.0),
-                    child:Text(" We couldn't have reached this place without your support",style:TextStyle(fontWeight: FontWeight.bold,),),
-                    ),),
-                    Expanded(child: 
-                    Padding(padding: EdgeInsets.all(5.0),
-                    child:Image.asset('assets/img/contri.png'))
-                  ),])
-                      // Padding(padding: EdgeInsets.all(15.0),
-                      // child: Image.asset('assets/img/contri.png'),) 
-                    ]
-              ),
-              
                 ),
-              ),
               SizedBox(
                 height: vpH * 0.005,
                 
