@@ -21,7 +21,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
    
-    var textStyle = TextStyle(fontSize:18.0,fontWeight: FontWeight.bold);
+    var textStyle = TextStyle(fontSize:vpH*0.0155,fontWeight: FontWeight.bold);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -40,7 +40,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
             child:Row(
              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-               Expanded(
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal:vpW*0.01),
+                  width: vpW*0.43,
+                  height: vpH*0.05,
                   child: FlatButton(
                   child: Text('Completed',style:textStyle),
                   textColor: !_ongoingPressed ? Colors.white: Colors.black,
@@ -48,25 +51,28 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   onPressed: () => {
                     setState(() {
                       _ongoingPressed = false;
-                      print(_ongoingPressed);
                     })
                    },
                   ),
                   ),
-                
-                Expanded(
-                 child: FlatButton(
+                  
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal:vpW*0.01),
+                  width: vpW*0.43,
+                  height: vpH*0.05,
+                  child: FlatButton(
                     child: Text('Ongoing',style: textStyle),
                     textColor: _ongoingPressed ? Colors.white: Colors.black,
                     color: _ongoingPressed ? Theme.of(context).primaryColor : Colors.white,
                     onPressed: () => {
                       setState(() {
                         _ongoingPressed = true;
-                         print(_ongoingPressed);
+                         
                       })
                     },
                   ),
-                    ),
+                  ),
+                  
               ],)
               ),
              SizedBox(

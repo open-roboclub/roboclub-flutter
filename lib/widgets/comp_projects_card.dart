@@ -8,12 +8,13 @@ class CompletedProjectCard extends StatelessWidget {
   
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    TextStyle _titlestyle =TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.020);
+    
+    TextStyle _titlestyle =TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal:40.0,vertical: 20.0),
+      padding: EdgeInsets.symmetric(horizontal:vpW*0.090,vertical:vpH* 0.020),
       child: Container(
         height: vpH * 0.20,
-        width: vpW * 0.90,
+        width: vpW * 0.80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).scaffoldBackgroundColor, 
@@ -22,7 +23,7 @@ class CompletedProjectCard extends StatelessWidget {
           children: [
             Container(
                height: vpH * 0.15,
-               width: vpW * 0.90,
+               width: vpW * 0.818,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Image.asset(
@@ -34,10 +35,10 @@ class CompletedProjectCard extends StatelessWidget {
             ),
             Positioned(
               bottom: 0,
-              left: vpW * 0.075,
+              left: vpW * 0.109,
               child: Container(
-                height: vpH * 0.13,
-                width: vpH * 0.30,
+                height: vpH * 0.16,
+                width: vpW * 0.60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
@@ -68,15 +69,15 @@ class CompletedProjectCard extends StatelessWidget {
                     Align(
                       alignment: Alignment.bottomRight,
                       child:Padding(
-                        padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(vpH*0.010),
                         child:FlatButton(
                           color: Colors.orange[400],
-                          child: Text("View",style: TextStyle(fontSize:15.0,)),
+                          child: Text("View",style: TextStyle(fontSize:vpH*0.015,)),
                           textColor: Colors.white,
                         onPressed: (){},) 
                        
                         )
-                     ) 
+                     ) ,
                   ],)
                 ),
               ),

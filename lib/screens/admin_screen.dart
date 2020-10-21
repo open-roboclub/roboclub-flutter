@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import '../helper/dimensions.dart';
-import './sign-up_login_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   @override
@@ -35,23 +34,19 @@ class _AdminScreenState extends State<AdminScreen> {
                   child: Image.asset('assets/img/admin.png'),
                 ),
                 ),
-                Padding(padding: EdgeInsets.only(top:50.0),
+                Padding(padding: EdgeInsets.only(top:vpH*0.07),
                 child:Container(
                   child: FlatButton(
                     color: Colors.white,
                     textColor: Colors.orange[300],
-                    padding: EdgeInsets.symmetric(horizontal:40.0,vertical: 20.0),
-                    onPressed: ()=>Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (BuildContext context)=>LoginSignup()
-                          )),
+                    padding: EdgeInsets.symmetric(horizontal:vpW*0.080,vertical:vpH* 0.020),
+                    onPressed: (){},
                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(35.0)),
                     child:Text(
                       "Admin Area !!",
                       style:TextStyle(
-                        fontSize: 30.0,
-                        fontWeight:FontWeight.w600),
+                        fontSize: vpH*0.040,
+                        fontWeight:FontWeight.bold),
                     )
                     ),
                 ))

@@ -11,7 +11,7 @@ class ContriCard extends StatelessWidget {
     return  Padding(
           padding: EdgeInsets.all(20.0),
           child: Container(
-            height: vpH * 0.13,
+            height: vpH * 0.15,
             width: vpW * 0.90,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -24,18 +24,19 @@ class ContriCard extends StatelessWidget {
                 ),
               ],
              ),
-             child:Column(children: [
-             Padding(padding: EdgeInsets.all(10.0),
-             child:Row(
+            child:Column(
+              children: [
+              Padding(padding: EdgeInsets.all(10.0),
+              child:Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
                   flex: 1,
                   child:CircleAvatar(
-                  radius: 21,
+                  radius:vpH*0.028,
                   backgroundColor: Colors.black,
                   child: CircleAvatar(
-                    radius: 20,
+                    radius: vpH*0.026,
                     backgroundImage: AssetImage('assets/img/placeholder.jpg'),
                   ),
                 )
@@ -44,7 +45,7 @@ class ContriCard extends StatelessWidget {
                   flex: 2,
                   fit: FlexFit.tight,
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal:20.0,vertical: 5.0),
+                    margin: EdgeInsets.symmetric(horizontal:vpW*0.020,vertical:vpH*0.005),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -56,6 +57,7 @@ class ContriCard extends StatelessWidget {
                         Text(
                           "-Contibuted to",
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize:vpH*0.015),
                         ),
                         
                       ],
@@ -72,11 +74,13 @@ class ContriCard extends StatelessWidget {
                 child: Text(
                   "Contribution",
                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize:vpH*0.018),
                   ),
-                )
+                ),
             ),
-            ])
-             )
+            ],
+            ),
+             ),
              );
   }
 }

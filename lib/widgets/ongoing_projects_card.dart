@@ -33,8 +33,8 @@ class OngoingProjectCard extends StatelessWidget {
                   flex: 1,
                   child: ClipRRect(
                   child: Container(
-                    height: 40.0,
-                    width: 40.0,
+                    height: vpH* 0.038,
+                    width: vpW*0.080,
                     child: Image.asset(
                     'assets/img/placeholder.jpg',
                     fit: BoxFit.cover,
@@ -46,7 +46,7 @@ class OngoingProjectCard extends StatelessWidget {
                   flex: 2,
                   fit: FlexFit.tight,
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal:20.0,vertical: 5.0),
+                    margin: EdgeInsets.symmetric(horizontal:vpW*0.050,vertical:vpH*0.005),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -58,6 +58,7 @@ class OngoingProjectCard extends StatelessWidget {
                         Text(
                           "Day, Date",
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize:vpH*0.018),
                         ),
                         
                       ],
@@ -71,10 +72,10 @@ class OngoingProjectCard extends StatelessWidget {
                   child:Padding(
                     padding: const EdgeInsets.all(5.0),
                     child:CircleAvatar(
-                    radius: 24,
+                    radius: vpH* 0.028,
                     backgroundColor: Colors.orange[400],
                     child: CircleAvatar(
-                      radius: 22,
+                      radius: vpH*0.026,
                       backgroundImage: AssetImage('assets/img/placeholder.jpg'),
                     ),
                 )
