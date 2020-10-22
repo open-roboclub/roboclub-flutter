@@ -21,7 +21,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
         drawer: appdrawer(context, page: "Contributors"),
         appBar: appBar(
           context,
-          strTitle: "Contributors",
+          strTitle: "CONTRIBUTORS",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -49,14 +49,14 @@ class _ContributorScreenState extends State<ContributorScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
                         Padding(padding: EdgeInsets.all(12.0),
-                        child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.orange[400],fontSize:vpH*0.028)),
+                        child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Color.fromRGBO(255, 156, 1, 1),fontSize:vpH*0.028)),
                         ),
                         Padding(
                           padding:EdgeInsets.symmetric(horizontal:10.0),
                           child:Container(
                           height:vpH* 0.002,
                           width:vpW*2.0,
-                          color:Colors.orange[400],),
+                          color:Color.fromRGBO(255, 156, 1, 1),),
                           ),
                         Row(children: [
                           Expanded(child: 

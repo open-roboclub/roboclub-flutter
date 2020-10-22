@@ -71,7 +71,7 @@ class CompletedProjectCard extends StatelessWidget {
                       child:Padding(
                         padding: EdgeInsets.all(vpH*0.010),
                         child:FlatButton(
-                          color: Colors.orange[400],
+                          color: Color(0xFFFF9C01),
                           child: Text("View",style: TextStyle(fontSize:vpH*0.015,)),
                           textColor: Colors.white,
                         onPressed: (){},) 

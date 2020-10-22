@@ -73,7 +73,7 @@ class OngoingProjectCard extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                     child:CircleAvatar(
                     radius: vpH* 0.028,
-                    backgroundColor: Colors.orange[400],
+                    backgroundColor: Color(0xFFFF9C01),
                     child: CircleAvatar(
                       radius: vpH*0.026,
                       backgroundImage: AssetImage('assets/img/placeholder.jpg'),

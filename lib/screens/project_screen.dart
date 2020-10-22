@@ -28,7 +28,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
         drawer: appdrawer(context, page: "Projects"),
         appBar: appBar(
           context,
-          strTitle: "Projects",
+          strTitle: "PROJECTS",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,

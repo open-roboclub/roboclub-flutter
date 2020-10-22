@@ -21,7 +21,7 @@ class _TeamScreenState extends State<TeamScreen> {
         drawer: appdrawer(context, page: "Teams"),
         appBar: appBar(
           context,
-          strTitle: "Teams",
+          strTitle: "TEAMS",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,

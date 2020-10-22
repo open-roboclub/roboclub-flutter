@@ -3,7 +3,7 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 
 AppBar appBar(context,
-    {String strTitle,
+    { String strTitle,
     bool isNotification = false,
     isDrawer = false,
     GlobalKey<ScaffoldState> scaffoldKey}) {
@@ -28,9 +28,9 @@ AppBar appBar(context,
     toolbarHeight: vpH * 0.098,
     leading: isDrawer
         ? IconButton(
-            icon: Icon(Icons.menu),
+            icon:Icon(Icons.menu,
+            size: vpH*0.05,),
             color: iconcolor,
-            iconSize: vpW * 0.10,
             onPressed: () {
               scaffoldKey.currentState.openDrawer();
             },
@@ -52,7 +52,7 @@ AppBar appBar(context,
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: isNotification
             ? IconButton(
-                icon: Icon(Icons.notifications),
+                icon: Icon(Icons.notifications_active),
                 color: iconcolor,
                 iconSize: vpW * 0.080,
                 onPressed: () => Navigator.push(

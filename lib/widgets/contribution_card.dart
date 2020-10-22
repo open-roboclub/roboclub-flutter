@@ -18,7 +18,7 @@ class ContriCard extends StatelessWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blueGrey[200],
+                  color: Color.fromRGBO(0, 0, 0, 0.16),
                   blurRadius: 5.0,
                   offset: Offset(0.0, 0.75)
                 ),
