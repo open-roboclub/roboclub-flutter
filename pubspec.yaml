@@ -26,6 +26,7 @@ dependencies:
   provider:
   #Store data in device
   shared_preferences: ^0.5.12
+  flutter_svg: ^0.19.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

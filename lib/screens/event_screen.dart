@@ -108,6 +108,10 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: null,
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }

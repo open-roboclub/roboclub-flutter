@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -7,8 +8,12 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  var vpH;
+  var vpW;
   @override
   Widget build(BuildContext context) {
+    vpH = getViewportHeight(context);
+    vpW = getViewportWidth(context);
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
@@ -19,6 +24,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
         body: Center(
           child: Text('Notifications Screen'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: null,
+          backgroundColor: Colors.white,
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).primaryColor,
+            size: vpH * 0.045,
+          ),
         ),
       ),
     );
