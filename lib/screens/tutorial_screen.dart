@@ -17,7 +17,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         drawer: appdrawer(context, page: "Tutorials"),
         appBar: appBar(
           context,
-          strTitle: "Tutorials",
+          strTitle: "TUTORIALS",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,

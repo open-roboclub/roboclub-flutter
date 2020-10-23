@@ -33,4 +33,6 @@ class CustomIcons {
   static const IconData teams = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tutorials = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData info = IconData(0xf3a9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  
+  
 }
