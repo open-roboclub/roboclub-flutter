@@ -49,14 +49,14 @@ class _ContributorScreenState extends State<ContributorScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
                         Padding(padding: EdgeInsets.all(12.0),
-                        child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Color.fromRGBO(255, 156, 1, 1),fontSize:vpH*0.028)),
+                        child: Text("We are because of you!!", style:TextStyle(fontWeight: FontWeight.bold,color: Color(0xFFFF9C01),fontSize:vpH*0.028)),
                         ),
                         Padding(
                           padding:EdgeInsets.symmetric(horizontal:10.0),
                           child:Container(
                           height:vpH* 0.002,
                           width:vpW*2.0,
-                          color:Color.fromRGBO(255, 156, 1, 1),),
+                          color:Color(0xFFFF9C01),),
                           ),
                         Row(children: [
                           Expanded(child: 

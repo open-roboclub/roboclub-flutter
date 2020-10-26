@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
-import 'package:roboclub_flutter/widgets/teams_card.dart';
+import 'package:roboclub_flutter/widgets/team2.dart';
 import '../helper/dimensions.dart';
 
-class TeamScreen extends StatefulWidget {
+class Team2Screen extends StatefulWidget {
   @override
-  _TeamScreenState createState() => _TeamScreenState();
+  _Team2ScreenState createState() => _Team2ScreenState();
 }
 
-class _TeamScreenState extends State<TeamScreen> {
+class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -17,11 +17,11 @@ class _TeamScreenState extends State<TeamScreen> {
     var vpW = getViewportWidth(context);
     return SafeArea(
       child: Scaffold(
-        key: _scaffoldKey,
-        drawer: appdrawer(context, page: "Teams"),
+        backgroundColor:Color(0xFFFFFFFF),
+        key: _scaffoldKey,  
         appBar: appBar(
           context,
-          strTitle: "TEAMS",
+          strTitle: "FACULTY TEAM",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -40,14 +40,14 @@ class _TeamScreenState extends State<TeamScreen> {
                     ? ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 4,
+                        itemCount: 10,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          return TeamCard();
+                          return Team2Card();
                         },
                       )
                     : Center(
-                        child: Text('No Teams Yet'),
+                        child: Text('No Members Yet'),
                       ),
               )
             ],

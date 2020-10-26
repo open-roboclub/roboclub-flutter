@@ -16,7 +16,7 @@ class _AdminScreenState extends State<AdminScreen> {
     var vpW = getViewportWidth(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor:Color.fromRGBO(217, 217, 217, 1),
+        backgroundColor:Color(0xFFD9D9D9),
         key: _scaffoldKey,
         drawer: appdrawer(context, page: "Admin Panel"),
         appBar: appBar(
@@ -38,7 +38,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 child:Container(
                   child: FlatButton(
                     color: Colors.white,
-                    textColor: Color.fromRGBO(255, 156, 1, 1),
+                    textColor: Color(0xFFFF9C01),
                     padding: EdgeInsets.symmetric(horizontal:vpW*0.080,vertical:vpH* 0.020),
                     onPressed: (){},
                     shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(35.0)),

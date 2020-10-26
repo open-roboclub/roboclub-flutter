@@ -36,3 +36,11 @@ class CustomIcons {
   
   
 }
+class MyFlutterApp {
+  MyFlutterApp._();
+
+  static const _kFontFam = 'MyFlutterApp';
+  static const _kFontPkg = null;
+
+  static const IconData edit = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+}
