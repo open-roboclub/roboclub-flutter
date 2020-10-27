@@ -17,7 +17,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         drawer: appdrawer(context, page: "Feedback"),
         appBar: appBar(
           context,
-          strTitle: "Feedback",
+          strTitle: "FEEDBACK",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,

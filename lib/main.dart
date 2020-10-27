@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]).then((_) {
   SharedPreferences.getInstance().then(
     (prefs) {
       var darkModeOn = prefs.getBool('darkMode') ?? false;
@@ -23,7 +22,6 @@ void main() {
       );
     },
   );
-  // });
 }
 
 class MyApp extends StatelessWidget {
