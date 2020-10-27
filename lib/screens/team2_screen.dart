@@ -19,6 +19,7 @@ class _Team2ScreenState extends State<Team2Screen> {
       child: Scaffold(
         backgroundColor:Color(0xFFFFFFFF),
         key: _scaffoldKey,  
+        drawer: appdrawer(context, page: "Faculty Team"),
         appBar: appBar(
           context,
           strTitle: "FACULTY TEAM",

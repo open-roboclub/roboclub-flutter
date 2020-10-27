@@ -29,12 +29,12 @@ class _AdminScreenState extends State<AdminScreen> {
         body: Center(
             child:Column(
               children: [
-                Padding(padding: EdgeInsets.all(15.0),
+                Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.030),
                 child:Container(
                   child: Image.asset('assets/img/admin.png'),
                 ),
                 ),
-                Padding(padding: EdgeInsets.only(top:vpH*0.07),
+                Padding(padding: EdgeInsets.only(top:vpH*0.15),
                 child:Container(
                   child: FlatButton(
                     color: Colors.white,
