@@ -1,73 +1,71 @@
 import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
-  primarySwatch: MaterialColor(4289743061, {
-    50: Color(0xfff6eafa),
-    100: Color(0xffedd6f5),
-    200: Color(0xffdbacec),
-    300: Color(0xffc983e2),
-    400: Color(0xffb759d9),
-    500: Color(0xffa530cf),
-    600: Color(0xff8426a6),
-    700: Color(0xff631d7c),
-    800: Color(0xff421353),
-    900: Color(0xff210a29)
+  primarySwatch: MaterialColor(4284889814, {
+    50: Color(0xffefeafb),
+    100: Color(0xffded5f6),
+    200: Color(0xffbdabed),
+    300: Color(0xff9d80e5),
+    400: Color(0xff7c56dc),
+    500: Color(0xff5b2cd3),
+    600: Color(0xff4923a9),
+    700: Color(0xff371a7f),
+    800: Color(0xff241254),
+    900: Color(0xff12092a)
   }),
   brightness: Brightness.light,
-  primaryColor: Color(0xffb048d5),
+  primaryColor: Color(0xff663ad6),
   primaryColorBrightness: Brightness.dark,
-  primaryColorLight: Color(0xffedd6f5),
-  primaryColorDark: Color(0xff631d7c),
-  accentColor: Color(0xffa530cf),
+  primaryColorLight: Color(0xffded5f6),
+  primaryColorDark: Color(0xff371a7f),
+  accentColor: Color(0xff5c2cd3),
   accentColorBrightness: Brightness.dark,
   canvasColor: Color(0xfffafafa),
-  scaffoldBackgroundColor: Color(0xfffafafa),
+  scaffoldBackgroundColor: Color(0xffECEAEA),
   bottomAppBarColor: Color(0xffffffff),
   cardColor: Color(0xffffffff),
   dividerColor: Color(0x1f000000),
   highlightColor: Color(0x66bcbcbc),
-  splashColor: Color(0x66c8c8c8),
+  splashColor: Color(0xff09C278),
   selectedRowColor: Color(0xfff5f5f5),
   unselectedWidgetColor: Color(0x8a000000),
-  disabledColor: Color(0x61000000),
-  buttonColor: Color(0xffe0e0e0),
-  toggleableActiveColor: Color(0xff8426a6),
-  secondaryHeaderColor: Color(0xfff6eafa),
-  textSelectionColor: Color(0xffdbacec),
-  cursorColor: Color(0xff4285f4),
-  textSelectionHandleColor: Color(0xffc983e2),
-  backgroundColor: Color(0xffdbacec),
+  disabledColor: Color(0xffc2b8ee),
+  buttonColor: Color(0xff6739d6),
+  toggleableActiveColor: Color(0xff4a23a9),
+  secondaryHeaderColor: Color(0xffefeafb),
+  textSelectionColor: Color(0xffbeabed),
+  cursorColor: Color(0xff6739d6),
+  textSelectionHandleColor: Color(0xff9d80e5),
+  backgroundColor: Color(0xffbeabed),
   dialogBackgroundColor: Color(0xffffffff),
-  indicatorColor: Color(0xffa530cf),
-  hintColor: Color(0x8a000000),
+  indicatorColor: Color(0xff5c2cd3),
+  hintColor: Color(0xff999999),
   errorColor: Color(0xffd32f2f),
   buttonTheme: ButtonThemeData(
-    textTheme: ButtonTextTheme.normal,
-    minWidth: 88,
-    height: 36,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
-    shape: RoundedRectangleBorder(
-      side: BorderSide(
-        color: Color(0xff000000),
-        width: 0,
-        style: BorderStyle.none,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(2.0)),
-    ),
-    alignedDropdown: false,
-    buttonColor: Color(0xffe0e0e0),
-    disabledColor: Color(0x61000000),
-    highlightColor: Color(0x29000000),
-    splashColor: Color(0x1f000000),
-    focusColor: Color(0x1f000000),
-    hoverColor: Color(0x0a000000),
+    textTheme: ButtonTextTheme.primary,
+    minWidth: 124,
+    height: 40,
+    padding: EdgeInsets.only(top: 0, bottom: 0, left: 52, right: 52),
+    shape: StadiumBorder(
+        side: BorderSide(
+      color: Color(0xff000000),
+      width: 0,
+      style: BorderStyle.none,
+    )),
+    alignedDropdown: true,
+    buttonColor: Color(0xff673ad6),
+    disabledColor: Color(0xffcec7f4),
+    highlightColor: Color(0x00000000),
+    splashColor: Color(0x1fffffff),
+    focusColor: Color(0xffc1b1f1),
+    hoverColor: Color(0xfff3f3f3),
     colorScheme: ColorScheme(
-      primary: Color(0xffb048d5),
-      primaryVariant: Color(0xff631d7c),
-      secondary: Color(0xffa530cf),
-      secondaryVariant: Color(0xff631d7c),
+      primary: Color(0xff673ad6),
+      primaryVariant: Color(0xff371a7f),
+      secondary: Color(0xff5c2cd3),
+      secondaryVariant: Color(0xff371a7f),
       surface: Color(0xffffffff),
-      background: Color(0xffdbacec),
+      background: Color(0xffbeabed),
       error: Color(0xffd32f2f),
       onPrimary: Color(0xffffffff),
       onSecondary: Color(0xffffffff),
@@ -78,55 +76,55 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   textTheme: TextTheme(
-    display4: TextStyle(
+    headline1: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display3: TextStyle(
+    headline2: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display2: TextStyle(
+    headline3: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline: TextStyle(
+    headline5: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subhead: TextStyle(
+    subtitle1: TextStyle(
+      color: Color(0xddFF9C01),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    bodyText1: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body2: TextStyle(
-      color: Color(0xdd000000),
-      fontSize: null,
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-    ),
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -144,7 +142,7 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Color(0xff000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -158,55 +156,55 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   primaryTextTheme: TextTheme(
-    display4: TextStyle(
+    headline1: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display3: TextStyle(
+    headline2: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display2: TextStyle(
+    headline3: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline: TextStyle(
+    headline5: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subhead: TextStyle(
+    subtitle1: TextStyle(
+      color: Color(0xffffffff),
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    bodyText1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body2: TextStyle(
-      color: Color(0xffffffff),
-      fontSize: null,
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-    ),
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -219,12 +217,12 @@ final ThemeData lightTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     button: TextStyle(
-      color: Color(0xffffffff),
+      color: Color(0xff000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -238,55 +236,55 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   accentTextTheme: TextTheme(
-    display4: TextStyle(
+    headline1: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display3: TextStyle(
+    headline2: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display2: TextStyle(
+    headline3: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline: TextStyle(
+    headline5: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subhead: TextStyle(
+    subtitle1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body2: TextStyle(
+    bodyText1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -304,7 +302,7 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -319,7 +317,7 @@ final ThemeData lightTheme = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
     labelStyle: TextStyle(
-      color: Color(0xdd000000),
+      color: Color(0xff999999),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
@@ -331,21 +329,21 @@ final ThemeData lightTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     hintStyle: TextStyle(
-      color: Color(0xdd000000),
+      color: Color(0xff999999),
       fontSize: null,
       fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
+      fontStyle: FontStyle.italic,
     ),
     errorStyle: TextStyle(
-      color: Color(0xdd000000),
+      color: Color(0xffef2f2f),
       fontSize: null,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
     ),
     errorMaxLines: null,
-    hasFloatingPlaceholder: true,
+    floatingLabelBehavior: FloatingLabelBehavior.always,
     isDense: false,
-    contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
+    contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 12, right: 12),
     isCollapsed: false,
     prefixStyle: TextStyle(
       color: Color(0xdd000000),
@@ -365,8 +363,8 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    filled: false,
-    fillColor: Color(0x00000000),
+    filled: true,
+    fillColor: Color(0xffe8e2f9),
     errorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: Color(0xff000000),
@@ -391,14 +389,7 @@ final ThemeData lightTheme = ThemeData(
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
-    disabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: Color(0xff000000),
-        width: 1,
-        style: BorderStyle.solid,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-    ),
+    disabledBorder: InputBorder.none,
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: Color(0xff000000),
@@ -440,13 +431,13 @@ final ThemeData lightTheme = ThemeData(
     inactiveTickMarkColor: null,
     disabledActiveTickMarkColor: null,
     disabledInactiveTickMarkColor: null,
-    thumbColor: null,
+    thumbColor: Color(0xff663ad6),
     disabledThumbColor: null,
     thumbShape: null,
     overlayColor: null,
     valueIndicatorColor: null,
     valueIndicatorShape: null,
-    showValueIndicator: null,
+    showValueIndicator: ShowValueIndicator.onlyForContinuous,
     valueIndicatorTextStyle: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
@@ -478,24 +469,25 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    secondarySelectedColor: Color(0x3db048d5),
+    secondarySelectedColor: Color(0x3d673ad6),
     selectedColor: Color(0x3d000000),
     shape: StadiumBorder(
-        side: BorderSide(
-      color: Color(0xff000000),
-      width: 0,
-      style: BorderStyle.none,
-    )),
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
   ),
   dialogTheme: DialogTheme(
-      shape: RoundedRectangleBorder(
-    side: BorderSide(
-      color: Color(0xff000000),
-      width: 0,
-      style: BorderStyle.none,
+    shape: StadiumBorder(
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
     ),
-    borderRadius: BorderRadius.all(Radius.circular(0.0)),
-  )),
+  ),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -516,7 +508,7 @@ final ThemeData darkTheme = ThemeData(
   primaryColorBrightness: Brightness.dark,
   primaryColorLight: Color(0xff9e9e9e),
   primaryColorDark: Color(0xff000000),
-  accentColor: Color(0xff64ffda),
+  accentColor: Color(0xff6739d6),
   accentColorBrightness: Brightness.light,
   canvasColor: Color(0xff303030),
   scaffoldBackgroundColor: Color(0xff303030),
@@ -528,39 +520,37 @@ final ThemeData darkTheme = ThemeData(
   selectedRowColor: Color(0xfff5f5f5),
   unselectedWidgetColor: Color(0xb3ffffff),
   disabledColor: Color(0x62ffffff),
-  buttonColor: Color(0xff8426a6),
-  toggleableActiveColor: Color(0xff64ffda),
+  buttonColor: Color(0xff6739d6),
+  toggleableActiveColor: Color(0xff673bd6),
   secondaryHeaderColor: Color(0xff616161),
-  textSelectionColor: Color(0xff64ffda),
-  cursorColor: Color(0xff4285f4),
-  textSelectionHandleColor: Color(0xff1de9b6),
+  textSelectionColor: Color(0xff6739d6),
+  cursorColor: Color(0xff6739d6),
+  textSelectionHandleColor: Color(0xff6739d6),
   backgroundColor: Color(0xff616161),
   dialogBackgroundColor: Color(0xff424242),
-  indicatorColor: Color(0xff64ffda),
+  indicatorColor: Color(0xff673ad6),
   hintColor: Color(0x80ffffff),
   errorColor: Color(0xffd32f2f),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.normal,
     minWidth: 88,
     height: 36,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
-    shape: RoundedRectangleBorder(
-      side: BorderSide(
-        color: Color(0xff000000),
-        width: 0,
-        style: BorderStyle.none,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(2.0)),
-    ),
+    padding: EdgeInsets.only(top: 0, bottom: 0, left: 44, right: 44),
+    shape: StadiumBorder(
+        side: BorderSide(
+      color: Color(0xff000000),
+      width: 0,
+      style: BorderStyle.none,
+    )),
     alignedDropdown: false,
-    buttonColor: Color(0xff8426a6),
+    buttonColor: Color(0xff6739d6),
     disabledColor: Color(0x61ffffff),
     highlightColor: Color(0x29ffffff),
     splashColor: Color(0x1fffffff),
     focusColor: Color(0x1fffffff),
     hoverColor: Color(0x0affffff),
     colorScheme: ColorScheme(
-      primary: Color(0xffb048d5),
+      primary: Color(0xff2196f3),
       primaryVariant: Color(0xff000000),
       secondary: Color(0xff64ffda),
       secondaryVariant: Color(0xff00bfa5),
@@ -576,55 +566,55 @@ final ThemeData darkTheme = ThemeData(
     ),
   ),
   textTheme: TextTheme(
-    display4: TextStyle(
+    headline1: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display3: TextStyle(
+    headline2: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display2: TextStyle(
+    headline3: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline: TextStyle(
+    headline5: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subhead: TextStyle(
+    subtitle1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body2: TextStyle(
+    bodyText1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -642,7 +632,7 @@ final ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -656,55 +646,55 @@ final ThemeData darkTheme = ThemeData(
     ),
   ),
   primaryTextTheme: TextTheme(
-    display4: TextStyle(
+    headline1: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display3: TextStyle(
+    headline2: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display2: TextStyle(
+    headline3: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline: TextStyle(
+    headline5: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subhead: TextStyle(
+    subtitle1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body2: TextStyle(
+    bodyText1: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -722,7 +712,7 @@ final ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -736,55 +726,55 @@ final ThemeData darkTheme = ThemeData(
     ),
   ),
   accentTextTheme: TextTheme(
-    display4: TextStyle(
+    headline1: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display3: TextStyle(
+    headline2: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display2: TextStyle(
+    headline3: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline: TextStyle(
+    headline5: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subhead: TextStyle(
+    subtitle1: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body2: TextStyle(
+    bodyText1: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -802,7 +792,7 @@ final ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Color(0xff000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -841,7 +831,7 @@ final ThemeData darkTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     errorMaxLines: null,
-    hasFloatingPlaceholder: true,
+    floatingLabelBehavior: FloatingLabelBehavior.always,
     isDense: false,
     contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
     isCollapsed: false,
@@ -971,13 +961,13 @@ final ThemeData darkTheme = ThemeData(
     ),
     padding: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
     secondaryLabelStyle: TextStyle(
-      color: Color(0x3dffffff),
+      color: Color(0xff000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
     secondarySelectedColor: Color(0x3d212121),
-    selectedColor: Color(0x3dffffff),
+    selectedColor: Color(0xff000000),
     shape: StadiumBorder(
         side: BorderSide(
       color: Color(0xff000000),
@@ -986,12 +976,12 @@ final ThemeData darkTheme = ThemeData(
     )),
   ),
   dialogTheme: DialogTheme(
-      shape: RoundedRectangleBorder(
-    side: BorderSide(
-      color: Color(0xff000000),
-      width: 0,
-      style: BorderStyle.none,
+    shape: StadiumBorder(
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
     ),
-    borderRadius: BorderRadius.all(Radius.circular(0.0)),
-  )),
+  ),
 );
