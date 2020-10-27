@@ -26,16 +26,16 @@ class _AboutScreenState extends State<AboutScreen> {
         ),
         body: CustomScrollView(
     slivers: <Widget>[
-      SliverAppBar(
-        title: Text('SliverAppBar'),
-        backgroundColor: Colors.green,
-        expandedHeight: vpH*0.02,
-        flexibleSpace: FlexibleSpaceBar(
+      // SliverAppBar(
+      //   // title: Text('SliverAppBar'),
+      //   backgroundColor: Colors.green,
+      //   expandedHeight: vpH*0.02,
+      //   flexibleSpace: FlexibleSpaceBar(
           
-        ),
-      ),
+      //   ),
+      // ),
       SliverFixedExtentList(
-        itemExtent: vpH*0.15,
+        itemExtent: vpH*0.18,
         delegate: SliverChildListDelegate(
           [
             Container(color: Colors.red),
