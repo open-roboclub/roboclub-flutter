@@ -21,7 +21,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
         drawer: appdrawer(context, page: "Contributors"),
         appBar: appBar(
           context,
-          strTitle: "Contributors",
+          strTitle: "CONTRIBUTORS",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -32,7 +32,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
               Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Container(
-                  height: vpH * 0.25,
+                  height: vpH * 0.28,
                   width: vpW * 0.90,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -46,36 +46,42 @@ class _ContributorScreenState extends State<ContributorScreen> {
                   ),
                   child: Column(children: [
                     Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text("We are because of you!!",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.orange[400],
-                              fontSize: 28.0)),
+                      padding: EdgeInsets.all(12.0),
+                      child: Text(
+                        "We are because of you!!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFF9C01),
+                            fontSize: vpH * 0.028),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       child: Container(
-                        height: 1.8,
-                        width: 300.0,
-                        color: Colors.orange[400],
+                        height: vpH * 0.002,
+                        width: vpW * 2.0,
+                        color: Color(0xFFFF9C01),
                       ),
                     ),
                     Row(children: [
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: vpW * 0.028, vertical: vpH * 0.015),
                           child: Text(
-                              "Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15.0)),
+                            "Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support.",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: vpH * 0.018),
+                          ),
                         ),
                       ),
                       Expanded(
-                          child: Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Image.asset('assets/img/contri.png'))),
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Image.asset('assets/img/contri.png'),
+                        ),
+                      ),
                     ])
                   ]),
                 ),

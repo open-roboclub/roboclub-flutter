@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import '../helper/dimensions.dart';
-import 'profile.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class AdminScreen extends StatefulWidget {
   @override
@@ -60,12 +58,12 @@ class _AdminScreenState extends State<AdminScreen> {
     vpW = getViewportWidth(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xffd9d9d9),
+        backgroundColor: Color(0xFFD9D9D9),
         key: _scaffoldKey,
         drawer: appdrawer(context, page: "Admin Panel"),
         appBar: appBar(
           context,
-          strTitle: "Admin Panel",
+          strTitle: "ADMIN PANEL",
           isDrawer: true,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
