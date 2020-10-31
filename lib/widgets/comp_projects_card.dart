@@ -74,10 +74,10 @@ class CompletedProjectCard extends StatelessWidget {
                           color: Color(0xFFFF9C01),
                           child: Text("View",style: TextStyle(fontSize:vpH*0.015,)),
                           textColor: Colors.white,
-                        onPressed: (){},) 
-                       
-                        )
-                     ) ,
+                        onPressed: (){},
+                        ), 
+                        ),
+                     ),
                   ],)
                 ),
               ),
