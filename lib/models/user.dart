@@ -3,14 +3,14 @@ class User {
   String name;
   String email;
   String profilePhoto;
-  String firebaseToken;
+  // String firebaseToken;
 
   User({
     this.uid,
     this.name,
     this.email,
     this.profilePhoto,
-    this.firebaseToken,
+    // this.firebaseToken,
   });
 
   Map toMap(User user) {
@@ -19,7 +19,7 @@ class User {
     data['name'] = user.name;
     data['email'] = user.email;
     data["profile_photo"] = user.profilePhoto;
-    data["firebaseToken"] = user.firebaseToken;
+    // data["firebaseToken"] = user.firebaseToken;
 
     return data;
   }
@@ -30,6 +30,6 @@ class User {
     this.name = mapData['name'];
     this.email = mapData['email'];
     this.profilePhoto = mapData['profile_photo'];
-    this.firebaseToken = mapData['firebaseToken'];
+    // this.firebaseToken = mapData['firebaseToken'];
   }
 }
