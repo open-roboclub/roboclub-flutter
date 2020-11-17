@@ -73,6 +73,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFD9D9D9),

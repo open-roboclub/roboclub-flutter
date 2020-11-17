@@ -8,21 +8,6 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 final Firestore _firestore = Firestore.instance;
 
 class AuthService {
-  String name;
-  String email;
-  String imageUrl;
-
-  User _userFromFirebaseUser(FirebaseUser user) {
-    // print(user);
-    Map<String, dynamic> _data = {
-      'uid': user.uid,
-      'name': user.displayName,
-      'email': user.email,
-      'profile_photo': user.photoUrl,
-    };
-    return user != null ? User.fromMap(_data) : null;
-  }
-
   Future<User> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
@@ -41,15 +26,39 @@ class AuthService {
     assert(user.displayName != null);
     assert(user.photoUrl != null);
 
-    name = user.displayName;
-    email = user.email;
-    imageUrl = user.photoUrl;
-
-    if (user != null) {
-      _firestore.collection('/users').document(user.uid).setData({
-        'name': name,
-        'email': email,
-        'profileImageUrl': imageUrl,
+    Map<String, dynamic> _tempUser;
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+    if (currentUser == null) {
+      if (user != null) {
+        _tempUser = {
+          'name': user.displayName,
+          'email': user.email,
+          'profileImageUrl': user.photoUrl,
+          'about': "",
+          'batch': "",
+          'contact': "",
+          'cvLink': "",
+          'fbId': "",
+          'instaId': "",
+          'interests': "",
+          'isAdmin': false,
+          'linkedinId': "",
+          'position': "N/A",
+        };
+        _firestore.collection('/users').document(user.uid).setData(_tempUser);
+      }
+    } else {
+      await _firestore
+          .collection('/users')
+          .document(currentUser.uid)
+          .get()
+          .then((snapshot) {
+        if (snapshot.exists) {
+          _tempUser = snapshot.data;
+        } else {
+          print("User Data doesn't exist in firestore!");
+        }
       });
     }
     // Only taking the first part of the name, i.e., First Name
@@ -60,24 +69,37 @@ class AuthService {
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
+    return User.fromMap(_tempUser);
+  }
 
-    return _userFromFirebaseUser(user);
+  Future<User> getCurrentUser() async {
+    Map<String, dynamic> _tempUser;
+    final FirebaseUser currentUser = await _auth.currentUser();
+    if (currentUser == null) {
+      return null;
+    } else {
+      await _firestore
+          .collection('/users')
+          .document(currentUser.uid)
+          .get()
+          .then((snapshot) {
+        if (snapshot.exists) {
+          _tempUser = snapshot.data;
+        } else {
+          print("User Data doesn't exist in firestore!");
+        }
+      });
+    }
+    // Only taking the first part of the name, i.e., First Name
+    // if (name.contains(" ")) {
+    //   name = name.substring(0, name.indexOf(" "));
+    // }
+    return User.fromMap(_tempUser);
   }
 
   void signOutGoogle() async {
     await googleSignIn.signOut();
 
     print("User Sign Out");
-  }
-
-  Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
   }
 }

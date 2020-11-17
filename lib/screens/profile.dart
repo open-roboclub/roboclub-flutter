@@ -10,12 +10,16 @@ class ProfileScreen extends StatelessWidget {
     final _user = Provider.of<UserProvider>(context).getUser;
     // var _color = Colors.orange[400];
     return SafeArea(
-        child: Scaffold(
-      body: ListTile(
-        leading: Text(_user.name),
-        title: Text(_user.email),
-        subtitle: Text(_user.uid),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Profile Screen'),
+        ),
+        body: ListTile(
+          leading: Text(_user.name ?? ""),
+          title: Text(_user.email ?? ""),
+          subtitle: Text(_user.profileImageUrl ?? ""),
+        ),
       ),
-    ));
+    );
   }
 }
