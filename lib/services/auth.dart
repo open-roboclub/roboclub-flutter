@@ -43,6 +43,7 @@ class AuthService {
           'instaId': "",
           'interests': "",
           'isAdmin': false,
+          'isMember': false,
           'linkedinId': "",
           'position': "N/A",
         };

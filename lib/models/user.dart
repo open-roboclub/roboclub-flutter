@@ -12,6 +12,7 @@ class User {
   String fbId;
   String linkedinId;
   String instaId;
+  bool isMember;
   bool isAdmin;
 
   User({
@@ -27,6 +28,7 @@ class User {
     this.instaId,
     this.interests,
     this.isAdmin,
+    this.isMember,
     this.linkedinId,
     this.position,
   });
@@ -45,6 +47,7 @@ class User {
     data["instaId"] = user.instaId;
     data["interests"] = user.interests;
     data["isAdmin"] = user.isAdmin;
+    data["isMember"] = user.isMember;
     data["linkedinId"] = user.linkedinId;
     data["position"] = user.position;
 
@@ -65,6 +68,7 @@ class User {
     this.instaId = mapData['instaId'];
     this.interests = mapData['interests'];
     this.isAdmin = mapData['isAdmin'];
+    this.isMember = mapData['isMember'];
     this.linkedinId = mapData['linkedinId'];
     this.position = mapData['position'];
   }

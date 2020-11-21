@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 
-class ShowEventScreen extends StatelessWidget {
+class ShowEventScreen extends StatefulWidget {
+  @override
+  _ShowEventScreenState createState() => _ShowEventScreenState();
+}
+
+class _ShowEventScreenState extends State<ShowEventScreen> {
+  bool drag = false;
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -15,15 +21,21 @@ class ShowEventScreen extends StatelessWidget {
             children: [
               Container(
                 height: vpH * 0.35,
-                color: Colors.yellow,
+                width: vpW,
                 child: Image.asset(
                   'assets/img/placeholder.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
-              Positioned(
-                top: vpH * 0.3,
-                child: SingleChildScrollView(
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 200),
+                top: drag ? vpH * 0.1 : vpH * 0.3,
+                child: GestureDetector(
+                  onVerticalDragStart: (details) {
+                    setState(() {
+                      drag = !drag;
+                    });
+                  },
                   child: Container(
                     height: vpH * 0.9,
                     width: vpW,
@@ -155,8 +167,7 @@ class ShowEventScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 12),
                           child: Text(
-                            "The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\nThe 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.",
-                            // maxLines: 5,
+                            "The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\nThe 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\nThe 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.",
                           ),
                         ),
                       ],

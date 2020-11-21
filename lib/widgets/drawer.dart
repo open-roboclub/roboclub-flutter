@@ -48,7 +48,7 @@ Drawer appdrawer(context, {String page}) {
         break;
       case "Admin Panel":
         {
-          final _user = Provider.of<UserProvider>(context).getUser;
+          var _user = Provider.of<UserProvider>(context).getUser;
           return _user != null ? ProfileScreen() : AdminScreen();
         }
         break;
