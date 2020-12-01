@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/helper/custom_icons.dart';
+import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/screens/admin_screen.dart';
 import 'package:roboclub_flutter/services/auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -31,13 +34,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Image.network(
                   _user.profileImageUrl,
                   fit: BoxFit.cover,
+                  color: Colors.black26,
+                  colorBlendMode: BlendMode.darken,
                 ),
               ),
-              Container(
-                height: vpH * 0.35,
-                width: vpW,
-                color: Colors.black.withOpacity(0.2),
-              ),
+              // Container(
+              //   height: vpH * 0.35,
+              //   width: vpW,
+              //   color: Colors.black.withOpacity(0.2),
+              // ),
               AnimatedPositioned(
                 duration: Duration(milliseconds: 200),
                 top: drag ? vpH * 0.1 : vpH * 0.3,
@@ -101,94 +106,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15, top: 12),
-                          child: Text(
-                            "Event Name",
+                        ListTile(
+                          title: Text(
+                            "Interests: ",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: vpH * 0.04),
+                              fontSize: vpH * 0.032,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
+                          subtitle: Text(_user.interests ?? ""),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today,
-                                      size: vpH * 0.06,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    SizedBox(
-                                      height: vpH * 0.05,
-                                    ),
-                                    Icon(
-                                      Icons.map,
-                                      size: vpH * 0.06,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: vpH * 0.07,
-                                      width: 1,
-                                      color: Colors.grey.withOpacity(0.5),
-                                    ),
-                                    SizedBox(
-                                      height: vpH * 0.04,
-                                    ),
-                                    Container(
-                                      height: vpH * 0.07,
-                                      width: 1,
-                                      color: Colors.grey.withOpacity(0.5),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      title: Text("Sun, 20 Nov, 2020"),
-                                      subtitle: Text("12 PM to 10 PM"),
-                                    ),
-                                    // SizedBox(
-                                    //   height: vpH * 0.02,
-                                    // ),
-                                    ListTile(
-                                      title: Text("Get Direction"),
-                                      subtitle: Text("ML 10, Main Building"),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15, top: 12),
+                          padding: const EdgeInsets.only(left: 15.0),
                           child: Text(
-                            "Event Details",
+                            "Let's Connect",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: vpH * 0.03),
+                              fontSize: vpH * 0.032,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15, top: 12),
-                          child: Text(
-                            "The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\nThe 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a",
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: vpH * 0.006,
+                                  horizontal: vpW * 0.02),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  icon: Icon(SocialMedia.facebook),
+                                  iconSize: vpW * 0.080,
+                                  color: Color(0xFF3B5998),
+                                  onPressed: () {
+                                    launch(_user.fbId ?? "");
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: vpH * 0.005,
+                                  horizontal: vpW * 0.02),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  icon: Icon(SocialMedia.linkedin),
+                                  iconSize: vpW * 0.080,
+                                  color: Color(0xFF2867B2),
+                                  onPressed: () {
+                                    launch(_user.linkedinId ?? "");
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: vpH * 0.013,
+                                  horizontal: vpW * 0.02),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    launch(_user.instaId ?? "");
+                                  },
+                                  child: Image.asset(
+                                    'assets/img/insta.png',
+                                    fit: BoxFit.cover,
+                                    width: vpW * 0.080,
+                                    height: vpH * 0.040,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: vpH * 0.005,
+                                  horizontal: vpW * 0.02),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  icon: Icon(SocialMedia.youtube),
+                                  iconSize: vpW * 0.090,
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    launch('tel://' + _user.contact ?? "");
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: vpH * 0.005,
+                                  horizontal: vpW * 0.02),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  icon: Icon(SocialMedia.github),
+                                  iconSize: vpW * 0.080,
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    launch('https://github.com/open-roboclub');
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -215,13 +240,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    AuthService().signOutGoogle();
-                    _userProvider.setUser = null;
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => AdminScreen(),
                       ),
                     );
+                    AuthService().signOutGoogle().then((value) {
+                      print("_user is set to null");
+                      // _userProvider.setUser = null;
+                    });
                   },
                 ),
               ),

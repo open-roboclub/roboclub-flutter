@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/show_event_screen.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
@@ -35,6 +38,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    User _user = Provider.of<UserProvider>(context).getUser;
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -45,6 +49,7 @@ class _EventScreenState extends State<EventScreen> {
             isNotification: true,
             scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
@@ -129,10 +134,14 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: null,
-          child: Icon(Icons.add),
-        ),
+        floatingActionButton: _user != null
+            ? (_user.isAdmin
+                ? FloatingActionButton(
+                    onPressed: null,
+                    child: Icon(Icons.add),
+                  )
+                : null)
+            : null,
       ),
     );
   }

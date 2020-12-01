@@ -19,10 +19,10 @@ class EventCard extends StatelessWidget {
           color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black,
-              // offset: Offset(2, 2),
+              color: Colors.black12,
+              offset: Offset(3, 8),
               blurRadius: 1.0,
-              // spreadRadius: 1.0,
+              spreadRadius: 2.0,
             ),
           ],
         ),

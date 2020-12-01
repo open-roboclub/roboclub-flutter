@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/models/contributor.dart';
+import 'package:roboclub_flutter/services/contributors.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/contribution_card.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
@@ -11,10 +13,21 @@ class ContributorScreen extends StatefulWidget {
 
 class _ContributorScreenState extends State<ContributorScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<Contributor> contributorsList = [];
+
+  @override
+  void initState() {
+    ContributorService().fetchContributors().then((value) {
+      contributorsList = value;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    var contributors = ContributorService();
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -96,10 +109,10 @@ class _ContributorScreenState extends State<ContributorScreen> {
                     ? ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: contributorsList.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          return ContriCard();
+                          return ContriCard(contributorsList[index]);
                         },
                       )
                     : Center(
@@ -108,6 +121,14 @@ class _ContributorScreenState extends State<ContributorScreen> {
               )
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => contributors.postContributor(
+              amount: "500000",
+              description: "VC AMU Contributed this chunk",
+              name: "VC AMU",
+              representativeImg: ""),
+          child: Icon(Icons.add),
         ),
       ),
     );

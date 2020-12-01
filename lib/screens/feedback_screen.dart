@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
+import 'package:roboclub_flutter/services/feedback.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -13,7 +16,8 @@ class FeedbackScreen extends StatefulWidget {
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  String _feedback = "";
+  TextEditingController _controller = TextEditingController();
   bool selected = false;
   @override
   void initState() {
@@ -42,6 +46,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           scaffoldKey: _scaffoldKey,
         ),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
@@ -76,17 +81,37 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         child: Container(
                           width: vpW * 0.9,
                           child: TextField(
+                            controller: _controller,
                             decoration: InputDecoration(
                               fillColor: Colors.white,
                               hintText: 'Write your feedback here!!',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
-                              suffixIcon: Icon(
-                                Icons.send,
-                                color: Color(0xFFFF9C01),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.send,
+                                  color: Color(0xFFFF9C01),
+                                ),
+                                onPressed: () {
+                                  if (_feedback.isNotEmpty) {
+                                    // var _user =
+                                    //     Provider.of<UserProvider>(context)
+                                    //         .getUser;
+                                    FeedbackService()
+                                        .postFeedback(_controller.text, true);
+                                    setState(() {
+                                      _controller.clear();
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
+                                    });
+                                  }
+                                },
                               ),
                             ),
+                            onChanged: (value) {
+                              _feedback = value;
+                            },
                             style: TextStyle(
                                 fontSize: vpH * 0.03, color: Colors.black),
                             maxLines: 7,

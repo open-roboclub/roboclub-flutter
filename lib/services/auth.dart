@@ -98,7 +98,7 @@ class AuthService {
     return User.fromMap(_tempUser);
   }
 
-  void signOutGoogle() async {
+  Future signOutGoogle() async {
     await googleSignIn.signOut();
 
     print("User Sign Out");

@@ -167,7 +167,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 12),
                           child: Text(
-                            "The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\nThe 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\nThe 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.",
+                            "The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\n",
                           ),
                         ),
                       ],

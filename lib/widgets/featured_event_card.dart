@@ -25,10 +25,10 @@ class FeaturedEventCard extends StatelessWidget {
           color: _colors['card'],
           boxShadow: [
             BoxShadow(
-              color: Colors.black54,
-              // offset: Offset(2, 2),
+              color: Colors.black12,
+              offset: Offset(2, 6),
               blurRadius: 1.0,
-              // spreadRadius: 1.0,
+              spreadRadius: 2.0,
             ),
           ],
         ),
