@@ -57,7 +57,7 @@ class _EventScreenState extends State<EventScreen> {
               ),
               _title('Featured Events', vpH, vpW),
               Container(
-                height: vpH * 0.32,
+                height: vpH * 0.34,
                 width: vpW,
                 child: true
                     ? ListView.builder(

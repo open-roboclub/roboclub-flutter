@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
@@ -9,6 +10,7 @@ import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   LocalStorage _storage = LocalStorage();
   var darkModeOn = await _storage.getThemepref() ?? false;
   runApp(

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
+import 'package:roboclub_flutter/screens/map_screen.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import '../widgets/developer_card.dart';
@@ -228,15 +231,33 @@ class _AboutScreenState extends State<AboutScreen> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: vpW * 0.028,
-                                  vertical: vpH * 0.015),
-                              child: Image.asset(
-                                'assets/img/placeholder.jpg',
-                                width: vpW * 0.9,
-                                height: vpH * 0.25,
-                                fit: BoxFit.fill,
+                            GestureDetector(
+                              onTap: () async {
+                                try {
+                                  final result = await InternetAddress.lookup(
+                                      'google.com');
+                                  if (result.isNotEmpty &&
+                                      result[0].rawAddress.isNotEmpty) {
+                                    print('connected');
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => MapView(),
+                                    ));
+                                  }
+                                } on SocketException catch (_) {
+                                  print('not connected');
+                                }
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: vpW * 0.028,
+                                    vertical: vpH * 0.015),
+                                child: Image.asset(
+                                  'assets/img/map.jpg',
+                                  width: vpW * 0.9,
+                                  height: vpH * 0.25,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                             Padding(
@@ -254,8 +275,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 width: vpW,
                                 child: Column(
                                   children: [
-                                    DeveloperCard(),
-                                    DeveloperCard(),
+                                    DeveloperCard(name: "Rishabh Sharma"),
+                                    DeveloperCard(name: "Samiksha Agrawal"),
                                   ],
                                 )),
                           ],

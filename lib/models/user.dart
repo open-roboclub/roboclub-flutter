@@ -16,21 +16,21 @@ class User {
   bool isAdmin;
 
   User({
-    this.uid,
-    this.name,
-    this.email,
-    this.profileImageUrl,
-    this.about,
-    this.batch,
-    this.contact,
-    this.cvLink,
-    this.fbId,
-    this.instaId,
-    this.interests,
-    this.isAdmin,
-    this.isMember,
-    this.linkedinId,
-    this.position,
+    this.uid = "",
+    this.name = "",
+    this.email = "",
+    this.profileImageUrl = "",
+    this.about = "",
+    this.batch = "",
+    this.contact = "",
+    this.cvLink = "",
+    this.fbId = "",
+    this.instaId = "",
+    this.interests = "",
+    this.isAdmin = false,
+    this.isMember = false,
+    this.linkedinId = "",
+    this.position = "",
   });
 
   Map toMap(User user) {

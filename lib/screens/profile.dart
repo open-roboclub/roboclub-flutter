@@ -247,7 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                     AuthService().signOutGoogle().then((value) {
                       print("_user is set to null");
-                      // _userProvider.setUser = null;
+                      _userProvider.setUser = User();
                     });
                   },
                 ),

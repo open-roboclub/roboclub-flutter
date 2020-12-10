@@ -124,10 +124,11 @@ class _ContributorScreenState extends State<ContributorScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => contributors.postContributor(
-              amount: "500000",
-              description: "VC AMU Contributed this chunk",
-              name: "VC AMU",
-              representativeImg: ""),
+            amount: "500000",
+            description: "VC AMU Contributed this chunk",
+            name: "VC AMU",
+            representativeImg: "",
+          ),
           child: Icon(Icons.add),
         ),
       ),
