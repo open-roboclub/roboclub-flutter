@@ -3,7 +3,7 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 
 AppBar appBar(context,
-    { String strTitle,
+    {String strTitle,
     bool isNotification = false,
     isDrawer = false,
     GlobalKey<ScaffoldState> scaffoldKey}) {
