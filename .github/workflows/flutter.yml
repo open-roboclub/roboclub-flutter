@@ -9,7 +9,7 @@ on:
 jobs:
   my-job:
     name: Decryption
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Decrypt google services secret
