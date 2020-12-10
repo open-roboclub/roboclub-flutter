@@ -18,23 +18,24 @@ class FeaturedEventCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
-        height: vpH * 0.3,
+        height: vpH * 0.32,
         width: vpW * 0.6,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: _colors['card'],
           boxShadow: [
             BoxShadow(
-              color: Colors.black54,
-              // offset: Offset(2, 2),
+              color: Colors.black12,
+              offset: Offset(2, 6),
               blurRadius: 1.0,
-              // spreadRadius: 1.0,
+              spreadRadius: 2.0,
             ),
           ],
         ),
         child: Stack(
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
@@ -43,17 +44,23 @@ class FeaturedEventCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Text(
-                  'Event name',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 8),
+                  child: Text(
+                    'Event name',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(
-                  'Place',
-                  overflow: TextOverflow.ellipsis,
-                  style: _textstyle['location'],
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    'Place',
+                    overflow: TextOverflow.ellipsis,
+                    style: _textstyle['location'],
+                  ),
                 )
               ],
             ),

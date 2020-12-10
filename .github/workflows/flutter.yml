@@ -7,6 +7,15 @@ on:
     branches: [master]
 
 jobs:
+  my-job:
+    name: Decryption
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Decrypt google services secret
+        run: ./.github/android/app/decrypt_secret.sh
+        env:
+          GOOGLE_SERVICE_SECRET: ${{ secrets.GOOGLE_SERVICE_SECRET }}
   build:
     runs-on: macos-latest
 
