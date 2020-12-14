@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
+import 'package:roboclub_flutter/screens/show_event_screen.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
@@ -34,6 +38,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    User _user = Provider.of<UserProvider>(context).getUser;
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -44,6 +49,7 @@ class _EventScreenState extends State<EventScreen> {
             isNotification: true,
             scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
@@ -51,7 +57,7 @@ class _EventScreenState extends State<EventScreen> {
               ),
               _title('Featured Events', vpH, vpW),
               Container(
-                height: vpH * 0.3,
+                height: vpH * 0.34,
                 width: vpW,
                 child: true
                     ? ListView.builder(
@@ -60,7 +66,13 @@ class _EventScreenState extends State<EventScreen> {
                         itemCount: 5,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return FeaturedEventCard();
+                          return GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => ShowEventScreen(),
+                                    ),
+                                  ),
+                              child: FeaturedEventCard());
                         },
                       )
                     : Center(
@@ -79,7 +91,14 @@ class _EventScreenState extends State<EventScreen> {
                         shrinkWrap: true,
                         itemCount: 5,
                         itemBuilder: (context, index) {
-                          return EventCard();
+                          return GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ShowEventScreen(),
+                              ),
+                            ),
+                            child: EventCard(),
+                          );
                         },
                       )
                     : Center(
@@ -98,7 +117,14 @@ class _EventScreenState extends State<EventScreen> {
                         shrinkWrap: true,
                         itemCount: 5,
                         itemBuilder: (context, index) {
-                          return EventCard();
+                          return GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ShowEventScreen(),
+                              ),
+                            ),
+                            child: EventCard(),
+                          );
                         },
                       )
                     : Center(
@@ -108,6 +134,14 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         ),
+        floatingActionButton: _user != null
+            ? (_user.isAdmin
+                ? FloatingActionButton(
+                    onPressed: null,
+                    child: Icon(Icons.add),
+                  )
+                : null)
+            : null,
       ),
     );
   }

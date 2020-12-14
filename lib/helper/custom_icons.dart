@@ -44,3 +44,18 @@ class MyFlutterApp {
 
   static const IconData edit = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
+
+
+class SocialMedia {
+  SocialMedia._();
+
+  static const _kFontFam = 'SocialMedia';
+  static const _kFontPkg = null;
+
+  static const IconData youtube = IconData(0xf16a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook = IconData(0xf301, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData twitter = IconData(0xf303, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData github = IconData(0xf308, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData linkedin = IconData(0xf31b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData instagram = IconData(0xf31f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+}

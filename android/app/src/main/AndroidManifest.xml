@@ -9,6 +9,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="AMURoboclub"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyA869pLcaPxA4Kjmvu7E_cwdm20sDXt79E"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
