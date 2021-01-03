@@ -59,3 +59,14 @@ class SocialMedia {
   static const IconData linkedin = IconData(0xf31b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData instagram = IconData(0xf31f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
+
+
+class Report {
+  Report._();
+
+  static const _kFontFam = 'Report';
+  static const  _kFontPkg = null;
+
+  static const IconData icon_ionic_md_open = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icon_ionic_md_document = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+}

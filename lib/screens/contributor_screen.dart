@@ -17,19 +17,19 @@ class _ContributorScreenState extends State<ContributorScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<Contributor> contributorsList = [];
 
-  // @override
-  // void initState() {
-  //   ContributorService().fetchContributors().then((value) {
-  //     contributorsList = value;
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    ContributorService().fetchContributors().then((value) {
+      contributorsList = value;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    // var contributors = ContributorService();
+  
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -104,41 +104,37 @@ class _ContributorScreenState extends State<ContributorScreen> {
               SizedBox(
                 height: vpH * 0.005,
               ),
-              // Container(
-              //   height: vpH * 0.6,
-              //   width: vpW,
-              //   child: true
-              //       ? ListView.builder(
-              //           physics: BouncingScrollPhysics(),
-              //           shrinkWrap: true,
-              //           itemCount: contributorsList.length,
-              //           scrollDirection: Axis.vertical,
-              //           itemBuilder: (context, index) {
-              //             return ContriCard(contributorsList[index]);
-              //           },
-              //         )
-              //       : Center(
-              //           child: Text('No Contributions Yet'),
-              //         ),
-              // )
+              Container(
+                height: vpH * 0.6,
+                width: vpW,
+                child: true
+                    ? ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: contributorsList.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return ContriCard(contributorsList[index]);
+                        },
+                      )
+                    : Center(
+                        child: Text('No Contributions Yet'),
+                      ),
+              )
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: ()
-          //  => contributors.postContributor(
-          //   amount: "500000",
-          //   description: "VC AMU Contributed this chunk",
-          //   name: "VC AMU",
-          //   representativeImg: "",
-          // ),
-          {
-                                      Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => ContributionForm(),
-                                    ),
-                                    );
-                                    },
+          onPressed: (){
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context)
+                { 
+                  return ContributionForm();
+                },
+              ),
+            );
+          },
           child: Icon(Icons.add),
         ),
       ),

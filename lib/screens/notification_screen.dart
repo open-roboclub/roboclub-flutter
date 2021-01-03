@@ -4,6 +4,7 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
+import 'package:roboclub_flutter/widgets/notification_card.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -26,8 +27,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
           isDrawer: false,
           isNotification: false,
         ),
-        body: Center(
-          child: Text('Notifications Screen'),
+        body: SingleChildScrollView(child:
+          Center(
+            child:Container(
+              height: vpH * 0.9,
+              width: vpW,
+              child: true
+              ? ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 10,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return NotificationCard();
+                  },
+                )
+              : Center(
+                  child: Text('No Contributions Yet'),
+                ),
+            ),
+          ),
         ),
         floatingActionButton: _user != null
             ? (_user.isAdmin

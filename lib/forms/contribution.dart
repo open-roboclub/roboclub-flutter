@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
+import 'package:roboclub_flutter/models/contributor.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/contributors.dart';
-import '../models/contributor.dart';
-import 'dart:async';
 
 class ContributionForm extends StatefulWidget {
+
+  
   @override
   _ContributionFormState createState() => _ContributionFormState();
 }
@@ -15,15 +16,21 @@ class _ContributionFormState extends State<ContributionForm> {
   final _formKey = GlobalKey<FormState>();
 
 
-//  final nameController = TextEditingController();
-//  final descController = TextEditingController();
-//  final amountController = TextEditingController();
-
  String _name;
  String _description;
  String _amount;
  String _img;
  
+  List<Contributor> contributorsList = [];
+
+  @override
+  void initState() {
+    ContributorService().fetchContributors().then((value) {
+      contributorsList = value;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -103,6 +110,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
+                        keyboardType: TextInputType.name,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
@@ -110,6 +118,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           hintText: 'Enter Name',
                           hintStyle: kHintTextStyle,
                         ),
+                        
                         validator: (value) {
                           if (value.isEmpty) {
                             return "Please enter name";
@@ -140,6 +149,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
+                        keyboardType: TextInputType.multiline,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
@@ -176,6 +186,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
@@ -219,12 +230,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           hintText: 'Enter image url',
                           hintStyle: kHintTextStyle,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
+                       
                         onSaved: (value)
                         {
                           _img = value;
@@ -248,6 +254,7 @@ class _ContributionFormState extends State<ContributionForm> {
                               name: _name,
                               representativeImg: "",);
                               print("saved");
+                              Navigator.pop(context);
                           }
                         },
                         padding: EdgeInsets.all(15),
