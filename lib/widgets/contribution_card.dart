@@ -3,7 +3,7 @@ import 'package:roboclub_flutter/models/contributor.dart';
 import '../helper/dimensions.dart';
 
 class ContriCard extends StatelessWidget {
-  Contributor _contributor;
+  final Contributor _contributor;
   ContriCard(this._contributor);
   @override
   Widget build(BuildContext context) {

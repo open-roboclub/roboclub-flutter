@@ -12,13 +12,15 @@ class TutorialService {
         .document(title)
         .setData(_tutorial)
         .then((value) {
-      return true;
+      return Future.value(true);
     }).catchError((e) {
-      return false;
+      return Future.value(false);
     });
+    return Future.value(false);
   }
 
   Future<bool> fetchTutorials() {
     _firestore.collection('/tutorials');
+    return Future.value(false);
   }
 }
