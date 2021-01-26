@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
 import 'package:roboclub_flutter/services/contributors.dart';
@@ -17,12 +18,13 @@ class ContriCard extends StatefulWidget {
 class _ContriCardState extends State<ContriCard> {
 
 
-
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+
     TextStyle _titlestyle =  TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
+
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: Container(
@@ -60,6 +62,7 @@ class _ContriCardState extends State<ContriCard> {
                         ),
                       )),
                   Flexible(
+
                 
                     flex: 5,
                     fit: FlexFit.tight,
@@ -67,11 +70,14 @@ class _ContriCardState extends State<ContriCard> {
                       margin: EdgeInsets.symmetric(
                           horizontal: vpW * 0.030, vertical: vpH * 0.005),
                         
+
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
+
                             widget._contributor.name ?? "",
+
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
@@ -79,7 +85,9 @@ class _ContriCardState extends State<ContriCard> {
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.006)),
                           Text(
+
                             widget._contributor.description ?? "",
+
                             // overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: vpH * 0.015),
                           ),
@@ -87,6 +95,7 @@ class _ContriCardState extends State<ContriCard> {
                       ),
                     ),
                   ),
+
                   Flexible(
                     flex: 2,
                     fit: FlexFit.tight,
@@ -112,6 +121,7 @@ class _ContriCardState extends State<ContriCard> {
               ),
             ),
             
+
           ],
         ),
       ),

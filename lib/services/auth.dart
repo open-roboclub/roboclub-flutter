@@ -77,7 +77,9 @@ class AuthService {
     Map<String, dynamic> _tempUser;
     final FirebaseUser currentUser = await _auth.currentUser();
     if (currentUser == null) {
-      return null;
+
+      return User();
+
     } else {
       await _firestore
           .collection('/users')

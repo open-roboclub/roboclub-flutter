@@ -29,7 +29,8 @@ class _ContributorScreenState extends State<ContributorScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-  
+
+
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -125,6 +126,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+
           onPressed: (){
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -135,6 +137,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
               ),
             );
           },
+
           child: Icon(Icons.add),
         ),
       ),

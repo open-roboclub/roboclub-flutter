@@ -79,12 +79,14 @@ class CompletedProjectCard extends StatelessWidget {
                                   fontSize: vpH * 0.015,
                                 )),
                             textColor: Colors.white,
+
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => ProjectInfo()),
                               );
                             },
+
                           ),
                         ),
                       ),

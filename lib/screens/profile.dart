@@ -4,8 +4,8 @@ import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
-import 'package:roboclub_flutter/screens/admin_screen.dart';
-import 'package:roboclub_flutter/services/auth.dart';
+
+
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,8 +19,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    final _userProvider = Provider.of<UserProvider>(context);
-    final _user = _userProvider.getUser;
+
+    var _userProvider = Provider.of<UserProvider>(context);
+    var _user = _userProvider.getUser;
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -32,7 +34,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: vpH * 0.35,
                 width: vpW,
                 child: Image.network(
-                  _user.profileImageUrl,
+
+                  _user.profileImageUrl.isEmpty
+                      ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS12QuNvQIsEBeYe6ecNFtaWq1uf-1jSZc2_g&usqp=CAU"
+                      : _user.profileImageUrl,
+
                   fit: BoxFit.cover,
                   color: Colors.black26,
                   colorBlendMode: BlendMode.darken,
@@ -240,15 +246,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => AdminScreen(),
-                      ),
-                    );
-                    AuthService().signOutGoogle().then((value) {
-                      print("_user is set to null");
-                      _userProvider.setUser = User();
-                    });
+
+                    print(_user.name + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111" ??
+                        "No name\n");
+                    _userProvider.setUser = User(name: "Rishabh Jackson");
+                    setState(() {});
+                    // _userProvider.setUser = User();
+                    // print(_userProvider.getUser.name +
+                    //         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!2222" ??
+                    //     "No name\n");
+                    // AuthService().signOutGoogle().then((value) {
+                    //   print("_user is set to null");
+                    //   Navigator.of(context).pushReplacement(
+                    //     MaterialPageRoute(
+                    //       builder: (context) => AdminScreen(),
+                    //     ),
+                    //   );
+                    // });
+
                   },
                 ),
               ),
