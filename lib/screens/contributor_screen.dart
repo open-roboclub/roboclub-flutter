@@ -5,6 +5,8 @@ import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/contribution_card.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import '../helper/dimensions.dart';
+import 'dart:async';
+import '../forms/contribution.dart';
 
 class ContributorScreen extends StatefulWidget {
   @override
@@ -27,7 +29,8 @@ class _ContributorScreenState extends State<ContributorScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    var contributors = ContributorService();
+
+
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -123,12 +126,18 @@ class _ContributorScreenState extends State<ContributorScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => contributors.postContributor(
-            amount: "500000",
-            description: "VC AMU Contributed this chunk",
-            name: "VC AMU",
-            representativeImg: "",
-          ),
+
+          onPressed: (){
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context)
+                { 
+                  return ContributionForm();
+                },
+              ),
+            );
+          },
+
           child: Icon(Icons.add),
         ),
       ),

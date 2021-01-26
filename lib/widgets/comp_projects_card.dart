@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/screens/project_info.dart';
 
 class CompletedProjectCard extends StatelessWidget {
   @override
@@ -78,7 +79,14 @@ class CompletedProjectCard extends StatelessWidget {
                                   fontSize: vpH * 0.015,
                                 )),
                             textColor: Colors.white,
-                            onPressed: () {},
+
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProjectInfo()),
+                              );
+                            },
+
                           ),
                         ),
                       ),

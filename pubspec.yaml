@@ -29,6 +29,7 @@ dependencies:
   firebase_auth: ^0.16.1
   cloud_firestore: ^0.13.6
   google_sign_in: ^4.5.1
+
   # flutter_svg: ^0.19.1
 
   # The following adds the Cupertino Icons font to your application.
@@ -84,5 +85,10 @@ flutter:
     - family: SocialMedia
       fonts:
         - asset: assets/icons/SocialMedia.ttf
+
+    - family: Report
+      fonts:
+        - asset: assets/icons/Report.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
