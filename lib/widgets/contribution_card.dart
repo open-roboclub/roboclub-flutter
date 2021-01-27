@@ -6,9 +6,7 @@ import 'package:roboclub_flutter/services/contributors.dart';
 import '../helper/dimensions.dart';
 
 class ContriCard extends StatefulWidget {
-
-  
-  Contributor _contributor;
+  final Contributor _contributor;
   ContriCard(this._contributor);
 
   @override
@@ -16,14 +14,13 @@ class ContriCard extends StatefulWidget {
 }
 
 class _ContriCardState extends State<ContriCard> {
-
-
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
 
-    TextStyle _titlestyle =  TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
+    TextStyle _titlestyle =
+        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
 
     return Padding(
       padding: EdgeInsets.all(20.0),
@@ -62,22 +59,16 @@ class _ContriCardState extends State<ContriCard> {
                         ),
                       )),
                   Flexible(
-
-                
                     flex: 5,
                     fit: FlexFit.tight,
                     child: Container(
                       margin: EdgeInsets.symmetric(
                           horizontal: vpW * 0.030, vertical: vpH * 0.005),
-                        
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-
                             widget._contributor.name ?? "",
-
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
@@ -85,7 +76,6 @@ class _ContriCardState extends State<ContriCard> {
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.006)),
                           Text(
-
                             widget._contributor.description ?? "",
 
                             // overflow: TextOverflow.ellipsis,
@@ -95,33 +85,29 @@ class _ContriCardState extends State<ContriCard> {
                       ),
                     ),
                   ),
-
                   Flexible(
                     flex: 2,
                     fit: FlexFit.tight,
                     child: Container(
                       margin: EdgeInsets.symmetric(
                           horizontal: vpW * 0.002, vertical: vpH * 0.005),
-                      child:
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding:  EdgeInsets.symmetric(horizontal:vpW *0.005, vertical: vpH *0.010),
-                              child: Text(
-                                "\u20B9 " + widget._contributor.amount ?? "",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: vpH * 0.018),
-                              ),
-                            ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: vpW * 0.005, vertical: vpH * 0.010),
+                          child: Text(
+                            "\u20B9 " + widget._contributor.amount ?? "",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: vpH * 0.018),
                           ),
-            
+                        ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
-            
-
           ],
         ),
       ),

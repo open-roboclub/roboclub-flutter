@@ -33,15 +33,13 @@ class Team2Card extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                      flex: 1,
-                      child: CircleAvatar(
-                        radius: vpH * 0.037,
-                        backgroundColor: Colors.black,
-                        child: CircleAvatar(
-                          radius: vpH * 0.032,
-                          backgroundColor: Colors.white,
-                        ),
-                      )),
+                    flex: 1,
+                    child: CircleAvatar(
+                      radius: vpH * 0.037,
+                      backgroundColor: Colors.black,
+                      backgroundImage: NetworkImage(member.profileImageUrl),
+                    ),
+                  ),
                   Flexible(
                     flex: 3,
                     // fit: FlexFit.tight,
