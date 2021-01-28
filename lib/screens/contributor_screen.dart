@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
 import 'package:roboclub_flutter/services/contributors.dart';
@@ -28,7 +29,6 @@ class _ContributorScreenState extends State<ContributorScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-
 
     return SafeArea(
       child: Scaffold(
@@ -108,13 +108,26 @@ class _ContributorScreenState extends State<ContributorScreen> {
                 height: vpH * 0.6,
                 width: vpW,
                 child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: contributorsList.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return ContriCard(contributorsList[index]);
+                    ? StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('/contributors')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final List<DocumentSnapshot> documents =
+                                snapshot.data.documents;
+                            return ListView(
+                              physics: BouncingScrollPhysics(),
+                              children: documents
+                                  .map((doc) =>
+                                      ContriCard(Contributor.fromMap(doc.data)))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("Some Error has Occured");
+                          } else {
+                            return Text("No Data");
+                          }
                         },
                       )
                     : Center(
@@ -125,18 +138,15 @@ class _ContributorScreenState extends State<ContributorScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context)
-                { 
+                builder: (BuildContext context) {
                   return ContributionForm();
                 },
               ),
             );
           },
-
           child: Icon(Icons.add),
         ),
       ),

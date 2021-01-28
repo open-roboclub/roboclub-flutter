@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -27,24 +28,51 @@ class _NotificationScreenState extends State<NotificationScreen> {
           isDrawer: false,
           isNotification: false,
         ),
-        body: SingleChildScrollView(child:
-          Center(
-            child:Container(
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
               height: vpH * 0.9,
               width: vpW,
               child: true
-              ? ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return NotificationCard();
-                  },
-                )
-              : Center(
-                  child: Text('No Contributions Yet'),
-                ),
+                  ? StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection('/notifications')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final List<DocumentSnapshot> documents =
+                              snapshot.data.documents;
+                          return ListView(
+                            physics: BouncingScrollPhysics(),
+                            children: documents
+                                .map(
+                                  (doc) => NotificationCard(
+                                    msg: doc.data['message'],
+                                    link: doc.data['link'],
+                                    title: doc.data['title'],
+                                  ),
+                                )
+                                .toList(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("Some Error has Occured");
+                        } else {
+                          return Text("No Data");
+                        }
+                      },
+                    )
+                  //  ListView.builder(
+                  //     physics: BouncingScrollPhysics(),
+                  //     shrinkWrap: true,
+                  //     itemCount: 10,
+                  //     scrollDirection: Axis.vertical,
+                  //     itemBuilder: (context, index) {
+                  //       return NotificationCard();
+                  //     },
+                  //   )
+                  : Center(
+                      child: Text('No Contributions Yet'),
+                    ),
             ),
           ),
         ),
