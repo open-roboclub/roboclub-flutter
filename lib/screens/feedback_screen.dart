@@ -1,12 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
-
-import 'package:provider/provider.dart';
-import 'package:roboclub_flutter/provider/user_provider.dart';
-
->>>>>>> 954e82db62a5a19c354b6d3f325c439f70f9a578
 import 'package:roboclub_flutter/services/feedback.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';

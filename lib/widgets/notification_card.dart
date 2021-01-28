@@ -20,7 +20,7 @@ class NotificationCard extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: vpW*0.05,vertical: vpH*0.03),
-      child:Flexible (child:Container(
+      child:Container(
         // height: vpH * 0.4,
         width: vpW * 0.6,
         decoration: BoxDecoration(
@@ -55,7 +55,7 @@ class NotificationCard extends StatelessWidget {
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text("Lorem  elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo .",style: TextStyle(fontSize: vpH*0.018),),
+                  child:Text("Lorem  elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo Lorem  elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo du .",style: TextStyle(fontSize: vpH*0.018),),
                 ),
               ),
               GestureDetector(
@@ -73,6 +73,6 @@ class NotificationCard extends StatelessWidget {
               ),
             ],) ,)
 
-  ),);
+  );
   }
 }
