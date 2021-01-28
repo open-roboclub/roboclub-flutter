@@ -1,29 +1,27 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Define
-    Map<String, Color> _colors = {
-      "card": Theme.of(context).cardColor,
-      "label": Theme.of(context).splashColor,
-    };
-    Map<String, TextStyle> _textstyle = {
-      "location": Theme.of(context).textTheme.subtitle1,
-      "label": Theme.of(context).primaryTextTheme.subtitle1,
-    };
+    // Map<String, Color> _colors = {
+    //   "card": Theme.of(context).cardColor,
+    //   "label": Theme.of(context).splashColor,
+    // };
+    // Map<String, TextStyle> _textstyle = {
+    //   "location": Theme.of(context).textTheme.subtitle1,
+    //   "label": Theme.of(context).primaryTextTheme.subtitle1,
+    // };
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.028,fontWeight:FontWeight.bold);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: vpW*0.05,vertical: vpH*0.03),
-      child:
-      Container(
-        height: vpH * 0.4,
+      child:Flexible (child:Container(
+        // height: vpH * 0.4,
         width: vpW * 0.6,
         decoration: BoxDecoration(
           border: Border(
@@ -57,7 +55,7 @@ class NotificationCard extends StatelessWidget {
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text("Lorem ipsuscing elitrdolore magna aliquyam  sit amet, consetetur sadipscing elitr, se dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo .",style: TextStyle(fontSize: vpH*0.018),),
+                  child:Text("Lorem  elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo .",style: TextStyle(fontSize: vpH*0.018),),
                 ),
               ),
               GestureDetector(
@@ -75,6 +73,6 @@ class NotificationCard extends StatelessWidget {
               ),
             ],) ,)
 
-  );
+  ),);
   }
 }

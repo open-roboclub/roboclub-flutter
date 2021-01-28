@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
-import 'package:roboclub_flutter/services/contributors.dart';
 import '../helper/dimensions.dart';
 
+// ignore: must_be_immutable
 class ContriCard extends StatefulWidget {
 
   
