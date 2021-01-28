@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
+
 import 'package:flutter/services.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,8 @@ import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
+  // debugPaintSizeEnabled = true;
+
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   LocalStorage _storage = LocalStorage();
@@ -44,6 +48,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       title: 'AMURoboclub',
+
       debugShowCheckedModeBanner: false,
       theme: themeNotifier.getTheme(),
       // darkTheme: darkTheme,

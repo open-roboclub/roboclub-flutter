@@ -41,7 +41,6 @@ dependencies:
   google_maps_flutter: ^0.5.25+3
   location: ^3.0.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,8 +85,10 @@ flutter:
     - family: SocialMedia
       fonts:
         - asset: assets/icons/SocialMedia.ttf
+
     - family: Report
       fonts:
         - asset: assets/icons/Report.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

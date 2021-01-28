@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/models/team.dart';
+import 'package:roboclub_flutter/services/team.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/teams_card.dart';
@@ -11,9 +13,20 @@ class TeamScreen extends StatefulWidget {
 
 class _TeamScreenState extends State<TeamScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List<Team> teamsList = [];
+
+  @override
+  void initState() {
+    TeamService().fetchTeams().then((teamList) {
+      teamsList = teamList;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-     var vpH = getViewportHeight(context);
+    var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     return SafeArea(
       child: Scaffold(
@@ -31,7 +44,6 @@ class _TeamScreenState extends State<TeamScreen> {
             children: [
               SizedBox(
                 height: vpH * 0.005,
-                
               ),
               Container(
                 height: vpH * 0.9,
@@ -40,10 +52,12 @@ class _TeamScreenState extends State<TeamScreen> {
                     ? ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 4,
+                        itemCount: teamsList.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          return TeamCard();
+                          return TeamCard(
+                            team: teamsList[index],
+                          );
                         },
                       )
                     : Center(
