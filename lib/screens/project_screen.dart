@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/forms/project.dart';
+import 'package:roboclub_flutter/models/project.dart';
+import 'package:roboclub_flutter/services/project.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/comp_projects_card.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
-
 import 'package:roboclub_flutter/widgets/ongoing_projects_card.dart';
 import '../helper/dimensions.dart';
 
 class ProjectScreen extends StatefulWidget {
+
+  final Project project;
+  const ProjectScreen({Key key, this.project}) : super(key: key);
+  
   @override
   _ProjectScreenState createState() => _ProjectScreenState();
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List<Project> projectsList = [];
+  
+
+  @override
+  void initState() {
+    ProjectService().fetchProjects().then((value) {
+      projectsList = value;
+    });
+    super.initState();
+  }
 
   bool _ongoingPressed = false;
   @override
@@ -82,27 +99,40 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 height: vpH * 0.8,
                 width: vpW,
                 child: _ongoingPressed
-                    ? ListView.builder(
+                      ? 
+                    ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: projectsList.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          return OngoingProjectCard();
+                          return OngoingProjectCard(project: projectsList[index],);
                         },
                       )
                     : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: projectsList.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          return CompletedProjectCard();
+                          return CompletedProjectCard(project: projectsList[index]);
                         },
                       ),
               ),
             ],
           ),
+        ),
+         floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return ProjectForm();
+                },
+              ),
+            );
+          },
+          child: Icon(Icons.add),
         ),
       ),
     );

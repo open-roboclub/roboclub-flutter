@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
 import '../helper/dimensions.dart';
 
 class OngoingProjectCard extends StatelessWidget {
+
+final Project project;
+ 
+ const OngoingProjectCard({Key key, this.project}) : super(key:key);
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -11,7 +17,7 @@ class OngoingProjectCard extends StatelessWidget {
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return  GestureDetector(
       onTap:(){ 
-        Navigator.push(context,MaterialPageRoute(builder: (context) => ProjectInfo()),);
+        Navigator.push(context,MaterialPageRoute(builder: (context) => ProjectInfo(newProject: project)),);
       },
       child: 
       Padding(
@@ -58,7 +64,7 @@ class OngoingProjectCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Project Name",
+                            project.name,
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),

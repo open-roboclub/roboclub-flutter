@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
 
 class CompletedProjectCard extends StatelessWidget {
+
+
+final Project project;
+ 
+ const CompletedProjectCard({Key key, this.project}) : super(key:key);
+
   @override
   Widget build(BuildContext context) {
+    
     // Define
-
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
 
@@ -65,7 +72,7 @@ class CompletedProjectCard extends StatelessWidget {
                     children: [
                       Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Text("Project Name ",
+                          child: Text(project.name,
                               overflow: TextOverflow.ellipsis,
                               style: _titlestyle)),
                       Align(
