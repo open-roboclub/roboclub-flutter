@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalStorage {
+class MyLocalStorage {
   //setter functions
   setTheme(bool darkMode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

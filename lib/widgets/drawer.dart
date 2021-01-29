@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -48,8 +49,17 @@ Drawer appdrawer(context, {String page}) {
         break;
       case "Admin Panel":
         {
-          var _user = Provider.of<UserProvider>(context).getUser;
-          return _user != null ? ProfileScreen() : AdminScreen();
+          // var _user = Provider.of<UserProvider>(context).getUser;
+          return StreamBuilder<FirebaseUser>(
+            stream: FirebaseAuth.instance.onAuthStateChanged,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ProfileScreen();
+              } else {
+                return AdminScreen();
+              }
+            },
+          );
         }
         break;
       case "Feedback":

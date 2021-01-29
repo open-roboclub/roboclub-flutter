@@ -15,7 +15,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  LocalStorage _storage = LocalStorage();
+  MyLocalStorage _storage = MyLocalStorage();
   var darkModeOn = await _storage.getThemepref() ?? false;
   runApp(
     MultiProvider(
@@ -41,9 +41,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final _user = Provider.of<UserProvider>(context);
+    final _userProvider = Provider.of<UserProvider>(context);
     AuthService().getCurrentUser().then((currUser) {
-      _user.setUser = currUser;
+      if (currUser != null) {
+        _userProvider.setUser = currUser;
+      }
     });
 
     return MaterialApp(

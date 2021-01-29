@@ -19,7 +19,11 @@ class TeamCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Team2Screen(members: team.members)),
+            builder: (context) => Team2Screen(
+              members: team.members,
+              title: team.teamName,
+            ),
+          ),
         );
       },
       child: Padding(

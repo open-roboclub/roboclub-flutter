@@ -61,15 +61,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         }
                       },
                     )
-                  //  ListView.builder(
-                  //     physics: BouncingScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: 10,
-                  //     scrollDirection: Axis.vertical,
-                  //     itemBuilder: (context, index) {
-                  //       return NotificationCard();
-                  //     },
-                  //   )
                   : Center(
                       child: Text('No Contributions Yet'),
                     ),
