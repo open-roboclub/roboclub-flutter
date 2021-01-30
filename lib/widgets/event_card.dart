@@ -11,66 +11,70 @@ class EventCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Container(
-        height: vpH * 0.15,
-        width: vpW * 0.85,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(3, 8),
-              blurRadius: 1.0,
-              spreadRadius: 2.0,
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Flexible(
-              flex: 1,
-              child: Container(
-                height: vpH * 0.15,
-                width: vpW * 0.3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    'assets/img/placeholder.jpg',
-                    fit: BoxFit.cover,
+      child: PhysicalModel(
+        color: Colors.transparent,
+        elevation: 8.0,
+        child: Container(
+          height: vpH * 0.15,
+          width: vpW * 0.85,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).cardColor,
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black12,
+            //     offset: Offset(3, 8),
+            //     blurRadius: 1.0,
+            //     spreadRadius: 2.0,
+            //   ),
+            // ],
+          ),
+          child: Row(
+            children: [
+              Flexible(
+                flex: 1,
+                child: Container(
+                  height: vpH * 0.15,
+                  width: vpW * 0.3,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      'assets/img/placeholder.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 2,
-              fit: FlexFit.tight,
-              child: Container(
-                margin: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "RoboRace",
-                      overflow: TextOverflow.ellipsis,
-                      style: _titlestyle,
-                    ),
-                    Text(
-                      "Thu, Oct 10 at 2:00 PM",
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "AMURoboclub",
+              Flexible(
+                flex: 2,
+                fit: FlexFit.tight,
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "RoboRace",
+                        overflow: TextOverflow.ellipsis,
+                        style: _titlestyle,
+                      ),
+                      Text(
+                        "Thu, Oct 10 at 2:00 PM",
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          "AMURoboclub",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -29,7 +29,7 @@ class _AdminScreenState extends State<AdminScreen> {
         if (isGoogle) {
           _auth.signInWithGoogle().then((user) {
             _userProvider.setUser = user;
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => ProfileScreen(),
               ),

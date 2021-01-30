@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
-import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/about_screen.dart';
 import 'package:roboclub_flutter/screens/admin_screen.dart';
 import 'package:roboclub_flutter/screens/contributor_screen.dart';

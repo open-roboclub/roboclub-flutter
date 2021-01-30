@@ -12,7 +12,6 @@ class TeamCard extends StatelessWidget {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     String teamName = team.teamName;
-    String teamImg = team.teamImg;
     var _style = TextStyle(fontSize: vpH * 0.05, fontWeight: FontWeight.bold);
     return GestureDetector(
       onTap: () {
