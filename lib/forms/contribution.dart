@@ -21,6 +21,11 @@ class _ContributionFormState extends State<ContributionForm> {
  String _amount;
  String _img;
  
+ final nameController = TextEditingController();
+ final descriptionController = TextEditingController();
+ final amountController = TextEditingController();
+ final imgController = TextEditingController();
+
   List<Contributor> contributorsList = [];
 
   @override
@@ -50,17 +55,7 @@ class _ContributionFormState extends State<ContributionForm> {
       fontFamily: 'OpenSans',
     ); 
 
-    final kBoxDecorationStyle = BoxDecoration(
-      color: Color(0xFFE8EAF6),
-      borderRadius: BorderRadius.circular(10.0),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black12,
-          blurRadius: 6.0,
-          offset: Offset(0, 2),
-        ),
-      ],
-    );
+  
     return SafeArea(
       child:Scaffold(
        key: _scaffoldKey,
@@ -93,32 +88,29 @@ class _ContributionFormState extends State<ContributionForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[   
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.12, vertical: vpH*0.015),
+                      padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.02),
                       alignment: Alignment.topLeft,
                       child:Text('Name',style: kLabelStyle,
                       ),
                     ),
-                      
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      decoration: kBoxDecorationStyle,
-                      height: vpH*0.08,
-                      width: vpW*0.8,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
+                        controller: nameController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
-                        keyboardType: TextInputType.name,
                         decoration: InputDecoration(
-                          border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
-                          contentPadding: EdgeInsets.symmetric(vertical:vpH*0.01, horizontal: vpW*0.08),
-                          hintText: 'Enter Name',
+                          hintText: ' Enter Name',
                           hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
-                        
+                   
                         validator: (value) {
                           if (value.isEmpty) {
                             return "Please enter name";
@@ -132,31 +124,29 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.12, vertical: vpH*0.015),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
                       child:Text('Description',style: kLabelStyle,
                       ),
                     ),
-                      
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      decoration: kBoxDecorationStyle,
-                      height: vpH*0.08,
-                      width: vpW*0.8,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
+                        controller: descriptionController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
-                        keyboardType: TextInputType.multiline,
                         decoration: InputDecoration(
-                          border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
-                          contentPadding: EdgeInsets.symmetric(vertical:vpH*0.01, horizontal: vpW*0.08), 
-                          hintText: 'Enter Description',
+                          hintText: ' Enter Description',
                           hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
+                  
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter some text';
@@ -170,30 +160,29 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.12, vertical: vpH*0.015),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
                       child:Text('Amount',style: kLabelStyle,
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      decoration: kBoxDecorationStyle,
-                      height: vpH*0.08,
-                      width: vpW*0.8,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
+                        controller: amountController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
-                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
-                          contentPadding: EdgeInsets.symmetric(vertical:vpH*0.01, horizontal: vpW*0.08), 
                           hintText: 'Enter Amount',
                           hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
+                  
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter some amount';
@@ -207,28 +196,27 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.12, vertical: vpH*0.015),
+                    padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
                       child:Text('Upload Image',style: kLabelStyle,
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      decoration: kBoxDecorationStyle,
-                      height: vpH*0.08,
-                      width: vpW*0.8,
+                     Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
+                        controller: imgController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
-                          border: InputBorder.none,
                           fillColor: Color(0xFFE8EAF6),
-                          contentPadding: EdgeInsets.symmetric(vertical:vpH*0.01, horizontal: vpW*0.08), 
                           hintText: 'Enter image url',
                           hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                        
                         onSaved: (value)
@@ -254,7 +242,11 @@ class _ContributionFormState extends State<ContributionForm> {
                               name: _name,
                               representativeImg: "",);
                               print("saved");
-                              Navigator.pop(context);
+                              nameController.clear();
+                              descriptionController.clear();
+                              amountController.clear();
+                              imgController.clear();
+                            
                           }
                         },
                         padding: EdgeInsets.all(15),

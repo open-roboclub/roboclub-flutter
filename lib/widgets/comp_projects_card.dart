@@ -3,13 +3,18 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
 
-class CompletedProjectCard extends StatelessWidget {
+class CompletedProjectCard extends StatefulWidget {
 
 
-final Project project;
- 
- const CompletedProjectCard({Key key, this.project}) : super(key:key);
+  final Project _completedProject;
+  CompletedProjectCard(this._completedProject);
 
+@override
+_CompletedProjectCardState createState() => _CompletedProjectCardState();
+}
+
+class _CompletedProjectCardState extends State<CompletedProjectCard>{
+  
   @override
   Widget build(BuildContext context) {
     
@@ -17,11 +22,9 @@ final Project project;
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
 
-    TextStyle _titlestyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
+    TextStyle _titlestyle =TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: vpW * 0.090, vertical: vpH * 0.020),
+      padding: EdgeInsets.symmetric(horizontal: vpW * 0.090, vertical: vpH * 0.020),
       child: Container(
         height: vpH * 0.20,
         width: vpW * 0.80,
@@ -58,21 +61,14 @@ final Project project;
                         // spreadRadius: 1.0,
                       ),
                     ],
-                    // gradient: LinearGradient(
-                    //   List: [
-                    //     Colors.blueGrey[200],
-                    //     Colors.grey[200],
-                    //   ],
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    // ),
+                  
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Text(project.name,
+                          child: Text(widget._completedProject.name,
                               overflow: TextOverflow.ellipsis,
                               style: _titlestyle)),
                       Align(

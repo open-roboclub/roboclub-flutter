@@ -3,21 +3,25 @@ import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
 import '../helper/dimensions.dart';
 
-class OngoingProjectCard extends StatelessWidget {
+class OngoingProjectCard extends StatefulWidget {
 
-final Project project;
- 
- const OngoingProjectCard({Key key, this.project}) : super(key:key);
+
+  final Project _ongoingProject;
+  OngoingProjectCard(this._ongoingProject);
 
   @override
+  _OngoingProjectCardState createState() => _OngoingProjectCardState();
+}
+class _OngoingProjectCardState extends State<OngoingProjectCard> {
+  @override
   Widget build(BuildContext context) {
+
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    TextStyle _titlestyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
+    TextStyle _titlestyle = TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return  GestureDetector(
       onTap:(){ 
-        Navigator.push(context,MaterialPageRoute(builder: (context) => ProjectInfo(newProject: project)),);
+        // Navigator.push(context,MaterialPageRoute(builder: (context) => ProjectInfo(newProject: project)),);
       },
       child: 
       Padding(
@@ -56,7 +60,7 @@ final Project project;
                     ),
                   ),
                   Flexible(
-                    flex: 2,
+                    flex: 5,
                     fit: FlexFit.tight,
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal:vpW*0.050,vertical:vpH*0.005),
@@ -64,12 +68,12 @@ final Project project;
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            project.name,
+                            widget._ongoingProject.name ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
                           Text(
-                            "Day, Date",
+                            widget._ongoingProject.date ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize:vpH*0.018),
                           ),  
@@ -78,7 +82,7 @@ final Project project;
                     ),
                   ),
                   Flexible(
-                    flex: 3,
+                    flex: 1,
                     child:Align(
                       alignment: Alignment.centerRight,
                       child:Padding(

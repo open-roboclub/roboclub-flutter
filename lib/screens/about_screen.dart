@@ -277,6 +277,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                   children: [
                                     DeveloperCard(name: "Rishabh Sharma"),
                                     DeveloperCard(name: "Samiksha Agrawal"),
+                                  
                                   ],
                                 )),
                           ],

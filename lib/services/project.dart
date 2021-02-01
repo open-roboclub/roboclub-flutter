@@ -12,19 +12,22 @@ class ProjectService {
       {String projectImg,
         String name,
         String description,
-        List<String> teamMembers,
+        String date,
         String memberImg,
-        File file,
         String link,
-        bool projectStatus}) async {
+        bool projectStatus,
+        // List<String> teamMembers,
+          // File file,
+        }) async {
           
     Map<String, dynamic> data = {
       "name": name,
       "description": description,
       "projectImg": projectImg,
       "memberImg": memberImg,
-      "file": file,
-      "teamMembers": teamMembers,
+      // "file": file,
+      // "teamMembers": teamMembers,
+      "date" : date,
       "link": link,
       "projectStatus" : projectStatus,
     };
@@ -39,7 +42,7 @@ class ProjectService {
   Future<List<Project>> fetchProjects() async {
     List<Project> list = [];
 
-    await _firestore.collection('/projects').getDocuments().then((value) {
+    await _firestore.collection("/projects").getDocuments().then((value) {
 
       value.documents.forEach((element) {
         list.add(Project.fromMap(element.data));
@@ -48,4 +51,5 @@ class ProjectService {
     return list;
   }
 }
+
 
