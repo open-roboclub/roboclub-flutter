@@ -24,74 +24,66 @@ class CompletedProjectCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Container(
-              height: vpH * 0.15,
-              width: vpW * 0.818,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Image.asset(
-                  'assets/img/placeholder.jpg',
-                  fit: BoxFit.cover,
+            PhysicalModel(
+              color: Colors.transparent,
+              elevation: 8.0,
+              child: Container(
+                height: vpH * 0.15,
+                width: vpW * 0.818,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.asset(
+                    'assets/img/placeholder.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
             Positioned(
               bottom: 0,
               left: vpW * 0.109,
-              child: Container(
-                  height: vpH * 0.16,
-                  width: vpW * 0.60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey[300],
-                        // offset: Offset(2, 2),
-                        blurRadius: 1.0,
-                        // spreadRadius: 1.0,
-                      ),
-                    ],
-                    // gradient: LinearGradient(
-                    //   List: [
-                    //     Colors.blueGrey[200],
-                    //     Colors.grey[200],
-                    //   ],
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    // ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text("Project Name ",
-                              overflow: TextOverflow.ellipsis,
-                              style: _titlestyle)),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.all(vpH * 0.010),
-                          child: FlatButton(
-                            color: Color(0xFFFF9C01),
-                            child: Text("View",
-                                style: TextStyle(
-                                  fontSize: vpH * 0.015,
-                                )),
-                            textColor: Colors.white,
-
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ProjectInfo()),
-                              );
-                            },
-
+              child: PhysicalModel(
+                color: Colors.transparent,
+                elevation: 10.0,
+                child: Container(
+                    height: vpH * 0.16,
+                    width: vpW * 0.60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[300],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text("Project Name ",
+                                overflow: TextOverflow.ellipsis,
+                                style: _titlestyle)),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: EdgeInsets.all(vpH * 0.010),
+                            child: FlatButton(
+                              color: Color(0xFFFF9C01),
+                              child: Text("View",
+                                  style: TextStyle(
+                                    fontSize: vpH * 0.015,
+                                  )),
+                              textColor: Colors.white,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProjectInfo()),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )),
+                      ],
+                    )),
+              ),
             ),
           ],
         ),

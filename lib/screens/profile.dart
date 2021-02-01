@@ -254,14 +254,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                   ),
                   onPressed: () async {
-                    await AuthService().signOutGoogle();
-                    _userProvider.setUser = User();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AdminScreen(),
-                      ),
-                    );
+                    await AuthService().signOutGoogle().then((value) {
+                      _userProvider.setUser = User();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminScreen(),
+                        ),
+                      );
+                    });
                   },
                 ),
               ),

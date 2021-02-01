@@ -82,6 +82,38 @@ class FeaturedEventCard extends StatelessWidget {
                   ),
                 ),
               ),
+              Positioned(
+                left: 10,
+                top: vpH * 0.12,
+                child: PhysicalModel(
+                  color: Colors.transparent,
+                  // shadowColor: Colors.red,
+                  elevation: 5.0,
+                  child: Container(
+                    // height: vpH * 0.04,
+                    // width: vpH * 0.05,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 1.0, horizontal: 4),
+                      child: Center(
+                        child: Text(
+                          '31\nJan',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: vpH * 0.015),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

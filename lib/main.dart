@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
@@ -41,10 +42,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final _userProvider = Provider.of<UserProvider>(context);
+    final _userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthService().getCurrentUser().then((currUser) {
       if (currUser != null) {
+        print("main" * 10);
         _userProvider.setUser = currUser;
+      } else {
+        _userProvider.setUser = User();
       }
     });
 

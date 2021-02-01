@@ -25,7 +25,7 @@ class _AdminScreenState extends State<AdminScreen> {
       color: isGoogle ? Color(0xffFF9C01) : Colors.white,
       textColor: !isGoogle ? Color(0xffFF9C01) : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
-      onPressed: () {
+      onPressed: () async {
         if (isGoogle) {
           _auth.signInWithGoogle().then((user) {
             _userProvider.setUser = user;

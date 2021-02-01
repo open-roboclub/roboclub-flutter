@@ -29,14 +29,18 @@ class TeamCard extends StatelessWidget {
         padding: EdgeInsets.all(20.0),
         child: Stack(
           children: [
-            Container(
-              height: vpH * 0.15,
-              width: vpW * 0.90,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Image.asset(
-                  "assets/img/NoPath.png",
-                  fit: BoxFit.cover,
+            PhysicalModel(
+              color: Colors.transparent,
+              elevation: 8.0,
+              child: Container(
+                height: vpH * 0.15,
+                width: vpW * 0.90,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.asset(
+                    "assets/img/NoPath.png",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
