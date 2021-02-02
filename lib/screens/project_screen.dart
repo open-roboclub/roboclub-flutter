@@ -108,8 +108,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                 snapshot.data.documents;
                             return ListView(
                               physics: BouncingScrollPhysics(),
-                              children: documents
-                                  .map((doc) =>
+                              children: 
+                              documents
+                                  .map((doc) => 
+                                  
                                       OngoingProjectCard(Project.fromMap(doc.data)))
                                   .toList(),
                             );

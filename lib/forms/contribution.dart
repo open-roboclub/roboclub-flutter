@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:roboclub_flutter/models/contributor.dart';
+import 'package:roboclub_flutter/screens/contributor_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/contributors.dart';
@@ -42,20 +43,37 @@ class _ContributionFormState extends State<ContributionForm> {
     var vpW = getViewportWidth(context);
     var contributors = ContributorService();
 
-    final kHintTextStyle = TextStyle(
-    color: Color(0xFF757575),
-    fontSize: vpH*0.024,
-    fontFamily: 'OpenSans',
-    );
+   
+    // TextFormFiels styling 
 
-    final kLabelStyle = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: vpH*0.025,
+      final kHintTextStyle = TextStyle(
+      color: Color(0xFF757575),
+      fontSize: vpH*0.024,
       fontFamily: 'OpenSans',
-    ); 
+      );
 
-  
+      final kLabelStyle = TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: vpH*0.025,
+        fontFamily: 'OpenSans',
+      ); 
+      
+      // alert after successful form submission 
+      Widget okButton =FlatButton(  
+          child: Text("OK",style: kLabelStyle,),  
+          onPressed: () {  
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ContributorScreen()));
+          },  
+        );
+
+      AlertDialog alert = AlertDialog(  
+        content: Text("Contribution made Successfully !!",style: kLabelStyle,),  
+        actions: [  
+          okButton,  
+        ],  
+      );  
+
     return SafeArea(
       child:Scaffold(
        key: _scaffoldKey,
@@ -174,6 +192,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
                           hintText: 'Enter Amount',
@@ -246,6 +265,12 @@ class _ContributionFormState extends State<ContributionForm> {
                               descriptionController.clear();
                               amountController.clear();
                               imgController.clear();
+                              showDialog(  
+                              context: context,  
+                              builder: (BuildContext context) {  
+                                return alert;  
+                              },  
+                            );  
                             
                           }
                         },

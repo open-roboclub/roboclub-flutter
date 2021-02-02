@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:roboclub_flutter/models/project.dart';
+import 'package:roboclub_flutter/screens/project_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/project.dart';
@@ -52,18 +53,35 @@ class _ProjectFormState extends State<ProjectForm> {
     var vpW = getViewportWidth(context);
     var projects = ProjectService();
 
-    final kHintTextStyle = TextStyle(
-    color: Color(0xFF757575),
-    fontSize: vpH*0.024,
-    fontFamily: 'OpenSans',
-    );
+      // TextFormFiels styling 
 
-    final kLabelStyle = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: vpH*0.025,
+      final kHintTextStyle = TextStyle(
+      color: Color(0xFF757575),
+      fontSize: vpH*0.024,
       fontFamily: 'OpenSans',
-    ); 
+      );
+
+      final kLabelStyle = TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: vpH*0.025,
+        fontFamily: 'OpenSans',
+      ); 
+      
+      // alert after successful form submission 
+      Widget okButton =FlatButton(  
+          child: Text("OK",style: kLabelStyle,),  
+          onPressed: () {  
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectScreen()));
+          },  
+        );
+
+      AlertDialog alert = AlertDialog(  
+        content: Text("Project added Successfully !!",style: kLabelStyle,),  
+        actions: [  
+          okButton,  
+        ],  
+      );  
 
     return SafeArea(
       child:Scaffold(
@@ -316,6 +334,12 @@ class _ProjectFormState extends State<ProjectForm> {
                             projectImgController.clear();
                             linkController.clear();
                             dateController.clear();
+                            showDialog(  
+                              context: context,  
+                              builder: (BuildContext context) {  
+                                return alert;  
+                              },  
+                            );  
                               
                           }
                           else{
