@@ -8,8 +8,9 @@ import '../helper/dimensions.dart';
 
 class Team2Screen extends StatefulWidget {
   final List<dynamic> members;
+  final String title;
 
-  const Team2Screen({Key key, this.members}) : super(key: key);
+  const Team2Screen({Key key, this.members, this.title}) : super(key: key);
   @override
   _Team2ScreenState createState() => _Team2ScreenState();
 }
@@ -38,8 +39,8 @@ class _Team2ScreenState extends State<Team2Screen> {
         drawer: appdrawer(context, page: "Faculty Team"),
         appBar: appBar(
           context,
-          strTitle: "FACULTY TEAM",
-          isDrawer: true,
+          strTitle: widget.title,
+          isDrawer: false,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),

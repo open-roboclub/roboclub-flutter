@@ -137,7 +137,11 @@ class _EventScreenState extends State<EventScreen> {
         floatingActionButton: _user != null
             ? (_user.isAdmin
                 ? FloatingActionButton(
-                    onPressed: null,
+                    onPressed: () {
+                      print("!!!!FLOATING" * 10);
+                      print(_user.name);
+                      print(_user.isAdmin);
+                    },
                     child: Icon(Icons.add),
                   )
                 : null)

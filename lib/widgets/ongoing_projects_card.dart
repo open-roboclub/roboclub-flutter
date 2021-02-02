@@ -18,6 +18,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
 
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+
     TextStyle _titlestyle = TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return  GestureDetector(
       onTap:(){ 
@@ -25,42 +26,42 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
           context, MaterialPageRoute(
             builder: (context) => ProjectInfo(project:widget._ongoingProject)
           ),
+
         );
       },
-      child: 
-      Padding(
+      child: Padding(
         padding: EdgeInsets.all(20.0),
-        child: Container(
-          height: vpH * 0.13,
-          width: vpW * 0.90,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.blueGrey[50],
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blueGrey[200],
-                blurRadius: 5.0,
-                offset: Offset(0.0, 0.75)
-              ),
-            ],
-          ),
-          child:Column(
-            children: [
-            Padding(padding: EdgeInsets.all(15.0),
-              child:Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: ClipRRect(
-                      child: Container(
-                        height: vpH* 0.038,
-                        width: vpW*0.080,
-                        child: Image.asset(
-                        'assets/img/placeholder.jpg',
-                        fit: BoxFit.cover,
+        child: PhysicalModel(
+          color: Colors.transparent,
+          elevation: 8.0,
+          child: Container(
+            height: vpH * 0.13,
+            width: vpW * 0.90,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.blueGrey[50],
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: ClipRRect(
+                          child: Container(
+                            height: vpH * 0.038,
+                            width: vpW * 0.080,
+                            child: Image.asset(
+                              'assets/img/placeholder.jpg',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
+
                     ),
                   ),
                   Flexible(
@@ -101,11 +102,12 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                         )
                       )
                     ),
+
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],),
+          ),
         ),
       ),
     );

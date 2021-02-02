@@ -4,7 +4,8 @@ import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
-
+import 'package:roboclub_flutter/screens/admin_screen.dart';
+import 'package:roboclub_flutter/services/auth.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,11 +35,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: vpH * 0.35,
                 width: vpW,
                 child: Image.network(
-
                   _user.profileImageUrl.isEmpty
                       ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS12QuNvQIsEBeYe6ecNFtaWq1uf-1jSZc2_g&usqp=CAU"
                       : _user.profileImageUrl,
-
                   fit: BoxFit.cover,
                   color: Colors.black26,
                   colorBlendMode: BlendMode.darken,
@@ -146,8 +145,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   icon: Icon(SocialMedia.facebook),
                                   iconSize: vpW * 0.080,
                                   color: Color(0xFF3B5998),
-                                  onPressed: () {
-                                    launch(_user.fbId ?? "");
+                                  onPressed: () async {
+                                    if (await canLaunch(_user.fbId)) {
+                                      launch(_user.fbId ?? "");
+                                    }
                                   },
                                 ),
                               ),
@@ -162,8 +163,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   icon: Icon(SocialMedia.linkedin),
                                   iconSize: vpW * 0.080,
                                   color: Color(0xFF2867B2),
-                                  onPressed: () {
-                                    launch(_user.linkedinId ?? "");
+                                  onPressed: () async {
+                                    if (await canLaunch(_user.linkedinId)) {
+                                      launch(_user.linkedinId ?? "");
+                                    }
                                   },
                                 ),
                               ),
@@ -175,8 +178,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Align(
                                 alignment: Alignment.topLeft,
                                 child: GestureDetector(
-                                  onTap: () {
-                                    launch(_user.instaId ?? "");
+                                  onTap: () async {
+                                    if (await canLaunch(_user.instaId)) {
+                                      launch(_user.instaId ?? "");
+                                    }
                                   },
                                   child: Image.asset(
                                     'assets/img/insta.png',
@@ -197,8 +202,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   icon: Icon(SocialMedia.youtube),
                                   iconSize: vpW * 0.090,
                                   color: Colors.red,
-                                  onPressed: () {
-                                    launch('tel://' + _user.contact ?? "");
+                                  onPressed: () async {
+                                    if (await canLaunch(
+                                        'tel://' + _user.contact)) {
+                                      launch('tel://' + _user.contact ?? "");
+                                    }
                                   },
                                 ),
                               ),
@@ -245,25 +253,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Icons.more_vert,
                     color: Colors.white,
                   ),
-                  onPressed: () {
-
-                    print(_user.name + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111" ??
-                        "No name\n");
-                    _userProvider.setUser = User(name: "Rishabh Jackson");
-                    setState(() {});
-                    // _userProvider.setUser = User();
-                    // print(_userProvider.getUser.name +
-                    //         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!2222" ??
-                    //     "No name\n");
-                    // AuthService().signOutGoogle().then((value) {
-                    //   print("_user is set to null");
-                    //   Navigator.of(context).pushReplacement(
-                    //     MaterialPageRoute(
-                    //       builder: (context) => AdminScreen(),
-                    //     ),
-                    //   );
-                    // });
-
+                  onPressed: () async {
+                    await AuthService().signOutGoogle().then((value) {
+                      _userProvider.setUser = User();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminScreen(),
+                        ),
+                      );
+                    });
                   },
                 ),
               ),

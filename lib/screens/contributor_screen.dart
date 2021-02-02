@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
+import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/services/contributors.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/contribution_card.dart';
@@ -30,6 +33,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    User _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
       child: Scaffold(
@@ -138,18 +142,22 @@ class _ContributorScreenState extends State<ContributorScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return ContributionForm();
-                },
-              ),
-            );
-          },
-          child: Icon(Icons.add),
-        ),
+        floatingActionButton: _user != null
+            ? (_user.isAdmin
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return ContributionForm();
+                          },
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.add),
+                  )
+                : null)
+            : null,
       ),
     );
   }

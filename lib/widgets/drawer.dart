@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -49,7 +50,11 @@ Drawer appdrawer(context, {String page}) {
       case "Admin Panel":
         {
           var _user = Provider.of<UserProvider>(context).getUser;
-          return _user != null ? ProfileScreen() : AdminScreen();
+          if (_user.name.isNotEmpty) {
+            return ProfileScreen();
+          } else {
+            return AdminScreen();
+          }
         }
         break;
       case "Feedback":

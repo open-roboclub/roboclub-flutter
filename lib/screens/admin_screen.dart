@@ -20,16 +20,16 @@ class _AdminScreenState extends State<AdminScreen> {
   AuthService _auth = AuthService();
 
   Widget _button(String title, BuildContext context, bool isGoogle) {
-    final _userProvider = Provider.of<UserProvider>(context);
+    var _userProvider = Provider.of<UserProvider>(context);
     return FlatButton(
       color: isGoogle ? Color(0xffFF9C01) : Colors.white,
       textColor: !isGoogle ? Color(0xffFF9C01) : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
-      onPressed: () {
+      onPressed: () async {
         if (isGoogle) {
           _auth.signInWithGoogle().then((user) {
             _userProvider.setUser = user;
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => ProfileScreen(),
               ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
@@ -15,7 +16,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  LocalStorage _storage = LocalStorage();
+  MyLocalStorage _storage = MyLocalStorage();
   var darkModeOn = await _storage.getThemepref() ?? false;
   runApp(
     MultiProvider(
@@ -41,9 +42,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final _user = Provider.of<UserProvider>(context);
+    final _userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthService().getCurrentUser().then((currUser) {
-      _user.setUser = currUser;
+      if (currUser != null) {
+        print("main" * 10);
+        _userProvider.setUser = currUser;
+      } else {
+        _userProvider.setUser = User();
+      }
     });
 
     return MaterialApp(
