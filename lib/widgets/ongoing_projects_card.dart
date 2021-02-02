@@ -21,7 +21,11 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
     TextStyle _titlestyle = TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
     return  GestureDetector(
       onTap:(){ 
-        // Navigator.push(context,MaterialPageRoute(builder: (context) => ProjectInfo(newProject: project)),);
+        Navigator.push(
+          context, MaterialPageRoute(
+            builder: (context) => ProjectInfo(project:widget._ongoingProject)
+          ),
+        );
       },
       child: 
       Padding(

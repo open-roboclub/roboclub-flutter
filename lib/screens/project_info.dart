@@ -7,9 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProjectInfo extends StatelessWidget {
 
-final Project newProject;
+final Project project;
 
-const ProjectInfo({Key key, this.newProject}) : super(key:key);
+ProjectInfo({Key key, this.project}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ const ProjectInfo({Key key, this.newProject}) : super(key:key);
       child: Scaffold(
         appBar: appBar(
           context,
-          strTitle: newProject.name ,
+          strTitle: project.name ,
           isDrawer: false,
           isNotification: false,
         ),
@@ -52,7 +52,7 @@ const ProjectInfo({Key key, this.newProject}) : super(key:key);
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text(newProject.description,style: TextStyle(fontSize: vpH*0.02),),
+                  child:Text(project.description,style: TextStyle(fontSize: vpH*0.02),),
                 ),
               ),
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
@@ -107,12 +107,12 @@ const ProjectInfo({Key key, this.newProject}) : super(key:key);
               ),
               GestureDetector(
                   onTap: () {
-                    launch(newProject.link);
+                    launch(project.link);
                   },child:
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text("Github link",style: TextStyle(color:Color(0XFF707070),fontSize: vpH*0.02),),
+                  child:Text(project.link ,style: TextStyle(color:Color(0XFF707070),fontSize: vpH*0.02),),
                 ),
               ),),
             ],

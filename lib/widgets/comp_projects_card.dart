@@ -14,7 +14,7 @@ _CompletedProjectCardState createState() => _CompletedProjectCardState();
 }
 
 class _CompletedProjectCardState extends State<CompletedProjectCard>{
-  
+
   @override
   Widget build(BuildContext context) {
     
@@ -86,7 +86,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ProjectInfo()),
+                                MaterialPageRoute(builder: (context) => ProjectInfo(project:widget._completedProject)),
                               );
                             },
 
