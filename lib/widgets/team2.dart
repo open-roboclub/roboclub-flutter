@@ -37,7 +37,11 @@ class Team2Card extends StatelessWidget {
                     child: CircleAvatar(
                       radius: vpH * 0.037,
                       backgroundColor: Colors.black,
-                      backgroundImage: NetworkImage(member.profileImageUrl),
+                      backgroundImage: NetworkImage(
+                        member.profileImageUrl.isNotEmpty
+                            ? member.profileImageUrl
+                            : "",
+                      ),
                     ),
                   ),
                   Flexible(

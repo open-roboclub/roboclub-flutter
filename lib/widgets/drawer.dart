@@ -80,6 +80,15 @@ Drawer appdrawer(context, {String page}) {
       onTap: () {
         Navigator.of(context).pop();
         if (title != page) {
+          // try {
+          //   Navigator.removeRoute(context,
+          //       MaterialPageRoute(builder: (context) => _getScreen(title)));
+          // } catch (e) {
+          //   print("!!!!!!!!" * 3);
+          //   print(e);
+          //   print("not in stack!");
+          //   print("!!!!!!!!" * 3);
+          // }
           Navigator.push(
             context,
             MaterialPageRoute(
