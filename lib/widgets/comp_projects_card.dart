@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
@@ -34,25 +35,20 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
         ),
         child: Stack(
           children: [
-            PhysicalModel(
-              color: Colors.transparent,
-              elevation: 8.0,
-              child: Container(
-                height: vpH * 0.15,
-                width: vpW * 0.818,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    'assets/img/placeholder.jpg',
-                    fit: BoxFit.cover,
-                  ),
+            Container(
+              height: vpH * 0.15,
+              width: vpW * 0.818,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.asset(
+                  'assets/img/placeholder.jpg',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
             Positioned(
               bottom: 0,
               left: vpW * 0.109,
-
               child: Container(
                   height: vpH * 0.16,
                   width: vpW * 0.60,
@@ -95,12 +91,11 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                               );
                             },
 
-
                           ),
                         ),
-                      ],
-                    )),
-              ),
+                      ),
+                    ],
+                  )),
             ),
           ],
         ),

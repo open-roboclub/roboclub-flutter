@@ -6,18 +6,15 @@ import '../widgets/appBar.dart';
 import '../services/contributors.dart';
 
 class ContributionForm extends StatefulWidget {
+
+  
   @override
   _ContributionFormState createState() => _ContributionFormState();
 }
 
 class _ContributionFormState extends State<ContributionForm> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+ final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-
-  String _name;
-  String _description;
-  String _amount;
-  String _img;
 
 
  String _name;
@@ -45,7 +42,6 @@ class _ContributionFormState extends State<ContributionForm> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var contributors = ContributorService();
-
 
    
     // TextFormFiels styling 
@@ -78,10 +74,9 @@ class _ContributionFormState extends State<ContributionForm> {
         ],  
       );  
 
-
     return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
+      child:Scaffold(
+       key: _scaffoldKey,
         appBar: appBar(
           context,
           strTitle: "Update Contribution",
@@ -89,16 +84,14 @@ class _ContributionFormState extends State<ContributionForm> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        backgroundColor: Color(0xFFC5CAE9),
+       backgroundColor: Color(0xFFC5CAE9),
         body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
+          height: double.infinity, width: double.infinity,
+            decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFC5CAE9),
+              colors: [Color(0xFFC5CAE9),
                 Color(0xFF9FA8DA),
                 Color(0xFF7986CB),
                 Color(0xFF5C6BC0),
@@ -108,7 +101,6 @@ class _ContributionFormState extends State<ContributionForm> {
           ),
           child: SingleChildScrollView(
             child: Form(
-
                key:_formKey,
                 child:Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -153,19 +145,8 @@ class _ContributionFormState extends State<ContributionForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
                       child:Text('Description',style: kLabelStyle,
-
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Please enter name";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _name = value;
-                      },
                     ),
-
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
@@ -200,19 +181,8 @@ class _ContributionFormState extends State<ContributionForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
                       child:Text('Amount',style: kLabelStyle,
-
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _description = value;
-                      },
                     ),
-
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
@@ -242,51 +212,23 @@ class _ContributionFormState extends State<ContributionForm> {
                         {
                           _amount = value;
                         },
-
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter some amount';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _amount = value;
-                      },
                     ),
-
                     Container(
                     padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
                       child:Text('Upload Image',style: kLabelStyle,
-
                       ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        fillColor: Color(0xFFE8EAF6),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: vpH * 0.01, horizontal: vpW * 0.08),
-                        hintText: 'Enter image url',
-                        hintStyle: kHintTextStyle,
-                      ),
-                      onSaved: (value) {
-                        _img = value;
-                      },
                     ),
-
                      Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
                         controller: imgController,
-
                         style: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: vpW * 0.015,
-                          fontSize: vpH * 0.02,
-                          fontWeight: FontWeight.bold,
+                          color: Colors.purple[200],
+                          fontFamily: 'OpenSans',
                         ),
-
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
                           hintText: 'Enter image url',
@@ -352,10 +294,11 @@ class _ContributionFormState extends State<ContributionForm> {
                     ],
                   ),
                 
-
           ),
         ),
       ),
-    );
+    ),
+  );
+                      
   }
 }
