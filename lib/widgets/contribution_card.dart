@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
 import '../helper/dimensions.dart';
 
+// ignore: must_be_immutable
 class ContriCard extends StatefulWidget {
+  
   final Contributor _contributor;
   ContriCard(this._contributor);
 
@@ -17,8 +19,7 @@ class _ContriCardState extends State<ContriCard> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
 
-    TextStyle _titlestyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
+    TextStyle _titlestyle = TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
 
     return Padding(
       padding: EdgeInsets.all(20.0),

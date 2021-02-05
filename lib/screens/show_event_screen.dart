@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 
 class ShowEventScreen extends StatefulWidget {
+  
   @override
   _ShowEventScreenState createState() => _ShowEventScreenState();
 }
