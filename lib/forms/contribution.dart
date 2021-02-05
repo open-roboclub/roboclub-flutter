@@ -74,6 +74,7 @@ class _ContributionFormState extends State<ContributionForm> {
         ],  
       );  
 
+    
     return SafeArea(
       child:Scaffold(
        key: _scaffoldKey,

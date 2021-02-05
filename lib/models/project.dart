@@ -7,7 +7,7 @@ class Project {
   String date;
   // List<String> teamMembers;
   String memberImg;
-  // File file;
+  String file;
   String link;
   bool projectStatus;
 
@@ -18,7 +18,7 @@ class Project {
     this.date,
     // this.teamMembers,
     this.memberImg,
-    // this.file,
+    this.file,
     this.link,
     this.projectStatus,
   });
@@ -31,7 +31,7 @@ class Project {
     data['date'] = project.date;
     // data['teamMembers'] = project.teamMembers;
     data['memberImg'] = project.memberImg;
-    // data['file'] = project.file;
+    data['file'] = project.file;
     data['link'] = project.link;
     data['projectStatus'] = project.projectStatus;
 
@@ -46,7 +46,7 @@ class Project {
     this.date = mapData['date'];
     // this.teamMembers = mapData['teamMembers'];
     this.memberImg = mapData['memberImg'];
-    // this.file = mapData['file'];
+    this.file = mapData['file'];
     this.link = mapData['link'];
     this.projectStatus = mapData['projectStatus'];
   
