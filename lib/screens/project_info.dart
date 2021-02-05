@@ -5,11 +5,19 @@ import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProjectInfo extends StatelessWidget {
+class ProjectInfo extends StatefulWidget {
 
 final Project project;
 
 ProjectInfo({Key key, this.project}) : super(key:key);
+
+  @override
+  _ProjectInfoState createState() => _ProjectInfoState();
+}
+
+class _ProjectInfoState extends State<ProjectInfo> {
+    
+  int progress = 0;  
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +26,14 @@ ProjectInfo({Key key, this.project}) : super(key:key);
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
+
+    bool _ongoing = true;
+    
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
           context,
-          strTitle: project.name ,
+          strTitle: widget.project.name ,
           isDrawer: false,
           isNotification: false,
         ),
@@ -43,6 +54,77 @@ ProjectInfo({Key key, this.project}) : super(key:key);
                   ),
                 ),
               ),),
+            
+            
+                Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
+                child: _ongoing ?
+                  Column(
+                    children: [
+                    Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
+                      child:Align(
+                        alignment: Alignment.center,
+                        child:Text("Progress",style: heading,),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Text(
+                          progress.toString(),
+                          style: TextStyle(fontSize: vpH*0.04, fontWeight: FontWeight.w900,color:  Color(0xFFFF9C01)),
+                        ),
+                        Text("%",style: TextStyle(fontSize: vpH*0.03, fontWeight: FontWeight.w700)),
+                      ],
+                    ),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                      
+                        trackShape: RoundedRectSliderTrackShape(),
+                        trackHeight: 4.0,
+                        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10.0),
+                        thumbColor: Colors.deepPurple[700],
+                        overlayColor: Colors.red.withAlpha(32),
+                        overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
+                        tickMarkShape: RoundSliderTickMarkShape(),
+                        valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+                        valueIndicatorColor: Colors.deepPurpleAccent,
+                        valueIndicatorTextStyle: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      child:Slider(  
+                        value: progress.toDouble(),  
+                        min: 0,  
+                        max: 100,  
+                        
+                        label: '$progress',  
+                        onChanged: (double newValue) {  
+                          setState(() {  
+                            progress = newValue.round();  
+                           
+                          });  
+                        },    
+                      ),
+                    ),],
+                  ) : Column(
+                    children: [
+                      Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02),
+                      child:Align(
+                        alignment: Alignment.topLeft,
+                        child:Text("Completed On",style: heading,),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,),
+                      child:Align(
+                        alignment: Alignment.topLeft,
+                        child:Text(widget.project.date,style: TextStyle(fontSize: vpH*0.02),),
+                      ),
+                    ),
+                  ],)
+                  
+                ),
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
@@ -52,7 +134,7 @@ ProjectInfo({Key key, this.project}) : super(key:key);
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text(project.description,style: TextStyle(fontSize: vpH*0.02),),
+                  child:Text(widget.project.description,style: TextStyle(fontSize: vpH*0.02),),
                 ),
               ),
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
@@ -107,12 +189,12 @@ ProjectInfo({Key key, this.project}) : super(key:key);
               ),
               GestureDetector(
                   onTap: () {
-                    launch(project.link);
+                    launch(widget.project.link);
                   },child:
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text(project.link ,style: TextStyle(color:Color(0XFF707070),fontSize: vpH*0.02),),
+                  child:Text(widget.project.link ,style: TextStyle(color:Color(0XFF707070),fontSize: vpH*0.02),),
                 ),
               ),),
             ],
@@ -122,6 +204,4 @@ ProjectInfo({Key key, this.project}) : super(key:key);
     );
   
   }
-
-  
 }

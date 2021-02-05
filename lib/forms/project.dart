@@ -13,13 +13,10 @@ class ProjectForm extends StatefulWidget {
 }
 
 
-
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-
-  
 
   String _projectImg;
   String _projectName;
@@ -56,18 +53,18 @@ class _ProjectFormState extends State<ProjectForm> {
 
       // TextFormFiels styling 
 
-      final kHintTextStyle = TextStyle(
+    final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
       fontSize: vpH*0.024,
       fontFamily: 'OpenSans',
-      );
+    );
 
-      final kLabelStyle = TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-        fontSize: vpH*0.025,
-        fontFamily: 'OpenSans',
-      ); 
+    final kLabelStyle = TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: vpH*0.025,
+      fontFamily: 'OpenSans',
+    ); 
       
       // alert after successful form submission 
       Widget okButton =FlatButton(  
@@ -271,7 +268,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           prefixIcon: Padding(
-                            padding: EdgeInsets.only( top: 15, left: 5, right: 0, bottom: 15),
+                            padding: EdgeInsets.all(12),
                             child: Icon(Icons.calendar_today),
                           ),
                         ),    
