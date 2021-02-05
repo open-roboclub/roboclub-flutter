@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
@@ -134,18 +135,30 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         ),
-        floatingActionButton: _user != null
-            ? (_user.isAdmin
-                ? FloatingActionButton(
-                    onPressed: () {
-                      print("!!!!FLOATING" * 10);
-                      print(_user.name);
-                      print(_user.isAdmin);
-                    },
-                    child: Icon(Icons.add),
-                  )
-                : null)
-            : null,
+        // floatingActionButton: _user != null
+        //     ? (_user.isAdmin
+        //         ? FloatingActionButton(
+        //             onPressed: () {
+        //               print("!!!!FLOATING" * 10);
+        //               print(_user.name);
+        //               print(_user.isAdmin);
+        //             },
+        //             child: Icon(Icons.add),
+        //           )
+        //         : null)
+        //     : null,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return EventForm();
+                },
+              ),
+            );
+          },
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }

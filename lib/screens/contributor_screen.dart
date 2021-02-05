@@ -52,7 +52,6 @@ class _ContributorScreenState extends State<ContributorScreen> {
               Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Container(
-                  height: vpH * 0.28,
                   width: vpW * 0.90,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),

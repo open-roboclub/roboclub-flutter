@@ -1,52 +1,47 @@
-import "package:flutter/material.dart";
-import 'package:roboclub_flutter/models/contributor.dart';
-import 'package:roboclub_flutter/screens/contributor_screen.dart';
+import 'package:roboclub_flutter/screens/event_screen.dart';
+import 'package:roboclub_flutter/services/event.dart';
+
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
-import '../services/contributors.dart';
+import 'package:flutter/material.dart';
 
-class ContributionForm extends StatefulWidget {
-
-  
+class EventForm extends StatefulWidget {
   @override
-  _ContributionFormState createState() => _ContributionFormState();
+  _EventFormState createState() => _EventFormState();
 }
 
-class _ContributionFormState extends State<ContributionForm> {
- 
+class _EventFormState extends State<EventForm> {
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
 
- String _name;
- String _description;
- String _amount;
- String _img;
- 
- final nameController = TextEditingController();
- final descriptionController = TextEditingController();
- final amountController = TextEditingController();
- final imgController = TextEditingController();
-
-  List<Contributor> contributorsList = [];
-
-  @override
-  void initState() {
-    ContributorService().fetchContributors().then((value) {
-      contributorsList = value;
-    });
-    super.initState();
-  }
+  String _eventName;
+  String _description;
+  String _date;
+  String _time;
+  String _eventImg;
+  String _hostImg;
+  String _hostedBy;
+  String _venue;
+  
+  final eventNameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final dateController = TextEditingController();
+  final timeController = TextEditingController();
+  final eventImgController = TextEditingController();
+  final hostImgController = TextEditingController();
+  final hostedByController = TextEditingController();
+  final venueController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    var contributors = ContributorService();
+    var events = EventService();
 
-   
     // TextFormFiels styling 
-
     final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
       fontSize: vpH*0.024,
@@ -60,28 +55,27 @@ class _ContributionFormState extends State<ContributionForm> {
       fontFamily: 'OpenSans',
     ); 
       
-      // alert after successful form submission 
+    // alert after successful form submission 
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ContributorScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen()));
       },  
     );
 
     AlertDialog alert = AlertDialog(  
-      content: Text("Contribution made Successfully !!",style: kLabelStyle,),  
+      content: Text("Event added Successfully !!",style: kLabelStyle,),  
       actions: [  
         okButton,  
       ],  
     );  
 
-    
     return SafeArea(
       child:Scaffold(
        key: _scaffoldKey,
         appBar: appBar(
           context,
-          strTitle: "Update Contribution",
+          strTitle: "Update Event",
           isDrawer: false,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -110,21 +104,21 @@ class _ContributionFormState extends State<ContributionForm> {
                     Container(
                       padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.02),
                       alignment: Alignment.topLeft,
-                      child:Text('Name',style: kLabelStyle,
+                      child:Text('Event Name',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: nameController,
+                        controller: eventNameController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Name',
+                          hintText: ' Enter Event Name',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -133,13 +127,13 @@ class _ContributionFormState extends State<ContributionForm> {
                    
                         validator: (value) {
                           if (value.isEmpty) {
-                            return "Please enter name";
+                            return "Please enter Event name";
                           }
                           return null;
                         },
                         onSaved: (value)
                         {
-                          _name = value;
+                          _eventName = value;
                         },
                       ),
                     ),
@@ -179,25 +173,31 @@ class _ContributionFormState extends State<ContributionForm> {
                         },
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+
+                      ],
+                    ),
+                    
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Amount',style: kLabelStyle,
+                      child:Text('Event Date',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: amountController,
+                        controller: dateController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
-                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Enter Amount',
+                          hintText: ' Enter Date',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -206,46 +206,126 @@ class _ContributionFormState extends State<ContributionForm> {
                   
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter some amount';
+                            return 'Please enter date';
                           }
                           return null;
                         },
                         onSaved: (value)
                         {
-                          _amount = value;
+                           _date = value;
                         },
                       ),
                     ),
                     Container(
-                    padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Upload Image',style: kLabelStyle,
+                      child:Text('Event Time',style: kLabelStyle,
                       ),
                     ),
-                     Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: imgController,
+                        controller: timeController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Enter image url',
+                          hintText: ' Enter Event Time',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
-                       
+                  
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter time';
+                          }
+                          return null;
+                        },
                         onSaved: (value)
                         {
-                          _img = value;
+                           _time = value;
                         },
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      alignment: Alignment.topLeft,
+                      child:Text('Hosted By',style: kLabelStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      child: TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        controller: hostedByController,
+                        style: TextStyle(
+                          color: Colors.purple[200],
+                          fontFamily: 'OpenSans',
+                        ),
+                        decoration: InputDecoration(
+                          fillColor: Color(0xFFE8EAF6),
+                          hintText: ' Enter host name',
+                          hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                  
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                        onSaved: (value)
+                        {
+                           _hostedBy = value;
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      alignment: Alignment.topLeft,
+                      child:Text('Venue',style: kLabelStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      child: TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        controller: venueController,
+                        style: TextStyle(
+                          color: Colors.purple[200],
+                          fontFamily: 'OpenSans',
+                        ),
+                        decoration: InputDecoration(
+                          fillColor: Color(0xFFE8EAF6),
+                          hintText: ' Enter Venue',
+                          hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                  
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                        onSaved: (value)
+                        {
+                           _venue = value;
+                        },
+                      ),
+                    ),
+
+                    
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
@@ -257,16 +337,22 @@ class _ContributionFormState extends State<ContributionForm> {
                           }
                           else{
                             _formKey.currentState.save();
-                            contributors.postContributor(
-                              amount:_amount,
+                            events.postEvent(
+                              eventName: _eventName,
                               description: _description,
-                              name: _name,
-                              representativeImg: "",);
+                              date: _date,
+                              time: _time,
+                              venue: _venue,
+                              hostedBy: _hostedBy,
+                              eventImg: "",
+                              hostImg: "");
                               print("saved");
-                              nameController.clear();
+                              eventNameController.clear();
                               descriptionController.clear();
-                              amountController.clear();
-                              imgController.clear();
+                              dateController.clear();
+                              timeController.clear();
+                              venueController.clear();
+                              hostedByController.clear();
                               showDialog(  
                               context: context,  
                               builder: (BuildContext context) {  
@@ -301,6 +387,5 @@ class _ContributionFormState extends State<ContributionForm> {
       ),
     ),
   );
-                      
   }
 }

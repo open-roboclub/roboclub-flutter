@@ -82,7 +82,7 @@ ProjectInfo({Key key, this.project}) : super(key:key);
               ),
               Padding(padding: EdgeInsets.symmetric(vertical: vpH*0.03),
               child:Container(
-                height: vpH * 0.09,
+              
                 width: vpW * 0.9,
                 padding:  EdgeInsets.all(3.0),
                 decoration: BoxDecoration(

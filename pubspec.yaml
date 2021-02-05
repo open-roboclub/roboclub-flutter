@@ -40,6 +40,8 @@ dependencies:
   youtube_player_flutter: ^6.0.3+2
   google_maps_flutter: ^0.5.25+3
   location: ^3.0.0
+  intl: ^0.16.1
+
   
 
 

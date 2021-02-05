@@ -15,7 +15,6 @@ class ProjectService {
         String date,
         String memberImg,
         String link,
-        bool projectStatus,
         // List<String> teamMembers,
           // File file,
         }) async {
@@ -29,7 +28,6 @@ class ProjectService {
       // "teamMembers": teamMembers,
       "date" : date,
       "link": link,
-      "projectStatus" : projectStatus,
     };
 
     await _firestore.collection("/projects").add(data).then((value) {
