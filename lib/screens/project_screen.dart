@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/forms/project.dart';
+import 'package:roboclub_flutter/models/project.dart';
+import 'package:roboclub_flutter/services/project.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/comp_projects_card.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
-
 import 'package:roboclub_flutter/widgets/ongoing_projects_card.dart';
 import '../helper/dimensions.dart';
 
 class ProjectScreen extends StatefulWidget {
+
   @override
   _ProjectScreenState createState() => _ProjectScreenState();
 }
@@ -14,14 +18,24 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  List<Project> projectsList = [];
+  
+
+  @override
+  void initState() {
+    ProjectService().fetchProjects().then((value) {
+      projectsList = value;
+    });
+    super.initState();
+  }
+
   bool _ongoingPressed = false;
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
 
-    var textStyle =
-        TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
+    var textStyle = TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -82,27 +96,72 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 height: vpH * 0.8,
                 width: vpW,
                 child: _ongoingPressed
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return OngoingProjectCard();
+      
+                    ?
+                    StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('/projects')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final List<DocumentSnapshot> documents =
+                                snapshot.data.documents;
+                            return ListView(
+                              physics: BouncingScrollPhysics(),
+                              children: 
+                              documents
+                                  .map((doc) => 
+                                  
+                                      OngoingProjectCard(Project.fromMap(doc.data)))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("Some Error has Occured");
+                          } else {
+                            return Text("No Data");
+                          }
                         },
                       )
-                    : ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return CompletedProjectCard();
+                    : 
+                
+                     StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('/projects')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final List<DocumentSnapshot> documents =
+                                snapshot.data.documents;
+                            return ListView(
+                              physics: BouncingScrollPhysics(),
+                              children: documents
+                                  .map((doc) =>
+                                      CompletedProjectCard(Project.fromMap(doc.data)))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("Some Error has Occured");
+                          } else {
+                            return Text("No Data");
+                          }
                         },
                       ),
+                   
               ),
             ],
           ),
+        ),
+         floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return ProjectForm();
+                },
+              ),
+            );
+          },
+          child: Icon(Icons.add),
         ),
       ),
     );

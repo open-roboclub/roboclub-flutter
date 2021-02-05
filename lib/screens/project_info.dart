@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ProjectInfo extends StatefulWidget {
-  @override
-  _ProjectInfoState createState() => _ProjectInfoState();
-}
+class ProjectInfo extends StatelessWidget {
 
-class _ProjectInfoState extends State<ProjectInfo> {
-  var vpH;
-  var vpW;
+final Project project;
+
+ProjectInfo({Key key, this.project}) : super(key:key);
+
   @override
   Widget build(BuildContext context) {
+    var vpH;
+    var vpW;
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
@@ -20,7 +22,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
       child: Scaffold(
         appBar: appBar(
           context,
-          strTitle: "Project Name",
+          strTitle: project.name ,
           isDrawer: false,
           isNotification: false,
         ),
@@ -50,7 +52,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolor magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et.",style: TextStyle(fontSize: vpH*0.02),),
+                  child:Text(project.description,style: TextStyle(fontSize: vpH*0.02),),
                 ),
               ),
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
@@ -96,18 +98,23 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   ),
                 ),
               ),),
+              
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
                   child:Text("Check out the project",style: heading,),
                 ),
               ),
+              GestureDetector(
+                  onTap: () {
+                    launch(project.link);
+                  },child:
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
-                  child:Text("Github link",style: TextStyle(color:Color(0XFF707070),fontSize: vpH*0.02),),
+                  child:Text(project.link ,style: TextStyle(color:Color(0XFF707070),fontSize: vpH*0.02),),
                 ),
-              ),
+              ),),
             ],
           ),
         ),

@@ -18,6 +18,7 @@ class ContributorScreen extends StatefulWidget {
 
 class _ContributorScreenState extends State<ContributorScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  
   List<Contributor> contributorsList = [];
 
   @override

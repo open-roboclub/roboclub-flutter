@@ -6,9 +6,11 @@ import 'package:roboclub_flutter/provider/user_provider.dart';
 import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
+  
   final User member;
 
   const Team2Card({Key key, this.member}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
