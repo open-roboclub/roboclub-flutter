@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
@@ -11,6 +13,7 @@ class Team2Card extends StatelessWidget {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    var _currUser = Provider.of<UserProvider>(context).getUser;
     TextStyle _titlestyle =
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.028);
     return Padding(
@@ -73,20 +76,22 @@ class Team2Card extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Flexible(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: IconButton(
-                            icon: Icon(MyFlutterApp.edit),
-                            color: Color(0xFFFF9C01),
-                            iconSize: vpW * 0.060,
-                            onPressed: () {}),
-                      ),
-                    ),
-                  ),
+                  _currUser.isAdmin
+                      ? Flexible(
+                          flex: 1,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: IconButton(
+                                  icon: Icon(MyFlutterApp.edit),
+                                  color: Color(0xFFFF9C01),
+                                  iconSize: vpW * 0.060,
+                                  onPressed: () {}),
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

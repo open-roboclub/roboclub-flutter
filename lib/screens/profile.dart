@@ -67,12 +67,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       fontSize: vpH * 0.02,
       color: Colors.grey,
     );
-    var _userProvider, _user;
+    var _userProvider, _user, _currUser;
     _userProvider = Provider.of<UserProvider>(context);
     if (!widget.viewMode) {
       _user = _userProvider.getUser;
+      _currUser = _userProvider.getUser;
     } else {
       _user = widget.member;
+      _currUser = _userProvider.getUser;
     }
 
     return SafeArea(
@@ -144,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: vpH * 0.05,
                     ),
-                    _user.isAdmin
+                    _currUser.isAdmin
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
