@@ -27,7 +27,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
 
-    bool _ongoing = true;
+    bool _ongoing = false;
     
     return SafeArea(
       child: Scaffold(
@@ -110,7 +110,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                     ),],
                   ) : Column(
                     children: [
-                      Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02),
+                      Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
                       child:Align(
                         alignment: Alignment.topLeft,
                         child:Text("Completed On",style: heading,),
