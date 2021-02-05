@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/screens/profile.dart';
 import 'package:roboclub_flutter/services/team.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
@@ -68,7 +69,16 @@ class _Team2ScreenState extends State<Team2Screen> {
                         itemCount: membersList.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          return Team2Card(member: membersList[index]);
+                          return GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(
+                                      viewMode: true,
+                                      member: membersList[index],
+                                    ),
+                                  )),
+                              child: Team2Card(member: membersList[index]));
                         },
                       )
                     : Center(

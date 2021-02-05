@@ -45,7 +45,6 @@ class _MyAppState extends State<MyApp> {
     final _userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthService().getCurrentUser().then((currUser) {
       if (currUser != null) {
-        print("main" * 10);
         _userProvider.setUser = currUser;
       } else {
         _userProvider.setUser = User();

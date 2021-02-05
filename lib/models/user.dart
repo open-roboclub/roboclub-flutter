@@ -6,6 +6,7 @@ class User {
   String position;
   String about;
   String batch;
+  String branch;
   String cvLink;
   String interests;
   String contact;
@@ -27,6 +28,7 @@ class User {
     this.fbId = "",
     this.instaId = "",
     this.interests = "",
+    this.branch = "",
     this.isAdmin = false,
     this.isMember = false,
     this.linkedinId = "",
@@ -47,6 +49,7 @@ class User {
     data["instaId"] = user.instaId;
     data["interests"] = user.interests;
     data["isAdmin"] = user.isAdmin;
+    data["branch"] = user.branch;
     data["isMember"] = user.isMember;
     data["linkedinId"] = user.linkedinId;
     data["position"] = user.position;
@@ -65,6 +68,7 @@ class User {
     this.contact = mapData['contact'];
     this.cvLink = mapData['cvLink'];
     this.fbId = mapData['fbId'];
+    this.branch = mapData['branch'];
     this.instaId = mapData['instaId'];
     this.interests = mapData['interests'];
     this.isAdmin = mapData['isAdmin'];

@@ -49,6 +49,7 @@ class AuthService {
           'fbId': "",
           'instaId': "",
           'interests': "",
+          'branch': "",
           'isAdmin': false,
           'isMember': false,
           'linkedinId': "",
