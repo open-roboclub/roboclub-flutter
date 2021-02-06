@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 
@@ -18,8 +19,7 @@ class _EventFormState extends State<EventForm> {
 
   String _eventName;
   String _description;
-  String _date;
-  String _time;
+  String _dateTime;
   String _eventImg;
   String _hostImg;
   String _hostedBy;
@@ -27,12 +27,11 @@ class _EventFormState extends State<EventForm> {
   
   final eventNameController = TextEditingController();
   final descriptionController = TextEditingController();
-  final dateController = TextEditingController();
-  final timeController = TextEditingController();
   final eventImgController = TextEditingController();
   final hostImgController = TextEditingController();
   final hostedByController = TextEditingController();
   final venueController = TextEditingController();
+  TextEditingController date = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -173,85 +172,41 @@ class _EventFormState extends State<EventForm> {
                         },
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-
-                      ],
+                  
+                   Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Text('Date',style: kLabelStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      child:TextFormField(
+                        controller: date,
+                        style: TextStyle(
+                          color: Colors.purple[200],
+                          fontFamily: 'OpenSans',
+                        ),
+                        decoration: InputDecoration(
+                          fillColor: Color(0xFFE8EAF6),
+                          hintText: 'Pick a Date',
+                          hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Icon(Icons.calendar_today),
+                          ),
+                        ),    
+                       
+                        onSaved: (String value)
+                        {
+                          _dateTime = value;
+                        },
+                      ),
                     ),
                     
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      alignment: Alignment.topLeft,
-                      child:Text('Event Date',style: kLabelStyle,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: dateController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Date',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                  
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter date';
-                          }
-                          return null;
-                        },
-                        onSaved: (value)
-                        {
-                           _date = value;
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      alignment: Alignment.topLeft,
-                      child:Text('Event Time',style: kLabelStyle,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: timeController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Event Time',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                  
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter time';
-                          }
-                          return null;
-                        },
-                        onSaved: (value)
-                        {
-                           _time = value;
-                        },
-                      ),
-                    ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
@@ -340,8 +295,7 @@ class _EventFormState extends State<EventForm> {
                             events.postEvent(
                               eventName: _eventName,
                               description: _description,
-                              date: _date,
-                              time: _time,
+                              date: _dateTime,
                               venue: _venue,
                               hostedBy: _hostedBy,
                               eventImg: "",
@@ -349,8 +303,7 @@ class _EventFormState extends State<EventForm> {
                               print("saved");
                               eventNameController.clear();
                               descriptionController.clear();
-                              dateController.clear();
-                              timeController.clear();
+                              date.clear();
                               venueController.clear();
                               hostedByController.clear();
                               showDialog(  
