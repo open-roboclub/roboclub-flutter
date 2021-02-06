@@ -19,7 +19,9 @@ class _TeamScreenState extends State<TeamScreen> {
   @override
   void initState() {
     TeamService().fetchTeams().then((teamList) {
-      teamsList = teamList;
+      setState(() {
+        teamsList = teamList;
+      });
     });
     super.initState();
   }

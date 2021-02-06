@@ -10,10 +10,6 @@ class UserProvider extends ChangeNotifier {
 
   set setUser(User user) {
     _user = user;
-    print('!!!!!!!!' * 5);
-    print("user changed");
-    print(user.name);
-    print(user.isAdmin);
     notifyListeners();
   }
 }

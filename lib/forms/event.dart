@@ -18,20 +18,20 @@ class _EventFormState extends State<EventForm> {
 
 
   String _eventName;
-  String _description;
-  String _dateTime;
-  String _eventImg;
-  String _hostImg;
-  String _hostedBy;
-  String _venue;
+  String _details;
+  String _date;
+  String _time;
+  String _posterImg;
+  String _duration;
+  String _place;
   
   final eventNameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final eventImgController = TextEditingController();
-  final hostImgController = TextEditingController();
-  final hostedByController = TextEditingController();
-  final venueController = TextEditingController();
+  final detailController = TextEditingController();
+  final posterImgController = TextEditingController();
+  final duratiomController = TextEditingController();
+  final placeController = TextEditingController();
   TextEditingController date = TextEditingController();
+  TextEditingController time = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -139,21 +139,21 @@ class _EventFormState extends State<EventForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Description',style: kLabelStyle,
+                      child:Text('Event Details',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: descriptionController,
+                        controller: detailController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Description',
+                          hintText: ' Enter Detail',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -168,7 +168,7 @@ class _EventFormState extends State<EventForm> {
                         },
                         onSaved: (value)
                         {
-                           _description = value;
+                           _details = value;
                         },
                       ),
                     ),
@@ -199,10 +199,24 @@ class _EventFormState extends State<EventForm> {
                             child: Icon(Icons.calendar_today),
                           ),
                         ),    
-                       
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          DateTime dateTime = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1990),
+                            lastDate:DateTime(2030),
+                          );
+                         
+                          DateFormat formatter = DateFormat('yyyy-MM-dd');
+                          String formatted = formatter.format(dateTime);
+                          print(formatted);
+                          date.text = formatted;
+                          // if(dateTime!=null) setState(() => _date = dateTime.toString());
+                        },
                         onSaved: (String value)
                         {
-                          _dateTime = value;
+                          _date = value;
                         },
                       ),
                     ),
@@ -210,21 +224,21 @@ class _EventFormState extends State<EventForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Hosted By',style: kLabelStyle,
+                      child:Text('Duration',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: hostedByController,
+                        controller: duratiomController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter host name',
+                          hintText: ' Enter duration',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -239,21 +253,21 @@ class _EventFormState extends State<EventForm> {
                         },
                         onSaved: (value)
                         {
-                           _hostedBy = value;
+                           _duration = value;
                         },
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Venue',style: kLabelStyle,
+                      child:Text('Place',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: venueController,
+                        controller: placeController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -275,7 +289,7 @@ class _EventFormState extends State<EventForm> {
                         },
                         onSaved: (value)
                         {
-                           _venue = value;
+                           _place = value;
                         },
                       ),
                     ),
@@ -294,18 +308,17 @@ class _EventFormState extends State<EventForm> {
                             _formKey.currentState.save();
                             events.postEvent(
                               eventName: _eventName,
-                              description: _description,
-                              date: _dateTime,
-                              venue: _venue,
-                              hostedBy: _hostedBy,
-                              eventImg: "",
-                              hostImg: "");
+                              details: _details,
+                              date: _date,
+                              place: _place,
+                              duration: _duration,
+                              posterURL: "",);
                               print("saved");
                               eventNameController.clear();
-                              descriptionController.clear();
+                              detailController.clear();
                               date.clear();
-                              venueController.clear();
-                              hostedByController.clear();
+                              placeController.clear();
+                              duratiomController.clear();
                               showDialog(  
                               context: context,  
                               builder: (BuildContext context) {  

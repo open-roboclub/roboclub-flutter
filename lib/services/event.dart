@@ -8,25 +8,23 @@ final Firestore _firestore = Firestore.instance;
 class EventService {
 
   Future<bool> postEvent(
-      {
-        String eventName,
-        String description,
-        String date,
-        String time,
-        String eventImg,
-        String hostImg,
-        String hostedBy,
-        String venue }) async {
+  {
+    String eventName,
+    String details,
+    String duration,
+    String place,
+    String posterURL,
+    String time,
+    String date,}) async {
 
     Map<String, dynamic> data = {
       "eventName": eventName,
-      "description": description,
+      "details": details,
       "date": date,
       "time": time,
-      "eventImg": eventImg,
-      "hostImg": hostImg,
-      "hostedBy": hostedBy,
-      "venue": venue,
+      "posterURL": posterURL,
+      "duration": duration,
+      "place": place,
     };
 
     await _firestore.collection("/events").add(data).then((value) {
@@ -40,7 +38,6 @@ class EventService {
     List<Event> list = [];
 
     await _firestore.collection("/events").getDocuments().then((value) {
-
       value.documents.forEach((element) {
         list.add(Event.fromMap(element.data));
       });

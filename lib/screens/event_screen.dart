@@ -61,20 +61,24 @@ class _EventScreenState extends State<EventScreen> {
                 height: vpH * 0.34,
                 width: vpW,
                 child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
+                    ? SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => ShowEventScreen(),
+                        physics: BouncingScrollPhysics(),
+                        child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => ShowEventScreen(),
+                                      ),
                                     ),
-                                  ),
-                              child: FeaturedEventCard());
-                        },
+                                child: FeaturedEventCard());
+                          },
+                        ),
                       )
                     : Center(
                         child: Text('No Ongoing Events Yet!'),

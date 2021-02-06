@@ -12,19 +12,23 @@ class TutorialService {
         .document(title)
         .setData(_tutorial)
         .then((value) {
-
       return Future.value(true);
     }).catchError((e) {
       return Future.value(false);
     });
     return Future.value(false);
-
   }
 
-  Future<bool> fetchTutorials() {
-    _firestore.collection('/tutorials');
+  Future<List<dynamic>> fetchProjects() async {
+    List<dynamic> list = [];
 
-    return Future.value(false);
-
+    await _firestore.collection("/tutorials").getDocuments().then((value) {
+      value.documents.forEach((element) {
+        list.add(element.data);
+      });
+    });
+    print(list[0]['title']);
+    print(list[0]['url']);
+    return list;
   }
 }
