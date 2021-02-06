@@ -1,12 +1,13 @@
 import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
-
+import 'package:date_format/date_format.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import 'package:flutter/material.dart';
 
 class EventForm extends StatefulWidget {
+  
   @override
   _EventFormState createState() => _EventFormState();
 }
@@ -17,21 +18,63 @@ class _EventFormState extends State<EventForm> {
   final _formKey = GlobalKey<FormState>();
 
 
-  String _eventName;
-  String _details;
-  String _date;
-  String _time;
-  String _posterImg;
-  String _duration;
-  String _place;
+  String _eventName, _details, _posterImg, _duration, _place, _setTime, _setDate;
   
+  String _hour, _minute, _time;
+  String dateTime;
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
   final eventNameController = TextEditingController();
   final detailController = TextEditingController();
   final posterImgController = TextEditingController();
   final duratiomController = TextEditingController();
   final placeController = TextEditingController();
-  TextEditingController date = TextEditingController();
-  TextEditingController time = TextEditingController();
+ 
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      initialDatePickerMode: DatePickerMode.day,
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2101));
+    if (picked != null)
+      setState(() {
+        selectedDate = picked;
+        _dateController.text = DateFormat.yMd().format(selectedDate);
+      });
+  }
+
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime = picked;
+        _hour = selectedTime.hour.toString();
+        _minute = selectedTime.minute.toString();
+        _time = _hour + ' : ' + _minute;
+        _timeController.text = _time;
+        _timeController.text = formatDate(
+            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+      });
+  }
+
+  @override
+  void initState() {
+    _dateController.text = DateFormat.yMd().format(DateTime.now());
+
+    _timeController.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,46 +222,77 @@ class _EventFormState extends State<EventForm> {
                       child:Text('Date',style: kLabelStyle,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child:TextFormField(
-                        controller: date,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                   
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _dateController,
+                          onSaved: (String value) {
+                            _setDate = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'Pick a Date',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(Icons.calendar_today),
+                            ),
+                          ),    
+                          onTap: ()
+                          {
+                            _selectDate(context);
+                          },
+                       
                         ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Pick a Date',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Icon(Icons.calendar_today),
-                          ),
-                        ),    
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          DateTime dateTime = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1990),
-                            lastDate:DateTime(2030),
-                          );
-                         
-                          DateFormat formatter = DateFormat('yyyy-MM-dd');
-                          String formatted = formatter.format(dateTime);
-                          print(formatted);
-                          date.text = formatted;
-                          // if(dateTime!=null) setState(() => _date = dateTime.toString());
-                        },
-                        onSaved: (String value)
-                        {
-                          _date = value;
-                        },
+                    
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Text('Time',style: kLabelStyle,
                       ),
+                    ),
+                   
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _timeController,
+                          onSaved: (String value) {
+                            _setTime = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'Choose Time',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(Icons.lock_clock),
+                            ),
+                          ),    
+                          onTap: ()
+                          {
+                            _selectTime(context);
+                          },
+                       
+                        ),
+                    
                     ),
                     
                     Container(
@@ -274,7 +348,7 @@ class _EventFormState extends State<EventForm> {
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Venue',
+                          hintText: 'Enter Venue',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -309,14 +383,15 @@ class _EventFormState extends State<EventForm> {
                             events.postEvent(
                               eventName: _eventName,
                               details: _details,
-                              date: _date,
+                              date: _setDate,
+                              time: _setTime,
                               place: _place,
                               duration: _duration,
                               posterURL: "",);
                               print("saved");
                               eventNameController.clear();
                               detailController.clear();
-                              date.clear();
+                              _dateController.clear();
                               placeController.clear();
                               duratiomController.clear();
                               showDialog(  

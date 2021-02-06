@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/event.dart';
 
 class ShowEventScreen extends StatefulWidget {
+  
+
+  final Event event;
+
+  ShowEventScreen({Key key, this.event}) : super(key:key);
   
   @override
   _ShowEventScreenState createState() => _ShowEventScreenState();
 }
 
 class _ShowEventScreenState extends State<ShowEventScreen> {
+  
   bool drag = false;
   @override
   Widget build(BuildContext context) {
@@ -85,7 +92,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 12),
                           child: Text(
-                            "Event Name",
+                            widget.event.eventName,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: vpH * 0.04),
@@ -140,15 +147,15 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                                 child: Column(
                                   children: [
                                     ListTile(
-                                      title: Text("Sun, 20 Nov, 2020"),
-                                      subtitle: Text("12 PM to 10 PM"),
+                                      title: Text(widget.event.date),
+                                      subtitle: Text(widget.event.time + widget.event.duration),
                                     ),
                                     // SizedBox(
                                     //   height: vpH * 0.02,
                                     // ),
                                     ListTile(
                                       title: Text("Get Direction"),
-                                      subtitle: Text("ML 10, Main Building"),
+                                      subtitle: Text(widget.event.place),
                                     ),
                                   ],
                                 ),
@@ -168,7 +175,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 12),
                           child: Text(
-                            "The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.The 3-day deal will consist of Live classes, problem-solving sessions, and even contests. As the cherry on top, all participants get to take home a certificate. So hurry up, the last date for registration is the 19th of November.\n",
+                            widget.event.details,
                           ),
                         ),
                       ],

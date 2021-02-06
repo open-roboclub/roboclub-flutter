@@ -8,13 +8,13 @@ class Event {
   String date;
 
   Event({
-    this.eventName = "",
-    this.details = "",
-    this.place = "",
-    this.time = "",
-    this.date = "",
-    this.posterURL = "",
-    this.duration = "",
+    this.eventName,
+    this.details,
+    this.place,
+    this.time,
+    this.date,
+    this.posterURL,
+    this.duration,
   });
 
   Map toMap(Event event) {

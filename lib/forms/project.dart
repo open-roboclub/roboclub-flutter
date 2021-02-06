@@ -35,15 +35,6 @@ class _ProjectFormState extends State<ProjectForm> {
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
 
-  List<Project> projectsList = [];
-
-  @override
-  void initState() {
-    ProjectService().fetchProjects().then((value) {
-      projectsList = value;
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

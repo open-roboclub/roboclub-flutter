@@ -28,15 +28,7 @@ class _ContributionFormState extends State<ContributionForm> {
  final amountController = TextEditingController();
  final imgController = TextEditingController();
 
-  List<Contributor> contributorsList = [];
 
-  @override
-  void initState() {
-    ContributorService().fetchContributors().then((value) {
-      contributorsList = value;
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
