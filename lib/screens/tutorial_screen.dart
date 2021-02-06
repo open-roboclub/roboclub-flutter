@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/screens/youtubeplayer.dart';
+import 'package:roboclub_flutter/services/tutorial.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -11,21 +14,19 @@ class TutorialScreen extends StatefulWidget {
 
 class _TutorialScreenState extends State<TutorialScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  YoutubePlayerController _controller;
   var vpH, vpW;
-  String videoId;
+  List<dynamic> list;
+  bool _isLoading = true;
 
   @override
   void initState() {
-    videoId = YoutubePlayer.convertUrlToId(
-        "https://www.youtube.com/watch?v=3SgDWuwTCrU");
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: YoutubePlayerFlags(
-        mute: false,
-        autoPlay: false,
-      ),
-    );
+    TutorialService().fetchProjects().then((value) {
+      list = value;
+
+      setState(() {
+        _isLoading = false;
+      });
+    });
     super.initState();
   }
 
@@ -44,30 +45,42 @@ class _TutorialScreenState extends State<TutorialScreen> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            height: vpH,
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return Center(
-                  child: Container(
-                    // height: vpH * 0.4,
-                    width: vpW * 0.9,
-                    child: YoutubePlayer(
-                      controller: _controller,
-                      showVideoProgressIndicator: true,
-                      onReady: () {
-                        // _controller.seekTo(Duration(seconds: 0));
-                        print('Player is ready.');
-                      },
-                    ),
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Container(
+                  height: vpH,
+                  child: ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: ListTile(
+                          leading: Icon(
+                            SocialMedia.youtube,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            list[index]['title'],
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => YoutubePlayerScreen(
+                                title: list[index]["title"],
+                                url: list[index]["url"],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-        ),
+                ),
+              ),
       ),
     );
   }
