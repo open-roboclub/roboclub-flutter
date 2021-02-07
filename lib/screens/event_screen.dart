@@ -1,21 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/show_event_screen.dart';
+import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
 
 class EventScreen extends StatefulWidget {
+
   @override
   _EventScreenState createState() => _EventScreenState();
 }
 
 class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List<Event> eventsList = [];
+
+  @override
+  void initState() {
+    EventService().fetchEvents().then((value) {
+      eventsList = value;
+    });
+    super.initState();
+  }
 
   Widget _title(String title, var vpH, var vpW) {
     return Row(
@@ -39,6 +54,7 @@ class _EventScreenState extends State<EventScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     User _user = Provider.of<UserProvider>(context).getUser;
+    
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -60,25 +76,47 @@ class _EventScreenState extends State<EventScreen> {
                 height: vpH * 0.34,
                 width: vpW,
                 child: true
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: 5,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => ShowEventScreen(),
-                                      ),
-                                    ),
-                                child: FeaturedEventCard());
-                          },
-                        ),
+                    ? StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('/events')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final List<DocumentSnapshot> documents =
+                                snapshot.data.documents;
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              child: ListView(
+                                physics: BouncingScrollPhysics(),
+                                children: documents
+                                    .map((doc) =>
+                                        FeaturedEventCard(Event.fromMap(doc.data)))
+                                    .toList(),
+                              ),);
+                          } else if (snapshot.hasError) {
+                            return Text("Some Error has Occured");
+                          } else {
+                            return Text("No Data");
+                          }
+                        },
                       )
+                        // ListView.builder(
+                        //   physics: BouncingScrollPhysics(),
+                        //   shrinkWrap: true,
+                        //   itemCount: 5,
+                        //   scrollDirection: Axis.horizontal,
+                        //   itemBuilder: (context, index) {
+                        //     return GestureDetector(
+                        //         onTap: () => Navigator.of(context).push(
+                        //               MaterialPageRoute(
+                        //                 builder: (context) => ShowEventScreen(),
+                        //               ),
+                        //             ),
+                        //         child: FeaturedEventCard());
+                        //   },
+                        // ),
+                      
                     : Center(
                         child: Text('No Ongoing Events Yet!'),
                       ),
@@ -90,21 +128,43 @@ class _EventScreenState extends State<EventScreen> {
               Container(
                 width: vpW,
                 child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ShowEventScreen(),
-                              ),
-                            ),
-                            child: EventCard(),
-                          );
+                     ? StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('/events')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final List<DocumentSnapshot> documents =
+                                snapshot.data.documents;
+                            return ListView(
+                              physics: BouncingScrollPhysics(),
+                              children: documents
+                                  .map((doc) =>
+                                      EventCard(Event.fromMap(doc.data)))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("Some Error has Occured");
+                          } else {
+                            return Text("No Data");
+                          }
                         },
                       )
+                    // ListView.builder(
+                    //     physics: BouncingScrollPhysics(),
+                    //     shrinkWrap: true,
+                    //     itemCount: 5,
+                    //     itemBuilder: (context, index) {
+                    //       return GestureDetector(
+                    //         onTap: () => Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => ShowEventScreen(),
+                    //           ),
+                    //         ),
+                    //         child: EventCard(),
+                    //       );
+                    //     },
+                    //   )
                     : Center(
                         child: Text('No Upcoming Events Yet!'),
                       ),
@@ -116,21 +176,43 @@ class _EventScreenState extends State<EventScreen> {
               Container(
                 width: vpW,
                 child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ShowEventScreen(),
-                              ),
-                            ),
-                            child: EventCard(),
-                          );
+                     ? StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('/events')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final List<DocumentSnapshot> documents =
+                                snapshot.data.documents;
+                            return ListView(
+                              physics: BouncingScrollPhysics(),
+                              children: documents
+                                  .map((doc) =>
+                                      EventCard(Event.fromMap(doc.data)))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("Some Error has Occured");
+                          } else {
+                            return Text("No Data");
+                          }
                         },
                       )
+                    //ListView.builder(
+                    //     physics: BouncingScrollPhysics(),
+                    //     shrinkWrap: true,
+                    //     itemCount: 5,
+                    //     itemBuilder: (context, index) {
+                    //       return GestureDetector(
+                    //         onTap: () => Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => ShowEventScreen(),
+                    //           ),
+                    //         ),
+                    //         child: EventCard(),
+                    //       );
+                    //     },
+                    //   )
                     : Center(
                         child: Text('No Upcoming Events Yet!'),
                       ),
@@ -138,18 +220,30 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         ),
-        floatingActionButton: _user != null
-            ? (_user.isAdmin
-                ? FloatingActionButton(
-                    onPressed: () {
-                      print("!!!!FLOATING" * 10);
-                      print(_user.name);
-                      print(_user.isAdmin);
-                    },
-                    child: Icon(Icons.add),
-                  )
-                : null)
-            : null,
+        // floatingActionButton: _user != null
+        //     ? (_user.isAdmin
+        //         ? FloatingActionButton(
+        //             onPressed: () {
+        //               print("!!!!FLOATING" * 10);
+        //               print(_user.name);
+        //               print(_user.isAdmin);
+        //             },
+        //             child: Icon(Icons.add),
+        //           )
+        //         : null)
+        //     : null,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return EventForm();
+                },
+              ),
+            );
+          },
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }

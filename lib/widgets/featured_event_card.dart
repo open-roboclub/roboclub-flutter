@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/event.dart';
+import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
-class FeaturedEventCard extends StatelessWidget {
+class FeaturedEventCard extends StatefulWidget {
+
+  final Event _featuredEvent;
+  FeaturedEventCard(this._featuredEvent);
+
+  @override
+  _FeaturedEventCardState createState() => _FeaturedEventCardState();
+}
+
+class _FeaturedEventCardState extends State<FeaturedEventCard> {
   @override
   Widget build(BuildContext context) {
     // Define
@@ -15,7 +26,16 @@ class FeaturedEventCard extends StatelessWidget {
     };
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    return Padding(
+
+    return  GestureDetector(
+      onTap:(){ 
+        Navigator.push(
+          context, MaterialPageRoute(
+            builder: (context) => ShowEventScreen(event:widget._featuredEvent)
+          ),
+        );
+      },
+      child: Padding(
       padding: const EdgeInsets.all(15.0),
       child: PhysicalModel(
         color: Colors.transparent,
@@ -42,7 +62,7 @@ class FeaturedEventCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 8),
                     child: Text(
-                      'Event name',
+                      widget._featuredEvent.eventName,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -52,7 +72,7 @@ class FeaturedEventCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      'Place',
+                      widget._featuredEvent.place,
                       overflow: TextOverflow.ellipsis,
                       style: _textstyle['location'],
                     ),
@@ -103,7 +123,7 @@ class FeaturedEventCard extends StatelessWidget {
                           vertical: 1.0, horizontal: 4),
                       child: Center(
                         child: Text(
-                          '31\nJan',
+                          widget._featuredEvent.date,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -118,6 +138,6 @@ class FeaturedEventCard extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),);
   }
 }

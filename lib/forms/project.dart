@@ -4,6 +4,7 @@ import 'package:roboclub_flutter/screens/project_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/project.dart';
+import 'package:intl/intl.dart';
 
 class ProjectForm extends StatefulWidget {
 
@@ -11,14 +12,11 @@ class ProjectForm extends StatefulWidget {
   _ProjectFormState createState() => _ProjectFormState();
 }
 
-enum projectstatus {completed,ongoing}
 
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-
-  projectstatus _status = projectstatus.ongoing;
 
   String _projectImg;
   String _projectName;
@@ -26,7 +24,7 @@ class _ProjectFormState extends State<ProjectForm> {
   String _date;
   String _memberImg;
   String _link;
-  bool _projectStatus;
+
   // List<String> _teamMembers;
   // File _file;
 
@@ -35,17 +33,8 @@ class _ProjectFormState extends State<ProjectForm> {
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
-  final dateController = TextEditingController();
+  TextEditingController date = TextEditingController();
 
-  List<Project> projectsList = [];
-
-  @override
-  void initState() {
-    ProjectService().fetchProjects().then((value) {
-      projectsList = value;
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,18 +44,18 @@ class _ProjectFormState extends State<ProjectForm> {
 
       // TextFormFiels styling 
 
-      final kHintTextStyle = TextStyle(
+    final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
       fontSize: vpH*0.024,
       fontFamily: 'OpenSans',
-      );
+    );
 
-      final kLabelStyle = TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-        fontSize: vpH*0.025,
-        fontFamily: 'OpenSans',
-      ); 
+    final kLabelStyle = TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: vpH*0.025,
+      fontFamily: 'OpenSans',
+    ); 
       
       // alert after successful form submission 
       Widget okButton =FlatButton(  
@@ -251,68 +240,51 @@ class _ProjectFormState extends State<ProjectForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Text('Enter Complete/Start Date',style: kLabelStyle,
+                      child:Text('Date',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: dateController,
+                      child:TextFormField(
+                        controller: date,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
-                           fillColor: Color(0xFFE8EAF6),
-                         hintText: 'Enter Date',
-                           hintStyle: kHintTextStyle,
+                          fillColor: Color(0xFFE8EAF6),
+                          hintText: 'Pick a Date',
+                          hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ),
-                                
-                        onSaved: (value)
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Icon(Icons.calendar_today),
+                          ),
+                        ),    
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          DateTime dateTime = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1990),
+                            lastDate:DateTime(2030),
+                          );
+                         
+                          DateFormat formatter = DateFormat('yyyy-MM-dd');
+                          String formatted = formatter.format(dateTime);
+                          print(formatted);
+                          date.text = formatted;
+                          // if(dateTime!=null) setState(() => _date = dateTime.toString());
+                        },
+                        onSaved: (String value)
                         {
                           _date = value;
                         },
                       ),
                     ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal:vpW*0.12, vertical: vpH*0.015),
-                    child:Row(
-                      children: <Widget> [
-                        Text('Ongoing',style:kLabelStyle ,),
-                        Radio(  
-                          value: projectstatus.ongoing,  
-                          groupValue: _status,  
-                          onChanged: (projectstatus value) {  
-                            setState(() {  
-                              _status = value;  
-                              if(_status==projectstatus.ongoing)
-                                {
-                                  _projectStatus = false;
-                                }
-                                print(_projectStatus);
-                              });  
-                            },  
-                          ),  
-                        Text('Completed',style: kLabelStyle,),  
-                        Radio(  
-                          value: projectstatus.completed,  
-                          groupValue: _status,  
-                          onChanged: (projectstatus value) {  
-                            setState(() {  
-                              _status = value;
-                              if(_status==projectstatus.completed)
-                              {
-                                _projectStatus = true;
-                              }  
-                              print(_projectStatus);
-                            });  
-                          },  
-                        ),
-                      ],
-                    ),),
+                    
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
@@ -326,14 +298,14 @@ class _ProjectFormState extends State<ProjectForm> {
                               name: _projectName,
                               projectImg: "",
                               date: _date,
-                              projectStatus:_projectStatus
+                            
                             );
                             print("saved");
                             nameController.clear();
                             descriptionController.clear();
                             projectImgController.clear();
                             linkController.clear();
-                            dateController.clear();
+                          
                             showDialog(  
                               context: context,  
                               builder: (BuildContext context) {  

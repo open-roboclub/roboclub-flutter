@@ -1,23 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:roboclub_flutter/models/event.dart';
 
+import 'dart:async';
+
 final Firestore _firestore = Firestore.instance;
 
 class EventService {
-  Future<bool> postEvent(String videoId, String title) {
-    Map<String, dynamic> _tutorial = {
-      'videoId': videoId,
+
+  Future<bool> postEvent(
+  {
+    String eventName,
+    String details,
+    String duration,
+    String place,
+    String posterURL,
+    String time,
+    String date,}) async {
+
+    Map<String, dynamic> data = {
+      "eventName": eventName,
+      "details": details,
+      "date": date,
+      "time": time,
+      "posterURL": posterURL,
+      "duration": duration,
+      "place": place,
     };
-    _firestore
-        .collection('/tutorials')
-        .document(title)
-        .setData(_tutorial)
-        .then((value) {
-      return Future.value(true);
-    }).catchError((e) {
-      return Future.value(false);
+
+    await _firestore.collection("/events").add(data).then((value) {
+
+      print(value);
     });
-    return Future.value(false);
+    return true;
   }
 
   Future<List<Event>> fetchEvents() async {

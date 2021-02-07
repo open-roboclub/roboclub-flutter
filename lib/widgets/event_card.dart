@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/event.dart';
+import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatefulWidget {
+
+   
+  final Event _event;
+  EventCard(this._event);
+
+  @override
+  _EventCardState createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -9,7 +21,15 @@ class EventCard extends StatelessWidget {
     TextStyle _titlestyle =
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
 
-    return Padding(
+    return  GestureDetector(
+      onTap:(){ 
+        Navigator.push(
+          context, MaterialPageRoute(
+            builder: (context) => ShowEventScreen(event:widget._event)
+          ),
+        );
+      },
+      child: Padding(
       padding: const EdgeInsets.all(15.0),
       child: PhysicalModel(
         color: Colors.transparent,
@@ -54,12 +74,12 @@ class EventCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "RoboRace",
+                        widget._event.eventName,
                         overflow: TextOverflow.ellipsis,
                         style: _titlestyle,
                       ),
                       Text(
-                        "Thu, Oct 10 at 2:00 PM",
+                        widget._event.date + widget._event.time,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Padding(
@@ -77,6 +97,6 @@ class EventCard extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),);
   }
 }

@@ -9,7 +9,7 @@ class Project {
   String memberImg;
   String file;
   String link;
-  bool projectStatus;
+  
 
   Project({
     this.projectImg,
@@ -20,7 +20,7 @@ class Project {
     this.memberImg,
     this.file,
     this.link,
-    this.projectStatus,
+    
   });
 
   Map toMap(Project project) {
@@ -33,7 +33,7 @@ class Project {
     data['memberImg'] = project.memberImg;
     data['file'] = project.file;
     data['link'] = project.link;
-    data['projectStatus'] = project.projectStatus;
+  
 
     return data;
   }
@@ -48,7 +48,7 @@ class Project {
     this.memberImg = mapData['memberImg'];
     this.file = mapData['file'];
     this.link = mapData['link'];
-    this.projectStatus = mapData['projectStatus'];
+  
   
   }
 }
