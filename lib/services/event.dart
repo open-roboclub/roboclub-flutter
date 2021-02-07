@@ -14,16 +14,17 @@ class EventService {
     String duration,
     String place,
     String posterURL,
-    String time,
+    String startTime,
+    String endTime,
     String date,}) async {
 
     Map<String, dynamic> data = {
       "eventName": eventName,
       "details": details,
       "date": date,
-      "time": time,
+      "startTime": startTime,
       "posterURL": posterURL,
-      "duration": duration,
+      "endTime": endTime,
       "place": place,
     };
 
