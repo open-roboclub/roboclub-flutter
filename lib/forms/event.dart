@@ -28,16 +28,18 @@ class _EventFormState extends State<EventForm> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedStartTime = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedEndTime = TimeOfDay(hour: 00, minute: 00);
+  
   File _image;
   final picker = ImagePicker();
 
   TextEditingController _dateController = TextEditingController();
   TextEditingController _startTimeController = TextEditingController();
   TextEditingController _endTimeController = TextEditingController();
-  final eventNameController = TextEditingController();
-  final detailController = TextEditingController();
-  final posterImgController = TextEditingController();
   TextEditingController placeController = TextEditingController();
+  TextEditingController eventNameController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
+  TextEditingController posterImgController = TextEditingController();
+  
  
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -102,7 +104,7 @@ class _EventFormState extends State<EventForm> {
     super.initState();
   }
 
-
+// To get image from gallery
 Future getImage() async {
     ImagePicker picker = ImagePicker();
     PickedFile pickedFile;
@@ -122,11 +124,14 @@ Future getImage() async {
     });
   }
   
+  // Save image to storage
   Future<void> saveImages(File _image) async {
 
     String _imageURL = await uploadFile(_image); 
     posterImgController.text = _imageURL; 
   }
+
+  // Save downloaded imageUrl to firestore
 
   Future<String> uploadFile(File _image) async {
     StorageReference storageReference = FirebaseStorage.instance

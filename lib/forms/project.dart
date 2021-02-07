@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:image_picker/image_picker.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_screen.dart';
 import '../helper/dimensions.dart';
@@ -22,19 +26,64 @@ class _ProjectFormState extends State<ProjectForm> {
   String _projectName;
   String _description;
   String _date;
-  String _memberImg;
   String _link;
+  File _image;
+  final picker = ImagePicker();
 
   // List<String> _teamMembers;
   // File _file;
-
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
+  TextEditingController posterImgController = TextEditingController();
+  
 
+  // To get image from gallery
+  Future getImage() async {
+      ImagePicker picker = ImagePicker();
+      PickedFile pickedFile;
+      pickedFile = await picker.getImage(
+        source: ImageSource.gallery,);
+
+      setState(() {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path); 
+          print("file picked");
+
+          saveImages(_image);
+
+        } else {
+          print('No image selected.');
+        }
+      });
+    }
+    
+    // Save image to storage
+    Future<void> saveImages(File _image) async {
+
+      String _imageURL = await uploadFile(_image); 
+      posterImgController.text = _imageURL; 
+    }
+
+    // Save downloaded imageUrl to firestore
+
+    Future<String> uploadFile(File _image) async {
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('${_image.path}');
+      StorageUploadTask uploadTask = storageReference.putFile(_image);
+      await uploadTask.onComplete;
+      print('File Uploaded');
+      String returnURL;
+      await storageReference.getDownloadURL().then((fileURL) {
+        returnURL =  fileURL;
+        print(returnURL);
+    });
+    return returnURL;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +91,7 @@ class _ProjectFormState extends State<ProjectForm> {
     var vpW = getViewportWidth(context);
     var projects = ProjectService();
 
-      // TextFormFiels styling 
+    // TextFormFiels styling 
 
     final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
@@ -57,24 +106,24 @@ class _ProjectFormState extends State<ProjectForm> {
       fontFamily: 'OpenSans',
     ); 
       
-      // alert after successful form submission 
-      Widget okButton =FlatButton(  
-          child: Text("OK",style: kLabelStyle,),  
-          onPressed: () {  
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectScreen()));
-          },  
-        );
+    // alert after successful form submission 
+    Widget okButton =FlatButton(  
+      child: Text("OK",style: kLabelStyle,),  
+      onPressed: () {  
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectScreen()));
+      },  
+    );
 
-      AlertDialog alert = AlertDialog(  
-        content: Text("Project added Successfully !!",style: kLabelStyle,),  
-        actions: [  
-          okButton,  
-        ],  
-      );  
+    AlertDialog alert = AlertDialog(  
+      content: Text("Project added Successfully !!",style: kLabelStyle,),  
+      actions: [  
+        okButton,  
+      ],  
+    );  
 
     return SafeArea(
       child:Scaffold(
-       key: _scaffoldKey,
+      key: _scaffoldKey,
         appBar: appBar(
           context,
           strTitle: "Update Projects",
@@ -209,34 +258,40 @@ class _ProjectFormState extends State<ProjectForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Text('Upload Project Image',style: kLabelStyle,
-                      ),
+                      child:Row(children:[
+                        Text('Pick an Image',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.add_a_photo),
+                        onPressed: (){
+                          getImage();
+                        },)
+                      ],),
                     ),
-                   
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: projectImgController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Enter project image url',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: posterImgController,
+                          onSaved: (String value) {
+                            _projectImg = value;
+                            
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
                           ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'No Image Selected',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                           
+                          ),    
+                         
                         ),
-                                
-                        onSaved: (value)
-                        {
-                          _projectImg = value;
-                        },
-                      ),
-                    ),
+                    
+                    ),  
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -276,7 +331,7 @@ class _ProjectFormState extends State<ProjectForm> {
                           String formatted = formatter.format(dateTime);
                           print(formatted);
                           date.text = formatted;
-                          // if(dateTime!=null) setState(() => _date = dateTime.toString());
+                         
                         },
                         onSaved: (String value)
                         {
@@ -296,7 +351,7 @@ class _ProjectFormState extends State<ProjectForm> {
                               link:_link,
                               description: _description,
                               name: _projectName,
-                              projectImg: "",
+                              projectImg: _projectImg,
                               date: _date,
                             
                             );
@@ -305,6 +360,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             descriptionController.clear();
                             projectImgController.clear();
                             linkController.clear();
+                            posterImgController.clear();
                           
                             showDialog(  
                               context: context,  

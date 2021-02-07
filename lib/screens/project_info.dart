@@ -47,10 +47,12 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   width: vpW * 0.9,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
-                    child: Image.asset(
-                      'assets/img/placeholder.jpg',
+                    child: widget.project.projectImg =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.project.projectImg ,
                       fit: BoxFit.cover,
-                    ),
+                    )
                   ),
                 ),
               ),),
