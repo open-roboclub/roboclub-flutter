@@ -146,7 +146,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 ),
               ),
               Container(
-                height: vpH * 0.25,
+                height: vpH * 0.2,
                 width: vpW,
                 child: true
                     ? ListView.builder(
@@ -164,9 +164,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         child: Text('No Members Yet'),
                       ),
               ),
-              Padding(padding: EdgeInsets.symmetric(vertical: vpH*0.03),
-              child:Container(
-              
+              widget.project.fileUrl ==null 
+              ?SizedBox()
+                :Padding(padding:EdgeInsets.symmetric(vertical: vpH*0.02),
+                child:Container(
                 width: vpW * 0.9,
                 padding:  EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
@@ -178,12 +179,12 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   subtitle: Text('pdf file'),
                   trailing: IconButton(
                     icon:Icon(Report.icon_ionic_md_open,color: Color(0XFFFF9C01),),
-                    onPressed: () {  },
+                    onPressed: () { launch(widget.project.fileUrl); },
                   ),
                 ),
               ),),
               
-              Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
+              Padding(padding: EdgeInsets.only(bottom:vpH*0.008,top:vpH*0.02,left: vpW*0.05,right: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
                   child:Text("Check out the project",style: heading,),

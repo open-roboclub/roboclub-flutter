@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
-import 'package:image_picker/image_picker.dart';
-import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
@@ -27,63 +27,68 @@ class _ProjectFormState extends State<ProjectForm> {
   String _description;
   String _date;
   String _link;
-  File _image;
-  final picker = ImagePicker();
+  String _fileUrl;
 
   // List<String> _teamMembers;
-  // File _file;
+  
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
-  TextEditingController posterImgController = TextEditingController();
+  TextEditingController fileController = TextEditingController();
   
-
-  // To get image from gallery
-  Future getImage() async {
-      ImagePicker picker = ImagePicker();
-      PickedFile pickedFile;
-      pickedFile = await picker.getImage(
-        source: ImageSource.gallery,);
-
-      setState(() {
-        if (pickedFile != null) {
-          _image = File(pickedFile.path); 
-          print("file picked");
-
-          saveImages(_image);
-
-        } else {
-          print('No image selected.');
-        }
-      });
+  // upload image
+  
+  Future getImage()async{
+    var rng = new Random();
+    String randomName="";
+    for (var i = 0; i < 20; i++) {
+      print(rng.nextInt(100));
+      randomName += rng.nextInt(100).toString();
     }
-    
-    // Save image to storage
-    Future<void> saveImages(File _image) async {
-
-      String _imageURL = await uploadFile(_image); 
-      posterImgController.text = _imageURL; 
-    }
-
-    // Save downloaded imageUrl to firestore
-
-    Future<String> uploadFile(File _image) async {
-      StorageReference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('${_image.path}');
-      StorageUploadTask uploadTask = storageReference.putFile(_image);
-      await uploadTask.onComplete;
-      print('File Uploaded');
-      String returnURL;
-      await storageReference.getDownloadURL().then((fileURL) {
-        returnURL =  fileURL;
-        print(returnURL);
-    });
-    return returnURL;
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    File file = File(result.files.single.path);
+    String fileName = '$randomName.png';
+    print(fileName);
+    print('${file.readAsBytesSync()}');
+    saveImg(file.readAsBytesSync(), fileName);
   }
+  Future saveImg(List<int> asset, String name) async {
+
+  StorageReference reference = FirebaseStorage.instance.ref().child(name);
+  StorageUploadTask uploadTask = reference.putData(asset);
+  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(url);
+  projectImgController.text = url;
+  
+}
+  // upload pdf
+  
+  Future getPdfAndUpload()async{
+    var rng = new Random();
+    String randomName="";
+    for (var i = 0; i < 20; i++) {
+      print(rng.nextInt(100));
+      randomName += rng.nextInt(100).toString();
+    }
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    File file = File(result.files.single.path);
+    String fileName = '$randomName.pdf';
+    print(fileName);
+    print('${file.readAsBytesSync()}');
+    savePdf(file.readAsBytesSync(), fileName);
+  }
+  Future savePdf(List<int> asset, String name) async {
+
+  StorageReference reference = FirebaseStorage.instance.ref().child(name);
+  StorageUploadTask uploadTask = reference.putData(asset);
+  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(url);
+  fileController.text = url;
+  
+}
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +275,7 @@ class _ProjectFormState extends State<ProjectForm> {
                         padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
-                          controller: posterImgController,
+                          controller: projectImgController,
                           onSaved: (String value) {
                             _projectImg = value;
                             
@@ -339,6 +344,43 @@ class _ProjectFormState extends State<ProjectForm> {
                         },
                       ),
                     ),
+                     Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Upload PDF',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.upload_file),
+                        onPressed: (){
+                          getPdfAndUpload();
+                        },)
+                      ],),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: fileController,
+                          onSaved: (String value) {
+                            _fileUrl = value;
+                            
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'No File Uploaded',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                           
+                          ),    
+                         
+                        ),
+                    
+                    ),  
                     
                     Container(
                       padding: EdgeInsets.all(15),
@@ -353,6 +395,7 @@ class _ProjectFormState extends State<ProjectForm> {
                               name: _projectName,
                               projectImg: _projectImg,
                               date: _date,
+                              fileUrl: _fileUrl,
                             
                             );
                             print("saved");
@@ -360,7 +403,8 @@ class _ProjectFormState extends State<ProjectForm> {
                             descriptionController.clear();
                             projectImgController.clear();
                             linkController.clear();
-                            posterImgController.clear();
+                            projectImgController.clear();
+                            fileController.clear();
                           
                             showDialog(  
                               context: context,  

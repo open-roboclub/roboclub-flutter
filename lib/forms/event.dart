@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart'; 
 import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
@@ -29,9 +30,7 @@ class _EventFormState extends State<EventForm> {
   TimeOfDay selectedStartTime = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedEndTime = TimeOfDay(hour: 00, minute: 00);
   
-  File _image;
-  final picker = ImagePicker();
-
+  
   TextEditingController _dateController = TextEditingController();
   TextEditingController _startTimeController = TextEditingController();
   TextEditingController _endTimeController = TextEditingController();
@@ -104,48 +103,30 @@ class _EventFormState extends State<EventForm> {
     super.initState();
   }
 
-// To get image from gallery
-Future getImage() async {
-    ImagePicker picker = ImagePicker();
-    PickedFile pickedFile;
-    pickedFile = await picker.getImage(
-      source: ImageSource.gallery,);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path); 
-        print("file picked");
-
-        saveImages(_image);
-
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
+// upload image
   
-  // Save image to storage
-  Future<void> saveImages(File _image) async {
-
-    String _imageURL = await uploadFile(_image); 
-    posterImgController.text = _imageURL; 
+  Future getImage()async{
+    var rng = new Random();
+    String randomName="";
+    for (var i = 0; i < 20; i++) {
+      print(rng.nextInt(100));
+      randomName += rng.nextInt(100).toString();
+    }
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    File file = File(result.files.single.path);
+    String fileName = '$randomName.png';
+    print(fileName);
+    print('${file.readAsBytesSync()}');
+    saveImg(file.readAsBytesSync(), fileName);
   }
+  Future saveImg(List<int> asset, String name) async {
 
-  // Save downloaded imageUrl to firestore
-
-  Future<String> uploadFile(File _image) async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('${_image.path}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    String returnURL;
-    await storageReference.getDownloadURL().then((fileURL) {
-      returnURL =  fileURL;
-      print(returnURL);
-  });
-  return returnURL;
+  StorageReference reference = FirebaseStorage.instance.ref().child(name);
+  StorageUploadTask uploadTask = reference.putData(asset);
+  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(url);
+  posterImgController.text = url;
+  
 }
 
   @override
