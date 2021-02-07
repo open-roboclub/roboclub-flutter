@@ -6,8 +6,8 @@ import '../helper/dimensions.dart';
 class OngoingProjectCard extends StatefulWidget {
 
 
-  final Project _ongoingProject;
-  OngoingProjectCard(this._ongoingProject);
+  final Project ongoingProject;
+  OngoingProjectCard({Key key, this.ongoingProject}): super(key: key);
 
   @override
   _OngoingProjectCardState createState() => _OngoingProjectCardState();
@@ -23,7 +23,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
       onTap:(){ 
         Navigator.push(
           context, MaterialPageRoute(
-            builder: (context) => ProjectInfo(project:widget._ongoingProject)
+            builder: (context) => ProjectInfo(project:widget.ongoingProject)
           ),
         );
       },
@@ -72,12 +72,12 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget._ongoingProject.name ?? "",
+                            widget.ongoingProject.name ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
                           Text(
-                            widget._ongoingProject.date ?? "",
+                            widget.ongoingProject.date ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize:vpH*0.018),
                           ),  
