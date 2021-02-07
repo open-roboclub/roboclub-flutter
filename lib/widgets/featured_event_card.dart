@@ -5,8 +5,9 @@ import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
 class FeaturedEventCard extends StatefulWidget {
 
-  final Event _featuredEvent;
-  FeaturedEventCard(this._featuredEvent);
+ 
+  final Event featuredEvent;
+  FeaturedEventCard({Key key,this.featuredEvent}): super(key: key);
 
   @override
   _FeaturedEventCardState createState() => _FeaturedEventCardState();
@@ -31,7 +32,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
       onTap:(){ 
         Navigator.push(
           context, MaterialPageRoute(
-            builder: (context) => ShowEventScreen(event:widget._featuredEvent)
+            builder: (context) => ShowEventScreen(eventinfo:widget.featuredEvent)
           ),
         );
       },
@@ -54,15 +55,18 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      'assets/img/placeholder.jpg',
+                    child: widget.featuredEvent.posterURL =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.featuredEvent.posterURL ,
                       fit: BoxFit.cover,
-                    ),
+                    )
+               
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 8),
                     child: Text(
-                      widget._featuredEvent.eventName,
+                      widget.featuredEvent.eventName,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -72,7 +76,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      widget._featuredEvent.place,
+                      widget.featuredEvent.place,
                       overflow: TextOverflow.ellipsis,
                       style: _textstyle['location'],
                     ),
@@ -123,7 +127,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                           vertical: 1.0, horizontal: 4),
                       child: Center(
                         child: Text(
-                          widget._featuredEvent.date,
+                          widget.featuredEvent.date,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,

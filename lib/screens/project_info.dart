@@ -27,7 +27,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
 
-    bool _ongoing = false;
+    bool _ongoing = true;
     
     return SafeArea(
       child: Scaffold(

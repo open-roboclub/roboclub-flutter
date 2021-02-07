@@ -6,8 +6,9 @@ import 'package:roboclub_flutter/screens/show_event_screen.dart';
 class EventCard extends StatefulWidget {
 
    
-  final Event _event;
-  EventCard(this._event);
+  final Event event;
+  EventCard({Key key,this.event}): super(key: key);
+
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -25,7 +26,7 @@ class _EventCardState extends State<EventCard> {
       onTap:(){ 
         Navigator.push(
           context, MaterialPageRoute(
-            builder: (context) => ShowEventScreen(event:widget._event)
+            builder: (context) => ShowEventScreen(eventinfo:widget.event)
           ),
         );
       },
@@ -58,10 +59,12 @@ class _EventCardState extends State<EventCard> {
                   width: vpW * 0.3,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      'assets/img/placeholder.jpg',
+                    child:  widget.event.posterURL =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.event.posterURL ,
                       fit: BoxFit.cover,
-                    ),
+                    )
                   ),
                 ),
               ),
@@ -74,12 +77,12 @@ class _EventCardState extends State<EventCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget._event.eventName,
+                        widget.event.eventName!=null ? widget.event.eventName : "",
                         overflow: TextOverflow.ellipsis,
                         style: _titlestyle,
                       ),
                       Text(
-                        widget._event.date + widget._event.time,
+                        widget.event.date!=null ? widget.event.date  : "",
                         overflow: TextOverflow.ellipsis,
                       ),
                       Padding(
