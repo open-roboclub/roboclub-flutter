@@ -55,10 +55,13 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      'assets/img/placeholder.jpg',
+                    child: widget.featuredEvent.posterURL =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.featuredEvent.posterURL ,
                       fit: BoxFit.cover,
-                    ),
+                    )
+               
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 8),

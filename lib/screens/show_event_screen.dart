@@ -30,10 +30,12 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
               Container(
                 height: vpH * 0.35,
                 width: vpW,
-                child: Image.asset(
-                  'assets/img/placeholder.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child:  widget.eventinfo.posterURL =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.eventinfo.posterURL ,
+                      fit: BoxFit.cover,
+                    )
               ),
               AnimatedPositioned(
                 duration: Duration(milliseconds: 200),
@@ -76,7 +78,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image.asset(
-                                'assets/img/placeholder.jpg',
+                                'assets/img/NoPath.png',
                                 fit: BoxFit.cover,
                               ),
                             ),
