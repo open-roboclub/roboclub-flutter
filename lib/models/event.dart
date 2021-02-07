@@ -1,20 +1,20 @@
 class Event {
   String eventName;
   String details;
-  String duration;
+  String endTime;
   String place;
   String posterURL;
-  String time;
+  String startTime;
   String date;
 
   Event({
     this.eventName,
     this.details,
     this.place,
-    this.time,
+    this.startTime,
     this.date,
     this.posterURL,
-    this.duration,
+    this.endTime,
   });
 
   Map toMap(Event event) {
@@ -22,10 +22,10 @@ class Event {
     data['eventName'] = event.eventName;
     data['details'] = event.details;
     data["place"] = event.place;
-    data["time"] = event.time;
+    data["startTime"] = event.startTime;
     data["date"] = event.date;
     data["posterURL"] = event.posterURL;
-    data["duration"] = event.duration;
+    data["endTime"] = event.endTime;
 
     return data;
   }
@@ -35,9 +35,9 @@ class Event {
     this.eventName = mapData['eventName'];
     this.details = mapData['details'];
     this.place = mapData['place'];
-    this.time = mapData['time'];
+    this.endTime = mapData['endTime'];
     this.date = mapData['date'];
     this.posterURL = mapData['posterURL'];
-    this.duration = mapData['duration'];
+    this.startTime = mapData['startTime'];
   }
 }

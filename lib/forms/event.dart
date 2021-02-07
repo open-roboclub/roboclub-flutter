@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart'; 
 import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
@@ -18,20 +21,23 @@ class _EventFormState extends State<EventForm> {
   final _formKey = GlobalKey<FormState>();
 
 
-  String _eventName, _details, _posterImg, _duration, _place, _setTime, _setDate;
+  String _eventName, _details, _posterUrl, _setEndTime, _place, _setStartTime, _setDate;
   
   String _hour, _minute, _time;
   String dateTime;
   DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedStartTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedEndTime = TimeOfDay(hour: 00, minute: 00);
+  File _image;
+  final picker = ImagePicker();
 
   TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  TextEditingController _startTimeController = TextEditingController();
+  TextEditingController _endTimeController = TextEditingController();
   final eventNameController = TextEditingController();
   final detailController = TextEditingController();
   final posterImgController = TextEditingController();
-  final duratiomController = TextEditingController();
-  final placeController = TextEditingController();
+  TextEditingController placeController = TextEditingController();
  
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -48,20 +54,37 @@ class _EventFormState extends State<EventForm> {
       });
   }
 
-  Future<Null> _selectTime(BuildContext context) async {
+  Future<Null> _selectStartTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: selectedStartTime,
     );
     if (picked != null)
       setState(() {
-        selectedTime = picked;
-        _hour = selectedTime.hour.toString();
-        _minute = selectedTime.minute.toString();
+        selectedStartTime = picked;
+        _hour = selectedStartTime.hour.toString();
+        _minute = selectedStartTime.minute.toString();
         _time = _hour + ' : ' + _minute;
-        _timeController.text = _time;
-        _timeController.text = formatDate(
-            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+        _startTimeController.text = _time;
+        _startTimeController.text = formatDate(
+            DateTime(2019, 08, 1, selectedStartTime.hour, selectedStartTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+      });
+  }
+  Future<Null> _selectEndTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: selectedEndTime,
+    );
+    if (picked != null)
+      setState(() {
+        selectedEndTime = picked;
+        _hour = selectedEndTime.hour.toString();
+        _minute = selectedEndTime.minute.toString();
+        _time = _hour + ' : ' + _minute;
+        _endTimeController.text = _time;
+        _endTimeController.text = formatDate(
+            DateTime(2019, 08, 1, selectedEndTime.hour, selectedEndTime.minute),
             [hh, ':', nn, " ", am]).toString();
       });
   }
@@ -69,12 +92,56 @@ class _EventFormState extends State<EventForm> {
   @override
   void initState() {
     _dateController.text = DateFormat.yMd().format(DateTime.now());
-
-    _timeController.text = formatDate(
+    _startTimeController.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+    super.initState();
+    _endTimeController.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
         [hh, ':', nn, " ", am]).toString();
     super.initState();
   }
+
+
+Future getImage() async {
+    ImagePicker picker = ImagePicker();
+    PickedFile pickedFile;
+    pickedFile = await picker.getImage(
+      source: ImageSource.gallery,);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path); 
+        print("file picked");
+
+        saveImages(_image);
+
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+  
+  Future<void> saveImages(File _image) async {
+
+    String _imageURL = await uploadFile(_image); 
+    posterImgController.text = _imageURL; 
+  }
+
+  Future<String> uploadFile(File _image) async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('${_image.path}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    String returnURL;
+    await storageReference.getDownloadURL().then((fileURL) {
+      returnURL =  fileURL;
+      print(returnURL);
+  });
+  return returnURL;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -180,13 +247,13 @@ class _EventFormState extends State<EventForm> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
                       child:Text('Event Details',style: kLabelStyle,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
                         controller: detailController,
@@ -224,7 +291,7 @@ class _EventFormState extends State<EventForm> {
                     ),
                    
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: _dateController,
@@ -258,17 +325,17 @@ class _EventFormState extends State<EventForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Text('Time',style: kLabelStyle,
+                      child:Text('Event Start Time',style: kLabelStyle,
                       ),
                     ),
                    
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
-                          controller: _timeController,
+                          controller: _startTimeController,
                           onSaved: (String value) {
-                            _setTime = value;
+                            _setStartTime = value;
                           },
                           style: TextStyle(
                             color: Colors.purple[200],
@@ -276,7 +343,7 @@ class _EventFormState extends State<EventForm> {
                           ),
                           decoration: InputDecoration(
                             fillColor: Color(0xFFE8EAF6),
-                            hintText: 'Choose Time',
+                            hintText: 'Choose Start Time',
                             hintStyle: kHintTextStyle,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -288,7 +355,7 @@ class _EventFormState extends State<EventForm> {
                           ),    
                           onTap: ()
                           {
-                            _selectTime(context);
+                            _selectStartTime(context);
                           },
                        
                         ),
@@ -296,49 +363,52 @@ class _EventFormState extends State<EventForm> {
                     ),
                     
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Text('Duration',style: kLabelStyle,
+                      child:Text('Event End Time',style: kLabelStyle,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: duratiomController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter duration',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                   
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _endTimeController,
+                          onSaved: (String value) {
+                            _setEndTime = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
                           ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'Choose End Time',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(Icons.lock_clock),
+                            ),
+                          ),    
+                          onTap: ()
+                          {
+                            _selectEndTime(context);
+                          },
+                       
                         ),
-                  
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                        onSaved: (value)
-                        {
-                           _duration = value;
-                        },
-                      ),
+                    
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
                       child:Text('Place',style: kLabelStyle,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
                         controller: placeController,
@@ -367,8 +437,43 @@ class _EventFormState extends State<EventForm> {
                         },
                       ),
                     ),
-
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Pick a poster Image',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.add_a_photo),
+                        onPressed: (){
+                          getImage();
+                        },)
+                      ],),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: posterImgController,
+                          onSaved: (String value) {
+                            _posterUrl = value;
+                            
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'No Image Selected',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                           
+                          ),    
+                         
+                        ),
                     
+                    ),  
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
@@ -379,21 +484,23 @@ class _EventFormState extends State<EventForm> {
                             return null;
                           }
                           else{
+                           
                             _formKey.currentState.save();
                             events.postEvent(
                               eventName: _eventName,
                               details: _details,
                               date: _setDate,
-                              time: _setTime,
+                              startTime: _setStartTime,
                               place: _place,
-                              duration: _duration,
-                              posterURL: "",);
+                              endTime: _setEndTime,
+                              posterURL: _posterUrl,);
                               print("saved");
                               eventNameController.clear();
                               detailController.clear();
                               _dateController.clear();
+                              _startTimeController.clear();
+                              _endTimeController.clear();
                               placeController.clear();
-                              duratiomController.clear();
                               showDialog(  
                               context: context,  
                               builder: (BuildContext context) {  

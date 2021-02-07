@@ -5,9 +5,9 @@ import 'package:roboclub_flutter/models/event.dart';
 class ShowEventScreen extends StatefulWidget {
   
 
-  final Event event;
+  final Event eventinfo;
 
-  ShowEventScreen({Key key, this.event}) : super(key:key);
+  ShowEventScreen({Key key, this.eventinfo}) : super(key:key);
   
   @override
   _ShowEventScreenState createState() => _ShowEventScreenState();
@@ -30,10 +30,12 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
               Container(
                 height: vpH * 0.35,
                 width: vpW,
-                child: Image.asset(
-                  'assets/img/placeholder.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child:  widget.eventinfo.posterURL =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.eventinfo.posterURL ,
+                      fit: BoxFit.cover,
+                    )
               ),
               AnimatedPositioned(
                 duration: Duration(milliseconds: 200),
@@ -76,7 +78,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image.asset(
-                                'assets/img/placeholder.jpg',
+                                'assets/img/NoPath.png',
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -92,7 +94,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 12),
                           child: Text(
-                            widget.event.eventName,
+                            widget.eventinfo.eventName!=null ? widget.eventinfo.eventName : "",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: vpH * 0.04),
@@ -147,15 +149,15 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                                 child: Column(
                                   children: [
                                     ListTile(
-                                      title: Text(widget.event.date),
-                                      subtitle: Text(widget.event.time + widget.event.duration),
+                                      title: Text(widget.eventinfo.date),
+                                      subtitle: Text(widget.eventinfo.startTime!=null ?widget.eventinfo.startTime + '-' + widget.eventinfo.endTime : ""),
                                     ),
                                     // SizedBox(
                                     //   height: vpH * 0.02,
                                     // ),
                                     ListTile(
                                       title: Text("Get Direction"),
-                                      subtitle: Text(widget.event.place),
+                                      subtitle: Text(widget.eventinfo.place!= null ? widget.eventinfo.place: ""),
                                     ),
                                   ],
                                 ),
@@ -175,7 +177,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 12),
                           child: Text(
-                            widget.event.details,
+                            widget.eventinfo.details,
                           ),
                         ),
                       ],
