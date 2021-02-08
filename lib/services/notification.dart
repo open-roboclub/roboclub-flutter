@@ -22,7 +22,7 @@ class NotificationService {
   Future<Null> pushNotification({String title, String msg}) async {
     String token = await MyLocalStorage().getDeviceToken();
     final Map<String, dynamic> body = {
-      "to": 'esq4ToTcR8G8tZOT5yO_bx:APA91bFslcEbeWMQKlSrqy6RVM2CzDE8KcvX2IPzaem7dzFq7K6gC0f9G_CcvQC029DaEpTgXbDMLVaKshASeqPMBEAGNiGY3jaX1N6dLIlZsHOsWMwWMm2Qr5DCunOXBeOAtHlGOm_M',
+      "to": token,
       "data": {
         "key1": "Hello this is key 1 from AMURoboclub",
         "key2": "Hello this is key 2 from AMURoboclub"

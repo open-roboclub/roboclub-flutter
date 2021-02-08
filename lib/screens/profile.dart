@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
+import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -152,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _quickOptions(
-                                  vpH, CustomIcons.events, ContributionForm()),
+                                  vpH, CustomIcons.events, EventForm()),
                               Divider(
                                 height: vpH * 0.04,
                               ),
@@ -391,8 +392,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ),
                                               IconButton(
-                                                icon: Icon(Icons.mail_outline),
-                                                iconSize: vpW * 0.080,
+                                                icon: Icon(Gmail.mail),
+                                                iconSize: vpW * 0.065,
                                                 color: Colors.black,
                                                 onPressed: () async {
                                                   final Uri params = Uri(

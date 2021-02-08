@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/models/project.dart';
+import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/services/project.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/comp_projects_card.dart';
@@ -18,19 +21,22 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  // List<Project> ongoingProjectsList = [];
-  // List<Project> complePedProjectsList = [];
-  List<Project> projectsList = [];
+  List<Project> ongoingProjectsList = [];
+  List<Project> complePedProjectsList = [];
+  // List<Project> projectsList = [];
   bool isLoading = false;
 
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      projectsList =value;
+      // projectsList =value;
 
-      //  value.forEach((item){
-      //    item.
-      //  });
+       value.forEach((item){
+         print(item.progress);
+         item.progress == "" ?
+          ongoingProjectsList =value : complePedProjectsList=value;
+       });
+      
       isLoading = true;
       setState(() {
         isLoading = false;
@@ -44,8 +50,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-
     var textStyle = TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
+    User _user = Provider.of<UserProvider>(context).getUser;
+
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -110,20 +117,20 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     ? ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: projectsList.length,
+                        itemCount: ongoingProjectsList.length,
                         itemBuilder: (context, index) {
                           return OngoingProjectCard(
-                            ongoingProject: projectsList[index],
+                            ongoingProject: ongoingProjectsList[index],
                           );
                         },
                       )
                     : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: projectsList.length,
+                        itemCount: complePedProjectsList.length,
                         itemBuilder: (context, index) {
                           return CompletedProjectCard(
-                            completedProject: projectsList[index],
+                            completedProject: complePedProjectsList[index],
                           );
                         },
                       ),
@@ -132,18 +139,27 @@ class _ProjectScreenState extends State<ProjectScreen> {
             ],
           ),
         ),
-         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return ProjectForm();
-                },
-              ),
-            );
-          },
-          child: Icon(Icons.add),
-        ),
+        
+         floatingActionButton: _user != null
+            ? (_user.isAdmin
+                ? FloatingActionButton(
+                    onPressed: () {
+                      print("!!!!FLOATING" * 10);
+                      print(_user.name);
+                      print(_user.isAdmin);
+                       Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return ProjectForm();
+                          },
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.add),
+                  )
+                : null)
+            : null,
+         
       ),
     );
   }
