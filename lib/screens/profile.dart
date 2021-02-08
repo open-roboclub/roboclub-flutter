@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/forms/event.dart';
@@ -101,6 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(20),
                             ),
+                            // color: Colors.white,
                             color:
                                 Theme.of(context).primaryColor.withOpacity(0.8),
                           ),
@@ -218,13 +219,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   fontSize: vpH * 0.03),
                                             ),
                                           ),
-                                          Text(
-                                            _user.about,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.blueGrey,
-                                                fontStyle: FontStyle.italic),
-                                          ),
+                                          _user.about.isNotEmpty
+                                              ? Text(
+                                                  _user.about,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.blueGrey,
+                                                      fontStyle:
+                                                          FontStyle.italic),
+                                                )
+                                              : Center(
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        height: vpH * 0.2,
+                                                        width: vpW * 0.4,
+                                                        child: SvgPicture.asset(
+                                                          'assets/illustrations/about.svg',
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                                      Text('What about you?')
+                                                    ],
+                                                  ),
+                                                ),
                                         ],
                                       ),
                                     ),
@@ -264,13 +282,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   fontSize: vpH * 0.03),
                                             ),
                                           ),
-                                          Text(
-                                            _user.interests,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.blueGrey,
-                                                fontStyle: FontStyle.italic),
-                                          ),
+                                          _user.interests.isNotEmpty
+                                              ? Text(
+                                                  _user.interests,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.blueGrey,
+                                                      fontStyle:
+                                                          FontStyle.italic),
+                                                )
+                                              : Center(
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        height: vpH * 0.2,
+                                                        width: vpW * 0.4,
+                                                        child: SvgPicture.asset(
+                                                          'assets/illustrations/interest.svg',
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                                      Text('What Interest you?')
+                                                    ],
+                                                  ),
+                                                ),
                                         ],
                                       ),
                                     ),
@@ -442,12 +477,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       elevation: 8.0,
                       child: Container(
                         width: vpW * 0.85,
-                        height: vpH * 0.1,
+                        // height: vpH * 0.1,
                         // color: Colors.white,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(
                             Radius.circular(10),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 20.0,
+                          ),
+                          child: Center(
+                            child: Text(
+                              "\" " + _user.quote + " \"",
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                           ),
                         ),
                       ),

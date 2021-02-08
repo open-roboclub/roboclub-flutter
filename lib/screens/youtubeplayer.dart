@@ -25,7 +25,7 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
       initialVideoId: videoId,
       flags: YoutubePlayerFlags(
         mute: false,
-        autoPlay: false,
+        autoPlay: true,
       ),
     );
     super.initState();

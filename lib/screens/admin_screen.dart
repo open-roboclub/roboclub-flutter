@@ -17,6 +17,7 @@ class _AdminScreenState extends State<AdminScreen> {
   var vpH;
   var vpW;
   bool _show = false;
+  bool _isLoading = false;
   AuthService _auth = AuthService();
 
   Widget _button(String title, BuildContext context, bool isGoogle) {
@@ -27,8 +28,14 @@ class _AdminScreenState extends State<AdminScreen> {
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
       onPressed: () async {
         if (isGoogle) {
+          setState(() {
+            _isLoading = true;
+          });
           _auth.signInWithGoogle().then((user) {
             _userProvider.setUser = user;
+            setState(() {
+              _isLoading = false;
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => ProfileScreen(),
@@ -86,38 +93,42 @@ class _AdminScreenState extends State<AdminScreen> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        body: Stack(
-          children: [
-            Center(
-              child: Column(
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Stack(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Container(
-                      child: Image.asset(
-                        'assets/img/admin.png',
-                      ),
+                  Center(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Container(
+                            child: Image.asset(
+                              'assets/img/admin.png',
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 50.0),
+                          child: Container(
+                            child: _button("Admin Area !!", context, false),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 50.0),
-                    child: Container(
-                      child: _button("Admin Area !!", context, false),
+                  AnimatedPositioned(
+                    width: vpW,
+                    child: Center(
+                      child: _button('Sign in with Google', context, true),
                     ),
+                    duration: Duration(milliseconds: 500),
+                    bottom: _show ? vpH * 0.12 : -vpH * 0.5,
                   ),
                 ],
               ),
-            ),
-            AnimatedPositioned(
-              width: vpW,
-              child: Center(
-                child: _button('Sign in with Google', context, true),
-              ),
-              duration: Duration(milliseconds: 500),
-              bottom: _show ? vpH * 0.12 : -vpH * 0.5,
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -35,35 +35,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Container(
               height: vpH * 0.9,
               width: vpW,
-              child: false
-                  ? StreamBuilder<QuerySnapshot>(
-                      stream: Firestore.instance
-                          .collection('/notifications')
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final List<DocumentSnapshot> documents =
-                              snapshot.data.documents;
-                          return ListView(
-                            physics: BouncingScrollPhysics(),
-                            children: documents
-                                .map(
-                                  (doc) => NotificationCard(
-                                    msg: doc.data['message'],
-                                    link: doc.data['link'],
-                                    title: doc.data['title'],
-                                  ),
-                                )
-                                .toList(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text("Some Error has Occured");
-                        } else {
-                          return Text("No Data");
-                        }
-                      },
-                    )
-                  : Center(
+              child: StreamBuilder<QuerySnapshot>(
+                stream:
+                    Firestore.instance.collection('/notifications').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final List<DocumentSnapshot> documents =
+                        snapshot.data.documents;
+                    return ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: documents
+                          .map(
+                            (doc) => NotificationCard(
+                              msg: doc.data['message'],
+                              link: doc.data['link'],
+                              title: doc.data['title'],
+                            ),
+                          )
+                          .toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("Some Error has Occured");
+                  } else {
+                    return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -73,13 +67,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             height: vpH * 0.5,
                             // color: Colors.yellow,
                             child: SvgPicture.asset(
-                              'assets/img/my_notifications.svg',
+                              'assets/illustrations/my_notifications.svg',
                               fit: BoxFit.contain,
                             ),
                           ),
                         ],
                       ),
-                    ),
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ),
