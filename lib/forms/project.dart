@@ -22,12 +22,13 @@ class _ProjectFormState extends State<ProjectForm> {
   final _formKey = GlobalKey<FormState>();
 
 
-  String _projectImg;
+  String _projectImg="";
   String _projectName;
   String _description;
   String _date;
-  String _link;
-  String _fileUrl;
+  String _link="";
+  String _fileUrl="";
+  String _progress;
 
   // List<String> _teamMembers;
   
@@ -38,6 +39,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
   TextEditingController fileController = TextEditingController();
+  TextEditingController progressController = TextEditingController();
   
   // upload image
   
@@ -99,8 +101,8 @@ class _ProjectFormState extends State<ProjectForm> {
     // TextFormFiels styling 
 
     final kHintTextStyle = TextStyle(
-      color: Color(0xFF757575),
-      fontSize: vpH*0.024,
+      color: Colors.white,
+      fontSize: vpH*0.022,
       fontFamily: 'OpenSans',
     );
 
@@ -169,12 +171,12 @@ class _ProjectFormState extends State<ProjectForm> {
                         textCapitalization: TextCapitalization.words,
                         controller: nameController,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Project Name',
+                          hintText: 'Enter Project Name',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -202,11 +204,12 @@ class _ProjectFormState extends State<ProjectForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
+                        maxLines: 3,
                         textCapitalization: TextCapitalization.words,
                         controller: descriptionController,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
                         ),
                         keyboardType: TextInputType.multiline,
                         decoration: InputDecoration(
@@ -230,6 +233,43 @@ class _ProjectFormState extends State<ProjectForm> {
                         },
                       ),
                     ),
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                    //   alignment: Alignment.topLeft,
+                    //   child:Text('Project Status',style: kLabelStyle,
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                    //   child: TextFormField(
+                    //     textCapitalization: TextCapitalization.words,
+                    //     controller: progressController,
+                    //     style: TextStyle(
+                    //       color: Colors.black,
+                    //       fontSize: vpH*0.02,
+                    //     ),
+                    //     keyboardType: TextInputType.number,
+                    //     decoration: InputDecoration(
+                    //       fillColor: Color(0xFFE8EAF6),
+                    //       hintText: 'Project Status',
+                    //       hintStyle: kHintTextStyle,
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(10.0),
+                    //       ),
+                    //     ),
+                      
+                    //     validator: (value) {
+                    //       if (value.isEmpty) {
+                    //         return 'Please enter project status in % ';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     onSaved: (value)
+                    //     {
+                    //        _progress = value;
+                    //     },
+                    //   ),
+                    // ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -242,8 +282,8 @@ class _ProjectFormState extends State<ProjectForm> {
                         textCapitalization: TextCapitalization.words,
                         controller: linkController,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
@@ -263,43 +303,6 @@ class _ProjectFormState extends State<ProjectForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Row(children:[
-                        Text('Pick an Image',style: kLabelStyle,),
-                        IconButton(icon: Icon(Icons.add_a_photo),
-                        onPressed: (){
-                          getImage();
-                        },)
-                      ],),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: projectImgController,
-                          onSaved: (String value) {
-                            _projectImg = value;
-                            
-                          },
-                          style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'OpenSans',
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'No Image Selected',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                           
-                          ),    
-                         
-                        ),
-                    
-                    ),  
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
                       child:Text('Date',style: kLabelStyle,
                       ),
                     ),
@@ -308,8 +311,8 @@ class _ProjectFormState extends State<ProjectForm> {
                       child:TextFormField(
                         controller: date,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
@@ -344,6 +347,44 @@ class _ProjectFormState extends State<ProjectForm> {
                         },
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Pick an Image',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.add_a_photo),
+                        onPressed: (){
+                          getImage();
+                        },)
+                      ],),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: projectImgController,
+                          onSaved: (String value) {
+                            _projectImg = value;
+                            
+                          },
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: vpH*0.02,
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'No Image Selected',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                           
+                          ),    
+                         
+                        ),
+                    
+                    ),  
+                    
                      Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -365,8 +406,8 @@ class _ProjectFormState extends State<ProjectForm> {
                             
                           },
                           style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'OpenSans',
+                            color: Colors.black,
+                            fontSize: vpH*0.02,
                           ),
                           decoration: InputDecoration(
                             fillColor: Color(0xFFE8EAF6),
@@ -396,6 +437,7 @@ class _ProjectFormState extends State<ProjectForm> {
                               projectImg: _projectImg,
                               date: _date,
                               fileUrl: _fileUrl,
+                              progress: _progress,
                             
                             );
                             print("saved");
@@ -405,6 +447,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             linkController.clear();
                             projectImgController.clear();
                             fileController.clear();
+                            progressController.clear();
                           
                             showDialog(  
                               context: context,  

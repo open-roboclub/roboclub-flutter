@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -20,13 +21,32 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  List<Event> eventsList = [];
+  List<Event> featuredEventsList = [];
+  List<Event> pastEventsList = [];
+  List<Event> upcomingEventsList = [];
   bool isLoading = false;
+  DateTime parsedDate;
 
   @override
   void initState() {
     EventService().fetchEvents().then((value) {
-      eventsList = value;
+      // eventsList = value;
+      value.forEach((item) {
+        print(item.date);
+        parsedDate = DateTime.parse(item.date);
+        print(parsedDate);
+        //  print(parsedDate);
+        //  parsedDate= DateFormat.yMd().format(parsedDate);
+        //  print(parsedDate);
+
+        if (parsedDate.isAtSameMomentAs(DateTime.now())) {
+          featuredEventsList = value;
+        } else if (parsedDate.isBefore(DateTime.now())) {
+          pastEventsList = value;
+        } else {
+          upcomingEventsList = value;
+        }
+      });
       isLoading = true;
       setState(() {
         isLoading = false;
@@ -69,87 +89,66 @@ class _EventScreenState extends State<EventScreen> {
             scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          child: eventsList.length == 0
-              ? Center(
-                  child: Container(
-                    height: vpH,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Be Ready! A lot is about to happen..."),
-                        Container(
-                          width: vpW * 0.8,
-                          height: vpH * 0.6,
-                          // color: Colors.yellow,
-                          child: SvgPicture.asset(
-                            'assets/illustrations/events.svg',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Column(
-                  children: [
-                    SizedBox(
-                      height: vpH * 0.04,
-                    ),
-                    _title('Featured Events', vpH, vpW),
-                    Container(
-                        height: vpH * 0.34,
-                        width: vpW,
-                        child: isLoading
-                            ? Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: eventsList.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return FeaturedEventCard(
-                                    featuredEvent: eventsList[index],
-                                  );
-                                },
-                              )),
-                    SizedBox(
-                      height: vpH * 0.04,
-                    ),
-                    _title('Upcoming Events', vpH, vpW),
-                    Container(
-                        width: vpW,
-                        child: isLoading
-                            ? Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: eventsList.length,
-                                itemBuilder: (context, index) {
-                                  return EventCard(
-                                    event: eventsList[index],
-                                  );
-                                },
-                              )),
-                    SizedBox(
-                      height: vpH * 0.04,
-                    ),
-                    _title('Past Events', vpH, vpW),
-                    Container(
-                        width: vpW,
-                        child: isLoading
-                            ? Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: eventsList.length,
-                                itemBuilder: (context, index) {
-                                  return EventCard(
-                                    event: eventsList[index],
-                                  );
-                                },
-                              )),
-                  ],
-                ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: vpH * 0.04,
+              ),
+              _title('Featured Events', vpH, vpW),
+              Container(
+                  height: vpH * 0.34,
+                  width: vpW,
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: featuredEventsList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return FeaturedEventCard(
+                              featuredEvent: featuredEventsList[index],
+                            );
+                          },
+                        )),
+              SizedBox(
+                height: vpH * 0.04,
+              ),
+              _title('Upcoming Events', vpH, vpW),
+              Container(
+                  width: vpW,
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: upcomingEventsList.length,
+                          itemBuilder: (context, index) {
+                            return EventCard(
+                              event: upcomingEventsList[index],
+                            );
+                          },
+                        )),
+              SizedBox(
+                height: vpH * 0.04,
+              ),
+              _title('Past Events', vpH, vpW),
+              Container(
+                  width: vpW,
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: pastEventsList.length,
+                          itemBuilder: (context, index) {
+                            return EventCard(
+                              event: pastEventsList[index],
+                            );
+                          },
+                        )),
+            ],
+          ),
         ),
         floatingActionButton: _user != null
             ? (_user.isAdmin
