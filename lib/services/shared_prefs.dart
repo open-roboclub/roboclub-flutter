@@ -13,6 +13,17 @@ class MyLocalStorage {
     return prefs.getBool('darkMode');
   }
 
+  setDeviceToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('deviceToken', token);
+  }
+
+  //getter functions
+  Future<String> getDeviceToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('deviceToken');
+  }
+
   // clear local storage
   clearPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

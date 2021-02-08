@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 
@@ -9,6 +10,7 @@ import 'package:roboclub_flutter/provider/theme_provider.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/auth.dart';
+import 'package:roboclub_flutter/services/notification.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
@@ -39,6 +41,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final FirebaseMessaging _messaging = FirebaseMessaging();
+
+  MyLocalStorage _storage = MyLocalStorage();
+  @override
+  void initState() {
+    _storage.getDeviceToken().then((value) {
+      if (value == null) {
+        _messaging.getToken().then((fcmToken) {
+          print("fcm saved to storage!");
+          NotificationService().postDeviceToken(fcmToken: fcmToken);
+          _storage.setDeviceToken(fcmToken);
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);

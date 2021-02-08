@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
+import 'package:roboclub_flutter/services/notification.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/notification_card.dart';
 
@@ -33,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Container(
               height: vpH * 0.9,
               width: vpW,
-              child: true
+              child: false
                   ? StreamBuilder<QuerySnapshot>(
                       stream: Firestore.instance
                           .collection('/notifications')
@@ -62,7 +64,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       },
                     )
                   : Center(
-                      child: Text('No Contributions Yet'),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text("No Notification Here"),
+                          Container(
+                            width: vpW * 0.7,
+                            height: vpH * 0.5,
+                            // color: Colors.yellow,
+                            child: SvgPicture.asset(
+                              'assets/img/my_notifications.svg',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
             ),
           ),
@@ -70,7 +86,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
         floatingActionButton: _user != null
             ? (_user.isAdmin
                 ? FloatingActionButton(
-                    onPressed: null,
+                    onPressed: () {
+                      NotificationService().pushNotification(
+                          title: "Team Meeting",
+                          msg: "There is a team Meeting tomorrow at 12pm");
+                    },
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.add,
