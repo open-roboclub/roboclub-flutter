@@ -43,10 +43,8 @@ dependencies:
   location: ^3.0.0
   intl: ^0.16.1
   date_format: ^1.0.9
-  # flutter_plugin_pdf_viewer:
-  # file_picker:
+  file_picker:
   firebase_storage:
-  image_picker:
   firebase_core:
   http: ^0.12.0+3
 

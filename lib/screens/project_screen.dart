@@ -18,17 +18,27 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  // List<Project> ongoingProjectsList = [];
+  // List<Project> complePedProjectsList = [];
   List<Project> projectsList = [];
-  
+  bool isLoading = false;
 
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      projectsList = value;
+      projectsList =value;
+
+      //  value.forEach((item){
+      //    item.
+      //  });
+      isLoading = true;
+      setState(() {
+        isLoading = false;
+      });
     });
     super.initState();
-  }
 
+  }
   bool _ongoingPressed = false;
   @override
   Widget build(BuildContext context) {
@@ -95,55 +105,26 @@ class _ProjectScreenState extends State<ProjectScreen> {
               Container(
                 height: vpH * 0.8,
                 width: vpW,
-                child: _ongoingPressed
-      
-                    ?
-                    StreamBuilder<QuerySnapshot>(
-                        stream: Firestore.instance
-                            .collection('/projects')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final List<DocumentSnapshot> documents =
-                                snapshot.data.documents;
-                            return ListView(
-                              physics: BouncingScrollPhysics(),
-                              children: 
-                              documents
-                                  .map((doc) => 
-                                  
-                                      OngoingProjectCard(Project.fromMap(doc.data)))
-                                  .toList(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("Some Error has Occured");
-                          } else {
-                            return Text("No Data");
-                          }
+                child: isLoading ? Center(child:  CircularProgressIndicator(),)
+                  : _ongoingPressed
+                    ? ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: projectsList.length,
+                        itemBuilder: (context, index) {
+                          return OngoingProjectCard(
+                            ongoingProject: projectsList[index],
+                          );
                         },
                       )
-                    : 
-                
-                     StreamBuilder<QuerySnapshot>(
-                        stream: Firestore.instance
-                            .collection('/projects')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final List<DocumentSnapshot> documents =
-                                snapshot.data.documents;
-                            return ListView(
-                              physics: BouncingScrollPhysics(),
-                              children: documents
-                                  .map((doc) =>
-                                      CompletedProjectCard(Project.fromMap(doc.data)))
-                                  .toList(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("Some Error has Occured");
-                          } else {
-                            return Text("No Data");
-                          }
+                    : ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: projectsList.length,
+                        itemBuilder: (context, index) {
+                          return CompletedProjectCard(
+                            completedProject: projectsList[index],
+                          );
                         },
                       ),
                    

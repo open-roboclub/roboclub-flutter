@@ -6,8 +6,8 @@ import '../helper/dimensions.dart';
 class OngoingProjectCard extends StatefulWidget {
 
 
-  final Project _ongoingProject;
-  OngoingProjectCard(this._ongoingProject);
+  final Project ongoingProject;
+  OngoingProjectCard({Key key, this.ongoingProject}): super(key: key);
 
   @override
   _OngoingProjectCardState createState() => _OngoingProjectCardState();
@@ -23,7 +23,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
       onTap:(){ 
         Navigator.push(
           context, MaterialPageRoute(
-            builder: (context) => ProjectInfo(project:widget._ongoingProject)
+            builder: (context) => ProjectInfo(project:widget.ongoingProject)
           ),
         );
       },
@@ -56,10 +56,12 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                       child: Container(
                         height: vpH* 0.038,
                         width: vpW*0.080,
-                        child: Image.asset(
-                        'assets/img/placeholder.jpg',
-                        fit: BoxFit.cover,
-                        ),
+                        child: widget.ongoingProject.projectImg =="" 
+                        ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                        :Image.network(
+                          widget.ongoingProject.projectImg ,
+                          fit: BoxFit.cover,
+                        )
                       ),
                     ),
                   ),
@@ -72,12 +74,12 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget._ongoingProject.name ?? "",
+                            widget.ongoingProject.name ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
                           Text(
-                            widget._ongoingProject.date ?? "",
+                            widget.ongoingProject.date ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize:vpH*0.018),
                           ),  

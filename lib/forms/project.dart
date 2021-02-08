@@ -1,5 +1,9 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
-import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
@@ -22,19 +26,69 @@ class _ProjectFormState extends State<ProjectForm> {
   String _projectName;
   String _description;
   String _date;
-  String _memberImg;
   String _link;
+  String _fileUrl;
 
   // List<String> _teamMembers;
-  // File _file;
-
+  
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
+  TextEditingController fileController = TextEditingController();
+  
+  // upload image
+  
+  Future getImage()async{
+    var rng = new Random();
+    String randomName="";
+    for (var i = 0; i < 20; i++) {
+      print(rng.nextInt(100));
+      randomName += rng.nextInt(100).toString();
+    }
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    File file = File(result.files.single.path);
+    String fileName = '$randomName.png';
+    print(fileName);
+    print('${file.readAsBytesSync()}');
+    saveImg(file.readAsBytesSync(), fileName);
+  }
+  Future saveImg(List<int> asset, String name) async {
 
+  StorageReference reference = FirebaseStorage.instance.ref().child(name);
+  StorageUploadTask uploadTask = reference.putData(asset);
+  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(url);
+  projectImgController.text = url;
+  
+}
+  // upload pdf
+  
+  Future getPdfAndUpload()async{
+    var rng = new Random();
+    String randomName="";
+    for (var i = 0; i < 20; i++) {
+      print(rng.nextInt(100));
+      randomName += rng.nextInt(100).toString();
+    }
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    File file = File(result.files.single.path);
+    String fileName = '$randomName.pdf';
+    print(fileName);
+    print('${file.readAsBytesSync()}');
+    savePdf(file.readAsBytesSync(), fileName);
+  }
+  Future savePdf(List<int> asset, String name) async {
+
+  StorageReference reference = FirebaseStorage.instance.ref().child(name);
+  StorageUploadTask uploadTask = reference.putData(asset);
+  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(url);
+  fileController.text = url;
+  
+}
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +96,7 @@ class _ProjectFormState extends State<ProjectForm> {
     var vpW = getViewportWidth(context);
     var projects = ProjectService();
 
-      // TextFormFiels styling 
+    // TextFormFiels styling 
 
     final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
@@ -57,24 +111,24 @@ class _ProjectFormState extends State<ProjectForm> {
       fontFamily: 'OpenSans',
     ); 
       
-      // alert after successful form submission 
-      Widget okButton =FlatButton(  
-          child: Text("OK",style: kLabelStyle,),  
-          onPressed: () {  
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectScreen()));
-          },  
-        );
+    // alert after successful form submission 
+    Widget okButton =FlatButton(  
+      child: Text("OK",style: kLabelStyle,),  
+      onPressed: () {  
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectScreen()));
+      },  
+    );
 
-      AlertDialog alert = AlertDialog(  
-        content: Text("Project added Successfully !!",style: kLabelStyle,),  
-        actions: [  
-          okButton,  
-        ],  
-      );  
+    AlertDialog alert = AlertDialog(  
+      content: Text("Project added Successfully !!",style: kLabelStyle,),  
+      actions: [  
+        okButton,  
+      ],  
+    );  
 
     return SafeArea(
       child:Scaffold(
-       key: _scaffoldKey,
+      key: _scaffoldKey,
         appBar: appBar(
           context,
           strTitle: "Update Projects",
@@ -209,34 +263,40 @@ class _ProjectFormState extends State<ProjectForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Text('Upload Project Image',style: kLabelStyle,
-                      ),
+                      child:Row(children:[
+                        Text('Pick an Image',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.add_a_photo),
+                        onPressed: (){
+                          getImage();
+                        },)
+                      ],),
                     ),
-                   
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: projectImgController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Enter project image url',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: projectImgController,
+                          onSaved: (String value) {
+                            _projectImg = value;
+                            
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
                           ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'No Image Selected',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                           
+                          ),    
+                         
                         ),
-                                
-                        onSaved: (value)
-                        {
-                          _projectImg = value;
-                        },
-                      ),
-                    ),
+                    
+                    ),  
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -276,7 +336,7 @@ class _ProjectFormState extends State<ProjectForm> {
                           String formatted = formatter.format(dateTime);
                           print(formatted);
                           date.text = formatted;
-                          // if(dateTime!=null) setState(() => _date = dateTime.toString());
+                         
                         },
                         onSaved: (String value)
                         {
@@ -284,6 +344,43 @@ class _ProjectFormState extends State<ProjectForm> {
                         },
                       ),
                     ),
+                     Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Upload PDF',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.upload_file),
+                        onPressed: (){
+                          getPdfAndUpload();
+                        },)
+                      ],),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: fileController,
+                          onSaved: (String value) {
+                            _fileUrl = value;
+                            
+                          },
+                          style: TextStyle(
+                            color: Colors.purple[200],
+                            fontFamily: 'OpenSans',
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'No File Uploaded',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                           
+                          ),    
+                         
+                        ),
+                    
+                    ),  
                     
                     Container(
                       padding: EdgeInsets.all(15),
@@ -296,8 +393,9 @@ class _ProjectFormState extends State<ProjectForm> {
                               link:_link,
                               description: _description,
                               name: _projectName,
-                              projectImg: "",
+                              projectImg: _projectImg,
                               date: _date,
+                              fileUrl: _fileUrl,
                             
                             );
                             print("saved");
@@ -305,6 +403,8 @@ class _ProjectFormState extends State<ProjectForm> {
                             descriptionController.clear();
                             projectImgController.clear();
                             linkController.clear();
+                            projectImgController.clear();
+                            fileController.clear();
                           
                             showDialog(  
                               context: context,  

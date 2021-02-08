@@ -7,8 +7,8 @@ import 'package:roboclub_flutter/screens/project_info.dart';
 class CompletedProjectCard extends StatefulWidget {
 
 
-  final Project _completedProject;
-  CompletedProjectCard(this._completedProject);
+  final Project completedProject;
+  CompletedProjectCard({Key key,this.completedProject}) : super(key: key);
 
 @override
 _CompletedProjectCardState createState() => _CompletedProjectCardState();
@@ -40,10 +40,12 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
               width: vpW * 0.818,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: Image.asset(
-                  'assets/img/placeholder.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child: widget.completedProject.projectImg =="" 
+                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    :Image.network(
+                      widget.completedProject.projectImg ,
+                      fit: BoxFit.cover,
+                    )
               ),
             ),
             Positioned(
@@ -69,7 +71,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                     children: [
                       Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Text(widget._completedProject.name,
+                          child: Text(widget.completedProject.name,
                               overflow: TextOverflow.ellipsis,
                               style: _titlestyle)),
                       Align(
@@ -87,7 +89,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ProjectInfo(project:widget._completedProject)),
+                                MaterialPageRoute(builder: (context) => ProjectInfo(project:widget.completedProject)),
                               );
                             },
 

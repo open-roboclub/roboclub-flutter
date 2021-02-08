@@ -23,11 +23,17 @@ class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   List<Event> eventsList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     EventService().fetchEvents().then((value) {
       eventsList = value;
+      isLoading = true;
+      setState(() {
+        isLoading = false;  
+      });
+     
      
     });
     super.initState();
@@ -76,8 +82,8 @@ class _EventScreenState extends State<EventScreen> {
               Container(
                 height: vpH * 0.34,
                 width: vpW,
-                child: true
-                    ? ListView.builder(
+                child: isLoading ? Center(child: CircularProgressIndicator())
+                     : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: eventsList.length,
@@ -89,9 +95,7 @@ class _EventScreenState extends State<EventScreen> {
                         },
                       )
                     
-                    : Center(
-                        child: Text('No Ongoing Events Yet!'),
-                      ),
+                    
               ),
               SizedBox(
                 height: vpH * 0.04,
@@ -99,34 +103,11 @@ class _EventScreenState extends State<EventScreen> {
               _title('Upcoming Events', vpH, vpW),
               Container(
                 width: vpW,
-                child: true
-                     ? ListView.builder(
+                child:  isLoading ? Center(child: CircularProgressIndicator())
+                     : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: eventsList.length,
-                        // scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return EventCard(
-                            event: eventsList[index],
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Text('No Upcoming Events Yet!'),
-                      ),
-              ),
-              SizedBox(
-                height: vpH * 0.04,
-              ),
-              _title('Past Events', vpH, vpW),
-              Container(
-                width: vpW,
-                child: true
-                     ?  ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: eventsList.length,
-                        // scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
                           return EventCard(
                             event: eventsList[index],
@@ -134,9 +115,26 @@ class _EventScreenState extends State<EventScreen> {
                         },
                       )
                    
-                    : Center(
-                        child: Text('No Upcoming Events Yet!'),
-                      ),
+              ),
+              SizedBox(
+                height: vpH * 0.04,
+              ),
+              _title('Past Events', vpH, vpW),
+              Container(
+                width: vpW,
+                child:  isLoading ? Center(child: CircularProgressIndicator())
+                     :  ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: eventsList.length,
+                        itemBuilder: (context, index) {
+                          return EventCard(
+                            event: eventsList[index],
+                          );
+                        },
+                      )
+                   
+                    
               ),
             ],
           ),
