@@ -31,7 +31,7 @@ android/app/google-services.json
 
 # Android related
 **/android/**/gradle-wrapper.jar
-**/android/.gradle
+**/android/.gradlehttps://github.com/Rishabhltfb/roboclub-flutter
 **/android/captures/
 **/android/gradlew
 **/android/gradlew.bat

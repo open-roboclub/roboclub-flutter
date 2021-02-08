@@ -18,21 +18,27 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  // List<Project> ongoingProjectsList = [];
+  // List<Project> complePedProjectsList = [];
   List<Project> projectsList = [];
   bool isLoading = false;
 
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      projectsList = value;
+      projectsList =value;
+
+      //  value.forEach((item){
+      //    item.
+      //  });
       isLoading = true;
       setState(() {
         isLoading = false;
       });
     });
     super.initState();
-  }
 
+  }
   bool _ongoingPressed = false;
   @override
   Widget build(BuildContext context) {

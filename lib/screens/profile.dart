@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
+import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
@@ -61,7 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-
     TextStyle lowPriorityText = TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: vpH * 0.02,
@@ -160,8 +161,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Divider(
                                 height: vpH * 0.04,
                               ),
-                              _quickOptions(vpH, CustomIcons.tutorials,
-                                  ContributionForm()),
+                              _quickOptions(
+                                  vpH, CustomIcons.projects, ProjectForm()),
                               Divider(
                                 height: vpH * 0.04,
                               ),

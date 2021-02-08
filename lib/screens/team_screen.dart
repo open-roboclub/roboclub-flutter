@@ -13,6 +13,7 @@ class TeamScreen extends StatefulWidget {
 
 class _TeamScreenState extends State<TeamScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _isLoading = true;
 
   List<Team> teamsList = [];
 
@@ -21,6 +22,7 @@ class _TeamScreenState extends State<TeamScreen> {
     TeamService().fetchTeams().then((teamList) {
       setState(() {
         teamsList = teamList;
+        _isLoading = false;
       });
     });
     super.initState();
@@ -41,34 +43,38 @@ class _TeamScreenState extends State<TeamScreen> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: vpH * 0.005,
-              ),
-              Container(
-                height: vpH * 0.9,
-                width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: teamsList.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return TeamCard(
-                            team: teamsList[index],
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Text('No Teams Yet'),
-                      ),
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
               )
-            ],
-          ),
-        ),
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: vpH * 0.005,
+                    ),
+                    Container(
+                      height: vpH * 0.9,
+                      width: vpW,
+                      child: true
+                          ? ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: teamsList.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                return TeamCard(
+                                  team: teamsList[index],
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text('No Teams Yet'),
+                            ),
+                    )
+                  ],
+                ),
+              ),
       ),
     );
   }

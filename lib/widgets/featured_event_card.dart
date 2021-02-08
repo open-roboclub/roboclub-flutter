@@ -56,11 +56,19 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: widget.featuredEvent.posterURL =="" 
-                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
-                    :Image.network(
-                      widget.featuredEvent.posterURL ,
-                      fit: BoxFit.cover,
-                    )
+                    ? Container(
+                       height: vpH * 0.18,
+                        width: vpW * 0.6,
+                      child: Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,),
+                      )
+                    :Container(
+                        height: vpH * 0.18,
+                        width: vpW * 0.6,
+                      child: Image.network(
+                        widget.featuredEvent.posterURL ,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                
                   ),
                   Padding(
