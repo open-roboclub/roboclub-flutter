@@ -138,7 +138,7 @@ class _EventFormState extends State<EventForm> {
 
     // TextFormFiels styling 
     final kHintTextStyle = TextStyle(
-      color: Color(0xFF757575),
+      color: Colors.white,
       fontSize: vpH*0.024,
       fontFamily: 'OpenSans',
     );
@@ -208,8 +208,8 @@ class _EventFormState extends State<EventForm> {
                         textCapitalization: TextCapitalization.words,
                         controller: eventNameController,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                           color: Colors.black,
+                           fontSize: vpH*0.02,
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
@@ -241,11 +241,12 @@ class _EventFormState extends State<EventForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
+                        maxLines: 3,
                         textCapitalization: TextCapitalization.words,
                         controller: detailController,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
@@ -268,125 +269,6 @@ class _EventFormState extends State<EventForm> {
                         },
                       ),
                     ),
-                  
-                   Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Text('Date',style: kLabelStyle,
-                      ),
-                    ),
-                   
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: _dateController,
-                          onSaved: (String value) {
-                            _setDate = value;
-                          },
-                          style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'OpenSans',
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'Pick a Date',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Icon(Icons.calendar_today),
-                            ),
-                          ),    
-                          onTap: ()
-                          {
-                            _selectDate(context);
-                          },
-                       
-                        ),
-                    
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Text('Event Start Time',style: kLabelStyle,
-                      ),
-                    ),
-                   
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: _startTimeController,
-                          onSaved: (String value) {
-                            _setStartTime = value;
-                          },
-                          style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'OpenSans',
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'Choose Start Time',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Icon(Icons.lock_clock),
-                            ),
-                          ),    
-                          onTap: ()
-                          {
-                            _selectStartTime(context);
-                          },
-                       
-                        ),
-                    
-                    ),
-                    
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Text('Event End Time',style: kLabelStyle,
-                      ),
-                    ),
-                   
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: _endTimeController,
-                          onSaved: (String value) {
-                            _setEndTime = value;
-                          },
-                          style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'OpenSans',
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'Choose End Time',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Icon(Icons.lock_clock),
-                            ),
-                          ),    
-                          onTap: ()
-                          {
-                            _selectEndTime(context);
-                          },
-                       
-                        ),
-                    
-                    ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -399,8 +281,8 @@ class _EventFormState extends State<EventForm> {
                         textCapitalization: TextCapitalization.words,
                         controller: placeController,
                         style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
@@ -424,28 +306,145 @@ class _EventFormState extends State<EventForm> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Row(children:[
-                        Text('Pick a poster Image',style: kLabelStyle,),
-                        IconButton(icon: Icon(Icons.add_a_photo),
-                        onPressed: (){
-                          getImage();
-                        },)
-                      ],),
-                    ),
-                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        alignment: Alignment.topLeft,
+                        child:Text('Date',style: kLabelStyle,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _dateController,
+                          onSaved: (String value) {
+                            _setDate = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: vpH*0.02,
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'Pick a Date',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(Icons.calendar_today),
+                            ),
+                          ),    
+                          onTap: ()
+                          {
+                            _selectDate(context);
+                          },
+                       
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        alignment: Alignment.topLeft,
+                        child:Text('Event Start Time',style: kLabelStyle,
+                        ),
+                      ),
+                   
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _startTimeController,
+                          onSaved: (String value) {
+                            _setStartTime = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: vpH*0.02,
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'Choose Start Time',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(Icons.lock_clock),
+                            ),
+                          ),    
+                          onTap: ()
+                          {
+                            _selectStartTime(context);
+                          },
+                       
+                        ),
+                      ),
+                    
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        alignment: Alignment.topLeft,
+                        child:Text('Event End Time',style: kLabelStyle,
+                        ),
+                      ),
+                   
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _endTimeController,
+                          onSaved: (String value) {
+                            _setEndTime = value;
+                          },
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: vpH*0.02,
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: Color(0xFFE8EAF6),
+                            hintText: 'Choose End Time',
+                            hintStyle: kHintTextStyle,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(Icons.lock_clock),
+                            ),
+                          ),    
+                          onTap: ()
+                          {
+                            _selectEndTime(context);
+                          },
+                       
+                        ),
+                    
+                      ),
+                    
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                        alignment: Alignment.topLeft,
+                        child:Row(children:[
+                          Text('Pick a poster Image',style: kLabelStyle,),
+                          IconButton(icon: Icon(Icons.add_a_photo),
+                          onPressed: (){
+                            getImage();
+                          },)
+                        ],),
+                      ),
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: posterImgController,
                           onSaved: (String value) {
                             _posterUrl = value;
-                            
+                              
                           },
                           style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'OpenSans',
+                            color: Colors.black,
+                            fontSize: vpH*0.02,
+                            
                           ),
                           decoration: InputDecoration(
                             fillColor: Color(0xFFE8EAF6),
@@ -454,67 +453,67 @@ class _EventFormState extends State<EventForm> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                           
-                          ),    
-                         
-                        ),
-                    
-                    ),  
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      child:RaisedButton(
-                        elevation: vpH*0.5,
-                        onPressed: (){
-                          if (!_formKey.currentState.validate()) {
-                            print("not valid");
-                            return null;
-                          }
-                          else{
-                           
-                            _formKey.currentState.save();
-                            events.postEvent(
-                              eventName: _eventName,
-                              details: _details,
-                              date: _setDate,
-                              startTime: _setStartTime,
-                              place: _place,
-                              endTime: _setEndTime,
-                              posterURL: _posterUrl,);
-                              print("saved");
-                              eventNameController.clear();
-                              detailController.clear();
-                              _dateController.clear();
-                              _startTimeController.clear();
-                              _endTimeController.clear();
-                              placeController.clear();
-                              showDialog(  
-                              context: context,  
-                              builder: (BuildContext context) {  
-                                return alert;  
-                              },  
-                            );  
                             
-                          }
-                        },
-                        padding: EdgeInsets.all(15),
-                        shape:RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(30.0),
-                          ),
-                        color: Color(0xFF3F51B5),
-                        child: Text(
-                            "Update",
-                            style: TextStyle(
-                              color: Colors.white,
-                              letterSpacing: vpW*0.015,
-                              fontSize: vpH*0.02,
-                              fontWeight: FontWeight.bold,
+                          ),    
                           
+                        ),
+                      
+                      ),  
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        child:RaisedButton(
+                          elevation: vpH*0.5,
+                          onPressed: (){
+                            if (!_formKey.currentState.validate()) {
+                              print("not valid");
+                              return null;
+                            }
+                            else{
+                            
+                              _formKey.currentState.save();
+                              events.postEvent(
+                                eventName: _eventName,
+                                details: _details,
+                                date: _setDate,
+                                startTime: _setStartTime,
+                                place: _place,
+                                endTime: _setEndTime,
+                                posterURL: _posterUrl,);
+                                print("saved");
+                                eventNameController.clear();
+                                detailController.clear();
+                                _dateController.clear();
+                                _startTimeController.clear();
+                                _endTimeController.clear();
+                                placeController.clear();
+                                showDialog(  
+                                context: context,  
+                                builder: (BuildContext context) {  
+                                  return alert;  
+                                },  
+                              );  
+                              
+                            }
+                          },
+                          padding: EdgeInsets.all(15),
+                          shape:RoundedRectangleBorder(
+                            borderRadius:BorderRadius.circular(30.0),
+                            ),
+                          color: Color(0xFF3F51B5),
+                          child: Text(
+                              "Update",
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: vpW*0.015,
+                                fontSize: vpH*0.02,
+                                fontWeight: FontWeight.bold,
+                            
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                        )
+                  ],
+                ),
                 
           ),
         ),

@@ -5,6 +5,7 @@ class Project {
   String name;
   String description;
   String date;
+  String progress;
   // List<String> teamMembers;
  
   String fileUrl;
@@ -16,21 +17,22 @@ class Project {
     this.description,
     this.name,
     this.date,
+    this.progress,
     // this.teamMembers,
-    
     this.fileUrl,
     this.link,
     
   });
 
   Map toMap(Project project) {
+
     var data = Map<String, dynamic>();
     data['name'] = project.name;
     data['projectImg'] = project.projectImg;
     data['description'] = project.description;
     data['date'] = project.date;
+    data['progress'] = project.progress;
     // data['teamMembers'] = project.teamMembers;
-    
     data['fileUrl'] = project.fileUrl;
     data['link'] = project.link;
   
@@ -44,8 +46,8 @@ class Project {
     this.projectImg = mapData['projectImg'];
     this.description = mapData['description'];
     this.date = mapData['date'];
+    this.progress = mapData['progress'];
     // this.teamMembers = mapData['teamMembers'];
-   
     this.fileUrl = mapData['fileUrl'];
     this.link = mapData['link'];
   

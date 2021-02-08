@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:roboclub_flutter/models/project.dart';
 
@@ -14,6 +13,7 @@ class ProjectService {
         String description,
         String date,
         String link,
+        String progress,
         // List<String> teamMembers,
         String fileUrl,
         }) async {
@@ -23,6 +23,7 @@ class ProjectService {
       "description": description,
       "projectImg": projectImg,
       "fileUrl": fileUrl,
+      "progress": progress,
       // "teamMembers": teamMembers,
       "date" : date,
       "link": link,

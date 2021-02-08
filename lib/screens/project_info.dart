@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
+import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,8 +19,7 @@ ProjectInfo({Key key, this.project}) : super(key:key);
 }
 
 class _ProjectInfoState extends State<ProjectInfo> {
-    
-  int progress = 0;  
+     
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
+    var progress =   widget.project.progress== null ? 0 : int.parse(widget.project.progress);
+    User _user = Provider.of<UserProvider>(context).getUser;
 
     bool _ongoing = true;
     
@@ -47,7 +51,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   width: vpW * 0.9,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
-                    child: widget.project.projectImg =="" 
+                    child: widget.project.projectImg.isEmpty 
                     ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
                     :Image.network(
                       widget.project.projectImg ,
@@ -68,18 +72,20 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         child:Text("Progress",style: heading,),
                       ),
                     ),
+                
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
-                          progress.toString(),
+                         progress.toString(),
                           style: TextStyle(fontSize: vpH*0.04, fontWeight: FontWeight.w900,color:  Color(0xFFFF9C01)),
                         ),
                         Text("%",style: TextStyle(fontSize: vpH*0.03, fontWeight: FontWeight.w700)),
                       ],
                     ),
+                    _user.isAdmin ?
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                       
@@ -109,7 +115,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
                           });  
                         },    
                       ),
-                    ),],
+                    )
+                    :SizedBox(),],
                   ) : Column(
                     children: [
                       Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
@@ -164,7 +171,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         child: Text('No Members Yet'),
                       ),
               ),
-              widget.project.fileUrl ==null 
+              widget.project.fileUrl.isEmpty 
               ?SizedBox()
                 :Padding(padding:EdgeInsets.symmetric(vertical: vpH*0.02),
                 child:Container(

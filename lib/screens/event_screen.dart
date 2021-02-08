@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
-import 'package:roboclub_flutter/screens/show_event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
@@ -22,13 +22,39 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  List<Event> eventsList = [];
+  List<Event> featuredEventsList = [];
+  List<Event> pastEventsList = [];
+  List<Event> upcomingEventsList = [];
   bool isLoading = false;
+  DateTime parsedDate;
+
 
   @override
   void initState() {
     EventService().fetchEvents().then((value) {
-      eventsList = value;
+      
+      // eventsList = value;
+        value.forEach((item){
+         print(item.date);
+         parsedDate = DateTime.parse(item.date);
+         print(parsedDate);
+        //  print(parsedDate);
+        //  parsedDate= DateFormat.yMd().format(parsedDate);
+        //  print(parsedDate);
+       
+         if (parsedDate.isAtSameMomentAs(DateTime.now()) )
+         {
+           featuredEventsList=value;
+         }
+         else if(parsedDate.isBefore(DateTime.now()))
+         {
+           pastEventsList = value;
+         }
+         else
+         {
+           upcomingEventsList= value;
+         }
+       });
       isLoading = true;
       setState(() {
         isLoading = false;  
@@ -86,11 +112,11 @@ class _EventScreenState extends State<EventScreen> {
                      : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: eventsList.length,
+                        itemCount: featuredEventsList.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return FeaturedEventCard(
-                            featuredEvent: eventsList[index],
+                            featuredEvent: featuredEventsList[index],
                           );
                         },
                       )
@@ -107,10 +133,10 @@ class _EventScreenState extends State<EventScreen> {
                      : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: eventsList.length,
+                        itemCount: upcomingEventsList.length,
                         itemBuilder: (context, index) {
                           return EventCard(
-                            event: eventsList[index],
+                            event: upcomingEventsList[index],
                           );
                         },
                       )
@@ -126,10 +152,10 @@ class _EventScreenState extends State<EventScreen> {
                      :  ListView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: eventsList.length,
+                        itemCount: pastEventsList.length,
                         itemBuilder: (context, index) {
                           return EventCard(
-                            event: eventsList[index],
+                            event: pastEventsList[index],
                           );
                         },
                       )
