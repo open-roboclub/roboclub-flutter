@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -21,6 +22,9 @@ ProjectInfo({Key key, this.project}) : super(key:key);
 class _ProjectInfoState extends State<ProjectInfo> {
      
 
+  
+   
+
   @override
   Widget build(BuildContext context) {
     var vpH;
@@ -28,11 +32,22 @@ class _ProjectInfoState extends State<ProjectInfo> {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
-    var progress =   widget.project.progress== null ? 0 : int.parse(widget.project.progress);
+    int progress;
+    progress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     bool _ongoing = true;
-    
+
+    CollectionReference pro = Firestore.instance.collection('projects');
+
+    Future<void> updateProgress() {
+      return pro
+        .document(pro.id)
+        .updateData({'progress': progress})
+        .then((value) => print("Progress Updated"))
+        .catchError((error) => print("Failed to update progress: $error"));
+    }
+      
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
@@ -63,7 +78,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
             
             
                 Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
-                child: _ongoing ?
+                child:  progress < 100  ?
                   Column(
                     children: [
                     Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
@@ -111,9 +126,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         onChanged: (double newValue) {  
                           setState(() {  
                             progress = newValue.round();  
-                           
+                            updateProgress();
                           });  
                         },    
+                        
                       ),
                     )
                     :SizedBox(),],

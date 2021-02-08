@@ -84,6 +84,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               fillColor: Colors.white,
                               hintText: 'Write your feedback here!!',
                               border: InputBorder.none,
+                              
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               suffixIcon: IconButton(

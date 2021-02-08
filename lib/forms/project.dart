@@ -28,7 +28,7 @@ class _ProjectFormState extends State<ProjectForm> {
   String _date;
   String _link="";
   String _fileUrl="";
-  String _progress;
+ 
 
   // List<String> _teamMembers;
   
@@ -39,7 +39,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
   TextEditingController fileController = TextEditingController();
-  TextEditingController progressController = TextEditingController();
+  
   
   // upload image
   
@@ -101,7 +101,7 @@ class _ProjectFormState extends State<ProjectForm> {
     // TextFormFiels styling 
 
     final kHintTextStyle = TextStyle(
-      color: Colors.white,
+      color: Color(0xFF757575),
       fontSize: vpH*0.022,
       fontFamily: 'OpenSans',
     );
@@ -233,43 +233,7 @@ class _ProjectFormState extends State<ProjectForm> {
                         },
                       ),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                    //   alignment: Alignment.topLeft,
-                    //   child:Text('Project Status',style: kLabelStyle,
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                    //   child: TextFormField(
-                    //     textCapitalization: TextCapitalization.words,
-                    //     controller: progressController,
-                    //     style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: vpH*0.02,
-                    //     ),
-                    //     keyboardType: TextInputType.number,
-                    //     decoration: InputDecoration(
-                    //       fillColor: Color(0xFFE8EAF6),
-                    //       hintText: 'Project Status',
-                    //       hintStyle: kHintTextStyle,
-                    //       enabledBorder: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(10.0),
-                    //       ),
-                    //     ),
-                      
-                    //     validator: (value) {
-                    //       if (value.isEmpty) {
-                    //         return 'Please enter project status in % ';
-                    //       }
-                    //       return null;
-                    //     },
-                    //     onSaved: (value)
-                    //     {
-                    //        _progress = value;
-                    //     },
-                    //   ),
-                    // ),
+                   
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -437,7 +401,7 @@ class _ProjectFormState extends State<ProjectForm> {
                               projectImg: _projectImg,
                               date: _date,
                               fileUrl: _fileUrl,
-                              progress: _progress,
+    
                             
                             );
                             print("saved");
@@ -447,7 +411,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             linkController.clear();
                             projectImgController.clear();
                             fileController.clear();
-                            progressController.clear();
+                           
                           
                             showDialog(  
                               context: context,  

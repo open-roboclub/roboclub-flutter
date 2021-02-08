@@ -13,7 +13,7 @@ class ProjectService {
         String description,
         String date,
         String link,
-        String progress,
+        String progress ="",
         // List<String> teamMembers,
         String fileUrl,
         }) async {

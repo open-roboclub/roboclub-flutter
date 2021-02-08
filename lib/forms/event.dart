@@ -138,7 +138,7 @@ class _EventFormState extends State<EventForm> {
 
     // TextFormFiels styling 
     final kHintTextStyle = TextStyle(
-      color: Colors.white,
+      color: Color(0xFF757575),
       fontSize: vpH*0.024,
       fontFamily: 'OpenSans',
     );
