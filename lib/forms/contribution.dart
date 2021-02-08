@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'dart:math';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
-import 'package:roboclub_flutter/models/contributor.dart';
 import 'package:roboclub_flutter/screens/contributor_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
@@ -22,6 +25,8 @@ class _ContributionFormState extends State<ContributionForm> {
  String _description;
  String _amount;
  String _img;
+
+
  
  final nameController = TextEditingController();
  final descriptionController = TextEditingController();
@@ -29,6 +34,31 @@ class _ContributionFormState extends State<ContributionForm> {
  final imgController = TextEditingController();
 
 
+// upload image
+  
+  Future getImage()async{
+    var rng = new Random();
+    String randomName="";
+    for (var i = 0; i < 20; i++) {
+      print(rng.nextInt(100));
+      randomName += rng.nextInt(100).toString();
+    }
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
+    File file = File(result.files.single.path);
+    String fileName = '$randomName.png';
+    print(fileName);
+    print('${file.readAsBytesSync()}');
+    saveImg(file.readAsBytesSync(), fileName);
+  }
+  Future saveImg(List<int> asset, String name) async {
+
+  StorageReference reference = FirebaseStorage.instance.ref().child(name);
+  StorageUploadTask uploadTask = reference.putData(asset);
+  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(url);
+  imgController.text = url;
+  
+}
 
   @override
   Widget build(BuildContext context) {
@@ -209,82 +239,89 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                     ),
                     Container(
-                    padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      alignment: Alignment.topLeft,
-                      child:Text('Upload Image',style: kLabelStyle,
-                      ),
-                    ),
-                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        controller: imgController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
+                          padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                          alignment: Alignment.topLeft,
+                          child:Row(children:[
+                            Text('Pick an Image',style: kLabelStyle,),
+                            IconButton(icon: Icon(Icons.add_a_photo),
+                            onPressed: (){
+                              getImage();
+                            },)
+                          ],),
                         ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Enter image url',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                       
-                        onSaved: (value)
-                        {
-                          _img = value;
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      child:RaisedButton(
-                        elevation: vpH*0.5,
-                        onPressed: (){
-                          if (!_formKey.currentState.validate()) {
-                            print("not valid");
-                            return null;
-                          }
-                          else{
-                            _formKey.currentState.save();
-                            contributors.postContributor(
-                              amount:_amount,
-                              description: _description,
-                              name: _name,
-                              representativeImg: "",);
-                              print("saved");
-                              nameController.clear();
-                              descriptionController.clear();
-                              amountController.clear();
-                              imgController.clear();
-                              showDialog(  
-                              context: context,  
-                              builder: (BuildContext context) {  
-                                return alert;  
-                              },  
-                            );  
-                            
-                          }
-                        },
-                        padding: EdgeInsets.all(15),
-                        shape:RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(30.0),
-                          ),
-                        color: Color(0xFF3F51B5),
-                        child: Text(
-                            "Update",
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller:imgController,
+                            onSaved: (String value) {
+                              _img = value;
+                                
+                            },
                             style: TextStyle(
-                              color: Colors.white,
-                              letterSpacing: vpW*0.015,
+                              color: Colors.black,
                               fontSize: vpH*0.02,
-                              fontWeight: FontWeight.bold,
-                          
+                              
+                            ),
+                            decoration: InputDecoration(
+                              fillColor: Color(0xFFE8EAF6),
+                              hintText: 'No Image Selected',
+                              hintStyle: kHintTextStyle,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              
+                            ),    
+                            
+                          ),
+                        ),  
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        child:RaisedButton(
+                          elevation: vpH*0.5,
+                          onPressed: (){
+                            if (!_formKey.currentState.validate()) {
+                              print("not valid");
+                              return null;
+                            }
+                            else{
+                              _formKey.currentState.save();
+                              contributors.postContributor(
+                                amount:_amount,
+                                description: _description,
+                                name: _name,
+                                representativeImg: _img,);
+                                print("saved");
+                                nameController.clear();
+                                descriptionController.clear();
+                                amountController.clear();
+                                imgController.clear();
+                                showDialog(  
+                                context: context,  
+                                builder: (BuildContext context) {  
+                                  return alert;  
+                                },  
+                              );  
+                              
+                            }
+                          },
+                          padding: EdgeInsets.all(15),
+                          shape:RoundedRectangleBorder(
+                            borderRadius:BorderRadius.circular(30.0),
+                            ),
+                          color: Color(0xFF3F51B5),
+                          child: Text(
+                              "Update",
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: vpW*0.015,
+                                fontSize: vpH*0.02,
+                                fontWeight: FontWeight.bold,
+                            
+                              ),
                             ),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
                 

@@ -50,7 +50,7 @@ class _ProjectFormState extends State<ProjectForm> {
       print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
     File file = File(result.files.single.path);
     String fileName = '$randomName.png';
     print(fileName);
@@ -75,7 +75,7 @@ class _ProjectFormState extends State<ProjectForm> {
       print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc']);
     File file = File(result.files.single.path);
     String fileName = '$randomName.pdf';
     print(fileName);

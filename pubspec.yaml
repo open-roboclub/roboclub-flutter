@@ -96,10 +96,7 @@ flutter:
     - family: Report
       fonts:
         - asset: assets/icons/Report.ttf
-        
-    - family: Gmail
-      fonts:
-        - asset: assets/icons/Gmail.ttf
+    
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

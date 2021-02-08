@@ -391,11 +391,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   height: vpH * 0.040,
                                                 ),
                                               ),
-                                              IconButton(
-                                                icon: Icon(Gmail.mail),
-                                                iconSize: vpW * 0.065,
-                                                color: Colors.black,
-                                                onPressed: () async {
+                                              GestureDetector(
+                                                onTap: ()
+                                                 async {
                                                   final Uri params = Uri(
                                                     scheme: 'mailto',
                                                     path: _user.email,
@@ -409,8 +407,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   } else {
                                                     throw 'Could not launch $url';
                                                   }
+                                              
                                                 },
+                                                child: Container(
+                                                  width: vpW * 0.10,
+                                                  height: vpH * 0.050,
+                                                  child: Image.asset(
+                                                    'assets/img/gmail.png',
+                                                    fit: BoxFit.cover,
+                                                   
+                                                  ),
+                                                ),
                                               ),
+                                            
                                             ],
                                           ),
                                         ],
