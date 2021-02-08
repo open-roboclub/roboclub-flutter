@@ -275,9 +275,13 @@ class _AboutScreenState extends State<AboutScreen> {
                                 width: vpW,
                                 child: Column(
                                   children: [
-                                    DeveloperCard(name: "Rishabh Sharma"),
-                                    DeveloperCard(name: "Samiksha Agrawal"),
-                                  
+                                    DeveloperCard(
+                                        name: "Samiksha Agrawal",
+                                        img: 'assets/img/samiksha.jpeg'),
+                                    DeveloperCard(
+                                      name: "Rishabh Sharma",
+                                      img: 'assets/img/rishabh.jpg',
+                                    ),
                                   ],
                                 )),
                           ],

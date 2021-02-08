@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/screens/youtubeplayer.dart';
@@ -52,33 +53,50 @@ class _TutorialScreenState extends State<TutorialScreen> {
             : SingleChildScrollView(
                 child: Container(
                   height: vpH,
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: ListTile(
-                          leading: Icon(
-                            SocialMedia.youtube,
-                            color: Colors.red,
-                          ),
-                          title: Text(
-                            list[index]['title'],
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => YoutubePlayerScreen(
-                                title: list[index]["title"],
-                                url: list[index]["url"],
+                  child: list.length == 0
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Container(
+                                height: vpH * 0.6,
+                                width: vpW * 0.7,
+                                child: SvgPicture.asset(
+                                  'assets/illustrations/playlist.svg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
-                            ),
+                              Text('About to see Awesome Playlist!')
+                            ],
                           ),
+                        )
+                      : ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: ListTile(
+                                tileColor: Colors.grey.withOpacity(0.4),
+                                leading: Icon(
+                                  SocialMedia.youtube,
+                                  color: Colors.red,
+                                ),
+                                title: Text(
+                                  list[index]['title'],
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => YoutubePlayerScreen(
+                                      title: list[index]["title"],
+                                      url: list[index]["url"],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
               ),
       ),

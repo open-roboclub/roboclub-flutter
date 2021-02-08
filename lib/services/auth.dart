@@ -45,6 +45,7 @@ class AuthService {
           'about': "",
           'batch': "",
           'contact': "",
+          'quote': "What quote describes you ?",
           'cvLink': "",
           'fbId': "",
           'instaId': "",

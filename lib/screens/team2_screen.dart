@@ -20,19 +20,19 @@ class Team2Screen extends StatefulWidget {
 
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _isLoading = true;
 
   List<User> membersList = [];
 
   @override
   void initState() {
     TeamService().getTeamMembers(widget.members).then((value) {
-      Timer(
-        Duration(milliseconds: 500),
-        () => setState(() {
-          membersList = value;
-          print("received" * 2);
-        }),
-      );
+      membersList = value;
+      Timer(Duration(milliseconds: 500), () {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     });
     super.initState();
   }
@@ -53,41 +53,46 @@ class _Team2ScreenState extends State<Team2Screen> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: vpH * 0.005,
-              ),
-              Container(
-                height: vpH * 0.9,
-                width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: membersList.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfileScreen(
-                                      viewMode: true,
-                                      member: membersList[index],
-                                    ),
-                                  )),
-                              child: Team2Card(member: membersList[index]));
-                        },
-                      )
-                    : Center(
-                        child: Text('No Members Yet'),
-                      ),
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
               )
-            ],
-          ),
-        ),
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: vpH * 0.005,
+                    ),
+                    Container(
+                      height: vpH * 0.9,
+                      width: vpW,
+                      child: true
+                          ? ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: membersList.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProfileScreen(
+                                            viewMode: true,
+                                            member: membersList[index],
+                                          ),
+                                        )),
+                                    child:
+                                        Team2Card(member: membersList[index]));
+                              },
+                            )
+                          : Center(
+                              child: Text('No Members Yet'),
+                            ),
+                    )
+                  ],
+                ),
+              ),
       ),
     );
   }

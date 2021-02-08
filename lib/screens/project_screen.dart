@@ -10,7 +10,6 @@ import 'package:roboclub_flutter/widgets/ongoing_projects_card.dart';
 import '../helper/dimensions.dart';
 
 class ProjectScreen extends StatefulWidget {
-
   @override
   _ProjectScreenState createState() => _ProjectScreenState();
 }
@@ -26,7 +25,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      projectsList =value;
+      projectsList = value;
 
       //  value.forEach((item){
       //    item.
@@ -37,15 +36,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
       });
     });
     super.initState();
-
   }
+
   bool _ongoingPressed = false;
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
 
-    var textStyle = TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
+    var textStyle =
+        TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -58,6 +58,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
           scaffoldKey: _scaffoldKey,
         ),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Padding(
@@ -105,34 +106,36 @@ class _ProjectScreenState extends State<ProjectScreen> {
               Container(
                 height: vpH * 0.8,
                 width: vpW,
-                child: isLoading ? Center(child:  CircularProgressIndicator(),)
-                  : _ongoingPressed
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: projectsList.length,
-                        itemBuilder: (context, index) {
-                          return OngoingProjectCard(
-                            ongoingProject: projectsList[index],
-                          );
-                        },
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
                       )
-                    : ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: projectsList.length,
-                        itemBuilder: (context, index) {
-                          return CompletedProjectCard(
-                            completedProject: projectsList[index],
-                          );
-                        },
-                      ),
-                   
+                    : _ongoingPressed
+                        ? ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: projectsList.length,
+                            itemBuilder: (context, index) {
+                              return OngoingProjectCard(
+                                ongoingProject: projectsList[index],
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: projectsList.length,
+                            itemBuilder: (context, index) {
+                              return CompletedProjectCard(
+                                completedProject: projectsList[index],
+                              );
+                            },
+                          ),
               ),
             ],
           ),
         ),
-         floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(

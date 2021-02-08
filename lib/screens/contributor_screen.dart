@@ -10,6 +10,7 @@ import 'package:roboclub_flutter/widgets/contribution_card.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import '../helper/dimensions.dart';
 import '../forms/contribution.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ContributorScreen extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class ContributorScreen extends StatefulWidget {
 
 class _ContributorScreenState extends State<ContributorScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  
+
   List<Contributor> contributorsList = [];
 
   @override
@@ -111,32 +112,43 @@ class _ContributorScreenState extends State<ContributorScreen> {
               Container(
                 height: vpH * 0.6,
                 width: vpW,
-                child: true
-                    ? StreamBuilder<QuerySnapshot>(
-                        stream: Firestore.instance
-                            .collection('/contributors')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final List<DocumentSnapshot> documents =
-                                snapshot.data.documents;
-                            return ListView(
-                              physics: BouncingScrollPhysics(),
-                              children: documents
-                                  .map((doc) =>
-                                      ContriCard(Contributor.fromMap(doc.data)))
-                                  .toList(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("Some Error has Occured");
-                          } else {
-                            return Text("No Data");
-                          }
-                        },
-                      )
-                    : Center(
-                        child: Text('No Contributions Yet'),
-                      ),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: Firestore.instance
+                      .collection('/contributors')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<DocumentSnapshot> documents =
+                          snapshot.data.documents;
+                      return ListView(
+                        physics: BouncingScrollPhysics(),
+                        children: documents
+                            .map((doc) =>
+                                ContriCard(Contributor.fromMap(doc.data)))
+                            .toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("Some Error has Occured");
+                    } else {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("No Contributor Yet"),
+                            Container(
+                              width: vpW * 0.7,
+                              height: vpH * 0.5,
+                              child: SvgPicture.asset(
+                                'assets/illustrations/transfer_money.svg',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
               )
             ],
           ),
