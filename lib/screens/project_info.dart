@@ -37,15 +37,15 @@ class _ProjectInfoState extends State<ProjectInfo> {
 
     bool _ongoing = true;
 
-    CollectionReference pro = Firestore.instance.collection('projects');
+    // CollectionReference pro = Firestore.instance.collection("/projects");
 
-    Future<void> updateProgress() {
-      return pro
-        .document(pro.id)
-        .updateData({'progress': progress})
-        .then((value) => print("Progress Updated"))
-        .catchError((error) => print("Failed to update progress: $error"));
-    }
+    // Future<void> updateProgress() {
+    //   return pro
+    //     .document(pro.id)
+    //     .updateData({'progress': progress})
+    //     .then((value) => print("Progress Updated"))
+    //     .catchError((error) => print("Failed to update progress: $error"));
+    // }
       
     return SafeArea(
       child: Scaffold(
@@ -129,7 +129,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         onChanged: (double newValue) {  
                           setState(() {  
                             progress = newValue.round();  
-                            updateProgress();
+                            // updateProgress();
+                             widget.project.progress = progress.toString();
                           });  
                         },    
                         
