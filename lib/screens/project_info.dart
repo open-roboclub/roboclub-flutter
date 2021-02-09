@@ -201,8 +201,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
                               onPressed: null,
                             ),
                             leading: CircleAvatar(
+                              backgroundColor: Colors.black,
                               backgroundImage:
-                                  AssetImage('assets/img/placeholder.jpg'),
+                            
+                                  AssetImage('assets/img/teamMember.png'),
                             ),
                             title: Text(
                               "Member",

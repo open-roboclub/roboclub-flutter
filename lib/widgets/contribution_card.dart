@@ -53,7 +53,8 @@ class _ContriCardState extends State<ContriCard> {
                         backgroundColor: Colors.black,
                         child: CircleAvatar(
                           radius: vpH * 0.026,
-                          backgroundImage: widget._contributor.representativeImg.isEmpty ? AssetImage('assets/img/placeholder.jpg')
+                          backgroundColor: Colors.white,
+                          backgroundImage: widget._contributor.representativeImg.isEmpty ? AssetImage('assets/img/money.png')
                             : NetworkImage(widget._contributor.representativeImg),
                         ),
                       )),
