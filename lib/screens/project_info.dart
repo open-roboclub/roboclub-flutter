@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -18,20 +19,34 @@ class ProjectInfo extends StatefulWidget {
 }
 
 class _ProjectInfoState extends State<ProjectInfo> {
+     
+
+  
+   
+
   @override
   Widget build(BuildContext context) {
     var vpH;
     var vpW;
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
-    var heading = TextStyle(fontSize: vpH * 0.03, fontWeight: FontWeight.bold);
-    var progress = widget.project.progress == null
-        ? 0
-        : int.parse(widget.project.progress);
+    var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
+    int progress;
+    progress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     bool _ongoing = true;
 
+    // CollectionReference pro = Firestore.instance.collection("/projects");
+
+    // Future<void> updateProgress() {
+    //   return pro
+    //     .document(pro.id)
+    //     .updateData({'progress': progress})
+    //     .then((value) => print("Progress Updated"))
+    //     .catchError((error) => print("Failed to update progress: $error"));
+    // }
+      
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
@@ -63,106 +78,84 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   ),
                 ),
               ),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: vpW * 0.05),
-                  child: _ongoing
-                      ? Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.symmetric(vertical: vpH * 0.01),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Progress",
-                                  style: heading,
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: <Widget>[
-                                Text(
-                                  progress.toString(),
-                                  style: TextStyle(
-                                      fontSize: vpH * 0.04,
-                                      fontWeight: FontWeight.w900,
-                                      color: Color(0xFFFF9C01)),
-                                ),
-                                Text("%",
-                                    style: TextStyle(
-                                        fontSize: vpH * 0.03,
-                                        fontWeight: FontWeight.w700)),
-                              ],
-                            ),
-                            _user.isAdmin
-                                ? SliderTheme(
-                                    data: SliderTheme.of(context).copyWith(
-                                      trackShape: RoundedRectSliderTrackShape(),
-                                      trackHeight: 4.0,
-                                      thumbShape: RoundSliderThumbShape(
-                                          enabledThumbRadius: 10.0),
-                                      thumbColor: Colors.deepPurple[700],
-                                      overlayColor: Colors.red.withAlpha(32),
-                                      overlayShape: RoundSliderOverlayShape(
-                                          overlayRadius: 28.0),
-                                      tickMarkShape: RoundSliderTickMarkShape(),
-                                      valueIndicatorShape:
-                                          PaddleSliderValueIndicatorShape(),
-                                      valueIndicatorColor:
-                                          Colors.deepPurpleAccent,
-                                      valueIndicatorTextStyle: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    child: Slider(
-                                      value: progress.toDouble(),
-                                      min: 0,
-                                      max: 100,
-                                      label: '$progress',
-                                      onChanged: (double newValue) {
-                                        setState(() {
-                                          progress = newValue.round();
-                                        });
-                                      },
-                                    ),
-                                  )
-                                : SizedBox(),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.symmetric(vertical: vpH * 0.01),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "Completed On",
-                                  style: heading,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: vpH * 0.005,
-                              ),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  widget.project.date,
-                                  style: TextStyle(fontSize: vpH * 0.02),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: vpH * 0.02, horizontal: vpW * 0.05),
-                child: Align(
+            
+            
+                Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
+                child:  progress < 100  ?
+                  Column(
+                    children: [
+                    Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
+                      child:Align(
+                        alignment: Alignment.center,
+                        child:Text("Progress",style: heading,),
+                      ),
+                    ),
+                
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Text(
+                         progress.toString(),
+                          style: TextStyle(fontSize: vpH*0.04, fontWeight: FontWeight.w900,color:  Color(0xFFFF9C01)),
+                        ),
+                        Text("%",style: TextStyle(fontSize: vpH*0.03, fontWeight: FontWeight.w700)),
+                      ],
+                    ),
+                    _user.isAdmin ?
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                      
+                        trackShape: RoundedRectSliderTrackShape(),
+                        trackHeight: 4.0,
+                        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10.0),
+                        thumbColor: Colors.deepPurple[700],
+                        overlayColor: Colors.red.withAlpha(32),
+                        overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
+                        tickMarkShape: RoundSliderTickMarkShape(),
+                        valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+                        valueIndicatorColor: Colors.deepPurpleAccent,
+                        valueIndicatorTextStyle: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      child:Slider(  
+                        value: progress.toDouble(),  
+                        min: 0,  
+                        max: 100,  
+                        
+                        label: '$progress',  
+                        onChanged: (double newValue) {  
+                          setState(() {  
+                            progress = newValue.round();  
+                            // updateProgress();
+                             widget.project.progress = progress.toString();
+                          });  
+                        },    
+                        
+                      ),
+                    )
+                    :SizedBox(),],
+                  ) : Column(
+                    children: [
+                      Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
+                      child:Align(
+                        alignment: Alignment.topLeft,
+                        child:Text("Completed On",style: heading,),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.005,),
+                      child:Align(
+                        alignment: Alignment.topLeft,
+                        child:Text(widget.project.date,style: TextStyle(fontSize: vpH*0.02),),
+                      ),
+                    ),
+                  ],)
+                  
+                ),
+              Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
+                child:Align(
                   alignment: Alignment.topLeft,
                   child: Text(
                     "Description",
@@ -210,8 +203,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
                               onPressed: null,
                             ),
                             leading: CircleAvatar(
+                              backgroundColor: Colors.black,
                               backgroundImage:
-                                  AssetImage('assets/img/placeholder.jpg'),
+                            
+                                  AssetImage('assets/img/teamMember.png'),
                             ),
                             title: Text(
                               "Member",

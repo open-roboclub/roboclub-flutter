@@ -84,7 +84,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {
-                      print('notification sending!!!!');
                       NotificationService().pushNotification(
                         title: "RoboClub Demo",
                         msg: "Hey Everyone this is a demo notification!",

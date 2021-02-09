@@ -21,20 +21,15 @@ class NotificationService {
 
   Future<List<String>> getFCMTokens() async {
     List<String> list = [];
-    print("inside fetch tokens!!!");
     await _firestore.collection('/pushTokens').getDocuments().then((tokens) {
       tokens.documents.forEach((token) {
         list.add(token.data['deviceToken']);
       });
     });
-    list.forEach((element) {
-      print("element: " + element);
-    });
     return list;
   }
 
   Future<Null> pushNotification({String title, String msg}) async {
-    print('inside push Notifications');
     List<String> tokens = await getFCMTokens();
 
     final Map<String, dynamic> body = {

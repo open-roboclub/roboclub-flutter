@@ -116,7 +116,8 @@ class _EventFormState extends State<EventForm> {
       print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     File file = File(result.files.single.path);
     String fileName = '$randomName.png';
     print(fileName);
@@ -140,7 +141,7 @@ class _EventFormState extends State<EventForm> {
 
     // TextFormFiels styling
     final kHintTextStyle = TextStyle(
-      color: Colors.white,
+      color: Color(0xFF757575),
       fontSize: vpH * 0.024,
       fontFamily: 'OpenSans',
     );

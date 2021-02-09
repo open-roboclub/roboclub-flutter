@@ -17,7 +17,7 @@ class Project {
     this.description,
     this.name,
     this.date,
-    this.progress,
+    this.progress = "",
     // this.teamMembers,
     this.fileUrl,
     this.link,
