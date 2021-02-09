@@ -24,7 +24,7 @@ class _ContriCardState extends State<ContriCard> {
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: Container(
-        height: vpH * 0.18,
+        // height: vpH * 0.18,
         width: vpW * 0.90,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
