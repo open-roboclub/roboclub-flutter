@@ -24,35 +24,30 @@ class _EventScreenState extends State<EventScreen> {
   List<Event> featuredEventsList = [];
   List<Event> pastEventsList = [];
   List<Event> upcomingEventsList = [];
-  bool isLoading = false;
+  bool isLoading = true;
   DateTime parsedDate;
 
   @override
   void initState() {
-    EventService().fetchEvents().then((value) {
-      // eventsList = value;
-      value.forEach((item) {
-        print(item.date);
-        parsedDate = DateTime.parse(item.date);
-        print(parsedDate);
-        //  print(parsedDate);
-        //  parsedDate= DateFormat.yMd().format(parsedDate);
-        //  print(parsedDate);
-
-        if (parsedDate.isAtSameMomentAs(DateTime.now())) {
-          featuredEventsList = value;
-        } else if (parsedDate.isBefore(DateTime.now())) {
-          pastEventsList = value;
-        } else {
-          upcomingEventsList = value;
-        }
-      });
-      isLoading = true;
+    EventService().fetchEvents().then((events) {
+      splitEventLists(events);
       setState(() {
         isLoading = false;
       });
     });
     super.initState();
+  }
+
+  void splitEventLists(List<Event> events) {
+    events.forEach((item) {
+      if (parsedDate.isAtSameMomentAs(DateTime.now())) {
+        featuredEventsList = events;
+      } else if (parsedDate.isBefore(DateTime.now())) {
+        pastEventsList = events;
+      } else {
+        upcomingEventsList = events;
+      }
+    });
   }
 
   Widget _title(String title, var vpH, var vpW) {
@@ -154,9 +149,6 @@ class _EventScreenState extends State<EventScreen> {
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {
-                      print("!!!!FLOATING" * 10);
-                      print(_user.name);
-                      print(_user.isAdmin);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) {

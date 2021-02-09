@@ -19,10 +19,27 @@ class NotificationService {
     await _firestore.collection("/pushTokens").document(fcmToken).setData(data);
   }
 
+  Future<List<String>> getFCMTokens() async {
+    List<String> list = [];
+    print("inside fetch tokens!!!");
+    await _firestore.collection('/pushTokens').getDocuments().then((tokens) {
+      tokens.documents.forEach((token) {
+        list.add(token.data['deviceToken']);
+      });
+    });
+    list.forEach((element) {
+      print("element: " + element);
+    });
+    return list;
+  }
+
   Future<Null> pushNotification({String title, String msg}) async {
-    String token = await MyLocalStorage().getDeviceToken();
+    print('inside push Notifications');
+    List<String> tokens = await getFCMTokens();
+
     final Map<String, dynamic> body = {
-      "to": token,
+      // "to": token,
+      "registration_ids": tokens,
       "data": {
         "key1": "Hello this is key 1 from AMURoboclub",
         "key2": "Hello this is key 2 from AMURoboclub"

@@ -193,7 +193,6 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 ),
               ),
               Container(
-                height: vpH * 0.2,
                 width: vpW,
                 child: true
                     ? ListView.builder(
@@ -204,7 +203,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         itemBuilder: (context, index) {
                           return ListTile(
                             trailing: IconButton(
-                              icon: Icon(SocialMedia.linkedin),
+                              icon: Icon(
+                                SocialMedia.linkedin,
+                                color: Colors.blue[700],
+                              ),
                               onPressed: null,
                             ),
                             leading: CircleAvatar(
