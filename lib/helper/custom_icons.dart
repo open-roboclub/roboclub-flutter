@@ -72,12 +72,3 @@ class Report {
   static const IconData icon_ionic_md_document = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 
 }
-
-class Gmail {
-  Gmail._();
-
-  static const _kFontFam = 'Gmail';
-  static const _kFontPkg = null;
-
-  static const IconData mail = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-}

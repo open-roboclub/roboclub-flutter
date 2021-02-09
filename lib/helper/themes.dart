@@ -315,7 +315,98 @@ final ThemeData lightTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
   ),
-  
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle: TextStyle(
+      color: Color(0xff999999),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    helperStyle: TextStyle(
+      color: Color(0xdd000000),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    hintStyle: TextStyle(
+      color: Color(0xff999999),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.italic,
+    ),
+    errorStyle: TextStyle(
+      color: Color(0xffef2f2f),
+      fontSize: null,
+      fontWeight: FontWeight.w700,
+      fontStyle: FontStyle.normal,
+    ),
+    errorMaxLines: null,
+    floatingLabelBehavior: FloatingLabelBehavior.always,
+    isDense: false,
+    contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 12, right: 12),
+    isCollapsed: false,
+    prefixStyle: TextStyle(
+      color: Color(0xdd000000),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    suffixStyle: TextStyle(
+      color: Color(0xdd000000),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    counterStyle: TextStyle(
+      color: Color(0xdd000000),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    filled: true,
+    fillColor: Color(0xffe8e2f9),
+    errorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xff000000),
+        width: 1,
+        style: BorderStyle.solid,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xff000000),
+        width: 1,
+        style: BorderStyle.solid,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+    ),
+    focusedErrorBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xff000000),
+        width: 1,
+        style: BorderStyle.solid,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+    ),
+    disabledBorder: InputBorder.none,
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xff000000),
+        width: 1,
+        style: BorderStyle.solid,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+    ),
+    border: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xff000000),
+        width: 1,
+        style: BorderStyle.solid,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+    ),
+  ),
   iconTheme: IconThemeData(
     color: Color(0xdd000000),
     opacity: 1,
@@ -359,7 +450,44 @@ final ThemeData lightTheme = ThemeData(
     labelColor: Color(0xffffffff),
     unselectedLabelColor: Color(0xb2ffffff),
   ),
- 
+  chipTheme: ChipThemeData(
+    backgroundColor: Color(0x1f000000),
+    brightness: Brightness.light,
+    deleteIconColor: Color(0xde000000),
+    disabledColor: Color(0x0c000000),
+    labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 8, right: 8),
+    labelStyle: TextStyle(
+      color: Color(0xde000000),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    padding: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
+    secondaryLabelStyle: TextStyle(
+      color: Color(0x3d000000),
+      fontSize: null,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+    ),
+    secondarySelectedColor: Color(0x3d673ad6),
+    selectedColor: Color(0x3d000000),
+    shape: StadiumBorder(
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
+  ),
+  // dialogTheme: DialogTheme(
+  //   shape: StadiumBorder(
+  //     side: BorderSide(
+  //       color: Color(0xff000000),
+  //       width: 0,
+  //       style: BorderStyle.none,
+  //     ),
+  //   ),
+  // ),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -733,7 +861,7 @@ final ThemeData darkTheme = ThemeData(
         width: 1,
         style: BorderStyle.solid,
       ),
-      // // borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
@@ -741,7 +869,7 @@ final ThemeData darkTheme = ThemeData(
         width: 1,
         style: BorderStyle.solid,
       ),
-      // // borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
     focusedErrorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
@@ -749,7 +877,7 @@ final ThemeData darkTheme = ThemeData(
         width: 1,
         style: BorderStyle.solid,
       ),
-      // // borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
     disabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
@@ -757,7 +885,7 @@ final ThemeData darkTheme = ThemeData(
         width: 1,
         style: BorderStyle.solid,
       ),
-      // // borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
@@ -765,7 +893,7 @@ final ThemeData darkTheme = ThemeData(
         width: 1,
         style: BorderStyle.solid,
       ),
-      // // borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
     border: UnderlineInputBorder(
       borderSide: BorderSide(
@@ -773,7 +901,7 @@ final ThemeData darkTheme = ThemeData(
         width: 1,
         style: BorderStyle.solid,
       ),
-      // // borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
   ),
   iconTheme: IconThemeData(
@@ -840,20 +968,20 @@ final ThemeData darkTheme = ThemeData(
     ),
     secondarySelectedColor: Color(0x3d212121),
     selectedColor: Color(0xff000000),
-    // shape: StadiumBorder(
-    //     side: BorderSide(
-    //   color: Color(0xff000000),
-    //   width: 0,
-    //   style: BorderStyle.none,
-    // )),
+    shape: StadiumBorder(
+        side: BorderSide(
+      color: Color(0xff000000),
+      width: 0,
+      style: BorderStyle.none,
+    )),
   ),
-  // dialogTheme: DialogTheme(
-  //   shape: StadiumBorder(
-  //     side: BorderSide(
-  //       color: Color(0xff000000),
-  //       width: 0,
-  //       style: BorderStyle.none,
-  //     ),
-  //   ),
-  // ),
+  dialogTheme: DialogTheme(
+    shape: StadiumBorder(
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
+  ),
 );
