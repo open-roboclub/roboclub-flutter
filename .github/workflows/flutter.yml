@@ -3,6 +3,7 @@ name: Flutter CI
 on:
   push:
     branches: [master,backend-setup]
+
   pull_request:
     branches: [master]
 
@@ -22,12 +23,14 @@ jobs:
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: echo $FIREBASE_SECRET > android/app/google-services.json
+
       - name: Create Keys File
         uses: 1arp/create-a-file-action@0.2
         with:
           path: 'lib/configs'
           file: 'keys.dart'
           content: ${{secrets.CONFIG_KEYS}}
+
 
       - run: flutter pub get
       # - run: flutter test # Enable after fixing tests
