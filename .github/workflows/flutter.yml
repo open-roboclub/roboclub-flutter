@@ -2,20 +2,11 @@ name: Flutter CI
 
 on:
   push:
-    branches: [master]
+    branches: [master,encrypt]
   pull_request:
     branches: [master]
 
 jobs:
-  my-job:
-    name: Decryption
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Decrypt google services secret
-        run: ./.github/android/app/decrypt_secret.sh
-        env:
-          GOOGLE_SERVICE_SECRET: ${{ secrets.GOOGLE_SERVICE_SECRET }}
   build:
     runs-on: macos-latest
 
@@ -27,6 +18,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable" # or: 'dev' or 'beta'
+      - name: Decode google-services.json
+        env:
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
+        run: echo $FIREBASE_SECRET > android/app/google-services.json
+
       - run: flutter pub get
       # - run: flutter test # Enable after fixing tests
       - run: flutter build apk
