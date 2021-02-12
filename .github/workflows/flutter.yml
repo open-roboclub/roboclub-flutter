@@ -22,6 +22,12 @@ jobs:
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: echo $FIREBASE_SECRET > android/app/google-services.json
+      
+      
+      - name: Generate Config Keys
+        env:
+          FIREBASE_SECRET: ${{ secrets.CONFIG_KEYS }}
+        run: echo $CONFIG_KEYS > lib/configs/keys.dart
 
       - run: flutter pub get
       # - run: flutter test # Enable after fixing tests
