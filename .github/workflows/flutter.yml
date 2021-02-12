@@ -2,7 +2,7 @@ name: Flutter CI
 
 on:
   push:
-    branches: [master,encrypt]
+    branches: [master,encrypt,backend-setup]
   pull_request:
     branches: [master]
 
