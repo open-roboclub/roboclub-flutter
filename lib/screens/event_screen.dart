@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/event.dart';
+import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
+import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
@@ -12,6 +20,56 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List<Event> featuredEventsList = [];
+  List<Event> eventsList = [];
+  List<Event> upcomingEventsList = [];
+  bool isLoading = true;
+  DateTime parsedDate;
+
+  @override
+  void initState() {
+    EventService().fetchEvents().then((value) {
+      eventsList = value;
+      eventsList.forEach((event) {
+        DateTime _parsed = DateTime.parse(event.date);
+        event.date = DateFormat.yMd().format(_parsed);
+      });
+      // value.forEach((item) {
+      //   print(item.date);
+      //   parsedDate = DateTime.parse(item.date);
+      //   print(parsedDate);
+      //   //  print(parsedDate);
+      //   //  parsedDate= DateFormat.yMd().format(parsedDate);
+      //   //  print(parsedDate);
+
+      //   if (parsedDate.isAfter(DateTime.now())) {
+      //     upcomingEventsList = value;
+      //   } else if (parsedDate.isBefore(DateTime.now())) {
+      //     pastEventsList = value;
+      //   } else {
+      //     featuredEventsList = value;
+      //   }
+      // });
+      isLoading = true;
+      setState(() {
+        isLoading = false;
+      });
+    });
+    super.initState();
+  }
+
+  // void splitEventLists(List<Event> events) {
+  //   events.forEach((item) {
+  //     if (parsedDate.isAtSameMomentAs(DateTime.now())) {
+  //       featuredEventsList = events;
+  //     } else if (parsedDate.isBefore(DateTime.now())) {
+  //       pastEventsList = events;
+  //     } else {
+  //       upcomingEventsList = events;
+  //     }
+  //   });
+  // }
 
   Widget _title(String title, var vpH, var vpW) {
     return Row(
@@ -34,6 +92,8 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    User _user = Provider.of<UserProvider>(context).getUser;
+
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -44,6 +104,7 @@ class _EventScreenState extends State<EventScreen> {
             isNotification: true,
             scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
@@ -51,67 +112,76 @@ class _EventScreenState extends State<EventScreen> {
               ),
               _title('Featured Events', vpH, vpW),
               Container(
-                height: vpH * 0.3,
-                width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return FeaturedEventCard();
-                        },
-                      )
-                    : Center(
-                        child: Text('No Ongoing Events Yet!'),
-                      ),
-              ),
+                  height: vpH * 0.34,
+                  width: vpW,
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: eventsList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return FeaturedEventCard(
+                              featuredEvent: eventsList[index],
+                            );
+                          },
+                        )),
               SizedBox(
                 height: vpH * 0.04,
               ),
               _title('Upcoming Events', vpH, vpW),
               Container(
-                width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return EventCard();
-                        },
-                      )
-                    : Center(
-                        child: Text('No Upcoming Events Yet!'),
-                      ),
-              ),
+                  width: vpW,
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: eventsList.length,
+                          itemBuilder: (context, index) {
+                            return EventCard(
+                              event: eventsList[index],
+                            );
+                          },
+                        )),
               SizedBox(
                 height: vpH * 0.04,
               ),
               _title('Past Events', vpH, vpW),
               Container(
-                width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return EventCard();
-                        },
-                      )
-                    : Center(
-                        child: Text('No Upcoming Events Yet!'),
-                      ),
-              ),
+                  width: vpW,
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: eventsList.length,
+                          itemBuilder: (context, index) {
+                            return EventCard(
+                              event: eventsList[index],
+                            );
+                          },
+                        )),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: null,
-          child: Icon(Icons.add),
-        ),
+        floatingActionButton: _user != null
+            ? (_user.isAdmin
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return EventForm();
+                          },
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.add),
+                  )
+                : null)
+            : null,
       ),
     );
   }
