@@ -22,15 +22,36 @@ class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   List<Event> featuredEventsList = [];
-  List<Event> pastEventsList = [];
+  List<Event> eventsList = [];
   List<Event> upcomingEventsList = [];
   bool isLoading = true;
   DateTime parsedDate;
 
   @override
   void initState() {
-    EventService().fetchEvents().then((events) {
-      splitEventLists(events);
+    EventService().fetchEvents().then((value) {
+      eventsList = value;
+      eventsList.forEach((event) {
+        DateTime _parsed = DateTime.parse(event.date);
+        event.date = DateFormat.yMd().format(_parsed);
+      });
+      // value.forEach((item) {
+      //   print(item.date);
+      //   parsedDate = DateTime.parse(item.date);
+      //   print(parsedDate);
+      //   //  print(parsedDate);
+      //   //  parsedDate= DateFormat.yMd().format(parsedDate);
+      //   //  print(parsedDate);
+
+      //   if (parsedDate.isAfter(DateTime.now())) {
+      //     upcomingEventsList = value;
+      //   } else if (parsedDate.isBefore(DateTime.now())) {
+      //     pastEventsList = value;
+      //   } else {
+      //     featuredEventsList = value;
+      //   }
+      // });
+      isLoading = true;
       setState(() {
         isLoading = false;
       });
@@ -38,17 +59,17 @@ class _EventScreenState extends State<EventScreen> {
     super.initState();
   }
 
-  void splitEventLists(List<Event> events) {
-    events.forEach((item) {
-      if (parsedDate.isAtSameMomentAs(DateTime.now())) {
-        featuredEventsList = events;
-      } else if (parsedDate.isBefore(DateTime.now())) {
-        pastEventsList = events;
-      } else {
-        upcomingEventsList = events;
-      }
-    });
-  }
+  // void splitEventLists(List<Event> events) {
+  //   events.forEach((item) {
+  //     if (parsedDate.isAtSameMomentAs(DateTime.now())) {
+  //       featuredEventsList = events;
+  //     } else if (parsedDate.isBefore(DateTime.now())) {
+  //       pastEventsList = events;
+  //     } else {
+  //       upcomingEventsList = events;
+  //     }
+  //   });
+  // }
 
   Widget _title(String title, var vpH, var vpW) {
     return Row(
@@ -98,11 +119,11 @@ class _EventScreenState extends State<EventScreen> {
                       : ListView.builder(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: featuredEventsList.length,
+                          itemCount: eventsList.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return FeaturedEventCard(
-                              featuredEvent: featuredEventsList[index],
+                              featuredEvent: eventsList[index],
                             );
                           },
                         )),
@@ -117,10 +138,10 @@ class _EventScreenState extends State<EventScreen> {
                       : ListView.builder(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: upcomingEventsList.length,
+                          itemCount: eventsList.length,
                           itemBuilder: (context, index) {
                             return EventCard(
-                              event: upcomingEventsList[index],
+                              event: eventsList[index],
                             );
                           },
                         )),
@@ -135,10 +156,10 @@ class _EventScreenState extends State<EventScreen> {
                       : ListView.builder(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: pastEventsList.length,
+                          itemCount: eventsList.length,
                           itemBuilder: (context, index) {
                             return EventCard(
-                              event: pastEventsList[index],
+                              event: eventsList[index],
                             );
                           },
                         )),

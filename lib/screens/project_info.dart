@@ -19,33 +19,42 @@ class ProjectInfo extends StatefulWidget {
 }
 
 class _ProjectInfoState extends State<ProjectInfo> {
+    var vpH;
+    var vpW;
      
+    int progress;
 
-  
+  @override
+    void initState() {
+    progress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
+      super.initState();
+    }
    
 
   @override
   Widget build(BuildContext context) {
-    var vpH;
-    var vpW;
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
-    int progress;
-    progress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     bool _ongoing = true;
+;
 
-    // CollectionReference pro = Firestore.instance.collection("/projects");
-
-    // Future<void> updateProgress() {
-    //   return pro
-    //     .document(pro.id)
-    //     .updateData({'progress': progress})
-    //     .then((value) => print("Progress Updated"))
-    //     .catchError((error) => print("Failed to update progress: $error"));
-    // }
+    Future<void> updateProgress()async {
+      // String id;
+      // Firestore.instance.collection('/projects').getDocuments().then((projects){
+      //   projects.documents.forEach((project){
+      //     if(project['name']==widget.project.name){
+      //       id =project.documentID;
+      //     }
+      //   });
+      // });
+      // return Firestore.instance.collection("/projects").document(id).updateData({'progress': progress.toString()})
+      //   .then((value) => print("Progress Updated"))
+      //   .catchError((error) => print("Failed to update progress: $error"));
+      
+    }
       
     return SafeArea(
       child: Scaffold(
@@ -129,8 +138,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         onChanged: (double newValue) {  
                           setState(() {  
                             progress = newValue.round();  
-                            // updateProgress();
-                             widget.project.progress = progress.toString();
+                            updateProgress();
                           });  
                         },    
                         

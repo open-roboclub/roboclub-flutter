@@ -52,9 +52,10 @@ class _EventFormState extends State<EventForm> {
     if (picked != null)
       setState(() {
         selectedDate = picked;
-        _dateController.text = DateFormat.yMd().format(selectedDate);
         _setDate = DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
         print(_setDate);
+        _dateController.text =
+            DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
       });
   }
 
