@@ -19,7 +19,7 @@
 .pub-cache/
 .pub/
 build/
-configs/
+keys.dart
 lib/generated_plugin_registrant.dart
 android/app/google-services.json
 
