@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:roboclub_flutter/configs/keys.dart';
-import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 final Firestore _firestore = Firestore.instance;
 
@@ -45,7 +44,7 @@ class NotificationService {
         // "image": "https://images.ctfassets.net/gg4ddi543f5b/2tMJ2QQXnxLatGtylEYut1/cdddf953c759f1083d41d7dc72c56d00/5-Positive-Conflict-tips-You-Can-Learn-From-High-Performance-Teams-5.jpg"
       }
     };
-    String fcmKey = Keys().fcmKey;
+    String fcmKey = env['FCM_KEY'];
     try {
       final http.Response response = await http.post(
           'https://fcm.googleapis.com/fcm/send',
