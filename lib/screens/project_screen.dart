@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/models/project.dart';
@@ -23,7 +24,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   List<Project> ongoingProjectsList = [];
   List<Project> complePedProjectsList = [];
   // List<Project> projectsList = [];
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -37,7 +38,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
             : complePedProjectsList = value;
       });
 
-      isLoading = true;
       setState(() {
         isLoading = false;
       });
@@ -119,26 +119,49 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         child: CircularProgressIndicator(),
                       )
                     : _ongoingPressed
-                        ? ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: ongoingProjectsList.length,
-                            itemBuilder: (context, index) {
-                              return OngoingProjectCard(
-                                ongoingProject: ongoingProjectsList[index],
-                              );
-                            },
-                          )
-                        : ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: complePedProjectsList.length,
-                            itemBuilder: (context, index) {
-                              return CompletedProjectCard(
-                                completedProject: complePedProjectsList[index],
-                              );
-                            },
-                          ),
+                        ? ongoingProjectsList.length == 0
+                            ? Center(
+                                child: Container(
+                                  width: vpW * 0.7,
+                                  height: vpH * 0.6,
+                                  child: SvgPicture.asset(
+                                    'assets/illustrations/project.svg',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: ongoingProjectsList.length,
+                                itemBuilder: (context, index) {
+                                  return OngoingProjectCard(
+                                    ongoingProject: ongoingProjectsList[index],
+                                  );
+                                },
+                              )
+                        : complePedProjectsList.length == 0
+                            ? Center(
+                                child: Container(
+                                  width: vpW * 0.7,
+                                  height: vpH * 0.6,
+                                  child: SvgPicture.asset(
+                                    'assets/illustrations/project.svg',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: complePedProjectsList.length,
+                                itemBuilder: (context, index) {
+                                  return CompletedProjectCard(
+                                    completedProject:
+                                        complePedProjectsList[index],
+                                  );
+                                },
+                              ),
               ),
             ],
           ),
@@ -147,9 +170,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {
-                      print("!!!!FLOATING" * 10);
-                      print(_user.name);
-                      print(_user.isAdmin);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) {
