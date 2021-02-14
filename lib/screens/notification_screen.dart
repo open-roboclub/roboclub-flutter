@@ -85,8 +85,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ? FloatingActionButton(
                     onPressed: () {
                       NotificationService().pushNotification(
-                          title: "Team Meeting",
-                          msg: "There is a team Meeting tomorrow at 12pm");
+                        title: "RoboClub Demo",
+                        msg: "Hey Everyone this is a demo notification!",
+                      );
                     },
                     backgroundColor: Colors.white,
                     child: Icon(

@@ -47,6 +47,7 @@ dependencies:
   firebase_storage:
   firebase_core:
   http: ^0.12.0+3
+  flutter_dotenv: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
   assets:
     - assets/img/
     - assets/illustrations/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -97,7 +99,6 @@ flutter:
     - family: Report
       fonts:
         - asset: assets/icons/Report.ttf
-    
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
