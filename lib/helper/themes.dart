@@ -479,15 +479,15 @@ final ThemeData lightTheme = ThemeData(
       ),
     ),
   ),
-  dialogTheme: DialogTheme(
-    shape: StadiumBorder(
-      side: BorderSide(
-        color: Color(0xff000000),
-        width: 0,
-        style: BorderStyle.none,
-      ),
-    ),
-  ),
+  // dialogTheme: DialogTheme(
+  //   shape: StadiumBorder(
+  //     side: BorderSide(
+  //       color: Color(0xff000000),
+  //       width: 0,
+  //       style: BorderStyle.none,
+  //     ),
+  //   ),
+  // ),
 );
 
 final ThemeData darkTheme = ThemeData(

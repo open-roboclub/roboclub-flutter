@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/about_screen.dart';
 import 'package:roboclub_flutter/screens/admin_screen.dart';
 import 'package:roboclub_flutter/screens/contributor_screen.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/screens/feedback_screen.dart';
+import 'package:roboclub_flutter/screens/profile.dart';
 import 'package:roboclub_flutter/screens/project_screen.dart';
 import 'package:roboclub_flutter/screens/team_screen.dart';
 import 'package:roboclub_flutter/screens/tutorial_screen.dart';
@@ -45,7 +48,12 @@ Drawer appdrawer(context, {String page}) {
         break;
       case "Admin Panel":
         {
-          return AdminScreen();
+          var _user = Provider.of<UserProvider>(context).getUser;
+          if (_user.name.isNotEmpty) {
+            return ProfileScreen();
+          } else {
+            return AdminScreen();
+          }
         }
         break;
       case "Feedback":
@@ -71,7 +79,7 @@ Drawer appdrawer(context, {String page}) {
       onTap: () {
         Navigator.of(context).pop();
         if (title != page) {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => _getScreen(title),
