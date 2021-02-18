@@ -6,7 +6,8 @@ class Project {
   String description;
   String date;
   String progress;
-  // List<String> teamMembers;
+  List<dynamic> teamMembers;
+  List<dynamic> teamProfile;
   String fileUrl;
   String link;
   
@@ -17,7 +18,8 @@ class Project {
     this.name,
     this.date,
     this.progress = "",
-    // this.teamMembers,
+    this.teamMembers,
+    this.teamProfile,
     this.fileUrl,
     this.link,
     
@@ -31,7 +33,8 @@ class Project {
     data['description'] = project.description;
     data['date'] = project.date;
     data['progress'] = project.progress;
-    // data['teamMembers'] = project.teamMembers;
+    data['teamMembers'] = project.teamMembers;
+    data['teamProfile'] =project.teamProfile;
     data['fileUrl'] = project.fileUrl;
     data['link'] = project.link;
   
@@ -46,7 +49,8 @@ class Project {
     this.description = mapData['description'];
     this.date = mapData['date'];
     this.progress = mapData['progress'];
-    // this.teamMembers = mapData['teamMembers'];
+    this.teamMembers = mapData['teamMembers'];
+    this.teamProfile = mapData['teamProfile'];
     this.fileUrl = mapData['fileUrl'];
     this.link = mapData['link'];
   
