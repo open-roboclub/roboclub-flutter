@@ -7,15 +7,6 @@ on:
     branches: [master]
 
 jobs:
-  my-job:
-    name: Decryption
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Decrypt google services secret
-        run: ./.github/android/app/decrypt_secret.sh
-        env:
-          GOOGLE_SERVICE_SECRET: ${{ secrets.GOOGLE_SERVICE_SECRET }}
   build:
     runs-on: macos-latest
 
@@ -27,15 +18,17 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable" # or: 'dev' or 'beta'
-      - run: flutter pub get
-      # - run: flutter test # Enable after fixing tests
-      - run: flutter build apk
-      - uses: actions/upload-artifact@v1
-        with:
-          name: android
-          path: build/app/outputs/apk/release/
-      - run: flutter build ios --release --no-codesign
-      - uses: actions/upload-artifact@v1
-        with:
-          name: ios
-          path: build/ios/iphoneos/
+      
+      - run: flutter pub get  
+      - name: Build
+        run: |
+          mkdir $HOME/private
+          gpg --quiet --batch --yes --decrypt --passphrase="$FIREBASE_SECRET" \
+          --output $HOME/private/services.tar services.tar.gpg
+          tar xvf $HOME/private/services.tar
+          touch .env
+          flutter build appbundle
+        env:
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
+          GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
+          FCM_KEY: ${{ secrets.FCM_KEY }}
