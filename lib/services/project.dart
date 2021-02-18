@@ -8,7 +8,7 @@ final Firestore _firestore = Firestore.instance;
 class ProjectService {
 
   Future<bool> postProjects(
-      {String projectImg,
+      {List<dynamic> projectImg,
         String name,
         String description,
         String date,

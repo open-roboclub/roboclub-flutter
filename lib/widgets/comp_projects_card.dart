@@ -40,10 +40,10 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
               width: vpW * 0.818,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: widget.completedProject.projectImg =="" 
+                child: widget.completedProject.projectImg[0] =="" 
                     ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
                     :Image.network(
-                      widget.completedProject.projectImg ,
+                      widget.completedProject.projectImg[0] ,
                       fit: BoxFit.cover,
                     )
               ),
