@@ -22,73 +22,76 @@ class _ProjectFormState extends State<ProjectForm> {
   final _formKey = GlobalKey<FormState>();
 
 
-  String _projectImg="";
+
   String _projectName;
   String _description;
   String _date;
   String _link="";
   String _fileUrl="";
- 
+  List<dynamic> _imageUrls = List();
+  List<File> imageList = List() ;
+  String fileName='';
+  String pdfFileName='';
+  File pdfFile;
 
-  // List<String> _teamMembers;
   
+  // List<String> _teamMembers;
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
-  TextEditingController fileController = TextEditingController();
-  
+
   
   // upload image
-  
+
   Future getImage()async{
+
     var rng = new Random();
     String randomName="";
     for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
-    File file = File(result.files.single.path);
-    String fileName = '$randomName.png';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    saveImg(file.readAsBytesSync(), fileName);
-  }
-  Future saveImg(List<int> asset, String name) async {
+   
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,type: FileType.image);
+    imageList =  result.paths.map((path) => File(path)).toList();
+    print(imageList.length);
+    fileName = '$randomName';
+   
+    }
 
-  StorageReference reference = FirebaseStorage.instance.ref().child(name);
-  StorageUploadTask uploadTask = reference.putData(asset);
-  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(url);
-  projectImgController.text = url;
-  
-}
+  Future postImages(List<File> imageList, String name) async{
+    for(int i=0;i<imageList.length;i++)
+    {
+      final StorageReference storageReference = FirebaseStorage().ref().child("$name$i");
+      final StorageUploadTask uploadTask = storageReference.putFile(imageList[i]);
+      String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+      _imageUrls.add(url);
+    }
+    print(_imageUrls);
+    print("Images posted");
+  }
+
   // upload pdf
   
   Future getPdfAndUpload()async{
     var rng = new Random();
     String randomName="";
     for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
     FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc']);
-    File file = File(result.files.single.path);
-    String fileName = '$randomName.pdf';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    savePdf(file.readAsBytesSync(), fileName);
+    pdfFile = File(result.files.single.path);
+    pdfFileName = '$randomName.pdf';
+   
   }
   Future savePdf(List<int> asset, String name) async {
 
   StorageReference reference = FirebaseStorage.instance.ref().child(name);
   StorageUploadTask uploadTask = reference.putData(asset);
-  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(url);
-  fileController.text = url;
+  _fileUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(_fileUrl);
   
 }
 
@@ -319,37 +322,14 @@ class _ProjectFormState extends State<ProjectForm> {
                         IconButton(icon: Icon(Icons.add_a_photo),
                         onPressed: (){
                           getImage();
-                        },)
+                        },),
+                        fileName.isEmpty
+                        ? Text('0 : Images Selected.',style: TextStyle(color: Color(0xFF757575),))
+                        :Text('${imageList.length}: Images Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                         
                       ],),
                     ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: projectImgController,
-                          onSaved: (String value) {
-                            _projectImg = value;
-                            
-                          },
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: vpH*0.02,
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'No Image Selected',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                           
-                          ),    
-                         
-                        ),
-                    
-                    ),  
-                    
-                     Container(
+                    Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
                       child:Row(children:[
@@ -357,48 +337,27 @@ class _ProjectFormState extends State<ProjectForm> {
                         IconButton(icon: Icon(Icons.upload_file),
                         onPressed: (){
                           getPdfAndUpload();
-                        },)
+                        },),
+                        pdfFileName.isEmpty
+                        ? Text('No File Selected.',style: TextStyle(color: Color(0xFF757575),))
+                        : Text('File Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
                       ],),
                     ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: fileController,
-                          onSaved: (String value) {
-                            _fileUrl = value;
-                            
-                          },
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: vpH*0.02,
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'No File Uploaded',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                           
-                          ),    
-                         
-                        ),
-                    
-                    ),  
+                   
                     
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
                         elevation: vpH*0.5,
-                        onPressed: (){
+                        onPressed: ()async{
+                          await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
                             projects.postProjects(
                               link:_link,
                               description: _description,
                               name: _projectName,
-                              projectImg: _projectImg,
+                              projectImg: _imageUrls,
                               date: _date,
                               fileUrl: _fileUrl,
     
@@ -409,9 +368,6 @@ class _ProjectFormState extends State<ProjectForm> {
                             descriptionController.clear();
                             projectImgController.clear();
                             linkController.clear();
-                            projectImgController.clear();
-                            fileController.clear();
-                           
                           
                             showDialog(  
                               context: context,  

@@ -1,13 +1,12 @@
 
 
 class Project {
-  String projectImg;
+  List<dynamic>projectImg;
   String name;
   String description;
   String date;
   String progress;
   // List<String> teamMembers;
- 
   String fileUrl;
   String link;
   
