@@ -43,9 +43,9 @@ final ThemeData lightTheme = ThemeData(
   errorColor: Color(0xffd32f2f),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
-    minWidth: 124,
-    height: 40,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 52, right: 52),
+    // minWidth: 124,
+    // height: 40,
+    // padding: EdgeInsets.only(top: 0, bottom: 0, left: 52, right: 52),
     shape: StadiumBorder(
         side: BorderSide(
       color: Color(0xff000000),
