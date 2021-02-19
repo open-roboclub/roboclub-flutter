@@ -21,20 +21,19 @@ class _ContributionFormState extends State<ContributionForm> {
   final _formKey = GlobalKey<FormState>();
 
 
- String _name;
- String _description;
- String _amount;
- String _img;
-
+  String _name;
+  String _description;
+  String _amount;
+  String _img;
+  File file;
+  String fileName='';
 
  
  final nameController = TextEditingController();
  final descriptionController = TextEditingController();
  final amountController = TextEditingController();
- final imgController = TextEditingController();
 
-
-// upload image
+  // upload image
   
   Future getImage()async{
     var rng = new Random();
@@ -44,19 +43,18 @@ class _ContributionFormState extends State<ContributionForm> {
       randomName += rng.nextInt(100).toString();
     }
     FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
-    File file = File(result.files.single.path);
-    String fileName = '$randomName.png';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    saveImg(file.readAsBytesSync(), fileName);
+    file = File(result.files.single.path);
+  
+    fileName = '$randomName.png';
+   
   }
   Future saveImg(List<int> asset, String name) async {
 
   StorageReference reference = FirebaseStorage.instance.ref().child(name);
   StorageUploadTask uploadTask = reference.putData(asset);
-  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(url);
-  imgController.text = url;
+  _img = await (await uploadTask.onComplete).ref.getDownloadURL();
+  print(_img);
+
   
 }
 
@@ -239,52 +237,33 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                     ),
                     Container(
-                          padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                          alignment: Alignment.topLeft,
-                          child:Row(children:[
-                            Text('Pick an Image',style: kLabelStyle,),
-                            IconButton(icon: Icon(Icons.add_a_photo),
-                            onPressed: (){
-                              getImage();
-                            },)
-                          ],),
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Pick an Image',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.add_a_photo),
+                          onPressed: (){
+                            getImage();
+                          },
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                          child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller:imgController,
-                            onSaved: (String value) {
-                              _img = value;
-                                
-                            },
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: vpH*0.02,
-                              
-                            ),
-                            decoration: InputDecoration(
-                              fillColor: Color(0xFFE8EAF6),
-                              hintText: 'No Image Selected',
-                              hintStyle: kHintTextStyle,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              
-                            ),    
-                            
-                          ),
-                        ),  
+                        fileName.isEmpty
+                        ? Text('Image not Selected.',style: TextStyle(color: Color(0xFF757575),))
+                        :Text('Image Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                      ],),
+                    ),
+                       
                       Container(
                         padding: EdgeInsets.all(15),
                         child:RaisedButton(
                           elevation: vpH*0.5,
-                          onPressed: (){
+                          onPressed: ()async{
+                            await saveImg(file.readAsBytesSync(), fileName);
                             if (!_formKey.currentState.validate()) {
                               print("not valid");
                               return null;
                             }
                             else{
+                             
                               _formKey.currentState.save();
                               contributors.postContributor(
                                 amount:_amount,
@@ -295,7 +274,7 @@ class _ContributionFormState extends State<ContributionForm> {
                                 nameController.clear();
                                 descriptionController.clear();
                                 amountController.clear();
-                                imgController.clear();
+
                                 showDialog(  
                                 context: context,  
                                 builder: (BuildContext context) {  

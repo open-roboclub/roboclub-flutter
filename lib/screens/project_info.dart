@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -29,8 +29,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
     progress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
       super.initState();
     }
-   
-
+ 
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
@@ -39,7 +38,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
     User _user = Provider.of<UserProvider>(context).getUser;
 
     bool _ongoing = true;
-;
+
+    int currentPos = 0;
 
     Future<void> updateProgress()async {
       // String id;
@@ -70,29 +70,47 @@ class _ProjectInfoState extends State<ProjectInfo> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: vpH * 0.03),
                 child: Center(
-                  child: Container(
-                    height: vpH * 0.20,
-                    width: vpW * 0.9,
-                    child: ClipRRect(
+                  child: widget.project.projectImg.isEmpty
+                  ? Container(
+                      height: vpH * 0.20,
+                      width: vpW * 0.9,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
-                        child: widget.project.projectImg.isEmpty
-                            ? Image.asset(
-                                'assets/img/placeholder.jpg',
-                                fit: BoxFit.cover,
+                        child: Image.asset(
+                          'assets/img/placeholder.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ) 
+                    :Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CarouselSlider.builder(
+                          itemCount: widget.project.projectImg.length,
+                          options: CarouselOptions(
+                            autoPlay: true,
+                            enlargeCenterPage: true,
+                          ),
+                          itemBuilder: (context,index){
+                            return Container(
+                              height: vpH * 0.20,
+                              width: vpW * 0.9,
+                              margin: EdgeInsets.symmetric(horizontal: 5),
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.network(widget.project.projectImg[index]),
                               )
-                            : Image.network(
-                                widget.project.projectImg,
-                                fit: BoxFit.cover,
-                              )),
-                  ),
+                            );
+                          },
+                        ),
+                      ]
+                    )
                 ),
               ),
-            
-            
-                Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
-                child:  progress < 100  ?
-                  Column(
-                    children: [
+              Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
+              child:  progress < 100  ?
+                Column(
+                  children: [
                     Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
                       child:Align(
                         alignment: Alignment.center,
@@ -144,8 +162,10 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         
                       ),
                     )
-                    :SizedBox(),],
-                  ) : Column(
+                    :SizedBox(),
+                  ],
+                ) 
+                : Column(
                     children: [
                       Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
                       child:Align(
@@ -159,9 +179,9 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         child:Text(widget.project.date,style: TextStyle(fontSize: vpH*0.02),),
                       ),
                     ),
-                  ],)
-                  
+                  ],
                 ),
+              ),
               Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.02,horizontal: vpW*0.05),
                 child:Align(
                   alignment: Alignment.topLeft,
@@ -229,40 +249,40 @@ class _ProjectInfoState extends State<ProjectInfo> {
                       ),
               ),
               widget.project.fileUrl.isEmpty
-                  ? SizedBox()
-                  : Padding(
-                      padding: EdgeInsets.symmetric(vertical: vpH * 0.02),
-                      child: Container(
-                        width: vpW * 0.9,
-                        padding: EdgeInsets.all(3.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0XFF8C8C8C)),
+              ? SizedBox()
+              : Padding(
+                  padding: EdgeInsets.symmetric(vertical: vpH * 0.02),
+                  child: Container(
+                    width: vpW * 0.9,
+                    padding: EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0XFF8C8C8C)),
+                    ),
+                    child: ListTile(
+                      leading: Icon(
+                        Report.icon_ionic_md_document,
+                        color: Color(0XFF8C8C8C),
+                      ),
+                      title: Text(
+                        "Report",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: vpH * 0.025,
+                          fontWeight: FontWeight.w500),
+                      ),
+                      subtitle: Text('pdf file'),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Report.icon_ionic_md_open,
+                          color: Color(0XFFFF9C01),
                         ),
-                        child: ListTile(
-                          leading: Icon(
-                            Report.icon_ionic_md_document,
-                            color: Color(0XFF8C8C8C),
-                          ),
-                          title: Text(
-                            "Report",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: vpH * 0.025,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          subtitle: Text('pdf file'),
-                          trailing: IconButton(
-                            icon: Icon(
-                              Report.icon_ionic_md_open,
-                              color: Color(0XFFFF9C01),
-                            ),
-                            onPressed: () {
-                              launch(widget.project.fileUrl);
-                            },
-                          ),
-                        ),
+                        onPressed: () {
+                          launch(widget.project.fileUrl);
+                        },
                       ),
                     ),
+                  ),
+              ),
               Padding(
                 padding: EdgeInsets.only(
                     bottom: vpH * 0.008,

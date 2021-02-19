@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -14,8 +15,27 @@ class AboutScreen extends StatefulWidget {
   _AboutScreenState createState() => _AboutScreenState();
 }
 
-class _AboutScreenState extends State<AboutScreen> {
+class _AboutScreenState extends State<AboutScreen> 
+  with SingleTickerProviderStateMixin{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+   AnimationController _animationController;
+   Animation _animation;
+   
+   void initState() {
+  
+ 
+     _animationController = AnimationController(
+       duration: Duration(seconds:1),
+       vsync: this,
+     );
+ 
+     _animation = Tween( begin: 60.0, end:85.0).animate(_animationController);
+     _animationController.repeat(reverse: true);
+      super.initState();
+   }
+ 
+   
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -57,6 +77,7 @@ class _AboutScreenState extends State<AboutScreen> {
                           Row(
                             children: [
                               Expanded(
+                                flex: 3,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: vpW * 0.028,
@@ -68,20 +89,31 @@ class _AboutScreenState extends State<AboutScreen> {
                                           fontSize: vpH * 0.020)),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: vpW * 0.028,
-                                    vertical: vpH * 0.015),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    launch('https://amuroboclub.in/');
-                                  },
-                                  child: Image.asset(
-                                    'assets/img/NoPath.png',
-                                    width: vpW * 0.24,
-                                    height: vpH * 0.13,
-                                    fit: BoxFit.fill,
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: vpW * 0.028,
+                                      vertical: vpH * 0.015),
+                                  child:AnimatedBuilder(
+                                    animation: _animation,
+                                    builder: (context, _) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          launch('https://amuroboclub.in/');
+                                        },
+                                        child: Image.asset(
+                                          'assets/img/NoPath.png',
+                                          // width: vpW * 0.24,
+                                          // height: vpH * 0.13,
+                                          width: _animation.value,
+                                          height: _animation.value,
+                                          // fit: BoxFit.fill,
+                                        ),   
+                                      );
+                                    }
                                   ),
+                                      
                                 ),
                               ),
                             ],
