@@ -14,7 +14,8 @@ class ProjectService {
         String date,
         String link,
         String progress ="",
-        // List<String> teamMembers,
+        List<dynamic> teamMembers,
+        List<dynamic>teamProfile,
         String fileUrl,
         }) async {
           
@@ -24,7 +25,8 @@ class ProjectService {
       "projectImg": projectImg,
       "fileUrl": fileUrl,
       "progress": progress,
-      // "teamMembers": teamMembers,
+      "teamMembers": teamMembers,
+      "teamProfile": teamProfile,
       "date" : date,
       "link": link,
     };

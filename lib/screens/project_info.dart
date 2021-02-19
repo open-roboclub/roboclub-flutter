@@ -93,6 +93,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
                           ),
                           itemBuilder: (context,index){
                             return Container(
+                              height: vpH * 0.20,
+                              width: vpW * 0.9,
                               margin: EdgeInsets.symmetric(horizontal: 5),
                               child: FittedBox(
                                 fit: BoxFit.fill,
