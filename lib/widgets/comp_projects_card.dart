@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
@@ -52,67 +54,110 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                 ),
               ),
               Positioned(
-                bottom: vpH*-0.02,
+                bottom: vpH*-0.008,
                 left: vpW * 0.08,
-                child: Container(
-                    height: vpH * 0.13,
-                    width: vpW * 0.65,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[300],
-                          // offset: Offset(2, 2),
-                          blurRadius: 1.0,
-                          // spreadRadius: 1.0,
+                    child: Container(
+                        height: vpH * 0.13,
+                        width: vpW * 0.65,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey[350].withOpacity(0.96),
+                              // offset: Offset(2, 2),
+                              blurRadius: 1.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        
                         ),
-                      ],
-                    
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(widget.completedProject.name,
-                              style: _titlestyle,overflow:TextOverflow.ellipsis,),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                                padding: EdgeInsets.all(vpH * 0.010),
-                                child: FlatButton(
-                                  color: Color(0xFFFF9C01),
-                                  child: Container(
-                                    width: vpW*0.08,
-                                    child: Text("View",
-                                        style: TextStyle(
-                                          fontSize: vpH * 0.018,
-                                        )),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Container(
+                                      height: vpH*0.05,
+                                      child: Text(widget.completedProject.name,
+                                        style: _titlestyle,overflow:TextOverflow.fade,),
+                                    ),
                                   ),
-                                  textColor: Colors.white,
-
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => ProjectInfo(project:widget.completedProject)),
-                                    );
-                                  },
-
-                                ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left:vpW*0.01 ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: vpH*0.045,
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.black,
+                                            backgroundImage:
+                                              AssetImage('assets/img/teamMember.png'),
+                                          ),
+                                        ),
+                                        Align(
+                                          widthFactor: 0.4,
+                                          child: Container(
+                                            height: vpH*0.045,
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.black,
+                                              backgroundImage:
+                                                AssetImage('assets/img/teamMember.png'),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: vpH*0.045,
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.black,
+                                            backgroundImage:
+                                              AssetImage('assets/img/teamMember.png'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                          ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                    padding: EdgeInsets.all(vpH * 0.010),
+                                    child: FlatButton(
+                                      color: Color(0xFFFF9C01),
+                                      child: Container(
+                                        width: vpW*0.08,
+                                        child: Text("View",
+                                            style: TextStyle(
+                                              fontSize: vpH * 0.018,
+                                            )),
+                                      ),
+                                      textColor: Colors.white,
+
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ProjectInfo(project:widget.completedProject)),
+                                        );
+                                      },
+
+                                    ),
+                                  ),
+                              ),
+                            ),
+                          
+                          ],
                         ),
-                      
-                      ],
                     ),
-                ),
-              ),
+                  ),
+            
             ],
           ),
         ),

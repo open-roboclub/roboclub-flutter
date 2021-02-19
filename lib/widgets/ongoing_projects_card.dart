@@ -40,6 +40,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
               BoxShadow(
                 color: Colors.blueGrey[200],
                 blurRadius: 5.0,
+                spreadRadius: 1.0,
                 offset: Offset(0.0, 0.75)
               ),
             ],
