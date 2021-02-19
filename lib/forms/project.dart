@@ -270,8 +270,8 @@ class _ProjectFormState extends State<ProjectForm> {
                           getImage();
                         },),
                         fileName.isEmpty
-                        ? Text('0 : Images Selected.',style: TextStyle(color: Color(0xFF757575),))
-                        :Text('${imageList.length}: Images Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                        ? Text('No Image Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('${imageList.length}: Images Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                          
                       ],),
                     ),
@@ -285,8 +285,8 @@ class _ProjectFormState extends State<ProjectForm> {
                           getPdfAndUpload();
                         },),
                         pdfFileName.isEmpty
-                        ? Text('No File Selected.',style: TextStyle(color: Color(0xFF757575),))
-                        : Text('File Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                        ? Text('No File Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('File Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                       ],),
                     ),
                     Container(
@@ -430,13 +430,13 @@ class _ProjectFormState extends State<ProjectForm> {
                         shape:RoundedRectangleBorder(
                           borderRadius:BorderRadius.circular(30.0),
                         ),
-                        color: Color(0xFF3F51B5),
+                        color: Color(0xFFFF9C01),
                         child: Text(
                           "Update",
                           style: TextStyle(
                             color: Colors.white,
-                            letterSpacing: vpW*0.015,
-                            fontSize: vpH*0.02,
+                            letterSpacing: vpW*0.005,
+                            fontSize: vpH*0.025,
                             fontWeight: FontWeight.bold,  
                           ),
                         ),
