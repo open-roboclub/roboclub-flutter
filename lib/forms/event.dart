@@ -28,6 +28,7 @@ class _EventFormState extends State<EventForm> {
       _setDate,
       fileName='';
 
+  bool filePicked =false;
   File file;
   String _hour, _minute, _time;
   String dateTime;
@@ -119,9 +120,18 @@ class _EventFormState extends State<EventForm> {
     }
    
     FilePickerResult result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
-    file = File(result.files.single.path);
-    fileName = '$randomName';
+      await FilePicker.platform.pickFiles(type: FileType.image)
+      .then((result) async {
+        if(result!=null)
+        {
+          filePicked=true;
+          file = File(result.files.single.path);
+          fileName = '$randomName';
+        }
+      }).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
    
     }
   Future saveImg(List<int> asset, String name) async {
@@ -469,7 +479,10 @@ class _EventFormState extends State<EventForm> {
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: ()async {
-                        await saveImg(file.readAsBytesSync(), fileName);
+                        if(filePicked)
+                        {
+                          await saveImg(file.readAsBytesSync(), fileName);
+                        }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
                           return null;

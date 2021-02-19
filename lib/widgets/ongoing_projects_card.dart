@@ -56,7 +56,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                       child: Container(
                         height: vpH* 0.038,
                         width: vpW*0.080,
-                        child: widget.ongoingProject.projectImg[0] =="" 
+                        child: widget.ongoingProject.projectImg.length ==0 
                         ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
                         :Image.network(
                           widget.ongoingProject.projectImg[0] ,

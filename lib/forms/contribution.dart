@@ -27,7 +27,7 @@ class _ContributionFormState extends State<ContributionForm> {
   String _img;
   File file;
   String fileName='';
-
+  bool filePicked=false;
  
  final nameController = TextEditingController();
  final descriptionController = TextEditingController();
@@ -42,11 +42,19 @@ class _ContributionFormState extends State<ContributionForm> {
       print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
-    file = File(result.files.single.path);
-  
-    fileName = '$randomName.png';
-   
+     FilePickerResult result =
+      await FilePicker.platform.pickFiles(type: FileType.image)
+      .then((result) async {
+        if(result!=null)
+        {
+          filePicked=true;
+          file = File(result.files.single.path);
+          fileName = '$randomName';
+        }
+      }).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
   }
   Future saveImg(List<int> asset, String name) async {
 
@@ -257,7 +265,10 @@ class _ContributionFormState extends State<ContributionForm> {
                         child:RaisedButton(
                           elevation: vpH*0.5,
                           onPressed: ()async{
-                            await saveImg(file.readAsBytesSync(), fileName);
+                            if(filePicked)
+                            {
+                              await saveImg(file.readAsBytesSync(), fileName);
+                            }
                             if (!_formKey.currentState.validate()) {
                               print("not valid");
                               return null;

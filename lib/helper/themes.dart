@@ -26,7 +26,7 @@ final ThemeData lightTheme = ThemeData(
   cardColor: Color(0xffffffff),
   dividerColor: Color(0x1f000000),
   highlightColor: Color(0x66bcbcbc),
-  splashColor: Color(0xff09C278),
+  splashColor: Color(0xff9d80e5),
   selectedRowColor: Color(0xfff5f5f5),
   unselectedWidgetColor: Color(0x8a000000),
   disabledColor: Color(0xffc2b8ee),

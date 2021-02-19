@@ -53,6 +53,9 @@ class _ProjectFormState extends State<ProjectForm> {
   String pdfFileName='';
   File pdfFile;
 
+  bool imagePicked=false;
+  bool filePicked=false;
+
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
@@ -70,11 +73,18 @@ class _ProjectFormState extends State<ProjectForm> {
       randomName += rng.nextInt(100).toString();
     }
    
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,type: FileType.image);
-    imageList =  result.paths.map((path) => File(path)).toList();
-    print(imageList.length);
-    fileName = '$randomName';
-   
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,type: FileType.image)
+    .then((result) async { 
+      if(result!=null){
+        imagePicked=true;
+        imageList =  result.paths.map((path) => File(path)).toList();
+        print(imageList.length);
+        fileName = '$randomName';
+      }}).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
+      
     }
 
   Future postImages(List<File> imageList, String name) async{
@@ -97,9 +107,15 @@ class _ProjectFormState extends State<ProjectForm> {
     for (var i = 0; i < 20; i++) {
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc']);
-    pdfFile = File(result.files.single.path);
-    pdfFileName = '$randomName.pdf';
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc'])
+    .then((result) async{
+      if(result!=null)
+      {
+        filePicked=true;
+        pdfFile = File(result.files.single.path);
+        pdfFileName = '$randomName.pdf';
+      }
+    }).catchError((error){ print("Error: "+error.toString());});
    
   }
   Future savePdf(List<int> asset, String name) async {
@@ -394,7 +410,15 @@ class _ProjectFormState extends State<ProjectForm> {
                       child:RaisedButton(
                         elevation: vpH*0.5,
                         onPressed: ()async{
-                          await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
+                          if(filePicked)
+                          {
+                            await savePdf(pdfFile.readAsBytesSync(),pdfFileName);
+                          }
+                          if(imagePicked)
+                          {
+                            await postImages(imageList,fileName);
+                          }
+                          // await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
                             projects.postProjects(
