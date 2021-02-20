@@ -31,7 +31,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
       Padding(
         padding: EdgeInsets.all(20.0),
         child: Container(
-          height: vpH * 0.13,
+          height: vpH * 0.16,
           width: vpW * 0.90,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -47,7 +47,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
           ),
           child:Column(
             children: [
-            Padding(padding: EdgeInsets.all(10.0),
+            Container(padding: EdgeInsets.all(10.0),
               child:Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,11 +79,46 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
-                          Text(
-                            widget.ongoingProject.date ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize:vpH*0.018),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical:vpH*0.005),
+                            child: Text(
+                              widget.ongoingProject.date ?? "",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize:vpH*0.018),
+                            ),
                           ),  
+                          Padding(
+                            padding: EdgeInsets.only(top:vpW*0.02 ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: vpH*0.045,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    backgroundImage: AssetImage('assets/img/teamMember.png'),
+                                  ),
+                                ),
+                                Align(
+                                  widthFactor: vpW*0.0004,
+                                  child: Container(
+                                    height: vpH*0.045,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                      backgroundImage:AssetImage('assets/img/teamMember.png'),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: vpH*0.045,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    backgroundImage: AssetImage('assets/img/teamMember.png'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -120,13 +155,13 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                             ),
                           ),
                         ),
-                        ),
-                      )
-                    ),
-                
+                      ),
+                    )
+                  ),
                 ],
               ),
             ),
+           
           ],),
         ),
       ),

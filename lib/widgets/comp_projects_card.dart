@@ -29,7 +29,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: vpW * 0.090, vertical: vpH * 0.020),
       child: Container(
-        height: vpH * 0.20,
+        height: vpH * 0.2,
         width: vpW * 0.80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -57,7 +57,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                 bottom: vpH*-0.008,
                 left: vpW * 0.08,
                     child: Container(
-                        height: vpH * 0.13,
+                        height: vpH * 0.14,
                         width: vpW * 0.65,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
@@ -100,7 +100,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                                           ),
                                         ),
                                         Align(
-                                          widthFactor: 0.4,
+                                          widthFactor: vpW*0.0004,
                                           child: Container(
                                             height: vpH*0.045,
                                             child: CircleAvatar(
