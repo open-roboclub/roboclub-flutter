@@ -68,9 +68,17 @@ class _ProjectInfoState extends State<ProjectInfo> {
           child: Column(
             children: [
               Padding(
+                padding:EdgeInsets.symmetric(vertical: vpH*0.03,horizontal:vpW*0.05),
+                child:Container(
+                  child:Text(widget.project.name,
+                  style: heading,
+                  textAlign: TextAlign.center,),
+                ),
+              ),
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: vpH * 0.03),
                 child: Center(
-                  child: widget.project.projectImg.isEmpty
+                  child: widget.project.projectImg.length==0
                   ? Container(
                       height: vpH * 0.20,
                       width: vpW * 0.9,
@@ -233,8 +241,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             leading: CircleAvatar(
                               backgroundColor: Colors.black,
                               backgroundImage:
-                            
-                                  AssetImage('assets/img/teamMember.png'),
+                                AssetImage('assets/img/teamMember.png'),
                             ),
                             title: Text(
                               "Member",
@@ -283,6 +290,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                     ),
                   ),
               ),
+              widget.project.link!="" ?
               Padding(
                 padding: EdgeInsets.only(
                     bottom: vpH * 0.008,
@@ -296,7 +304,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
                     style: heading,
                   ),
                 ),
-              ),
+              ):
+              SizedBox(),
               GestureDetector(
                 onTap: () {
                   launch(widget.project.link);

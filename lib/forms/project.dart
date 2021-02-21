@@ -53,6 +53,9 @@ class _ProjectFormState extends State<ProjectForm> {
   String pdfFileName='';
   File pdfFile;
 
+  bool imagePicked=false;
+  bool filePicked=false;
+
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
@@ -70,11 +73,18 @@ class _ProjectFormState extends State<ProjectForm> {
       randomName += rng.nextInt(100).toString();
     }
    
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,type: FileType.image);
-    imageList =  result.paths.map((path) => File(path)).toList();
-    print(imageList.length);
-    fileName = '$randomName';
-   
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,type: FileType.image)
+    .then((result) async { 
+      if(result!=null){
+        imagePicked=true;
+        imageList =  result.paths.map((path) => File(path)).toList();
+        print(imageList.length);
+        fileName = '$randomName';
+      }}).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
+      
     }
 
   Future postImages(List<File> imageList, String name) async{
@@ -97,9 +107,15 @@ class _ProjectFormState extends State<ProjectForm> {
     for (var i = 0; i < 20; i++) {
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc']);
-    pdfFile = File(result.files.single.path);
-    pdfFileName = '$randomName.pdf';
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc'])
+    .then((result) async{
+      if(result!=null)
+      {
+        filePicked=true;
+        pdfFile = File(result.files.single.path);
+        pdfFileName = '$randomName.pdf';
+      }
+    }).catchError((error){ print("Error: "+error.toString());});
    
   }
   Future savePdf(List<int> asset, String name) async {
@@ -270,8 +286,8 @@ class _ProjectFormState extends State<ProjectForm> {
                           getImage();
                         },),
                         fileName.isEmpty
-                        ? Text('0 : Images Selected.',style: TextStyle(color: Color(0xFF757575),))
-                        :Text('${imageList.length}: Images Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                        ? Text('No Image Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('${imageList.length}: Images Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                          
                       ],),
                     ),
@@ -285,8 +301,8 @@ class _ProjectFormState extends State<ProjectForm> {
                           getPdfAndUpload();
                         },),
                         pdfFileName.isEmpty
-                        ? Text('No File Selected.',style: TextStyle(color: Color(0xFF757575),))
-                        : Text('File Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                        ? Text('No File Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('File Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                       ],),
                     ),
                     Container(
@@ -394,7 +410,15 @@ class _ProjectFormState extends State<ProjectForm> {
                       child:RaisedButton(
                         elevation: vpH*0.5,
                         onPressed: ()async{
-                          await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
+                          if(filePicked)
+                          {
+                            await savePdf(pdfFile.readAsBytesSync(),pdfFileName);
+                          }
+                          if(imagePicked)
+                          {
+                            await postImages(imageList,fileName);
+                          }
+                          // await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
                             projects.postProjects(
@@ -430,13 +454,13 @@ class _ProjectFormState extends State<ProjectForm> {
                         shape:RoundedRectangleBorder(
                           borderRadius:BorderRadius.circular(30.0),
                         ),
-                        color: Color(0xFF3F51B5),
+                        color: Color(0xFFFF9C01),
                         child: Text(
                           "Update",
                           style: TextStyle(
                             color: Colors.white,
-                            letterSpacing: vpW*0.015,
-                            fontSize: vpH*0.02,
+                            letterSpacing: vpW*0.005,
+                            fontSize: vpH*0.025,
                             fontWeight: FontWeight.bold,  
                           ),
                         ),

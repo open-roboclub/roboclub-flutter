@@ -28,6 +28,7 @@ class _EventFormState extends State<EventForm> {
       _setDate,
       fileName='';
 
+  bool filePicked =false;
   File file;
   String _hour, _minute, _time;
   String dateTime;
@@ -119,9 +120,18 @@ class _EventFormState extends State<EventForm> {
     }
    
     FilePickerResult result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
-    file = File(result.files.single.path);
-    fileName = '$randomName';
+      await FilePicker.platform.pickFiles(type: FileType.image)
+      .then((result) async {
+        if(result!=null)
+        {
+          filePicked=true;
+          file = File(result.files.single.path);
+          fileName = '$randomName';
+        }
+      }).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
    
     }
   Future saveImg(List<int> asset, String name) async {
@@ -445,6 +455,7 @@ class _EventFormState extends State<EventForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.005),
                     alignment: Alignment.topLeft,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           'Pick a poster Image',
@@ -457,8 +468,8 @@ class _EventFormState extends State<EventForm> {
                           },
                         ),
                         fileName.isEmpty
-                        ? Text('Poster Image not Selected.',style: TextStyle(color: Color(0xFF757575),))
-                        :Text('Poster Image Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                        ? Text('Poster Image not Selected.',style: TextStyle(color: Colors.grey[400],fontSize: vpH*0.016,fontWeight:FontWeight.bold))
+                        :Text('Poster Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.016, fontWeight:FontWeight.bold))
                       ],
                     ),
                   ),
@@ -468,7 +479,10 @@ class _EventFormState extends State<EventForm> {
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: ()async {
-                        await saveImg(file.readAsBytesSync(), fileName);
+                        if(filePicked)
+                        {
+                          await saveImg(file.readAsBytesSync(), fileName);
+                        }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
                           return null;
@@ -502,13 +516,13 @@ class _EventFormState extends State<EventForm> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      color: Color(0xFF3F51B5),
+                      color: Color(0xFFFF9C01),
                       child: Text(
                         "Create",
                         style: TextStyle(
                           color: Colors.white,
-                          letterSpacing: vpW * 0.015,
-                          fontSize: vpH * 0.02,
+                          letterSpacing: vpW*0.005,
+                          fontSize: vpH * 0.025,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

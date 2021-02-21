@@ -56,7 +56,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var textStyle =
-        TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
+        TextStyle(fontSize: vpH * 0.027, fontWeight: FontWeight.normal);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
@@ -80,9 +80,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FlatButton(
-                        child: Text(
-                          'Completed',
-                          style: textStyle,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: vpW*0.3,
+                          child: Center(
+                            child: Text(
+                              'Completed',
+                              style: textStyle,
+                            ),
+                          ),
                         ),
                         textColor:
                             !_ongoingPressed ? Colors.white : Colors.black,
@@ -99,7 +105,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         width: vpW * 0.01,
                       ),
                       FlatButton(
-                        child: Text('Ongoing', style: textStyle),
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: vpW*0.3,
+                          child: Center(
+                            child: Text(
+                              'Ongoing', style: textStyle,
+                            ),
+                          ),
+                        ),
                         textColor:
                             _ongoingPressed ? Colors.white : Colors.black,
                         color: _ongoingPressed

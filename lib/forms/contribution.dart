@@ -27,7 +27,7 @@ class _ContributionFormState extends State<ContributionForm> {
   String _img;
   File file;
   String fileName='';
-
+  bool filePicked=false;
  
  final nameController = TextEditingController();
  final descriptionController = TextEditingController();
@@ -42,11 +42,19 @@ class _ContributionFormState extends State<ContributionForm> {
       print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
-    file = File(result.files.single.path);
-  
-    fileName = '$randomName.png';
-   
+     FilePickerResult result =
+      await FilePicker.platform.pickFiles(type: FileType.image)
+      .then((result) async {
+        if(result!=null)
+        {
+          filePicked=true;
+          file = File(result.files.single.path);
+          fileName = '$randomName';
+        }
+      }).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
   }
   Future saveImg(List<int> asset, String name) async {
 
@@ -247,8 +255,8 @@ class _ContributionFormState extends State<ContributionForm> {
                           },
                         ),
                         fileName.isEmpty
-                        ? Text('Image not Selected.',style: TextStyle(color: Color(0xFF757575),))
-                        :Text('Image Selected.',style: TextStyle(color: Color(0xFFFF9C01),))
+                        ?  Text('Image not Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                       ],),
                     ),
                        
@@ -257,7 +265,10 @@ class _ContributionFormState extends State<ContributionForm> {
                         child:RaisedButton(
                           elevation: vpH*0.5,
                           onPressed: ()async{
-                            await saveImg(file.readAsBytesSync(), fileName);
+                            if(filePicked)
+                            {
+                              await saveImg(file.readAsBytesSync(), fileName);
+                            }
                             if (!_formKey.currentState.validate()) {
                               print("not valid");
                               return null;
@@ -288,13 +299,13 @@ class _ContributionFormState extends State<ContributionForm> {
                           shape:RoundedRectangleBorder(
                             borderRadius:BorderRadius.circular(30.0),
                             ),
-                          color: Color(0xFF3F51B5),
+                          color: Color(0xFFFF9C01),
                           child: Text(
                               "Update",
                               style: TextStyle(
                                 color: Colors.white,
-                                letterSpacing: vpW*0.015,
-                                fontSize: vpH*0.02,
+                                letterSpacing: vpW*0.005,
+                                fontSize: vpH*0.025,
                                 fontWeight: FontWeight.bold,
                             
                               ),
