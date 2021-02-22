@@ -15,104 +15,147 @@ class ProjectForm extends StatefulWidget {
   @override
   _ProjectFormState createState() => _ProjectFormState();
 }
+var vpH;
+var vpW;
 
+  // TextFormFiels styling 
+
+  final kHintTextStyle = TextStyle(
+    color: Color(0xFF757575),
+    fontSize: vpH*0.022,
+    fontFamily: 'OpenSans',
+  );
+
+  final kLabelStyle = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: vpH*0.025,
+    fontFamily: 'OpenSans',
+  ); 
 
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
 
-  String _projectImg="";
+  List<dynamic> dynamicList = [];
   String _projectName;
   String _description;
   String _date;
   String _link="";
   String _fileUrl="";
- 
+  List<dynamic> _imageUrls = List();
+  List<File> imageList = List() ;
+  List<dynamic> _teamMembers=List();
+  List<dynamic> _teamProfile=List();
 
-  // List<String> _teamMembers;
-  
+  String fileName='';
+  String pdfFileName='';
+  File pdfFile;
+
+  bool imagePicked=false;
+  bool filePicked=false;
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
-  TextEditingController fileController = TextEditingController();
-  
-  
+  // TextEditingController memberName = new TextEditingController();
+
   // upload image
-  
+
   Future getImage()async{
+
     var rng = new Random();
     String randomName="";
     for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
-    File file = File(result.files.single.path);
-    String fileName = '$randomName.png';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    saveImg(file.readAsBytesSync(), fileName);
-  }
-  Future saveImg(List<int> asset, String name) async {
+   
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,type: FileType.image)
+    .then((result) async { 
+      if(result!=null){
+        imagePicked=true;
+        imageList =  result.paths.map((path) => File(path)).toList();
+        print(imageList.length);
+        fileName = '$randomName';
+      }}).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
+      
+    }
 
-  StorageReference reference = FirebaseStorage.instance.ref().child(name);
-  StorageUploadTask uploadTask = reference.putData(asset);
-  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(url);
-  projectImgController.text = url;
-  
-}
+  Future postImages(List<File> imageList, String name) async{
+    for(int i=0;i<imageList.length;i++)
+    {
+      final StorageReference storageReference = FirebaseStorage().ref().child("$name$i");
+      final StorageUploadTask uploadTask = storageReference.putFile(imageList[i]);
+      String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+      _imageUrls.add(url);
+    }
+    print(_imageUrls);
+    print("Images posted");
+  }
+
   // upload pdf
   
   Future getPdfAndUpload()async{
     var rng = new Random();
     String randomName="";
     for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc']);
-    File file = File(result.files.single.path);
-    String fileName = '$randomName.pdf';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    savePdf(file.readAsBytesSync(), fileName);
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf','doc'])
+    .then((result) async{
+      if(result!=null)
+      {
+        filePicked=true;
+        pdfFile = File(result.files.single.path);
+        pdfFileName = '$randomName.pdf';
+      }
+    }).catchError((error){ print("Error: "+error.toString());});
+   
   }
   Future savePdf(List<int> asset, String name) async {
 
-  StorageReference reference = FirebaseStorage.instance.ref().child(name);
-  StorageUploadTask uploadTask = reference.putData(asset);
-  String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(url);
-  fileController.text = url;
-  
-}
+    StorageReference reference = FirebaseStorage.instance.ref().child(name);
+    StorageUploadTask uploadTask = reference.putData(asset);
+    _fileUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    print(_fileUrl);
+    
+  }
 
   @override
   Widget build(BuildContext context) {
-    var vpH = getViewportHeight(context);
-    var vpW = getViewportWidth(context);
+    vpH = getViewportHeight(context);
+    vpW = getViewportWidth(context);
     var projects = ProjectService();
 
-    // TextFormFiels styling 
 
-    final kHintTextStyle = TextStyle(
-      color: Color(0xFF757575),
-      fontSize: vpH*0.022,
-      fontFamily: 'OpenSans',
+    addDynamic(){
+      // if(_teamMembers.length != 0){
+      //   floatingIcon = new Icon(Icons.add);
+
+      //   _teamMembers=[];
+      //   dynamicList = [];
+      // }
+      setState(() {});
+      if (dynamicList.length >= 10) {
+        return;
+      }
+      dynamicList.add(new dynamicWidget());
+    }
+
+    Widget dynamicTextField = new Flexible(
+      flex: 2,
+      child: new ListView.builder(
+        itemCount: dynamicList.length,
+        itemBuilder: (_, index) => dynamicList[index],
+      ),
     );
 
-    final kLabelStyle = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: vpH*0.025,
-      fontFamily: 'OpenSans',
-    ); 
-      
     // alert after successful form submission 
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
@@ -233,7 +276,35 @@ class _ProjectFormState extends State<ProjectForm> {
                         },
                       ),
                     ),
-                   
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Pick an Image',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.add_a_photo),
+                        onPressed: (){
+                          getImage();
+                        },),
+                        fileName.isEmpty
+                        ? Text('No Image Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('${imageList.length}: Images Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
+                         
+                      ],),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
+                      child:Row(children:[
+                        Text('Upload PDF',style: kLabelStyle,),
+                        IconButton(icon: Icon(Icons.upload_file),
+                        onPressed: (){
+                          getPdfAndUpload();
+                        },),
+                        pdfFileName.isEmpty
+                        ? Text('No File Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
+                        :Text('File Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
+                      ],),
+                    ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -314,91 +385,47 @@ class _ProjectFormState extends State<ProjectForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Row(children:[
-                        Text('Pick an Image',style: kLabelStyle,),
-                        IconButton(icon: Icon(Icons.add_a_photo),
-                        onPressed: (){
-                          getImage();
-                        },)
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children:[
+                        Text('Team Members',style: kLabelStyle),
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: FloatingActionButton(
+                            mini: true,
+                            backgroundColor: Color(0xFFFF9C01),
+                            onPressed: () {
+                              addDynamic();
+                            },
+                            child: Icon(Icons.add),
+                          ),
+                        ),
+                      
                       ],),
                     ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: projectImgController,
-                          onSaved: (String value) {
-                            _projectImg = value;
-                            
-                          },
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: vpH*0.02,
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'No Image Selected',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                           
-                          ),    
-                         
-                        ),
                     
-                    ),  
-                    
-                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Row(children:[
-                        Text('Upload PDF',style: kLabelStyle,),
-                        IconButton(icon: Icon(Icons.upload_file),
-                        onPressed: (){
-                          getPdfAndUpload();
-                        },)
-                      ],),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: fileController,
-                          onSaved: (String value) {
-                            _fileUrl = value;
-                            
-                          },
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: vpH*0.02,
-                          ),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xFFE8EAF6),
-                            hintText: 'No File Uploaded',
-                            hintStyle: kHintTextStyle,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                           
-                          ),    
-                         
-                        ),
-                    
-                    ),  
-                    
+                   
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
                         elevation: vpH*0.5,
-                        onPressed: (){
+                        onPressed: ()async{
+                          if(filePicked)
+                          {
+                            await savePdf(pdfFile.readAsBytesSync(),pdfFileName);
+                          }
+                          if(imagePicked)
+                          {
+                            await postImages(imageList,fileName);
+                          }
+                          // await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
                             projects.postProjects(
                               link:_link,
                               description: _description,
                               name: _projectName,
-                              projectImg: _projectImg,
+                              projectImg: _imageUrls,
                               date: _date,
                               fileUrl: _fileUrl,
     
@@ -409,9 +436,6 @@ class _ProjectFormState extends State<ProjectForm> {
                             descriptionController.clear();
                             projectImgController.clear();
                             linkController.clear();
-                            projectImgController.clear();
-                            fileController.clear();
-                           
                           
                             showDialog(  
                               context: context,  
@@ -430,13 +454,13 @@ class _ProjectFormState extends State<ProjectForm> {
                         shape:RoundedRectangleBorder(
                           borderRadius:BorderRadius.circular(30.0),
                         ),
-                        color: Color(0xFF3F51B5),
+                        color: Color(0xFFFF9C01),
                         child: Text(
                           "Update",
                           style: TextStyle(
                             color: Colors.white,
-                            letterSpacing: vpW*0.015,
-                            fontSize: vpH*0.02,
+                            letterSpacing: vpW*0.005,
+                            fontSize: vpH*0.025,
                             fontWeight: FontWeight.bold,  
                           ),
                         ),
@@ -451,3 +475,51 @@ class _ProjectFormState extends State<ProjectForm> {
       );
     }
   }
+
+  class dynamicWidget extends StatelessWidget {
+  TextEditingController _teamMember = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+
+    return  Container(
+    margin: EdgeInsets.symmetric(vertical:vpH*0.005, horizontal: vpW*0.05),
+    child:ListBody(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Container(
+              width: vpW*0.65,
+              padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+              child:  TextFormField(
+                controller: _teamMember,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: vpH*0.02,
+                ),
+                decoration: InputDecoration(
+                  fillColor: Color(0xFFE8EAF6),
+                  hintText: 'Member Name',
+                  hintStyle: kHintTextStyle,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: vpW*0.2,
+              padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+              child:IconButton(icon: Icon(Icons.add_a_photo),
+                onPressed: (){
+                },
+                iconSize: vpH*0.04,
+              ),
+            )
+          ],
+        ),
+      ],
+    ),);
+  }
+
+}

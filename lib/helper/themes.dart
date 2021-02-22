@@ -26,7 +26,7 @@ final ThemeData lightTheme = ThemeData(
   cardColor: Color(0xffffffff),
   dividerColor: Color(0x1f000000),
   highlightColor: Color(0x66bcbcbc),
-  splashColor: Color(0xff09C278),
+  splashColor: Color(0xff9d80e5),
   selectedRowColor: Color(0xfff5f5f5),
   unselectedWidgetColor: Color(0x8a000000),
   disabledColor: Color(0xffc2b8ee),
@@ -43,9 +43,9 @@ final ThemeData lightTheme = ThemeData(
   errorColor: Color(0xffd32f2f),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
-    minWidth: 124,
-    height: 40,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 52, right: 52),
+    // minWidth: 124,
+    // height: 40,
+    // padding: EdgeInsets.only(top: 0, bottom: 0, left: 52, right: 52),
     shape: StadiumBorder(
         side: BorderSide(
       color: Color(0xff000000),

@@ -25,8 +25,11 @@ class _EventFormState extends State<EventForm> {
       _setEndTime,
       _place,
       _setStartTime,
-      _setDate;
+      _setDate,
+      fileName='';
 
+  bool filePicked =false;
+  File file;
   String _hour, _minute, _time;
   String dateTime;
   DateTime selectedDate = DateTime.now();
@@ -39,7 +42,6 @@ class _EventFormState extends State<EventForm> {
   TextEditingController placeController = TextEditingController();
   TextEditingController eventNameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
-  TextEditingController posterImgController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -107,32 +109,39 @@ class _EventFormState extends State<EventForm> {
         [hh, ':', nn, " ", am]).toString();
     super.initState();
   }
+  // upload image
 
-// upload image
+  Future getImage()async{
 
-  Future getImage() async {
     var rng = new Random();
-    String randomName = "";
+    String randomName="";
     for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
+   
     FilePickerResult result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
-    File file = File(result.files.single.path);
-    String fileName = '$randomName.png';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    saveImg(file.readAsBytesSync(), fileName);
-  }
-
+      await FilePicker.platform.pickFiles(type: FileType.image)
+      .then((result) async {
+        if(result!=null)
+        {
+          filePicked=true;
+          file = File(result.files.single.path);
+          fileName = '$randomName';
+        }
+      }).catchError((error)
+      {
+        print("Error: "+error.toString());
+      });
+   
+    }
   Future saveImg(List<int> asset, String name) async {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
     StorageUploadTask uploadTask = reference.putData(asset);
-    String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-    print(url);
-    posterImgController.text = url;
+    _posterUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    
   }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -446,6 +455,7 @@ class _EventFormState extends State<EventForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.005),
                     alignment: Alignment.topLeft,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           'Pick a poster Image',
@@ -456,38 +466,23 @@ class _EventFormState extends State<EventForm> {
                           onPressed: () {
                             getImage();
                           },
-                        )
+                        ),
+                        fileName.isEmpty
+                        ? Text('Poster Image not Selected.',style: TextStyle(color: Colors.grey[400],fontSize: vpH*0.016,fontWeight:FontWeight.bold))
+                        :Text('Poster Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.016, fontWeight:FontWeight.bold))
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: posterImgController,
-                      onSaved: (String value) {
-                        _posterUrl = value;
-                      },
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: vpH * 0.02,
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'No Image Selected',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                  ),
+                  
                   Container(
                     padding: EdgeInsets.all(15),
                     child: RaisedButton(
                       elevation: vpH * 0.5,
-                      onPressed: () {
+                      onPressed: ()async {
+                        if(filePicked)
+                        {
+                          await saveImg(file.readAsBytesSync(), fileName);
+                        }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
                           return null;
@@ -521,13 +516,13 @@ class _EventFormState extends State<EventForm> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      color: Color(0xFF3F51B5),
+                      color: Color(0xFFFF9C01),
                       child: Text(
                         "Create",
                         style: TextStyle(
                           color: Colors.white,
-                          letterSpacing: vpW * 0.015,
-                          fontSize: vpH * 0.02,
+                          letterSpacing: vpW*0.005,
+                          fontSize: vpH * 0.025,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

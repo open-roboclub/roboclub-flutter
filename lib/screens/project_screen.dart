@@ -21,22 +21,27 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  List<Project> ongoingProjectsList = [];
-  List<Project> complePedProjectsList = [];
-  // List<Project> projectsList = [];
+  // List<Project> ongoingProjectsList = [];
+  // List<Project> complePedProjectsList = [];
+  List<Project> projectsList = [];
   bool isLoading = true;
 
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      // projectsList =value;
+      projectsList =value;
 
-      value.forEach((item) {
-        print(item.progress);
-        item.progress == ""
-            ? ongoingProjectsList = value
-            : complePedProjectsList = value;
-      });
+      // value.forEach((item) {
+      //   print(item.progress);
+      //   item.progress == ""
+      //       ? ongoingProjectsList = value
+      //       : complePedProjectsList = value;
+      // }); // value.forEach((item) {
+      //   print(item.progress);
+      //   item.progress == ""
+      //       ? ongoingProjectsList = value
+      //       : complePedProjectsList = value;
+      // });
 
       setState(() {
         isLoading = false;
@@ -51,7 +56,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var textStyle =
-        TextStyle(fontSize: vpH * 0.018, fontWeight: FontWeight.bold);
+        TextStyle(fontSize: vpH * 0.027, fontWeight: FontWeight.normal);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
@@ -75,9 +80,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FlatButton(
-                        child: Text(
-                          'Completed',
-                          style: textStyle,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: vpW*0.3,
+                          child: Center(
+                            child: Text(
+                              'Completed',
+                              style: textStyle,
+                            ),
+                          ),
                         ),
                         textColor:
                             !_ongoingPressed ? Colors.white : Colors.black,
@@ -94,7 +105,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         width: vpW * 0.01,
                       ),
                       FlatButton(
-                        child: Text('Ongoing', style: textStyle),
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: vpW*0.3,
+                          child: Center(
+                            child: Text(
+                              'Ongoing', style: textStyle,
+                            ),
+                          ),
+                        ),
                         textColor:
                             _ongoingPressed ? Colors.white : Colors.black,
                         color: _ongoingPressed
@@ -119,7 +138,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         child: CircularProgressIndicator(),
                       )
                     : _ongoingPressed
-                        ? ongoingProjectsList.length == 0
+                        ? projectsList.length == 0
                             ? Center(
                                 child: Container(
                                   width: vpW * 0.7,
@@ -133,14 +152,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             : ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: ongoingProjectsList.length,
+                                itemCount: projectsList.length,
                                 itemBuilder: (context, index) {
                                   return OngoingProjectCard(
-                                    ongoingProject: ongoingProjectsList[index],
+                                    ongoingProject: projectsList[index],
                                   );
                                 },
                               )
-                        : complePedProjectsList.length == 0
+                        : projectsList.length == 0
                             ? Center(
                                 child: Container(
                                   width: vpW * 0.7,
@@ -154,11 +173,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             : ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: complePedProjectsList.length,
+                                itemCount: projectsList.length,
                                 itemBuilder: (context, index) {
                                   return CompletedProjectCard(
                                     completedProject:
-                                        complePedProjectsList[index],
+                                        projectsList[index],
                                   );
                                 },
                               ),
