@@ -34,13 +34,11 @@ class NotificationService {
     final Map<String, dynamic> body = {
       // "to": token,
       "registration_ids": tokens,
-      "data": {
-        "key1": "Hello this is key 1 from AMURoboclub",
-        "key2": "Hello this is key 2 from AMURoboclub"
-      },
+      "data": {"screen": "notification"},
       "notification": {
         "title": title,
-        "body": msg
+        "body": msg,
+        "click_action": "FLUTTER_NOTIFICATION_CLICK"
         // "image": "https://images.ctfassets.net/gg4ddi543f5b/2tMJ2QQXnxLatGtylEYut1/cdddf953c759f1083d41d7dc72c56d00/5-Positive-Conflict-tips-You-Can-Learn-From-High-Performance-Teams-5.jpg"
       }
     };

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,9 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
+import 'package:roboclub_flutter/screens/admin_screen.dart';
+import 'package:roboclub_flutter/screens/feedback_screen.dart';
+import 'package:roboclub_flutter/screens/notification_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
@@ -18,6 +22,24 @@ class EventScreen extends StatefulWidget {
   _EventScreenState createState() => _EventScreenState();
 }
 
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print("!!!!!!!!" * 5);
+  print("inside background handler");
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+    print(data);
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+    print(notification);
+  }
+
+  // Or do other work.
+}
+
 class _EventScreenState extends State<EventScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -26,6 +48,8 @@ class _EventScreenState extends State<EventScreen> {
   List<Event> pastEventsList = [];
   bool isLoading = true;
   DateTime parsedDate;
+
+  final FirebaseMessaging _messaging = FirebaseMessaging();
 
   @override
   void initState() {
@@ -37,6 +61,66 @@ class _EventScreenState extends State<EventScreen> {
       });
     });
     super.initState();
+  }
+
+  void initNotifications(BuildContext context) async {
+    _messaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.amber,
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+
+        // final snackbar = SnackBar(
+        //   content: Text(message['notification']['title']),
+        //   action: SnackBarAction(
+        //     label: 'Show',
+        //     onPressed: () => Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (context) => NotificationScreen(),
+        //         )),
+        //   ),
+        // );
+
+        // Scaffold.of(context).showSnackBar(snackbar);
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("!!!!!!!!" * 5);
+        print("onLaunch: $message");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NotificationScreen(),
+            ));
+
+        // _navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("!!!!!!!!" * 5);
+        print("onResume: $message");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NotificationScreen(),
+            ));
+      },
+    );
   }
 
   void splitEventLists(List<Event> events) {
@@ -75,6 +159,7 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    initNotifications(context);
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     User _user = Provider.of<UserProvider>(context).getUser;
@@ -90,66 +175,97 @@ class _EventScreenState extends State<EventScreen> {
             scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(
-                height: vpH * 0.04,
-              ),
-              _title('Featured Events', vpH, vpW),
-              Container(
-                  height: vpH * 0.34,
-                  width: vpW,
-                  child: isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: featuredEventsList.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return FeaturedEventCard(
-                              featuredEvent: featuredEventsList[index],
-                            );
-                          },
-                        )),
-              SizedBox(
-                height: vpH * 0.04,
-              ),
-              _title('Upcoming Events', vpH, vpW),
-              Container(
-                  width: vpW,
-                  child: isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: upcomingEventsList.length,
-                          itemBuilder: (context, index) {
-                            return EventCard(
-                              event: upcomingEventsList[index],
-                            );
-                          },
-                        )),
-              SizedBox(
-                height: vpH * 0.04,
-              ),
-              _title('Past Events', vpH, vpW),
-              Container(
-                  width: vpW,
-                  child: isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: pastEventsList.length,
-                          itemBuilder: (context, index) {
-                            return EventCard(
-                              event: pastEventsList[index],
-                            );
-                          },
-                        )),
-            ],
-          ),
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: vpH * 0.04,
+                    ),
+                    _title('Featured Events', vpH, vpW),
+                    Container(
+                        height: vpH * 0.34,
+                        width: vpW,
+                        child: featuredEventsList.isEmpty
+                            ? Center(
+                                child: Container(
+                                  height: vpH * 0.2,
+                                  width: vpW * 0.6,
+                                  child: SvgPicture.asset(
+                                    'assets/illustrations/events.svg',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: featuredEventsList.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return FeaturedEventCard(
+                                    featuredEvent: featuredEventsList[index],
+                                  );
+                                },
+                              )),
+                    SizedBox(
+                      height: vpH * 0.04,
+                    ),
+                    _title('Upcoming Events', vpH, vpW),
+                    Container(
+                        width: vpW,
+                        child: upcomingEventsList.isEmpty
+                            ? Center(
+                                child: Container(
+                                  height: vpH * 0.3,
+                                  width: vpW * 0.6,
+                                  child: SvgPicture.asset(
+                                    'assets/illustrations/calendar.svg',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: upcomingEventsList.length,
+                                itemBuilder: (context, index) {
+                                  return EventCard(
+                                    event: upcomingEventsList[index],
+                                  );
+                                },
+                              )),
+                    SizedBox(
+                      height: vpH * 0.04,
+                    ),
+                    _title('Past Events', vpH, vpW),
+                    Container(
+                        width: vpW,
+                        child: pastEventsList.isEmpty
+                            ? Center(
+                                child: Container(
+                                  height: vpH * 0.3,
+                                  width: vpW * 0.6,
+                                  child: SvgPicture.asset(
+                                    'assets/illustrations/calendar.svg',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: pastEventsList.length,
+                                itemBuilder: (context, index) {
+                                  return EventCard(
+                                    event: pastEventsList[index],
+                                  );
+                                },
+                              )),
+                  ],
+                ),
         ),
         floatingActionButton: _user != null
             ? (_user.isAdmin
