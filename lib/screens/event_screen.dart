@@ -8,8 +8,6 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
-import 'package:roboclub_flutter/screens/admin_screen.dart';
-import 'package:roboclub_flutter/screens/feedback_screen.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
@@ -22,19 +20,15 @@ class EventScreen extends StatefulWidget {
   _EventScreenState createState() => _EventScreenState();
 }
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  print("!!!!!!!!" * 5);
-  print("inside background handler");
-  if (message.containsKey('data')) {
-    // Handle data message
-    final dynamic data = message['data'];
-    print(data);
-  }
-
-  if (message.containsKey('notification')) {
-    // Handle notification message
-    final dynamic notification = message['notification'];
-    print(notification);
+Future<dynamic> myBackgroundMessageHandler(
+    Map<String, dynamic> message, BuildContext context) async {
+  if (message['data']['screen'] == 'notification') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NotificationScreen(),
+      ),
+    );
   }
 
   // Or do other work.
@@ -78,47 +72,61 @@ class _EventScreenState extends State<EventScreen> {
             actions: <Widget>[
               FlatButton(
                 color: Colors.amber,
-                child: Text('Ok'),
+                child: Text('Show'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (message['data']['screen'] == 'event') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventScreen(),
+                        ));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationScreen(),
+                        ));
+                  }
+                },
+              ),
+              FlatButton(
+                color: Colors.amber,
+                child: Text('Calcel'),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
           ),
         );
-
-        // final snackbar = SnackBar(
-        //   content: Text(message['notification']['title']),
-        //   action: SnackBarAction(
-        //     label: 'Show',
-        //     onPressed: () => Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: (context) => NotificationScreen(),
-        //         )),
-        //   ),
-        // );
-
-        // Scaffold.of(context).showSnackBar(snackbar);
       },
-      onBackgroundMessage: myBackgroundMessageHandler,
+      onBackgroundMessage: (Map<String, dynamic> message) async {
+        myBackgroundMessageHandler(message, context);
+      },
       onLaunch: (Map<String, dynamic> message) async {
-        print("!!!!!!!!" * 5);
-        print("onLaunch: $message");
-        Navigator.push(
+        if (message['data']['screen'] == 'notification') {
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => NotificationScreen(),
-            ));
-
-        // _navigateToItemDetail(message);
+            ),
+          );
+        }
       },
       onResume: (Map<String, dynamic> message) async {
-        print("!!!!!!!!" * 5);
-        print("onResume: $message");
-        Navigator.push(
+        if (message['data']['screen'] == 'event') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EventScreen(),
+              ));
+        } else {
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => NotificationScreen(),
-            ));
+            ),
+          );
+        }
       },
     );
   }
