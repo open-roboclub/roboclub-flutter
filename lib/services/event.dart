@@ -6,9 +6,7 @@ import 'dart:async';
 final Firestore _firestore = Firestore.instance;
 
 class EventService {
-
-  Future<bool> postEvent(
-  {
+  Future<bool> postEvent({
     String eventName,
     String details,
     String duration,
@@ -16,8 +14,8 @@ class EventService {
     String posterURL,
     String startTime,
     String endTime,
-    String date,}) async {
-
+    String date,
+  }) async {
     Map<String, dynamic> data = {
       "eventName": eventName,
       "details": details,
@@ -29,7 +27,6 @@ class EventService {
     };
 
     await _firestore.collection("/events").add(data).then((value) {
-
       print(value);
     });
     return true;
@@ -38,7 +35,11 @@ class EventService {
   Future<List<Event>> fetchEvents() async {
     List<Event> list = [];
 
-    await _firestore.collection("/events").getDocuments().then((value) {
+    await _firestore
+        .collection("/events")
+        .orderBy('date', descending: true)
+        .getDocuments()
+        .then((value) {
       value.documents.forEach((element) {
         list.add(Event.fromMap(element.data));
       });

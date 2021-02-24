@@ -20,17 +20,8 @@ class EventScreen extends StatefulWidget {
   _EventScreenState createState() => _EventScreenState();
 }
 
-Future<dynamic> myBackgroundMessageHandler(
-    Map<String, dynamic> message, BuildContext context) async {
-  if (message['data']['screen'] == 'notification') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NotificationScreen(),
-      ),
-    );
-  }
-
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print("myBackgroundMessageHandler");
   // Or do other work.
 }
 
@@ -99,9 +90,7 @@ class _EventScreenState extends State<EventScreen> {
           ),
         );
       },
-      onBackgroundMessage: (Map<String, dynamic> message) async {
-        myBackgroundMessageHandler(message, context);
-      },
+      onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         if (message['data']['screen'] == 'notification') {
           Navigator.push(
@@ -132,6 +121,7 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   void splitEventLists(List<Event> events) {
+    List<Event> tempList = [];
     events.forEach((item) {
       DateTime today = DateTime.now();
       DateTime _parsed = DateTime.parse(item.date);
@@ -140,12 +130,13 @@ class _EventScreenState extends State<EventScreen> {
         featuredEventsList.add(item);
       } else if (_parsed.isAfter(today)) {
         item.date = DateFormat.yMd().format(_parsed);
-        upcomingEventsList.add(item);
+        tempList.add(item);
       } else {
         item.date = DateFormat.yMd().format(_parsed);
         pastEventsList.add(item);
       }
     });
+    upcomingEventsList = tempList.reversed.toList();
   }
 
   Widget _title(String title, var vpH, var vpW) {
