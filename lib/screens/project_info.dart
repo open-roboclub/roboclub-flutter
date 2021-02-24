@@ -29,7 +29,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
 
   @override
     void initState() {
-     _currprogress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
+     _currprogress =   widget.project.progress== "" ? 0 : int.parse(widget.project.progress);
       super.initState();
     }
  
@@ -40,7 +40,6 @@ class _ProjectInfoState extends State<ProjectInfo> {
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
     User _user = Provider.of<UserProvider>(context).getUser;
 
-    bool _updatedProgress = false;
 
     Future<void> updateProgress()async {
       String id;
@@ -49,7 +48,6 @@ class _ProjectInfoState extends State<ProjectInfo> {
           
           if(project['name']==widget.project.name){
             id =project.documentID;
-            print(id);
             return Firestore.instance.collection('projects').document(id).updateData({
               'progress': _currprogress.toString()})
               .then((value) => print("Progress Updated"))
@@ -121,7 +119,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 ),
               ),
               Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
-              child: int.parse(widget.project.progress) < 100  ?
+              child: widget.project.progress.isEmpty || int.parse(widget.project.progress) < 100  ?
                 Column(
                   children: [
                     Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
@@ -170,9 +168,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             label: '$_currprogress',  
                             onChanged: (double newValue) {  
                               setState(() {  
-                                _currprogress = newValue.round();  
-                                print(_currprogress);
-
+                                _currprogress = newValue.round();
                               });  
                             },    
                               

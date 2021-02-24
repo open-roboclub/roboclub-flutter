@@ -39,12 +39,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   void splitProjectsList(List<Project> projects) {
     projects.forEach((item) {
-      print(item.progress);
-      if(item.progress.isEmpty){
-        ongoingProjectsList.add(item);
+      if(item.progress == "100"){
+        completedProjectsList.add(item);
       }
       else{
-        completedProjectsList.add(item);
+        ongoingProjectsList.add(item);
       }
     });
   }

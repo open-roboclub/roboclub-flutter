@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
 import '../helper/dimensions.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class OngoingProjectCard extends StatefulWidget {
 
@@ -13,6 +15,7 @@ class OngoingProjectCard extends StatefulWidget {
   _OngoingProjectCardState createState() => _OngoingProjectCardState();
 }
 class _OngoingProjectCardState extends State<OngoingProjectCard> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -127,37 +130,36 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                     flex: 1,
                     child:Align(
                       alignment: Alignment.bottomRight,
-                      child:Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child:
-                        // CircleAvatar(
-                        //   radius: vpH* 0.028,
-                        //   backgroundColor: Color(0xFFFF9C01),
-                        //   child: 
-                        //   CircleAvatar(
-                        //     radius: vpH*0.026,
-                        //     backgroundImage: AssetImage('assets/img/placeholder.jpg'),
-                        //   ),
-                        // )
-                        Container(
-                          width: vpW*0.15,
-                          height: vpH*0.055,
-                          decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.green,
-                            width: 3,
-                          ),
-                          borderRadius: BorderRadius.circular(26)),
-                          child: Padding(padding: EdgeInsets.only(top:vpH*0.012 ,left: vpW*0.01),child:
-                            Text( widget.ongoingProject.progress== "" ? "" :
-                              widget.ongoingProject.progress,style: TextStyle(fontSize: vpH*0.02),
-                            ),
-                          ),
+                      child:CircularPercentIndicator(
+                        radius: vpH*0.06,
+                        lineWidth: vpW*0.015,
+                        animation: true,
+                        percent: widget.ongoingProject.progress.isEmpty?0.0: int.parse(widget.ongoingProject.progress).toDouble()/100, // Defaults to 0.5.
+                        center: new Text(
+                          widget.ongoingProject.progress.isEmpty?'0' +"%":widget.ongoingProject.progress.toString() +"%",
+                          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: vpH*0.02),
                         ),
+                        
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: (() {
+                          if(widget.ongoingProject.progress.isEmpty){
+                            return Colors.grey;
+                          }
+                          else if(int.parse(widget.ongoingProject.progress) <26 && int.parse(widget.ongoingProject.progress)>0 ){
+                            return Colors.red;
+                          }
+                          else if(int.parse(widget.ongoingProject.progress) <51 && int.parse(widget.ongoingProject.progress) >25){
+                            return Colors.orange;
+                          }
+                          else if(int.parse(widget.ongoingProject.progress) <76 && int.parse(widget.ongoingProject.progress) > 50){
+                            return Colors.yellow[600];
+                          }
+                          else{
+                            return Colors.green;
+                          }
+                        }()),
                       ),
-                    )
-                  ),
+                    ),),
                 ],
               ),
             ),
