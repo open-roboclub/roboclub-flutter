@@ -25,11 +25,11 @@ class _ProjectInfoState extends State<ProjectInfo> {
   var vpH;
   var vpW;
      
-  int progress;
+  int _currprogress;
 
   @override
     void initState() {
-    progress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
+     _currprogress =   widget.project.progress== "" ? 0 : int.parse( widget.project.progress);
       super.initState();
     }
  
@@ -40,23 +40,24 @@ class _ProjectInfoState extends State<ProjectInfo> {
     var heading = TextStyle(fontSize: vpH*0.03,fontWeight:FontWeight.bold);
     User _user = Provider.of<UserProvider>(context).getUser;
 
-    bool _ongoing = true;
-
-    int currentPos = 0;
+    bool _updatedProgress = false;
 
     Future<void> updateProgress()async {
       String id;
-      Firestore.instance.collection('/projects').getDocuments().then((projects){
+      Firestore.instance.collection('projects').getDocuments().then((projects){
         projects.documents.forEach((project){
+          
           if(project['name']==widget.project.name){
             id =project.documentID;
+            print(id);
+            return Firestore.instance.collection('projects').document(id).updateData({
+              'progress': _currprogress.toString()})
+              .then((value) => print("Progress Updated"))
+              .catchError((error) => print("Failed to update progress: $error"));
+            
           }
         });
       });
-      return Firestore.instance.collection("/projects").document(id).updateData({'progress': progress.toString()})
-        .then((value) => print("Progress Updated"))
-        .catchError((error) => print("Failed to update progress: $error"));
-      
     }
    
       
@@ -120,7 +121,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 ),
               ),
               Padding(padding: EdgeInsets.symmetric(horizontal: vpW*0.05),
-              child:  progress < 100  ?
+              child: int.parse(widget.project.progress) < 100  ?
                 Column(
                   children: [
                     Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.01),
@@ -136,7 +137,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
-                         progress.toString(),
+                         _currprogress.toString(),
                           style: TextStyle(fontSize: vpH*0.04, fontWeight: FontWeight.w900,color:  Color(0xFFFF9C01)),
                         ),
                         Text("%",style: TextStyle(fontSize: vpH*0.03, fontWeight: FontWeight.w700)),
@@ -163,14 +164,15 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             ),
                           ),
                           child:Slider(  
-                            value: progress.toDouble(),  
+                            value: _currprogress.toDouble(),  
                             min: 0,  
                             max: 100,  
-                            label: '$progress',  
+                            label: '$_currprogress',  
                             onChanged: (double newValue) {  
                               setState(() {  
-                                progress = newValue.round();  
-                                
+                                _currprogress = newValue.round();  
+                                print(_currprogress);
+
                               });  
                             },    
                               
@@ -191,9 +193,17 @@ class _ProjectInfoState extends State<ProjectInfo> {
                           onPressed: () async{
                             if(_formKey.currentState.validate()){
                               await updateProgress();
+                              showDialog(  
+                                context: context,  
+                                builder: (BuildContext context) {  
+                                  return  AlertDialog(
+                                    title: Container(
+                                      height: vpH*0.035,
+                                      child:Image.asset('assets/img/success-mark.png'),),
+                                    content: Text("Progress updated !!",style:TextStyle(fontSize: vpH*0.03),textAlign: TextAlign.center,),);
+                                },
+                              );
                             }
-                            // updateProgress();
-                            
                           },
 
                         ),
