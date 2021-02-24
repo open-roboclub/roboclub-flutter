@@ -126,13 +126,13 @@ class _EventScreenState extends State<EventScreen> {
       DateTime today = DateTime.now();
       DateTime _parsed = DateTime.parse(item.date);
       if (_parsed.difference(today).inDays == 0) {
-        item.date = DateFormat.yMd().format(_parsed);
+        item.date = DateFormat('MMMEd').format(_parsed);
         featuredEventsList.add(item);
       } else if (_parsed.isAfter(today)) {
-        item.date = DateFormat.yMd().format(_parsed);
+        item.date = DateFormat('MMMEd').format(_parsed);
         tempList.add(item);
       } else {
-        item.date = DateFormat.yMd().format(_parsed);
+        item.date = DateFormat('MMMEd').format(_parsed);
         pastEventsList.add(item);
       }
     });

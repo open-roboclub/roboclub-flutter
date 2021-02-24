@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -29,7 +30,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      projectsList =value;
+      value.forEach((element) {
+        DateTime _parsed = DateTime.parse(element.date);
+        element.date = DateFormat('yMMMd').format(_parsed);
+        projectsList.add(element);
+      });
 
       // value.forEach((item) {
       //   print(item.progress);
@@ -82,7 +87,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       FlatButton(
                         child: Container(
                           padding: EdgeInsets.all(10),
-                          width: vpW*0.3,
+                          width: vpW * 0.3,
                           child: Center(
                             child: Text(
                               'Completed',
@@ -107,10 +112,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       FlatButton(
                         child: Container(
                           padding: EdgeInsets.all(10),
-                          width: vpW*0.3,
+                          width: vpW * 0.3,
                           child: Center(
                             child: Text(
-                              'Ongoing', style: textStyle,
+                              'Ongoing',
+                              style: textStyle,
                             ),
                           ),
                         ),
@@ -176,8 +182,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                 itemCount: projectsList.length,
                                 itemBuilder: (context, index) {
                                   return CompletedProjectCard(
-                                    completedProject:
-                                        projectsList[index],
+                                    completedProject: projectsList[index],
                                   );
                                 },
                               ),
