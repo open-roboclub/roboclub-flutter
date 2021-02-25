@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:roboclub_flutter/models/user.dart';
 
@@ -29,6 +30,23 @@ class AuthService {
     Map<String, dynamic> _tempUser;
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
+
+    bool isAllowed = false;
+    await _firestore
+        .collection('/currentTeam')
+        .document(env['currTeamId'])
+        .get()
+        .then((snapshot) {
+      snapshot.data['emails'].forEach((email) {
+        if (email == user.email) {
+          isAllowed = true;
+        }
+      });
+    });
+    if (!isAllowed) {
+      signOutGoogle();
+      return null;
+    }
     await _firestore
         .collection('/users')
         .document(currentUser.uid)

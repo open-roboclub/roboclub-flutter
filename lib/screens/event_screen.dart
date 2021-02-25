@@ -20,15 +20,9 @@ class EventScreen extends StatefulWidget {
   _EventScreenState createState() => _EventScreenState();
 }
 
-Future<dynamic> myBackgroundMessageHandler(
-    Map<String, dynamic> message, BuildContext context) async {
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   if (message['data']['screen'] == 'notification') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NotificationScreen(),
-      ),
-    );
+    print('inside notification screen');
   }
 
   // Or do other work.
@@ -99,9 +93,7 @@ class _EventScreenState extends State<EventScreen> {
           ),
         );
       },
-      onBackgroundMessage: (Map<String, dynamic> message) async {
-        myBackgroundMessageHandler(message, context);
-      },
+      onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         if (message['data']['screen'] == 'notification') {
           Navigator.push(
