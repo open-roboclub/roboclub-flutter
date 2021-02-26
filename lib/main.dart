@@ -10,6 +10,7 @@ import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/theme_provider.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
+import 'package:roboclub_flutter/screens/onboarding_screen.dart';
 import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/notification.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
@@ -21,6 +22,7 @@ void main() async {
   await DotEnv.load(fileName: ".env");
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   MyLocalStorage _storage = MyLocalStorage();
+  var isOnboarding = await _storage.getOnboarding() ?? false;
   var darkModeOn = await _storage.getThemepref() ?? false;
   runApp(
     MultiProvider(
@@ -32,12 +34,17 @@ void main() async {
           create: (_) => UserProvider(),
         ),
       ],
-      child: MyApp(),
+      child: MyApp(
+        isOnboarding: isOnboarding,
+      ),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
+  final isOnboarding;
+
+  const MyApp({Key key, this.isOnboarding}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -80,7 +87,7 @@ class _MyAppState extends State<MyApp> {
       // theme: ThemeData(),
       // darkTheme: darkTheme,
 
-      home: EventScreen(),
+      home: !widget.isOnboarding ? OnboardingScreen() : EventScreen(),
     );
   }
 }
