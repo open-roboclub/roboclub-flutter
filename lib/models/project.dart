@@ -5,7 +5,7 @@ class Project {
   String name;
   String description;
   String date;
-  String progress;
+  String progress ="";
   List<dynamic> teamMembers;
   List<dynamic> teamProfile;
   String fileUrl;

@@ -24,6 +24,17 @@ class MyLocalStorage {
     return prefs.getString('deviceToken');
   }
 
+  setOnboarding(bool isDone) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('onboarding', isDone);
+  }
+
+  //getter functions
+  Future<bool> getOnboarding() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('onboarding');
+  }
+
   // clear local storage
   clearPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
