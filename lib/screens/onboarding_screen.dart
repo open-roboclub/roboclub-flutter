@@ -151,12 +151,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                             SizedBox(height: 30.0),
                             Text(
-                              'Visionary Projects ',
+                              'Visionary Projects',
                               style: kTitleStyle,
                             ),
                             SizedBox(height: 15.0),
                             Text(
-                              'Your seniors have developed tons of projects, Wanna see how ?',
+                              'Our seniors have developed tons of projects.\nWanna see how ?',
                               style: kSubtitleStyle,
                             ),
                           ],

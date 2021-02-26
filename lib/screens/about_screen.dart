@@ -15,27 +15,24 @@ class AboutScreen extends StatefulWidget {
   _AboutScreenState createState() => _AboutScreenState();
 }
 
-class _AboutScreenState extends State<AboutScreen> 
-  with SingleTickerProviderStateMixin{
+class _AboutScreenState extends State<AboutScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-   AnimationController _animationController;
-   Animation _animation;
-   
-   void initState() {
-  
- 
-     _animationController = AnimationController(
-       duration: Duration(seconds:1),
-       vsync: this,
-     );
- 
-     _animation = Tween( begin: 60.0, end:85.0).animate(_animationController);
-     _animationController.repeat(reverse: true);
-      super.initState();
-   }
- 
-   
+  AnimationController _animationController;
+  Animation _animation;
+
+  void initState() {
+    _animationController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _animation = Tween(begin: 60.0, end: 85.0).animate(_animationController);
+    _animationController.repeat(reverse: true);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -95,25 +92,23 @@ class _AboutScreenState extends State<AboutScreen>
                                   padding: EdgeInsets.symmetric(
                                       horizontal: vpW * 0.028,
                                       vertical: vpH * 0.015),
-                                  child:AnimatedBuilder(
-                                    animation: _animation,
-                                    builder: (context, _) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          launch('https://amuroboclub.in/');
-                                        },
-                                        child: Image.asset(
-                                          'assets/img/NoPath.png',
-                                          // width: vpW * 0.24,
-                                          // height: vpH * 0.13,
-                                          width: _animation.value,
-                                          height: _animation.value,
-                                          // fit: BoxFit.fill,
-                                        ),   
-                                      );
-                                    }
-                                  ),
-                                      
+                                  child: AnimatedBuilder(
+                                      animation: _animation,
+                                      builder: (context, _) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            launch('https://amuroboclub.in/');
+                                          },
+                                          child: Image.asset(
+                                            'assets/img/NoPath.png',
+                                            // width: vpW * 0.24,
+                                            // height: vpH * 0.13,
+                                            width: _animation.value,
+                                            height: _animation.value,
+                                            // fit: BoxFit.fill,
+                                          ),
+                                        );
+                                      }),
                                 ),
                               ),
                             ],
@@ -122,7 +117,7 @@ class _AboutScreenState extends State<AboutScreen>
                             padding: EdgeInsets.symmetric(
                                 horizontal: vpW * 0.028, vertical: vpH * 0.005),
                             child: Text(
-                                "Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support.Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support.Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support.We couldn't have reached this place without your support.Thank you for all the people who contributed in making AMURoboclub what it is today",
+                                "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University.",
                                 style: TextStyle(
                                     fontWeight: FontWeight.normal,
                                     fontSize: vpH * 0.020)),
