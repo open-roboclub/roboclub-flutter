@@ -32,15 +32,37 @@ class _AdminScreenState extends State<AdminScreen> {
             _isLoading = true;
           });
           _auth.signInWithGoogle().then((user) {
-            _userProvider.setUser = user;
+            if (user != null) {
+              _userProvider.setUser = user;
+            }
             setState(() {
               _isLoading = false;
             });
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => ProfileScreen(),
-              ),
-            );
+            if (user != null) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(),
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  content: ListTile(
+                    title: Text('Access Denied!'),
+                    subtitle: Text(
+                        'Sorry! Only Core Team members are allowed for User Access and Login.'),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      color: Colors.amber,
+                      child: Text('Ok'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              );
+            }
           });
         } else {
           setState(() {
