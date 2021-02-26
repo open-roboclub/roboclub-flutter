@@ -20,18 +20,18 @@ var vpW;
 
   // TextFormFiels styling 
 
-  final kHintTextStyle = TextStyle(
-    color: Color(0xFF757575),
-    fontSize: vpH*0.022,
-    fontFamily: 'OpenSans',
-  );
+final kHintTextStyle = TextStyle(
+  color: Color(0xFF757575),
+  fontSize: vpH*0.022,
+  fontFamily: 'OpenSans',
+);
 
-  final kLabelStyle = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontSize: vpH*0.025,
-    fontFamily: 'OpenSans',
-  ); 
+final kLabelStyle = TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+  fontSize: vpH*0.025,
+  fontFamily: 'OpenSans',
+); 
 
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -48,6 +48,8 @@ class _ProjectFormState extends State<ProjectForm> {
   List<File> imageList = List() ;
   List<dynamic> _teamMembers=List();
   List<dynamic> _teamProfile=List();
+  String dropdownValue = '1';
+
 
   String fileName='';
   String pdfFileName='';
@@ -61,6 +63,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
+  TextEditingController _teamMember = new TextEditingController();
   // TextEditingController memberName = new TextEditingController();
 
   // upload image
@@ -133,28 +136,6 @@ class _ProjectFormState extends State<ProjectForm> {
     vpW = getViewportWidth(context);
     var projects = ProjectService();
 
-
-    addDynamic(){
-      // if(_teamMembers.length != 0){
-      //   floatingIcon = new Icon(Icons.add);
-
-      //   _teamMembers=[];
-      //   dynamicList = [];
-      // }
-      setState(() {});
-      if (dynamicList.length >= 10) {
-        return;
-      }
-      dynamicList.add(new dynamicWidget());
-    }
-
-    Widget dynamicTextField = new Flexible(
-      flex: 2,
-      child: new ListView.builder(
-        itemCount: dynamicList.length,
-        itemBuilder: (_, index) => dynamicList[index],
-      ),
-    );
 
     // alert after successful form submission 
     Widget okButton =FlatButton(  
@@ -385,26 +366,44 @@ class _ProjectFormState extends State<ProjectForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children:[
-                        Text('Team Members',style: kLabelStyle),
-                        Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: FloatingActionButton(
-                            mini: true,
-                            backgroundColor: Color(0xFFFF9C01),
-                            onPressed: () {
-                              addDynamic();
-                            },
-                            child: Icon(Icons.add),
-                          ),
-                        ),
-                      
-                      ],),
+                      child:Text('Team Members',style: kLabelStyle),
                     ),
-                    
-                   
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      child:Align(
+                        alignment: Alignment.centerLeft,
+                        child:DropdownButton<String>(
+                          style: TextStyle(color:Colors.black, fontWeight:FontWeight.bold),
+                          dropdownColor: Color(0xFFE8EAF6),
+                            value: dropdownValue,
+                            isDense: true,
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dropdownValue = newValue;
+                              });
+                            },
+                            items: <String>['1','2','3','4','5','6','7','8','9','10']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            hint: Text('Select Team Size'),
+                          ),
+                      ),
+                    ),
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                    //   alignment: Alignment.topLeft,
+                    //   child:ListView.builder(
+                    //     itemCount: int.parse(dropdownValue) ,
+                    //     itemBuilder: (context,index)
+                    //     {
+                    //       return dynamicWidget();
+                    //     }
+                    //   ),
+                    // ),
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
@@ -474,7 +473,7 @@ class _ProjectFormState extends State<ProjectForm> {
         ),
       );
     }
-  }
+}
 
   class dynamicWidget extends StatelessWidget {
   TextEditingController _teamMember = new TextEditingController();
@@ -484,7 +483,7 @@ class _ProjectFormState extends State<ProjectForm> {
 
     return  Container(
     margin: EdgeInsets.symmetric(vertical:vpH*0.005, horizontal: vpW*0.05),
-    child:ListBody(
+    child:Column(
       children: <Widget>[
         Row(
           children: <Widget>[

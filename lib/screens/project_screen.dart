@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -21,33 +20,32 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  // List<Project> ongoingProjectsList = [];
-  // List<Project> complePedProjectsList = [];
-  List<Project> projectsList = [];
+  List<Project> ongoingProjectsList = [];
+  List<Project> completedProjectsList = [];
   bool isLoading = true;
+
 
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
-      projectsList =value;
-
-      // value.forEach((item) {
-      //   print(item.progress);
-      //   item.progress == ""
-      //       ? ongoingProjectsList = value
-      //       : complePedProjectsList = value;
-      // }); // value.forEach((item) {
-      //   print(item.progress);
-      //   item.progress == ""
-      //       ? ongoingProjectsList = value
-      //       : complePedProjectsList = value;
-      // });
-
+      splitProjectsList(value);
+      isLoading = true;
       setState(() {
         isLoading = false;
       });
     });
     super.initState();
+  }
+
+  void splitProjectsList(List<Project> projects) {
+    projects.forEach((item) {
+      if(item.progress == "100"){
+        completedProjectsList.add(item);
+      }
+      else{
+        ongoingProjectsList.add(item);
+      }
+    });
   }
 
   bool _ongoingPressed = false;
@@ -138,7 +136,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         child: CircularProgressIndicator(),
                       )
                     : _ongoingPressed
-                        ? projectsList.length == 0
+                        ? ongoingProjectsList.length == 0
                             ? Center(
                                 child: Container(
                                   width: vpW * 0.7,
@@ -152,14 +150,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             : ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: projectsList.length,
+                                itemCount: ongoingProjectsList.length,
                                 itemBuilder: (context, index) {
                                   return OngoingProjectCard(
-                                    ongoingProject: projectsList[index],
+                                    ongoingProject: ongoingProjectsList[index],
                                   );
                                 },
                               )
-                        : projectsList.length == 0
+                        : completedProjectsList.length == 0
                             ? Center(
                                 child: Container(
                                   width: vpW * 0.7,
@@ -173,11 +171,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             : ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: projectsList.length,
+                                itemCount: completedProjectsList.length,
                                 itemBuilder: (context, index) {
                                   return CompletedProjectCard(
                                     completedProject:
-                                        projectsList[index],
+                                        completedProjectsList[index],
                                   );
                                 },
                               ),
