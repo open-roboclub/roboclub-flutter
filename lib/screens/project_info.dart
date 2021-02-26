@@ -12,8 +12,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProjectInfo extends StatefulWidget {
   final Project project;
+  final void Function(Project, String) callback;
 
-  ProjectInfo({Key key, this.project}) : super(key: key);
+  ProjectInfo({Key key, this.project, this.callback}) : super(key: key);
 
   @override
   _ProjectInfoState createState() => _ProjectInfoState();
@@ -42,6 +43,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
     User _user = Provider.of<UserProvider>(context).getUser;
 
     Future<void> updateProgress() async {
+      widget.callback(widget.project, _currprogress.toString());
       String id;
       Firestore.instance.collection('projects').getDocuments().then((projects) {
         projects.documents.forEach((project) {

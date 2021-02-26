@@ -41,6 +41,17 @@ class _ProjectScreenState extends State<ProjectScreen> {
     super.initState();
   }
 
+  void updateProgress(Project updatedProject, String progress) {
+    setState(() {
+      updatedProject.progress = progress;
+      if (progress == "100") {
+        completedProjectsList.add(updatedProject);
+        ongoingProjectsList
+            .removeWhere((element) => element.name == updatedProject.name);
+      }
+    });
+  }
+
   void splitProjectsList(List<Project> projects) {
     projects.forEach((item) {
       if (item.progress == "100") {
@@ -157,8 +168,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                 itemCount: ongoingProjectsList.length,
                                 itemBuilder: (context, index) {
                                   return OngoingProjectCard(
-                                    ongoingProject: ongoingProjectsList[index],
-                                  );
+                                      ongoingProject:
+                                          ongoingProjectsList[index],
+                                      callback: updateProgress);
                                 },
                               )
                         : completedProjectsList.length == 0
