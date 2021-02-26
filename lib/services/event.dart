@@ -6,16 +6,16 @@ import 'dart:async';
 final Firestore _firestore = Firestore.instance;
 
 class EventService {
-  Future<bool> postEvent({
-    String eventName,
-    String details,
-    String duration,
-    String place,
-    String posterURL,
-    String startTime,
-    String endTime,
-    String date,
-  }) async {
+  Future<bool> postEvent(
+      {String eventName,
+      String details,
+      String duration,
+      String place,
+      String posterURL,
+      String startTime,
+      String endTime,
+      String date,
+      String regFormLink}) async {
     Map<String, dynamic> data = {
       "eventName": eventName,
       "details": details,
@@ -24,6 +24,7 @@ class EventService {
       "posterURL": posterURL,
       "endTime": endTime,
       "place": place,
+      "regFormLink": regFormLink,
     };
 
     await _firestore.collection("/events").add(data).then((value) {

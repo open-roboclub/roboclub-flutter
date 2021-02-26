@@ -13,12 +13,15 @@ class ContributorService {
       {String name,
       String description,
       String amount,
-      String representativeImg}) async {
+      String representativeImg,
+      String date}) async {
+        
     Map<String, dynamic> data = {
       "name": name,
       "description": description,
       "representativeImg": representativeImg,
       "amount": amount,
+      "date": date,
     };
 
     await _firestore.collection("/contributors").add(data).then((value) {
