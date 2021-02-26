@@ -286,6 +286,12 @@ class _ContributionFormState extends State<ContributionForm> {
                           date.text = formatted;
                          
                         },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please select a date';
+                          }
+                          return null;
+                        },
                         onSaved: (String value)
                         {
                           _date = value;
