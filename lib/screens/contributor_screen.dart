@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -21,13 +22,27 @@ class _ContributorScreenState extends State<ContributorScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   List<Contributor> contributorsList = [];
-
+  bool isLoading = true;
   @override
   void initState() {
     ContributorService().fetchContributors().then((value) {
-      contributorsList = value;
+      value.forEach((element){
+        DateTime _parsed = DateTime.parse(element.date);
+        element.date = DateFormat('yMMMd').format(_parsed);
+
+      });
+      addContriList(value);
+      setState(() {
+        isLoading = false;
+      });
     });
     super.initState();
+  }
+
+  void addContriList(List<Contributor> contribution) {
+    contribution.forEach((item) {
+     contributorsList.add(item);
+    });
   }
 
   @override
@@ -112,41 +127,29 @@ class _ContributorScreenState extends State<ContributorScreen> {
               Container(
                 height: vpH * 0.6,
                 width: vpW,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance
-                      .collection('/contributors')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final List<DocumentSnapshot> documents =
-                          snapshot.data.documents;
-                      return ListView(
-                        physics: BouncingScrollPhysics(),
-                        children: documents
-                            .map((doc) =>
-                                ContriCard(Contributor.fromMap(doc.data)))
-                            .toList(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("Some Error has Occured");
-                    } else {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("No Contributor Yet"),
-                            Container(
-                              width: vpW * 0.7,
-                              height: vpH * 0.5,
-                              child: SvgPicture.asset(
-                                'assets/illustrations/transfer_money.svg',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ],
+                child: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : contributorsList.length == 0
+                    ? Center(
+                        child: Container(
+                          width: vpW * 0.7,
+                          height: vpH * 0.6,
+                          child: SvgPicture.asset(
+                            'assets/illustrations/transfer_money.svg',
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      );
-                    }
+                    )
+                  : ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: contributorsList.length,
+                  itemBuilder: (context, index) {
+                    return ContriCard(
+                      contributor: contributorsList[index],
+                    );
                   },
                 ),
               )

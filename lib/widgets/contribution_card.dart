@@ -6,8 +6,8 @@ import '../helper/dimensions.dart';
 // ignore: must_be_immutable
 class ContriCard extends StatefulWidget {
   
-  final Contributor _contributor;
-  ContriCard(this._contributor);
+  final Contributor contributor;
+  ContriCard({Key key, this.contributor}): super(key: key);
 
   @override
   _ContriCardState createState() => _ContriCardState();
@@ -54,8 +54,8 @@ class _ContriCardState extends State<ContriCard> {
                         child: CircleAvatar(
                           radius: vpH * 0.026,
                           backgroundColor: Colors.white,
-                          backgroundImage: widget._contributor.representativeImg.isEmpty ? AssetImage('assets/img/money.png')
-                            : NetworkImage(widget._contributor.representativeImg),
+                          backgroundImage: widget.contributor.representativeImg.isEmpty ? AssetImage('assets/img/money.png')
+                            : NetworkImage(widget.contributor.representativeImg),
                         ),
                       )),
                   Flexible(
@@ -68,7 +68,7 @@ class _ContriCardState extends State<ContriCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget._contributor.name ?? "",
+                            widget.contributor.name ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
@@ -76,7 +76,7 @@ class _ContriCardState extends State<ContriCard> {
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.0001)),
                           Text(
-                            widget._contributor.date?? "",
+                            widget.contributor.date?? "",
 
                             // overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: vpH * 0.015),
@@ -85,7 +85,7 @@ class _ContriCardState extends State<ContriCard> {
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.006)),
                           Text(
-                            widget._contributor.description ?? "",
+                            widget.contributor.description ?? "",
 
                             // overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: vpH * 0.015),
@@ -107,7 +107,7 @@ class _ContriCardState extends State<ContriCard> {
                           padding: EdgeInsets.symmetric(
                               horizontal: vpW * 0.005, vertical: vpH * 0.010),
                           child: Text(
-                            "\u20B9 " + widget._contributor.amount ?? "",
+                            "\u20B9 " + widget.contributor.amount ?? "",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: vpH * 0.018),
                           ),
