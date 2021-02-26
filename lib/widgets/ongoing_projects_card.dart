@@ -132,7 +132,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                       alignment: Alignment.bottomRight,
                       child:CircularPercentIndicator(
                         radius: vpH*0.06,
-                        lineWidth: vpW*0.015,
+                        lineWidth: vpW*0.012,
                         animation: true,
                         percent: widget.ongoingProject.progress.isEmpty?0.0: int.parse(widget.ongoingProject.progress).toDouble()/100, // Defaults to 0.5.
                         center: new Text(

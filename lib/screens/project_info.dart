@@ -63,7 +63,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
       child: Scaffold(
         appBar: appBar(
           context,
-          strTitle: widget.project.name,
+          strTitle: widget.project.progress=="100"? "Completed Project": "Ongoing Project",
           isDrawer: false,
           isNotification: false,
         ),
