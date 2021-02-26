@@ -3,12 +3,14 @@ class Contributor {
   String description;
   String representativeImg;
   String amount;
+  String date;
 
   Contributor({
     this.description,
     this.name,
     this.representativeImg,
     this.amount,
+    this.date,
   });
 
   Map toMap(Contributor contributor) {
@@ -17,6 +19,7 @@ class Contributor {
     data['description'] = contributor.description;
     data['representativeImg'] = contributor.representativeImg;
     data['amount'] = contributor.amount;
+    data['date'] = contributor.date;
     return data;
   }
 
@@ -26,5 +29,6 @@ class Contributor {
     this.description = mapData['description'];
     this.representativeImg = mapData['representativeImg'];
     this.amount = mapData['amount'];
+    this.date = mapData['date'];
   }
 }

@@ -16,7 +16,8 @@ class EventService {
     String posterURL,
     String startTime,
     String endTime,
-    String date,}) async {
+    String date,
+    String regFormLink}) async {
 
     Map<String, dynamic> data = {
       "eventName": eventName,
@@ -26,6 +27,7 @@ class EventService {
       "posterURL": posterURL,
       "endTime": endTime,
       "place": place,
+      "regFormLink":regFormLink,
     };
 
     await _firestore.collection("/events").add(data).then((value) {
