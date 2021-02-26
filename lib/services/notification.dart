@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,20 +29,22 @@ class NotificationService {
     return list;
   }
 
-  Future<Null> pushNotification({String title, String msg}) async {
+  Future<Null> pushNotification(
+      {@required String title,
+      @required String msg,
+      @required String img,
+      @required String screen}) async {
     List<String> tokens = await getFCMTokens();
 
     final Map<String, dynamic> body = {
       // "to": token,
       "registration_ids": tokens,
-      "data": {
-        "key1": "Hello this is key 1 from AMURoboclub",
-        "key2": "Hello this is key 2 from AMURoboclub"
-      },
+      "data": {"screen": screen},
       "notification": {
         "title": title,
-        "body": msg
-        // "image": "https://images.ctfassets.net/gg4ddi543f5b/2tMJ2QQXnxLatGtylEYut1/cdddf953c759f1083d41d7dc72c56d00/5-Positive-Conflict-tips-You-Can-Learn-From-High-Performance-Teams-5.jpg"
+        "body": msg,
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "image": img
       }
     };
     String fcmKey = env['FCM_KEY'];

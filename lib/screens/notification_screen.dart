@@ -87,6 +87,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       NotificationService().pushNotification(
                         title: "RoboClub Demo",
                         msg: "Hey Everyone this is a demo notification!",
+                        img:
+                            "https://www.biznessapps.com/blog/wp-content/uploads/2016/01/push.png",
+                        screen: 'notification',
                       );
                     },
                     backgroundColor: Colors.white,
