@@ -6,6 +6,7 @@ class Event {
   String posterURL;
   String startTime;
   String date;
+  String regFormLink;
 
   Event({
     this.eventName,
@@ -15,6 +16,7 @@ class Event {
     this.date,
     this.posterURL,
     this.endTime,
+    this.regFormLink,
   });
 
   Map toMap(Event event) {
@@ -26,6 +28,7 @@ class Event {
     data["date"] = event.date;
     data["posterURL"] = event.posterURL;
     data["endTime"] = event.endTime;
+    data['regFormLink'] =event.regFormLink;
 
     return data;
   }
@@ -39,5 +42,6 @@ class Event {
     this.date = mapData['date'];
     this.posterURL = mapData['posterURL'];
     this.startTime = mapData['startTime'];
+    this.regFormLink = mapData['regFormLink'];
   }
 }

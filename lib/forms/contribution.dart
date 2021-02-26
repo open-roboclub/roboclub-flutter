@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/screens/contributor_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
@@ -25,6 +26,7 @@ class _ContributionFormState extends State<ContributionForm> {
   String _description;
   String _amount;
   String _img;
+  String _date;
   File file;
   String fileName='';
   bool filePicked=false;
@@ -32,7 +34,7 @@ class _ContributionFormState extends State<ContributionForm> {
  final nameController = TextEditingController();
  final descriptionController = TextEditingController();
  final amountController = TextEditingController();
-
+ final date = TextEditingController();
   // upload image
   
   Future getImage()async{
@@ -247,6 +249,53 @@ class _ContributionFormState extends State<ContributionForm> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       alignment: Alignment.topLeft,
+                      child:Text('Date',style: kLabelStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
+                      child:TextFormField(
+                        controller: date,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: vpH*0.02,
+                        ),
+                        decoration: InputDecoration(
+                          fillColor: Color(0xFFE8EAF6),
+                          hintText: 'Pick a Date',
+                          hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Icon(Icons.calendar_today),
+                          ),
+                        ),  
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          DateTime dateTime = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1990),
+                            lastDate:DateTime(2030),
+                          );
+                         
+                          DateFormat formatter = DateFormat('yyyy-MM-dd');
+                          String formatted = formatter.format(dateTime);
+                          print(formatted);
+                          date.text = formatted;
+                         
+                        },
+                        onSaved: (String value)
+                        {
+                          _date = value;
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
+                      alignment: Alignment.topLeft,
                       child:Row(children:[
                         Text('Pick an Image',style: kLabelStyle,),
                         IconButton(icon: Icon(Icons.add_a_photo),
@@ -259,7 +308,7 @@ class _ContributionFormState extends State<ContributionForm> {
                         :Text('Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                       ],),
                     ),
-                       
+                    
                       Container(
                         padding: EdgeInsets.all(15),
                         child:RaisedButton(

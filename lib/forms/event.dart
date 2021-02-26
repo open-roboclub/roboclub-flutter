@@ -26,7 +26,8 @@ class _EventFormState extends State<EventForm> {
       _place,
       _setStartTime,
       _setDate,
-      fileName='';
+      fileName='',
+      _regFormLink;
 
   bool filePicked =false;
   File file;
@@ -42,7 +43,8 @@ class _EventFormState extends State<EventForm> {
   TextEditingController placeController = TextEditingController();
   TextEditingController eventNameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
-
+  TextEditingController regFormController = TextEditingController();
+  
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -450,6 +452,39 @@ class _EventFormState extends State<EventForm> {
                       },
                     ),
                   ),
+                   Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Registration form Link',
+                      style: kLabelStyle,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.words,
+                      controller: regFormController,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: vpH * 0.02,
+                      ),
+                      decoration: InputDecoration(
+                        fillColor: Color(0xFFE8EAF6),
+                        hintText: 'Form Link',
+                        hintStyle: kHintTextStyle,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                    
+                      onSaved: (value) {
+                        _regFormLink = value;
+                      },
+                    ),
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.005),
@@ -473,7 +508,7 @@ class _EventFormState extends State<EventForm> {
                       ],
                     ),
                   ),
-                  
+                 
                   Container(
                     padding: EdgeInsets.all(15),
                     child: RaisedButton(
@@ -496,6 +531,7 @@ class _EventFormState extends State<EventForm> {
                             place: _place,
                             endTime: _setEndTime,
                             posterURL: _posterUrl,
+                            regFormLink: _regFormLink,
                           );
                           print("saved");
                           eventNameController.clear();
@@ -504,6 +540,8 @@ class _EventFormState extends State<EventForm> {
                           _startTimeController.clear();
                           _endTimeController.clear();
                           placeController.clear();
+                          regFormController.clear();
+                          
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
