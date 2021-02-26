@@ -49,7 +49,7 @@ class AuthService {
     }
     await _firestore
         .collection('/users')
-        .document(currentUser.uid)
+        .document(currentUser.email)
         .get()
         .then((snapshot) {
       if (snapshot.exists) {
@@ -74,7 +74,7 @@ class AuthService {
           'linkedinId': "",
           'position': "N/A",
         };
-        _firestore.collection('/users').document(user.uid).setData(_tempUser);
+        _firestore.collection('/users').document(user.email).setData(_tempUser);
       }
     });
     // Only taking the first part of the name, i.e., First Name
@@ -97,7 +97,7 @@ class AuthService {
     } else {
       await _firestore
           .collection('/users')
-          .document(currentUser.uid)
+          .document(currentUser.email)
           .get()
           .then((snapshot) {
         if (snapshot.exists) {

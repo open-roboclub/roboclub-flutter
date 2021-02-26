@@ -23,7 +23,10 @@ class _TutorialScreenState extends State<TutorialScreen> {
   void initState() {
     TutorialService().fetchProjects().then((value) {
       list = value;
-
+      list.forEach((element) {
+        String videoId = YoutubePlayer.convertUrlToId(element['url']);
+        element['videoId'] = videoId;
+      });
       setState(() {
         _isLoading = false;
       });
@@ -52,7 +55,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               )
             : SingleChildScrollView(
                 child: Container(
-                  height: vpH,
+                  height: vpH * 0.9,
                   child: list.length == 0
                       ? Center(
                           child: Column(
@@ -72,25 +75,48 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       : ListView.builder(
                           itemCount: list.length,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: ListTile(
-                                tileColor: Colors.grey.withOpacity(0.4),
-                                leading: Icon(
-                                  SocialMedia.youtube,
-                                  color: Colors.red,
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => YoutubePlayerScreen(
+                                    title: list[index]["title"],
+                                    url: list[index]["url"],
+                                  ),
                                 ),
-                                title: Text(
-                                  list[index]['title'],
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => YoutubePlayerScreen(
-                                      title: list[index]["title"],
-                                      url: list[index]["url"],
-                                    ),
+                              ),
+                              child: Container(
+                                width: vpW * 0.85,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        child: Image.network(
+                                            'https://img.youtube.com/vi/${list[index]['videoId']}/0.jpg'),
+                                      ),
+                                      ListTile(
+                                        tileColor: Colors.grey.withOpacity(0.4),
+                                        leading: Icon(
+                                          SocialMedia.youtube,
+                                          color: Colors.red,
+                                        ),
+                                        title: Text(
+                                          list[index]['title'],
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                YoutubePlayerScreen(
+                                              title: list[index]["title"],
+                                              url: list[index]["url"],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

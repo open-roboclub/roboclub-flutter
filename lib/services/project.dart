@@ -6,19 +6,17 @@ import 'dart:async';
 final Firestore _firestore = Firestore.instance;
 
 class ProjectService {
-
-  Future<bool> postProjects(
-      {List<dynamic> projectImg,
-        String name,
-        String description,
-        String date,
-        String link,
-        String progress ="",
-        List<dynamic> teamMembers,
-        List<dynamic>teamProfile,
-        String fileUrl,
-        }) async {
-          
+  Future<bool> postProjects({
+    List<dynamic> projectImg,
+    String name,
+    String description,
+    String date,
+    String link,
+    String progress = "",
+    List<dynamic> teamMembers,
+    List<dynamic> teamProfile,
+    String fileUrl,
+  }) async {
     Map<String, dynamic> data = {
       "name": name,
       "description": description,
@@ -27,12 +25,11 @@ class ProjectService {
       "progress": progress,
       "teamMembers": teamMembers,
       "teamProfile": teamProfile,
-      "date" : date,
+      "date": date,
       "link": link,
     };
 
     await _firestore.collection("/projects").add(data).then((value) {
-
       print(value);
     });
     return true;
@@ -41,8 +38,11 @@ class ProjectService {
   Future<List<Project>> fetchProjects() async {
     List<Project> list = [];
 
-    await _firestore.collection("/projects").getDocuments().then((value) {
-
+    await _firestore
+        .collection("/projects")
+        .orderBy('date', descending: true)
+        .getDocuments()
+        .then((value) {
       value.documents.forEach((element) {
         list.add(Project.fromMap(element.data));
       });
@@ -50,5 +50,3 @@ class ProjectService {
     return list;
   }
 }
-
-

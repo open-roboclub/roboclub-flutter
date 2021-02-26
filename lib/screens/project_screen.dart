@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -24,12 +25,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
   List<Project> completedProjectsList = [];
   bool isLoading = true;
 
-
   @override
   void initState() {
     ProjectService().fetchProjects().then((value) {
+      value.forEach((element) {
+        DateTime _parsed = DateTime.parse(element.date);
+        element.date = DateFormat('yMMMd').format(_parsed);
+      });
+
       splitProjectsList(value);
-      isLoading = true;
       setState(() {
         isLoading = false;
       });
@@ -39,10 +43,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   void splitProjectsList(List<Project> projects) {
     projects.forEach((item) {
-      if(item.progress == "100"){
+      if (item.progress == "100") {
         completedProjectsList.add(item);
-      }
-      else{
+      } else {
         ongoingProjectsList.add(item);
       }
     });
@@ -54,7 +57,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var textStyle =
-        TextStyle(fontSize: vpH * 0.027, fontWeight: FontWeight.normal);
+        TextStyle(fontSize: vpH * 0.025, fontWeight: FontWeight.normal);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
@@ -80,7 +83,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       FlatButton(
                         child: Container(
                           padding: EdgeInsets.all(10),
-                          width: vpW*0.3,
+                          width: vpW * 0.3,
                           child: Center(
                             child: Text(
                               'Completed',
@@ -105,10 +108,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       FlatButton(
                         child: Container(
                           padding: EdgeInsets.all(10),
-                          width: vpW*0.3,
+                          width: vpW * 0.3,
                           child: Center(
                             child: Text(
-                              'Ongoing', style: textStyle,
+                              'Ongoing',
+                              style: textStyle,
                             ),
                           ),
                         ),
@@ -129,7 +133,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 height: vpH * 0.005,
               ),
               Container(
-                height: vpH * 0.8,
+                height: vpH * 0.76,
                 width: vpW,
                 child: isLoading
                     ? Center(

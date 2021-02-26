@@ -130,7 +130,7 @@ Drawer appdrawer(context, {String page}) {
           endIndent: vpW * 0.04,
         ),
         SizedBox(
-          height: vpH * 0.05,
+          height: vpH * 0.01,
         ),
         _tileBuilder(CustomIcons.feedback, "Feedback", page == "Feedback"),
         _tileBuilder(CustomIcons.info, "About us", page == "About us"),
