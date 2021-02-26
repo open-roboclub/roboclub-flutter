@@ -124,20 +124,22 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   void splitEventLists(List<Event> events) {
+    List<Event> tempList = [];
     events.forEach((item) {
       DateTime today = DateTime.now();
       DateTime _parsed = DateTime.parse(item.date);
       if (_parsed.difference(today).inDays == 0) {
-        item.date = DateFormat.yMd().format(_parsed);
+        item.date = DateFormat('MMMEd').format(_parsed);
         featuredEventsList.add(item);
       } else if (_parsed.isAfter(today)) {
-        item.date = DateFormat.yMd().format(_parsed);
-        upcomingEventsList.add(item);
+        item.date = DateFormat('MMMEd').format(_parsed);
+        tempList.add(item);
       } else {
-        item.date = DateFormat.yMd().format(_parsed);
+        item.date = DateFormat('MMMEd').format(_parsed);
         pastEventsList.add(item);
       }
     });
+    upcomingEventsList = tempList.reversed.toList();
   }
 
   Widget _title(String title, var vpH, var vpW) {
