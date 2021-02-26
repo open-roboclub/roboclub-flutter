@@ -25,8 +25,8 @@ class _ContributionFormState extends State<ContributionForm> {
   String _name;
   String _description;
   String _amount;
-  String _img;
-  String _date;
+  String _img="";
+  String _date="";
   File file;
   String fileName='';
   bool filePicked=false;
@@ -34,7 +34,7 @@ class _ContributionFormState extends State<ContributionForm> {
  final nameController = TextEditingController();
  final descriptionController = TextEditingController();
  final amountController = TextEditingController();
- final date = TextEditingController();
+ TextEditingController date = TextEditingController();
   // upload image
   
   Future getImage()async{
@@ -271,7 +271,7 @@ class _ContributionFormState extends State<ContributionForm> {
                             padding: EdgeInsets.all(12),
                             child: Icon(Icons.calendar_today),
                           ),
-                        ),  
+                        ),    
                         onTap: () async {
                           FocusScope.of(context).requestFocus(new FocusNode());
                           DateTime dateTime = await showDatePicker(
@@ -283,7 +283,6 @@ class _ContributionFormState extends State<ContributionForm> {
                          
                           DateFormat formatter = DateFormat('yyyy-MM-dd');
                           String formatted = formatter.format(dateTime);
-                          print(formatted);
                           date.text = formatted;
                          
                         },
@@ -329,7 +328,8 @@ class _ContributionFormState extends State<ContributionForm> {
                                 amount:_amount,
                                 description: _description,
                                 name: _name,
-                                representativeImg: _img,);
+                                representativeImg: _img,
+                                date: _date);
                                 print("saved");
                                 nameController.clear();
                                 descriptionController.clear();
