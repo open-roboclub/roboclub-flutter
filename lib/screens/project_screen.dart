@@ -33,18 +33,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
         element.date = DateFormat('yMMMd').format(_parsed);
       });
 
-      // value.forEach((item) {
-      //   print(item.progress);
-      //   item.progress == ""
-      //       ? ongoingProjectsList = value
-      //       : complePedProjectsList = value;
-      // }); // value.forEach((item) {
-      //   print(item.progress);
-      //   item.progress == ""
-      //       ? ongoingProjectsList = value
-      //       : complePedProjectsList = value;
-      // });
-
       splitProjectsList(value);
       setState(() {
         isLoading = false;
@@ -69,7 +57,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var textStyle =
-        TextStyle(fontSize: vpH * 0.027, fontWeight: FontWeight.normal);
+        TextStyle(fontSize: vpH * 0.025, fontWeight: FontWeight.normal);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
@@ -145,7 +133,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 height: vpH * 0.005,
               ),
               Container(
-                height: vpH * 0.8,
+                height: vpH * 0.76,
                 width: vpW,
                 child: isLoading
                     ? Center(
