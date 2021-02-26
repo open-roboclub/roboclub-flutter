@@ -21,6 +21,13 @@ class EventScreen extends StatefulWidget {
 }
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+<<<<<<< HEAD
+=======
+  if (message['data']['screen'] == 'notification') {
+    print('inside notification screen');
+  }
+
+>>>>>>> e797cafe95ea1c7d47171592e6c049dec055ab68
   // Or do other work.
 }
 
