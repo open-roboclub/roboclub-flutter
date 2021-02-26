@@ -72,6 +72,15 @@ class _ContriCardState extends State<ContriCard> {
                             overflow: TextOverflow.ellipsis,
                             style: _titlestyle,
                           ),
+                           Padding(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: vpH * 0.0001)),
+                          Text(
+                            widget._contributor.date?? "",
+
+                            // overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: vpH * 0.015),
+                          ),
                           Padding(
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.006)),
@@ -81,6 +90,7 @@ class _ContriCardState extends State<ContriCard> {
                             // overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: vpH * 0.015),
                           ),
+                         
                         ],
                       ),
                     ),
