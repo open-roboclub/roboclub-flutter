@@ -224,7 +224,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
                           hintText: 'Enter Amount',
