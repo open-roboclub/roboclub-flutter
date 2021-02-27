@@ -18,7 +18,7 @@ class ProjectForm extends StatefulWidget {
 var vpH;
 var vpW;
 
-  // TextFormFiels styling 
+// TextFormFiels styling 
 
 final kHintTextStyle = TextStyle(
   color: Color(0xFF757575),
@@ -67,7 +67,6 @@ class _ProjectFormState extends State<ProjectForm> {
   // TextEditingController memberName = new TextEditingController();
 
   // upload image
-
   Future getImage()async{
 
     var rng = new Random();
@@ -356,6 +355,12 @@ class _ProjectFormState extends State<ProjectForm> {
                           print(formatted);
                           date.text = formatted;
                          
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please select date';
+                          }
+                          return null;
                         },
                         onSaved: (String value)
                         {

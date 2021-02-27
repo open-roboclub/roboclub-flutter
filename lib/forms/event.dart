@@ -350,9 +350,6 @@ class _EventFormState extends State<EventForm> {
                     child: TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _dateController,
-                      onSaved: (String value) {
-                        _setDate = value;
-                      },
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -371,6 +368,15 @@ class _EventFormState extends State<EventForm> {
                       ),
                       onTap: () {
                         _selectDate(context);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some amount';
+                        }
+                        return null;
+                      },
+                      onSaved: (String value) {
+                        _setDate = value;
                       },
                     ),
                   ),

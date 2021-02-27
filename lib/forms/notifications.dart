@@ -4,75 +4,40 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
-import 'package:roboclub_flutter/screens/contributor_screen.dart';
+import 'package:roboclub_flutter/screens/notification_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
-import '../services/contributors.dart';
+import '../services/notification.dart';
 
-class ContributionForm extends StatefulWidget {
+class NotificationForm extends StatefulWidget {
 
   
   @override
-  _ContributionFormState createState() => _ContributionFormState();
+  _NotificationFormState createState() => _NotificationFormState();
 }
 
-class _ContributionFormState extends State<ContributionForm> {
+class _NotificationFormState extends State<NotificationForm> {
  
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
 
-  String _name;
-  String _description;
-  String _amount;
-  String _img="";
-  String _date="";
-  File file;
-  String fileName='';
-  bool filePicked=false;
- 
- final nameController = TextEditingController();
- final descriptionController = TextEditingController();
- final amountController = TextEditingController();
- TextEditingController date = TextEditingController();
-  // upload image
+  String _title;
+  String _msg;
+  String _link="";
+  String _date;
   
-  Future getImage()async{
-    var rng = new Random();
-    String randomName="";
-    for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
-      randomName += rng.nextInt(100).toString();
-    }
-     FilePickerResult result =
-      await FilePicker.platform.pickFiles(type: FileType.image)
-      .then((result) async {
-        if(result!=null)
-        {
-          filePicked=true;
-          file = File(result.files.single.path);
-          fileName = '$randomName';
-        }
-      }).catchError((error)
-      {
-        print("Error: "+error.toString());
-      });
-  }
-  Future saveImg(List<int> asset, String name) async {
 
-  StorageReference reference = FirebaseStorage.instance.ref().child(name);
-  StorageUploadTask uploadTask = reference.putData(asset);
-  _img = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(_img);
-
+ TextEditingController dateController = TextEditingController();
+ TextEditingController titleController = TextEditingController();
+ TextEditingController msgController = TextEditingController();
+ TextEditingController linkController = TextEditingController();
   
-}
-
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    var contributors = ContributorService();
+    var notifications = NotificationService();
 
    
     // TextFormFiels styling 
@@ -90,16 +55,16 @@ class _ContributionFormState extends State<ContributionForm> {
       fontFamily: 'OpenSans',
     ); 
       
-      // alert after successful form submission 
+    // alert after successful form submission 
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ContributorScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationScreen()));
       },  
     );
 
     AlertDialog alert = AlertDialog(  
-      content: Text("Contribution made Successfully !!",style: kLabelStyle,),  
+      content: Text("Notification sent Successfully !!",style: kLabelStyle,),  
       actions: [  
         okButton,  
       ],  
@@ -111,7 +76,7 @@ class _ContributionFormState extends State<ContributionForm> {
        key: _scaffoldKey,
         appBar: appBar(
           context,
-          strTitle: "Update Contribution",
+          strTitle: "Send Notification",
           isDrawer: false,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -140,21 +105,21 @@ class _ContributionFormState extends State<ContributionForm> {
                     Container(
                       padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.02),
                       alignment: Alignment.topLeft,
-                      child:Text('Name',style: kLabelStyle,
+                      child:Text('Title',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: nameController,
+                        controller: titleController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Name',
+                          hintText: ' Enter Notification title',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -163,34 +128,35 @@ class _ContributionFormState extends State<ContributionForm> {
                    
                         validator: (value) {
                           if (value.isEmpty) {
-                            return "Please enter name";
+                            return "Please enter title";
                           }
                           return null;
                         },
                         onSaved: (value)
                         {
-                          _name = value;
+                          _title = value;
                         },
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Description',style: kLabelStyle,
+                      child:Text('Message',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: descriptionController,
+                        controller: msgController,
+                        maxLines: 3,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Description',
+                          hintText: ' Enter Notigication Message',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -199,27 +165,27 @@ class _ContributionFormState extends State<ContributionForm> {
                   
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter some text';
+                            return 'Please enter some message';
                           }
                           return null;
                         },
                         onSaved: (value)
                         {
-                           _description = value;
+                          _msg = value;
                         },
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       alignment: Alignment.topLeft,
-                      child:Text('Amount',style: kLabelStyle,
+                      child:Text('Notification Link',style: kLabelStyle,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        controller: amountController,
+                        controller: linkController,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -227,22 +193,16 @@ class _ContributionFormState extends State<ContributionForm> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Enter Amount',
+                          hintText: 'Enter Notification Link',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
-                  
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter some amount';
-                          }
-                          return null;
-                        },
+      
                         onSaved: (value)
                         {
-                          _amount = value;
+                          _link = value;
                         },
                       ),
                     ),
@@ -255,7 +215,7 @@ class _ContributionFormState extends State<ContributionForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
                       child:TextFormField(
-                        controller: date,
+                        controller: dateController,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: vpH*0.02,
@@ -283,7 +243,7 @@ class _ContributionFormState extends State<ContributionForm> {
                          
                           DateFormat formatter = DateFormat('yyyy-MM-dd');
                           String formatted = formatter.format(dateTime);
-                          date.text = formatted;
+                          dateController.text = formatted;
                          
                         },
                         validator: (value) {
@@ -298,77 +258,65 @@ class _ContributionFormState extends State<ContributionForm> {
                         },
                       ),
                     ),
+                   
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Row(children:[
-                        Text('Pick an Image',style: kLabelStyle,),
-                        IconButton(icon: Icon(Icons.add_a_photo),
-                          onPressed: (){
-                            getImage();
-                          },
-                        ),
-                        fileName.isEmpty
-                        ?  Text('Image not Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
-                        :Text('Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
-                      ],),
-                    ),
-                    
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        child:RaisedButton(
-                          elevation: vpH*0.5,
-                          onPressed: ()async{
-                            if(filePicked)
-                            {
-                              await saveImg(file.readAsBytesSync(), fileName);
-                            }
-                            if (!_formKey.currentState.validate()) {
-                              print("not valid");
-                              return null;
-                            }
-                            else{
-                             
-                              _formKey.currentState.save();
-                              contributors.postContributor(
-                                amount:_amount,
-                                description: _description,
-                                name: _name,
-                                representativeImg: _img,
-                                date: _date);
-                                print("saved");
-                                nameController.clear();
-                                descriptionController.clear();
-                                amountController.clear();
+                      padding: EdgeInsets.all(15),
+                      child:RaisedButton(
+                        elevation: vpH*0.5,
+                        onPressed: (){
+                          if (!_formKey.currentState.validate()) {
+                            print("not valid");
+                            return null;
+                          }
+                          else{
+                             _formKey.currentState.save();
+                            notifications.postNotification(
+                              title:_title,
+                              msg: _msg,
+                              link: _link,
+                              date: _date);
+                            NotificationService().pushNotification(
+                              title:  _title,
+                              msg: _msg,
+                              img:"https://www.biznessapps.com/blog/wp-content/uploads/2016/01/push.png",
+                              screen: 'notification',
+                              link: _link,
+                              date:_date,
+                            );
+                           
+                            print("saved");
+                            titleController.clear();
+                            linkController.clear();
+                            msgController.clear();
 
-                                showDialog(  
-                                context: context,  
-                                builder: (BuildContext context) {  
-                                  return alert;  
-                                },  
-                              );  
+                            showDialog(  
+                              context: context,  
+                              builder: (BuildContext context) {  
+                                return alert;  
+                              },  
+                            );  
                               
-                            }
-                          },
-                          padding: EdgeInsets.all(15),
-                          shape:RoundedRectangleBorder(
-                            borderRadius:BorderRadius.circular(30.0),
-                            ),
-                          color: Color(0xFFFF9C01),
-                          child: Text(
-                              "Update",
-                              style: TextStyle(
-                                color: Colors.white,
-                                letterSpacing: vpW*0.005,
-                                fontSize: vpH*0.025,
-                                fontWeight: FontWeight.bold,
+                          }
+                        },
+                        padding: EdgeInsets.all(15),
+                        shape:RoundedRectangleBorder(
+                          borderRadius:BorderRadius.circular(30.0),
+                        ),
+                        color: Color(0xFFFF9C01),
+                        child: Text(
+                          "Update",
+                          style: TextStyle(
+                            color: Colors.white,
+                            letterSpacing: vpW*0.005,
+                            fontSize: vpH*0.025,
+                            fontWeight: FontWeight.bold,
                             
-                              ),
-                            ),
                           ),
-                        )
-                    ],
-                  ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 
           ),
         ),
