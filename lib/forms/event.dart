@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:date_format/date_format.dart';
+import 'package:roboclub_flutter/services/notification.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _EventFormState extends State<EventForm> {
 
   String _eventName,
       _details,
-      _posterUrl,
+      _posterUrl="",
       _setEndTime,
       _place,
       _setStartTime,
@@ -61,6 +62,11 @@ class _EventFormState extends State<EventForm> {
         _dateController.text =
             DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
       });
+    else{
+      setState(() {
+        _setDate =DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
+      });
+    }
   }
 
   Future<Null> _selectStartTime(BuildContext context) async {
@@ -171,7 +177,15 @@ class _EventFormState extends State<EventForm> {
         "OK",
         style: kLabelStyle,
       ),
-      onPressed: () {
+      onPressed: () async{
+        await NotificationService().pushNotification(
+          title:  _eventName,
+          msg: _details,
+          img:_posterUrl,
+          screen: 'event',
+          link: _regFormLink,
+          date:_setDate,
+        );
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => EventScreen()));
       },
@@ -529,7 +543,7 @@ class _EventFormState extends State<EventForm> {
                           return null;
                         } else {
                           _formKey.currentState.save();
-                          events.postEvent(
+                          await events.postEvent(
                             eventName: _eventName,
                             details: _details,
                             date: _setDate,
@@ -539,6 +553,7 @@ class _EventFormState extends State<EventForm> {
                             posterURL: _posterUrl,
                             regFormLink: _regFormLink,
                           );
+                          
                           print("saved");
                           eventNameController.clear();
                           detailController.clear();
@@ -554,6 +569,7 @@ class _EventFormState extends State<EventForm> {
                               return alert;
                             },
                           );
+                          
                         }
                       },
                       padding: EdgeInsets.all(15),

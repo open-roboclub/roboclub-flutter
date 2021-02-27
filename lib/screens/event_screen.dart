@@ -86,7 +86,7 @@ class _EventScreenState extends State<EventScreen> {
               ),
               FlatButton(
                 color: Colors.amber,
-                child: Text('Calcel'),
+                child: Text('Cancel'),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
