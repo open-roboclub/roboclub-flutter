@@ -427,8 +427,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ),
                                               GestureDetector(
-                                                onTap: ()
-                                                 async {
+                                                onTap: () async {
                                                   final Uri params = Uri(
                                                     scheme: 'mailto',
                                                     path: _user.email,
@@ -442,7 +441,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   } else {
                                                     throw 'Could not launch $url';
                                                   }
-                                              
                                                 },
                                                 child: Container(
                                                   width: vpW * 0.10,
@@ -450,11 +448,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   child: Image.asset(
                                                     'assets/img/gmail.png',
                                                     fit: BoxFit.cover,
-                                                   
                                                   ),
                                                 ),
                                               ),
-                                            
                                             ],
                                           ),
                                         ],
@@ -522,22 +518,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   : Positioned(
                       top: vpH * 0.025,
                       right: vpW * 0.02,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: Colors.black.withOpacity(0.8),
-                        ),
-                        onPressed: () async {
-                          await AuthService().signOutGoogle().then((value) {
-                            _userProvider.setUser = User();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AdminScreen(),
-                              ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                          dropdownColor: Color(0xFFE8EAF6),
+                          // underline: Underline,
+                          // value: "",
+                          isDense: true,
+                          onChanged: (String newValue) async {
+                            if (newValue == "Sign Out") {
+                              await AuthService().signOutGoogle().then((value) {
+                                _userProvider.setUser = User();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AdminScreen(),
+                                  ),
+                                );
+                              });
+                            }
+                          },
+                          items: <String>['Sign Out']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
                             );
-                          });
-                        },
+                          }).toList(),
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.black.withOpacity(0.8),
+                          ),
+                        ),
                       ),
                     ),
             ],
