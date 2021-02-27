@@ -14,7 +14,6 @@ class ProjectService {
     String link,
     String progress = "",
     List<dynamic> teamMembers,
-    List<dynamic> teamProfile,
     String fileUrl,
   }) async {
     Map<String, dynamic> data = {
@@ -24,7 +23,6 @@ class ProjectService {
       "fileUrl": fileUrl,
       "progress": progress,
       "teamMembers": teamMembers,
-      "teamProfile": teamProfile,
       "date": date,
       "link": link,
     };

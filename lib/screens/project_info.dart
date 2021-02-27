@@ -376,16 +376,25 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 3,
+                  itemCount: widget.project.teamMembers.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     return ListTile(
                       trailing: IconButton(
                         icon: Icon(
                           SocialMedia.linkedin,
-                          color: Colors.blue[700],
+                          color: widget.project.teamMembers[index]['linkedinId']
+                                  .isEmpty
+                              ? Colors.grey
+                              : Colors.blue[700],
                         ),
-                        onPressed: null,
+                        onPressed: () {
+                          if (!widget.project.teamMembers[index]['linkedinId']
+                              .isEmpty) {
+                            launch(widget.project.teamMembers[index]
+                                ['linkedinId']);
+                          }
+                        },
                       ),
                       leading: CircleAvatar(
                         backgroundColor: Colors.black,
@@ -393,7 +402,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             AssetImage('assets/img/teamMember.png'),
                       ),
                       title: Text(
-                        "Member",
+                        widget.project.teamMembers[index]['member'],
                         style: TextStyle(
                             color: Colors.black, fontSize: vpH * 0.025),
                       ),
