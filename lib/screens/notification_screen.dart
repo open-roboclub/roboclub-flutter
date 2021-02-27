@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/notifications.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/notifications.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/services/notification.dart';
@@ -15,6 +17,8 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+
+
   var vpH;
   var vpW;
   @override
@@ -36,8 +40,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               height: vpH * 0.9,
               width: vpW,
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    Firestore.instance.collection('/notifications').snapshots(),
+                stream: Firestore.instance.collection('/notifications').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final List<DocumentSnapshot> documents =
@@ -46,12 +49,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       physics: BouncingScrollPhysics(),
                       children: documents
                           .map(
-                            (doc) => NotificationCard(
-                              msg: doc.data['message'],
-                              link: doc.data['link'],
-                              title: doc.data['title'],
-                            ),
-                          )
+                            (doc) => NotificationCard(Notifications.fromMap(doc.data)))
                           .toList(),
                     );
                   } else if (snapshot.hasError) {
@@ -83,13 +81,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
         floatingActionButton: _user != null
             ? (_user.isAdmin
                 ? FloatingActionButton(
-                    onPressed: () {
-                      NotificationService().pushNotification(
-                        title: "RoboClub Demo",
-                        msg: "Hey Everyone this is a demo notification!",
-                        img:
-                            "https://www.biznessapps.com/blog/wp-content/uploads/2016/01/push.png",
-                        screen: 'notification',
+                    onPressed: (){
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return NotificationForm();
+                          },
+                        ),
                       );
                     },
                     backgroundColor: Colors.white,

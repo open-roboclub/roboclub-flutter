@@ -133,11 +133,12 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                                     child: FlatButton(
                                       color: Color(0xFFFF9C01),
                                       child: Container(
-                                        width: vpW*0.08,
+                                        width: vpW*0.09,
                                         child: Text("View",
                                             style: TextStyle(
                                               fontSize: vpH * 0.018,
-                                            )),
+                                            ),
+                                            textAlign: TextAlign.center,),
                                       ),
                                       textColor: Colors.white,
 

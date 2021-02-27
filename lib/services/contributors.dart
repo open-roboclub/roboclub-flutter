@@ -34,7 +34,10 @@ class ContributorService {
   Future<List<Contributor>> fetchContributors() async {
     List<Contributor> list = [];
 
-    await _firestore.collection("/contributors").getDocuments().then((value) {
+    await _firestore.collection("/contributors")
+      .orderBy('date', descending: true)
+      .getDocuments()
+      .then((value) {
 
       value.documents.forEach((element) {
         list.add(Contributor.fromMap(element.data));
