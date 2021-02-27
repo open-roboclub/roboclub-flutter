@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import '../models/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -33,6 +33,8 @@ class NotificationService {
       {@required String title,
       @required String msg,
       @required String img,
+      @required String date,
+      String link,
       @required String screen}) async {
     List<String> tokens = await getFCMTokens();
 
@@ -43,6 +45,8 @@ class NotificationService {
       "notification": {
         "title": title,
         "body": msg,
+        "date": date,
+        "link": link,
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "image": img
       }
@@ -70,5 +74,39 @@ class NotificationService {
     } catch (err) {
       print(err);
     }
+  }
+  Future<bool> postNotification(
+    {String title,
+    String msg,
+    String link,
+    String date}) async {
+        
+    Map<String, dynamic> data = {
+      "title": title,
+      "msg": msg,
+      "link": link,
+      "date": date,
+    };
+
+    await _firestore.collection("/notifications").add(data).then((value) {
+
+      print(value);
+    });
+    return true;
+  }
+
+  Future<List<Notifications>> fetchNotifications() async {
+    List<Notifications> list = [];
+
+    await _firestore.collection("/notifications")
+      .orderBy('date', descending: true)
+      .getDocuments()
+      .then((value) {
+
+      value.documents.forEach((element) {
+        list.add(Notifications.fromMap(element.data));
+      });
+    });
+    return list;
   }
 }

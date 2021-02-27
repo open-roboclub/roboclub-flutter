@@ -1,16 +1,15 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/models/notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NotificationCard extends StatefulWidget {
-  final String msg;
-  final String link;
-  final String title;
+ 
+final Notifications notifications;
 
-  const NotificationCard({Key key, this.msg, this.link, this.title})
-      : super(key: key);
-
+ NotificationCard(this.notifications) ;
+ 
   @override
   _NotificationCardState createState() => _NotificationCardState();
 }
@@ -28,11 +27,11 @@ class _NotificationCardState extends State<NotificationCard> {
           padding: const EdgeInsets.symmetric(vertical: 18.0),
           child: ExpansionTile(
             title: Text(
-              widget.title,
+              widget.notifications.title,
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
-            trailing: widget.link.isNotEmpty
+            trailing: widget.notifications.link.isNotEmpty
                 ? IconButton(
                     icon: Icon(
                       Icons.link_outlined,
@@ -40,8 +39,8 @@ class _NotificationCardState extends State<NotificationCard> {
                       color: Color(0XFFFF9C01),
                     ),
                     onPressed: () async {
-                      if (await canLaunch(widget.link)) {
-                        launch(widget.link);
+                      if (await canLaunch(widget.notifications.link)) {
+                        launch(widget.notifications.link);
                       }
                     })
                 : null,
@@ -55,14 +54,14 @@ class _NotificationCardState extends State<NotificationCard> {
                 ? Text("")
                 : RichText(
                     text: new TextSpan(
-                      text: widget.msg.length > 100
-                          ? widget.msg.substring(0, 100)
-                          : widget.msg,
+                      text: widget.notifications.msg.length > 100
+                          ? widget.notifications.msg.substring(0, 100)
+                          : widget.notifications.msg,
                       style: TextStyle(
                           color: Colors.black54, fontStyle: FontStyle.italic),
                       children: <TextSpan>[
                         new TextSpan(
-                            text: widget.msg.length > 100 ? "...Read more" : "",
+                            text: widget.notifications.msg.length > 100 ? "...Read more" : "",
                             style: new TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
@@ -107,7 +106,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            widget.title,
+                            widget.notifications.title,
                             style: heading,
                           ),
                         ),
@@ -118,15 +117,15 @@ class _NotificationCardState extends State<NotificationCard> {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            widget.msg.isNotEmpty ? widget.msg : "",
+                            widget.notifications.msg.isNotEmpty ? widget.notifications.msg : "",
                             style: TextStyle(fontSize: vpH * 0.018),
                           ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (await canLaunch(widget.link)) {
-                            launch(widget.link);
+                          if (await canLaunch(widget.notifications.link)) {
+                            launch(widget.notifications.link);
                           }
                         },
                         child: Padding(
@@ -137,12 +136,12 @@ class _NotificationCardState extends State<NotificationCard> {
                             child: ListTile(
                               leading: Icon(
                                 Icons.link_outlined,
-                                color: widget.link.isNotEmpty
+                                color: widget.notifications.link.isNotEmpty
                                     ? Color(0XFFFF9C01)
                                     : Colors.grey,
                               ),
                               title: Text(
-                                widget.link.isNotEmpty
+                                widget.notifications.link.isNotEmpty
                                     ? "View attached link"
                                     : "No link attached",
                                 style: TextStyle(
