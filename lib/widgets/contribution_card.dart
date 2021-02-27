@@ -105,10 +105,11 @@ class _ContriCardState extends State<ContriCard> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: vpW * 0.005, vertical: vpH * 0.010),
-                          child: Text(
-                            "\u20B9 " + widget.contributor.amount ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: vpH * 0.018),
+                          child: Container(
+                            child: Text(
+                              widget.contributor.amount ?? "",
+                              style: TextStyle(fontSize: vpH * 0.018),
+                            ),
                           ),
                         ),
                       ),
