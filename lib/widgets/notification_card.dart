@@ -70,10 +70,7 @@ class _NotificationCardState extends State<NotificationCard> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: vpH * 0.03),
                 child: Container(
-                  // height: vpH * 0.4,
-
                   width: vpW * 0.8,
-
                   decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
@@ -82,11 +79,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         width: vpW * 0.017,
                       ),
                     ),
-
-                    // borderRadius: BorderRadius.circular(10),
-
                     color: Theme.of(context).cardColor,
-
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12,
@@ -100,16 +93,31 @@ class _NotificationCardState extends State<NotificationCard> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: vpH * 0.02, horizontal: vpW * 0.05),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            widget.notifications.title,
-                            style: heading,
+                      Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: vpH * 0.02, horizontal: vpW * 0.05),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                widget.notifications.title,
+                                style: heading,
+                              ),
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: vpH * 0.02, horizontal: vpW * 0.05),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                widget.notifications.date,
+                                style: TextStyle(fontSize: vpH * 0.015),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(

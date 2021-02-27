@@ -40,7 +40,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               height: vpH * 0.9,
               width: vpW,
               child: StreamBuilder<QuerySnapshot>(
-                stream: Firestore.instance.collection('/notifications').snapshots(),
+                stream: Firestore.instance.collection('/notifications')
+                .orderBy('date', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final List<DocumentSnapshot> documents =

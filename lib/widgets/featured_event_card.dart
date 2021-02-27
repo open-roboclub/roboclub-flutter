@@ -55,7 +55,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: widget.featuredEvent.posterURL =="" 
+                    child: widget.featuredEvent.posterURL.isEmpty 
                     ? Container(
                        height: vpH * 0.18,
                         width: vpW * 0.6,
