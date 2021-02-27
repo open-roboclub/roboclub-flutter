@@ -95,18 +95,4 @@ class NotificationService {
     return true;
   }
 
-  Future<List<Notifications>> fetchNotifications() async {
-    List<Notifications> list = [];
-
-    await _firestore.collection("/notifications")
-      .orderBy('date', descending: true)
-      .getDocuments()
-      .then((value) {
-
-      value.documents.forEach((element) {
-        list.add(Notifications.fromMap(element.data));
-      });
-    });
-    return list;
-  }
 }

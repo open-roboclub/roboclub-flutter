@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,6 +22,9 @@ class _NotificationCardState extends State<NotificationCard> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH * 0.028, fontWeight: FontWeight.bold);
+
+    DateTime _parsed = DateTime.parse(widget.notifications.date);
+  
     return Column(
       children: [
         Padding(
@@ -70,10 +74,7 @@ class _NotificationCardState extends State<NotificationCard> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: vpH * 0.03),
                 child: Container(
-                  // height: vpH * 0.4,
-
                   width: vpW * 0.8,
-
                   decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
@@ -82,11 +83,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         width: vpW * 0.017,
                       ),
                     ),
-
-                    // borderRadius: BorderRadius.circular(10),
-
                     color: Theme.of(context).cardColor,
-
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12,
@@ -100,16 +97,34 @@ class _NotificationCardState extends State<NotificationCard> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: vpH * 0.02, horizontal: vpW * 0.05),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            widget.notifications.title,
-                            style: heading,
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: vpH * 0.02, horizontal: vpW * 0.05),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  widget.notifications.title,
+                                  style: heading,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: vpH * 0.02, horizontal: vpW * 0.05),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                DateFormat('MMMEd').format(_parsed),
+                                style: TextStyle(fontSize: vpH * 0.015),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(

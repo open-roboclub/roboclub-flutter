@@ -25,14 +25,37 @@ class _NotificationFormState extends State<NotificationForm> {
   String _title;
   String _msg;
   String _link="";
-  String _date;
-  
+  String _setDate;
+  DateTime selectedDate = DateTime.now();
 
  TextEditingController dateController = TextEditingController();
  TextEditingController titleController = TextEditingController();
  TextEditingController msgController = TextEditingController();
  TextEditingController linkController = TextEditingController();
   
+   Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      initialDatePickerMode: DatePickerMode.day,
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null)
+      setState(() {
+        selectedDate = picked;
+        _setDate = DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
+        print(_setDate);
+        dateController.text =
+            DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
+      });
+  }
+   @override
+  void initState() {
+    dateController.text = DateFormat.yMd().format(selectedDate);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -58,7 +81,15 @@ class _NotificationFormState extends State<NotificationForm> {
     // alert after successful form submission 
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
-      onPressed: () {  
+      onPressed: () async{
+        NotificationService().pushNotification(
+          title:  _title,
+          msg: _msg,
+          img:"https://www.biznessapps.com/blog/wp-content/uploads/2016/01/push.png",
+          screen: 'notification',
+          link: _link,
+          date:_setDate,
+        );  
         Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationScreen()));
       },  
     );
@@ -190,7 +221,7 @@ class _NotificationFormState extends State<NotificationForm> {
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
                         ),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
                           hintText: 'Enter Notification Link',
@@ -206,64 +237,56 @@ class _NotificationFormState extends State<NotificationForm> {
                         },
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
-                      alignment: Alignment.topLeft,
-                      child:Text('Date',style: kLabelStyle,
-                      ),
+                     Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Date',
+                      style: kLabelStyle,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.01),
-                      child:TextFormField(
-                        controller: dateController,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: vpH*0.02,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: dateController,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: vpH * 0.02,
+                      ),
+                      decoration: InputDecoration(
+                        fillColor: Color(0xFFE8EAF6),
+                        hintText: 'Pick a Date',
+                        hintStyle: kHintTextStyle,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: 'Pick a Date',
-                          hintStyle: kHintTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Icon(Icons.calendar_today),
-                          ),
-                        ),    
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          DateTime dateTime = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1990),
-                            lastDate:DateTime(2030),
-                          );
-                         
-                          DateFormat formatter = DateFormat('yyyy-MM-dd');
-                          String formatted = formatter.format(dateTime);
-                          dateController.text = formatted;
-                         
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please select a date';
-                          }
-                          return null;
-                        },
-                        onSaved: (String value)
-                        {
-                          _date = value;
-                        },
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Icon(Icons.calendar_today),
+                        ),
                       ),
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some amount';
+                        }
+                        return null;
+                      },
+                      onSaved: (String value) {
+                        _setDate = value;
+                      },
                     ),
-                   
+                  ),
                     Container(
                       padding: EdgeInsets.all(15),
                       child:RaisedButton(
                         elevation: vpH*0.5,
-                        onPressed: (){
+                        onPressed: ()async{
                           if (!_formKey.currentState.validate()) {
                             print("not valid");
                             return null;
@@ -274,15 +297,8 @@ class _NotificationFormState extends State<NotificationForm> {
                               title:_title,
                               msg: _msg,
                               link: _link,
-                              date: _date);
-                            NotificationService().pushNotification(
-                              title:  _title,
-                              msg: _msg,
-                              img:"https://www.biznessapps.com/blog/wp-content/uploads/2016/01/push.png",
-                              screen: 'notification',
-                              link: _link,
-                              date:_date,
-                            );
+                              date: _setDate);
+                           
                            
                             print("saved");
                             titleController.clear();
