@@ -12,8 +12,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProjectInfo extends StatefulWidget {
   final Project project;
+  final void Function(Project, String) callback;
 
-  ProjectInfo({Key key, this.project}) : super(key: key);
+  ProjectInfo({Key key, this.project, this.callback}) : super(key: key);
 
   @override
   _ProjectInfoState createState() => _ProjectInfoState();
@@ -42,6 +43,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
     User _user = Provider.of<UserProvider>(context).getUser;
 
     Future<void> updateProgress() async {
+      widget.callback(widget.project, _currprogress.toString());
       String id;
       Firestore.instance.collection('projects').getDocuments().then((projects) {
         projects.documents.forEach((project) {
@@ -371,37 +373,42 @@ class _ProjectInfoState extends State<ProjectInfo> {
               ),
               Container(
                 width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            trailing: IconButton(
-                              icon: Icon(
-                                SocialMedia.linkedin,
-                                color: Colors.blue[700],
-                              ),
-                              onPressed: null,
-                            ),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              backgroundImage:
-                                  AssetImage('assets/img/teamMember.png'),
-                            ),
-                            title: Text(
-                              "Member",
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: vpH * 0.025),
-                            ),
-                          );
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: widget.project.teamMembers.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      trailing: IconButton(
+                        icon: Icon(
+                          SocialMedia.linkedin,
+                          color: widget.project.teamMembers[index]['linkedinId']
+                                  .isEmpty
+                              ? Colors.grey
+                              : Colors.blue[700],
+                        ),
+                        onPressed: () {
+                          if (!widget.project.teamMembers[index]['linkedinId']
+                              .isEmpty) {
+                            launch(widget.project.teamMembers[index]
+                                ['linkedinId']);
+                          }
                         },
-                      )
-                    : Center(
-                        child: Text('No Members Yet'),
                       ),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        backgroundImage:
+                            AssetImage('assets/img/teamMember.png'),
+                      ),
+                      title: Text(
+                        widget.project.teamMembers[index]['member'],
+                        style: TextStyle(
+                            color: Colors.black, fontSize: vpH * 0.025),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

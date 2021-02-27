@@ -66,29 +66,24 @@ class _Team2ScreenState extends State<Team2Screen> {
                     Container(
                       height: vpH * 0.9,
                       width: vpW,
-                      child: true
-                          ? ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: membersList.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProfileScreen(
-                                            viewMode: true,
-                                            member: membersList[index],
-                                          ),
-                                        )),
-                                    child:
-                                        Team2Card(member: membersList[index]));
-                              },
-                            )
-                          : Center(
-                              child: Text('No Members Yet'),
-                            ),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: membersList.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(
+                                      viewMode: true,
+                                      member: membersList[index],
+                                    ),
+                                  )),
+                              child: Team2Card(member: membersList[index]));
+                        },
+                      ),
                     )
                   ],
                 ),

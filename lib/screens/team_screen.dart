@@ -56,21 +56,17 @@ class _TeamScreenState extends State<TeamScreen> {
                     Container(
                       height: vpH * 0.9,
                       width: vpW,
-                      child: true
-                          ? ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: teamsList.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return TeamCard(
-                                  team: teamsList[index],
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Text('No Teams Yet'),
-                            ),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: teamsList.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return TeamCard(
+                            team: teamsList[index],
+                          );
+                        },
+                      ),
                     )
                   ],
                 ),

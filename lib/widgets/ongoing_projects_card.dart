@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
@@ -6,32 +5,32 @@ import '../helper/dimensions.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class OngoingProjectCard extends StatefulWidget {
-
-
   final Project ongoingProject;
-  OngoingProjectCard({Key key, this.ongoingProject}): super(key: key);
+  final void Function(Project, String) callback;
+  OngoingProjectCard({Key key, this.ongoingProject, this.callback})
+      : super(key: key);
 
   @override
   _OngoingProjectCardState createState() => _OngoingProjectCardState();
 }
-class _OngoingProjectCardState extends State<OngoingProjectCard> {
 
+class _OngoingProjectCardState extends State<OngoingProjectCard> {
   @override
   Widget build(BuildContext context) {
-
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    TextStyle _titlestyle = TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
-    return  GestureDetector(
-      onTap:(){ 
+    TextStyle _titlestyle =
+        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
+    return GestureDetector(
+      onTap: () {
         Navigator.push(
-          context, MaterialPageRoute(
-            builder: (context) => ProjectInfo(project:widget.ongoingProject)
-          ),
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProjectInfo(
+                  project: widget.ongoingProject, callback: widget.callback)),
         );
       },
-      child: 
-      Padding(
+      child: Padding(
         padding: EdgeInsets.all(20.0),
         child: Container(
           height: vpH * 0.16,
@@ -41,130 +40,154 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
             color: Colors.blueGrey[50],
             boxShadow: [
               BoxShadow(
-                color: Colors.blueGrey[200],
-                blurRadius: 5.0,
-                spreadRadius: 1.0,
-                offset: Offset(0.0, 0.75)
+                  color: Colors.blueGrey[200],
+                  blurRadius: 5.0,
+                  spreadRadius: 1.0,
+                  offset: Offset(0.0, 0.75)),
+            ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: ClipRRect(
+                        child: Container(
+                            height: vpH * 0.038,
+                            width: vpW * 0.080,
+                            child: widget.ongoingProject.projectImg.length == 0
+                                ? Image.asset(
+                                    'assets/img/placeholder.jpg',
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    widget.ongoingProject.projectImg[0],
+                                    fit: BoxFit.cover,
+                                  )),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 4,
+                      fit: FlexFit.tight,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: vpW * 0.050, vertical: vpH * 0.005),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.ongoingProject.name ?? "",
+                              overflow: TextOverflow.ellipsis,
+                              style: _titlestyle,
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: vpH * 0.005),
+                              child: Text(
+                                widget.ongoingProject.date ?? "",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: vpH * 0.018),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: vpW * 0.02),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: vpH * 0.045,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                      backgroundImage: AssetImage(
+                                          'assets/img/teamMember.png'),
+                                    ),
+                                  ),
+                                  Align(
+                                    widthFactor: vpW * 0.0004,
+                                    child: Container(
+                                      height: vpH * 0.045,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.black,
+                                        backgroundImage: AssetImage(
+                                            'assets/img/teamMember.png'),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: vpH * 0.045,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                      backgroundImage: AssetImage(
+                                          'assets/img/teamMember.png'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: CircularPercentIndicator(
+                          radius: vpH * 0.06,
+                          lineWidth: vpW * 0.012,
+                          animation: true,
+                          percent: widget.ongoingProject.progress.isEmpty
+                              ? 0.0
+                              : int.parse(widget.ongoingProject.progress)
+                                      .toDouble() /
+                                  100, // Defaults to 0.5.
+                          center: new Text(
+                            widget.ongoingProject.progress.isEmpty
+                                ? '0' + "%"
+                                : widget.ongoingProject.progress.toString() +
+                                    "%",
+                            style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: vpH * 0.02),
+                          ),
+
+                          circularStrokeCap: CircularStrokeCap.round,
+                          progressColor: (() {
+                            if (widget.ongoingProject.progress.isEmpty) {
+                              return Colors.grey;
+                            } else if (int.parse(
+                                        widget.ongoingProject.progress) <
+                                    26 &&
+                                int.parse(widget.ongoingProject.progress) > 0) {
+                              return Colors.red;
+                            } else if (int.parse(
+                                        widget.ongoingProject.progress) <
+                                    51 &&
+                                int.parse(widget.ongoingProject.progress) >
+                                    25) {
+                              return Colors.orange;
+                            } else if (int.parse(
+                                        widget.ongoingProject.progress) <
+                                    76 &&
+                                int.parse(widget.ongoingProject.progress) >
+                                    50) {
+                              return Colors.yellow[600];
+                            } else {
+                              return Colors.green;
+                            }
+                          }()),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-          child:Column(
-            children: [
-            Container(padding: EdgeInsets.all(10.0),
-              child:Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: ClipRRect(
-                      child: Container(
-                        height: vpH* 0.038,
-                        width: vpW*0.080,
-                        child: widget.ongoingProject.projectImg.length ==0 
-                        ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
-                        :Image.network(
-                          widget.ongoingProject.projectImg[0] ,
-                          fit: BoxFit.cover,
-                        )
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 4,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal:vpW*0.050,vertical:vpH*0.005),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.ongoingProject.name ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            style: _titlestyle,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical:vpH*0.005),
-                            child: Text(
-                              widget.ongoingProject.date ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize:vpH*0.018),
-                            ),
-                          ),  
-                          Padding(
-                            padding: EdgeInsets.only(top:vpW*0.02 ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: vpH*0.045,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    backgroundImage: AssetImage('assets/img/teamMember.png'),
-                                  ),
-                                ),
-                                Align(
-                                  widthFactor: vpW*0.0004,
-                                  child: Container(
-                                    height: vpH*0.045,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.black,
-                                      backgroundImage:AssetImage('assets/img/teamMember.png'),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: vpH*0.045,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    backgroundImage: AssetImage('assets/img/teamMember.png'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child:Align(
-                      alignment: Alignment.bottomRight,
-                      child:CircularPercentIndicator(
-                        radius: vpH*0.06,
-                        lineWidth: vpW*0.012,
-                        animation: true,
-                        percent: widget.ongoingProject.progress.isEmpty?0.0: int.parse(widget.ongoingProject.progress).toDouble()/100, // Defaults to 0.5.
-                        center: new Text(
-                          widget.ongoingProject.progress.isEmpty?'0' +"%":widget.ongoingProject.progress.toString() +"%",
-                          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: vpH*0.02),
-                        ),
-                        
-                        circularStrokeCap: CircularStrokeCap.round,
-                        progressColor: (() {
-                          if(widget.ongoingProject.progress.isEmpty){
-                            return Colors.grey;
-                          }
-                          else if(int.parse(widget.ongoingProject.progress) <26 && int.parse(widget.ongoingProject.progress)>0 ){
-                            return Colors.red;
-                          }
-                          else if(int.parse(widget.ongoingProject.progress) <51 && int.parse(widget.ongoingProject.progress) >25){
-                            return Colors.orange;
-                          }
-                          else if(int.parse(widget.ongoingProject.progress) <76 && int.parse(widget.ongoingProject.progress) > 50){
-                            return Colors.yellow[600];
-                          }
-                          else{
-                            return Colors.green;
-                          }
-                        }()),
-                      ),
-                    ),),
-                ],
-              ),
-            ),
-           
-          ],),
         ),
       ),
     );
