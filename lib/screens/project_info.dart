@@ -373,37 +373,33 @@ class _ProjectInfoState extends State<ProjectInfo> {
               ),
               Container(
                 width: vpW,
-                child: true
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            trailing: IconButton(
-                              icon: Icon(
-                                SocialMedia.linkedin,
-                                color: Colors.blue[700],
-                              ),
-                              onPressed: null,
-                            ),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              backgroundImage:
-                                  AssetImage('assets/img/teamMember.png'),
-                            ),
-                            title: Text(
-                              "Member",
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: vpH * 0.025),
-                            ),
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Text('No Members Yet'),
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 3,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      trailing: IconButton(
+                        icon: Icon(
+                          SocialMedia.linkedin,
+                          color: Colors.blue[700],
+                        ),
+                        onPressed: null,
                       ),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        backgroundImage:
+                            AssetImage('assets/img/teamMember.png'),
+                      ),
+                      title: Text(
+                        "Member",
+                        style: TextStyle(
+                            color: Colors.black, fontSize: vpH * 0.025),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

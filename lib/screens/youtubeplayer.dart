@@ -34,7 +34,7 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
-    var vpW = getViewportWidth(context);
+    // var vpW = getViewportWidth(context);
     return SafeArea(
         child: Scaffold(
       appBar: appBar(
