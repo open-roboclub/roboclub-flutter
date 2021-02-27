@@ -66,7 +66,7 @@ class _EventScreenState extends State<EventScreen> {
             actions: <Widget>[
               FlatButton(
                 color: Colors.amber,
-                child: Text('Show'),
+                child: Text('Send as Notification'),
                 onPressed: () {
                   Navigator.of(context).pop();
                   if (message['data']['screen'] == 'event') {
@@ -86,7 +86,7 @@ class _EventScreenState extends State<EventScreen> {
               ),
               FlatButton(
                 color: Colors.amber,
-                child: Text('Calcel'),
+                child: Text('Cancel'),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
