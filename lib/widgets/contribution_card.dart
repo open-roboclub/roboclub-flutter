@@ -24,14 +24,12 @@ class _ContriCardState extends State<ContriCard> {
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: Container(
-        // height: vpH * 0.18,
         width: vpW * 0.90,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              // color: Color(0xFF00000029),
               color: Colors.black26,
               blurRadius: 5.0,
               offset: Offset(0.0, 5),
@@ -67,10 +65,11 @@ class _ContriCardState extends State<ContriCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.contributor.name ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            style: _titlestyle,
+                          Container(
+                            child: Text(
+                              widget.contributor.name ?? "",
+                              style: _titlestyle,
+                            ),
                           ),
                            Padding(
                               padding:
