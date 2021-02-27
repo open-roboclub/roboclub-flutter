@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -92,10 +93,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             width: vpW * 0.9,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5.0),
-                              child: Image.asset(
-                                'assets/img/placeholder.jpg',
-                                fit: BoxFit.cover,
-                              ),
+                              child: SvgPicture.asset('assets/illustrations/project.svg',fit: BoxFit.contain),
                             ),
                           )
                         : Column(

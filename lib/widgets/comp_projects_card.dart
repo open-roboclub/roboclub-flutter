@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
@@ -46,7 +47,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard>{
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: widget.completedProject.projectImg.length ==0
-                      ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                      ? SvgPicture.asset('assets/illustrations/project.svg',fit: BoxFit.contain)
                       :Image.network(
                         widget.completedProject.projectImg[0] ,
                         fit: BoxFit.cover,
