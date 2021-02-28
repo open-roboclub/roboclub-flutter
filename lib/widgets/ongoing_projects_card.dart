@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
 import '../helper/dimensions.dart';
@@ -60,10 +61,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                             height: vpH * 0.038,
                             width: vpW * 0.080,
                             child: widget.ongoingProject.projectImg.length == 0
-                                ? Image.asset(
-                                    'assets/img/placeholder.jpg',
-                                    fit: BoxFit.cover,
-                                  )
+                                ? SvgPicture.asset('assets/illustrations/project.svg',fit: BoxFit.contain)
                                 : Image.network(
                                     widget.ongoingProject.projectImg[0],
                                     fit: BoxFit.cover,

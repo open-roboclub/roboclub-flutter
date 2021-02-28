@@ -26,7 +26,7 @@ class _EventFormState extends State<EventForm> {
       _setEndTime,
       _place,
       _setStartTime,
-      _setDate,
+      _date,
       fileName='',
       _regFormLink;
 
@@ -34,11 +34,10 @@ class _EventFormState extends State<EventForm> {
   File file;
   String _hour, _minute, _time;
   String dateTime;
-  DateTime selectedDate = DateTime.now();
   TimeOfDay selectedStartTime = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedEndTime = TimeOfDay(hour: 00, minute: 00);
 
-  TextEditingController _dateController = TextEditingController();
+  TextEditingController date = TextEditingController();
   TextEditingController _startTimeController = TextEditingController();
   TextEditingController _endTimeController = TextEditingController();
   TextEditingController placeController = TextEditingController();
@@ -46,28 +45,7 @@ class _EventFormState extends State<EventForm> {
   TextEditingController detailController = TextEditingController();
   TextEditingController regFormController = TextEditingController();
   
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      initialDatePickerMode: DatePickerMode.day,
-      firstDate: DateTime(2015),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null)
-      setState(() {
-        selectedDate = picked;
-        _setDate = DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
-        print(_setDate);
-        _dateController.text =
-            DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
-      });
-    else{
-      setState(() {
-        _setDate =DateFormat("yyyy-MM-dd hh:mm:ss").format(selectedDate);
-      });
-    }
-  }
+ 
 
   Future<Null> _selectStartTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
@@ -108,7 +86,6 @@ class _EventFormState extends State<EventForm> {
 
   @override
   void initState() {
-    _dateController.text = DateFormat.yMd().format(selectedDate);
     _startTimeController.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
         [hh, ':', nn, " ", am]).toString();
@@ -184,7 +161,7 @@ class _EventFormState extends State<EventForm> {
           img:_posterUrl,
           screen: 'event',
           link: _regFormLink,
-          date:_setDate,
+          date:_date,
         );
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => EventScreen()));
@@ -358,12 +335,11 @@ class _EventFormState extends State<EventForm> {
                       style: kLabelStyle,
                     ),
                   ),
-                  Padding(
+                 Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: _dateController,
+                      controller: date,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -380,17 +356,27 @@ class _EventFormState extends State<EventForm> {
                           child: Icon(Icons.calendar_today),
                         ),
                       ),
-                      onTap: () {
-                        _selectDate(context);
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        DateTime dateTime = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(2030),
+                        );
+                        DateFormat formatter = DateFormat("yyyy-MM-dd hh:mm:ss");
+                        String formatted = formatter.format(dateTime);
+                        print(formatted);
+                        date.text = formatted;
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter some amount';
+                          return 'Please select date';
                         }
                         return null;
                       },
                       onSaved: (String value) {
-                        _setDate = value;
+                        _date = value;
                       },
                     ),
                   ),
@@ -546,7 +532,7 @@ class _EventFormState extends State<EventForm> {
                           await events.postEvent(
                             eventName: _eventName,
                             details: _details,
-                            date: _setDate,
+                            date: _date,
                             startTime: _setStartTime,
                             place: _place,
                             endTime: _setEndTime,
@@ -557,7 +543,7 @@ class _EventFormState extends State<EventForm> {
                           print("saved");
                           eventNameController.clear();
                           detailController.clear();
-                          _dateController.clear();
+                          date.clear();
                           _startTimeController.clear();
                           _endTimeController.clear();
                           placeController.clear();
