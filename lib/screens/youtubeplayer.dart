@@ -39,7 +39,7 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
         child: Scaffold(
       appBar: appBar(
         context,
-        strTitle: "Alumni Talk Series",
+        strTitle: "YouTube Tutorials",
         isDrawer: false,
         isNotification: false,
         scaffoldKey: _scaffoldKey,
