@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/screens/show_event_screen.dart';
@@ -60,7 +61,7 @@ class _EventCardState extends State<EventCard> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child:  widget.event.posterURL =="" 
-                    ? Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,)
+                    ? SvgPicture.asset('assets/illustrations/events.svg',fit: BoxFit.contain)
                     :Image.network(
                       widget.event.posterURL ,
                       fit: BoxFit.cover,

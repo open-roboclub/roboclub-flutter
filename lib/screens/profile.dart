@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/forms/event.dart';
+import 'package:roboclub_flutter/forms/notifications.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -159,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: vpH * 0.04,
                               ),
                               _quickOptions(vpH, Icons.notifications_sharp,
-                                  ContributionForm()),
+                                  NotificationForm()),
                               Divider(
                                 height: vpH * 0.04,
                               ),

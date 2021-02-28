@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/screens/show_event_screen.dart';
@@ -59,7 +60,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                     ? Container(
                        height: vpH * 0.18,
                         width: vpW * 0.6,
-                      child: Image.asset('assets/img/placeholder.jpg',fit: BoxFit.cover,),
+                      child: SvgPicture.asset('assets/illustrations/events.svg',fit: BoxFit.contain)
                       )
                     :Container(
                         height: vpH * 0.18,
