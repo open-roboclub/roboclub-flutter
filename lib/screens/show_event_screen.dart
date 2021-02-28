@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,10 +30,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                   height: vpH * 0.35,
                   width: vpW,
                   child: widget.eventinfo.posterURL == ""
-                      ? Image.asset(
-                          'assets/img/placeholder.jpg',
-                          fit: BoxFit.cover,
-                        )
+                      ? SvgPicture.asset('assets/illustrations/events.svg', fit: BoxFit.contain,)
                       : Image.network(
                           widget.eventinfo.posterURL,
                           fit: BoxFit.cover,
