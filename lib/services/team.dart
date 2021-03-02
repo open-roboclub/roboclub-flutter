@@ -38,7 +38,11 @@ class TeamService {
   Future<List<User>> getTeamMembers(List<dynamic> ids) async {
     List<User> list = [];
     ids.forEach((id) async {
-      await _firestore.collection('/users').document(id).get().then((user) {
+      await _firestore
+          .collection('/users')
+          .document(id['email'])
+          .get()
+          .then((user) {
         list.add(User.fromMap(user.data));
       });
     });

@@ -7,8 +7,9 @@ import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
   final User member;
+  final Image dp;
 
-  const Team2Card({Key key, this.member}) : super(key: key);
+  const Team2Card({Key key, this.member, this.dp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,86 +19,36 @@ class Team2Card extends StatelessWidget {
     TextStyle _titlestyle =
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.028);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15),
-      child: Container(
-        height: vpH * 0.13,
-        width: vpW * 0.90,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: vpH * 0.0016, color: Color(0xFF707070)),
-          ),
-          color: Colors.white,
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        tileColor: Colors.grey.withOpacity(0.2),
+        contentPadding: EdgeInsets.all(10),
+        leading: CircleAvatar(
+          radius: vpH * 0.037,
+          onBackgroundImageError: (exception, stackTrace) {
+            print("Network Img Exception");
+            print(exception);
+          },
+          backgroundColor: Colors.black,
+          // child: dp,
+          backgroundImage: dp.image,
         ),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: CircleAvatar(
-                      radius: vpH * 0.037,
-                      backgroundColor: Colors.black,
-                      backgroundImage: NetworkImage(
-                        member.profileImageUrl.isNotEmpty
-                            ? member.profileImageUrl
-                            : "",
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 3,
-                    // fit: FlexFit.tight,
-                    child: Container(
-                      // margin: EdgeInsets.symmetric(horizontal: vpW * 0.040),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            member.name ?? "Name",
-                            overflow: TextOverflow.ellipsis,
-                            style: _titlestyle,
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: vpH * 0.006),
-                            child: Text(
-                              member.position ?? "Post",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: vpH * 0.018,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  _currUser.isAdmin
-                      ? Flexible(
-                          flex: 1,
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: IconButton(
-                                  icon: Icon(MyFlutterApp.edit),
-                                  color: Color(0xFFFF9C01),
-                                  iconSize: vpW * 0.060,
-                                  onPressed: () {}),
-                            ),
-                          ),
-                        )
-                      : Container(),
-                ],
+        title: Text(
+          member.name ?? " ",
+          style: _titlestyle,
+        ),
+        subtitle: Text(member.position ?? " "),
+        trailing: _currUser.isAdmin
+            ? IconButton(
+                icon: Icon(MyFlutterApp.edit),
+                color: Color(0xFFFF9C01),
+                iconSize: vpW * 0.060,
+                onPressed: () {},
+              )
+            : Container(
+                height: 0,
+                width: 0,
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

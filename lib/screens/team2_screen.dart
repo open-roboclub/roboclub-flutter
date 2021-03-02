@@ -23,18 +23,44 @@ class _Team2ScreenState extends State<Team2Screen> {
   bool _isLoading = true;
 
   List<User> membersList = [];
+  final List<Image> dpList = [];
 
   @override
   void initState() {
+    widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
+    List<User> tempList = [];
     TeamService().getTeamMembers(widget.members).then((value) {
-      membersList = value;
+      tempList = value;
       Timer(Duration(milliseconds: 500), () {
         setState(() {
+          rankMembers(tempList);
           _isLoading = false;
         });
       });
     });
     super.initState();
+  }
+
+  void rankMembers(List<User> tempList) {
+    for (int i = 0; i < widget.members.length; i++) {
+      for (int j = 0; j < tempList.length; j++) {
+        if (widget.members[i]['email'] == tempList[j].email) {
+          membersList.add(tempList[j]);
+          break;
+        }
+      }
+    }
+    membersList.forEach((element) {
+      dpList.add(Image.network(element.profileImageUrl));
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    dpList.forEach((dp) {
+      precacheImage(dp.image, context);
+    });
+    super.didChangeDependencies();
   }
 
   @override
@@ -66,23 +92,25 @@ class _Team2ScreenState extends State<Team2Screen> {
                     Container(
                       height: vpH * 0.9,
                       width: vpW,
-                      child: ListView.builder(
+                      child: ListView(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: membersList.length,
                         scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
+                        children: [
+                          for (int i = 0; i < membersList.length; i++)
+                            GestureDetector(
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ProfileScreen(
                                       viewMode: true,
-                                      member: membersList[index],
+                                      member: membersList[i],
                                     ),
                                   )),
-                              child: Team2Card(member: membersList[index]));
-                        },
+                              child: Team2Card(
+                                  member: membersList[i], dp: dpList[i]),
+                            )
+                        ],
                       ),
                     )
                   ],
