@@ -23,6 +23,7 @@ class _Team2ScreenState extends State<Team2Screen> {
   bool _isLoading = true;
 
   List<User> membersList = [];
+  final List<Image> dpList = [];
 
   @override
   void initState() {
@@ -49,6 +50,17 @@ class _Team2ScreenState extends State<Team2Screen> {
         }
       }
     }
+    membersList.forEach((element) {
+      dpList.add(Image.network(element.profileImageUrl));
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    dpList.forEach((dp) {
+      precacheImage(dp.image, context);
+    });
+    super.didChangeDependencies();
   }
 
   @override
@@ -80,23 +92,25 @@ class _Team2ScreenState extends State<Team2Screen> {
                     Container(
                       height: vpH * 0.9,
                       width: vpW,
-                      child: ListView.builder(
+                      child: ListView(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: membersList.length,
                         scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
+                        children: [
+                          for (int i = 0; i < membersList.length; i++)
+                            GestureDetector(
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ProfileScreen(
                                       viewMode: true,
-                                      member: membersList[index],
+                                      member: membersList[i],
                                     ),
                                   )),
-                              child: Team2Card(member: membersList[index]));
-                        },
+                              child: Team2Card(
+                                  member: membersList[i], dp: dpList[i]),
+                            )
+                        ],
                       ),
                     )
                   ],
