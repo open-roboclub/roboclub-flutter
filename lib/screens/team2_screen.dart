@@ -26,15 +26,29 @@ class _Team2ScreenState extends State<Team2Screen> {
 
   @override
   void initState() {
+    widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
+    List<User> tempList = [];
     TeamService().getTeamMembers(widget.members).then((value) {
-      membersList = value;
+      tempList = value;
       Timer(Duration(milliseconds: 500), () {
         setState(() {
+          rankMembers(tempList);
           _isLoading = false;
         });
       });
     });
     super.initState();
+  }
+
+  void rankMembers(List<User> tempList) {
+    for (int i = 0; i < widget.members.length; i++) {
+      for (int j = 0; j < tempList.length; j++) {
+        if (widget.members[i]['email'] == tempList[j].email) {
+          membersList.add(tempList[j]);
+          break;
+        }
+      }
+    }
   }
 
   @override
