@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/team.dart';
-import 'package:roboclub_flutter/services/team.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/teams_card.dart';
@@ -13,15 +13,19 @@ class TeamScreen extends StatefulWidget {
 
 class _TeamScreenState extends State<TeamScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  final Firestore _firestore = Firestore.instance;
   bool _isLoading = true;
 
   List<Team> teamsList = [];
 
   @override
   void initState() {
-    TeamService().fetchTeams().then((teamList) {
+    _firestore.collection('/teams').getDocuments().then((teamSnaps) {
+      teamSnaps.documents.forEach((element) {
+        teamsList.add(Team.fromMap(element.data));
+      });
       setState(() {
-        teamsList = teamList;
         _isLoading = false;
       });
     });

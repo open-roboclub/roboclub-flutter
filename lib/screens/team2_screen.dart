@@ -1,9 +1,7 @@
-import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
-import 'package:roboclub_flutter/services/team.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/team2.dart';
@@ -20,47 +18,11 @@ class Team2Screen extends StatefulWidget {
 
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _isLoading = true;
-
-  List<User> membersList = [];
-  final List<Image> dpList = [];
 
   @override
   void initState() {
     widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
-    List<User> tempList = [];
-    TeamService().getTeamMembers(widget.members).then((value) {
-      tempList = value;
-      Timer(Duration(milliseconds: 500), () {
-        setState(() {
-          rankMembers(tempList);
-          _isLoading = false;
-        });
-      });
-    });
     super.initState();
-  }
-
-  void rankMembers(List<User> tempList) {
-    for (int i = 0; i < widget.members.length; i++) {
-      for (int j = 0; j < tempList.length; j++) {
-        if (widget.members[i]['email'] == tempList[j].email) {
-          membersList.add(tempList[j]);
-          break;
-        }
-      }
-    }
-    membersList.forEach((element) {
-      dpList.add(Image.network(element.profileImageUrl));
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    dpList.forEach((dp) {
-      precacheImage(dp.image, context);
-    });
-    super.didChangeDependencies();
   }
 
   @override
@@ -79,43 +41,48 @@ class _Team2ScreenState extends State<Team2Screen> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : SingleChildScrollView(
-                child: Column(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: vpH * 0.005,
+              ),
+              Container(
+                height: vpH * 0.9,
+                width: vpW,
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
                   children: [
-                    SizedBox(
-                      height: vpH * 0.005,
-                    ),
-                    Container(
-                      height: vpH * 0.9,
-                      width: vpW,
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          for (int i = 0; i < membersList.length; i++)
-                            GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfileScreen(
-                                      viewMode: true,
-                                      member: membersList[i],
-                                    ),
-                                  )),
-                              child: Team2Card(
-                                  member: membersList[i], dp: dpList[i]),
-                            )
-                        ],
-                      ),
-                    )
+                    for (int i = 0; i < widget.members.length; i++)
+                      GestureDetector(
+                        onTap: () async {
+                          final Firestore _firestore = Firestore.instance;
+
+                          DocumentSnapshot snap = await _firestore
+                              .collection('/users')
+                              .document(widget.members[i]['email'])
+                              .get();
+                          User member = User.fromMap(snap.data);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                viewMode: true,
+                                member: member,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Team2Card(member: widget.members[i]),
+                      )
                   ],
                 ),
-              ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

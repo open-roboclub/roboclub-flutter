@@ -5,11 +5,8 @@ import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
 class EventCard extends StatefulWidget {
-
-   
   final Event event;
-  EventCard({Key key,this.event}): super(key: key);
-
+  EventCard({Key key, this.event}) : super(key: key);
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -23,84 +20,91 @@ class _EventCardState extends State<EventCard> {
     TextStyle _titlestyle =
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.025);
 
-    return  GestureDetector(
-      onTap:(){ 
+    return GestureDetector(
+      onTap: () {
         Navigator.push(
-          context, MaterialPageRoute(
-            builder: (context) => ShowEventScreen(eventinfo:widget.event)
-          ),
+          context,
+          MaterialPageRoute(
+              builder: (context) => ShowEventScreen(eventinfo: widget.event)),
         );
       },
       child: Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: PhysicalModel(
-        color: Colors.transparent,
-        elevation: 8.0,
-        child: Container(
-          height: vpH * 0.15,
-          width: vpW * 0.85,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).cardColor,
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.black12,
-            //     offset: Offset(3, 8),
-            //     blurRadius: 1.0,
-            //     spreadRadius: 2.0,
-            //   ),
-            // ],
-          ),
-          child: Row(
-            children: [
-              Flexible(
-                flex: 1,
-                child: Container(
-                  height: vpH * 0.15,
-                  width: vpW * 0.3,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child:  widget.event.posterURL =="" 
-                    ? SvgPicture.asset('assets/illustrations/events.svg',fit: BoxFit.contain)
-                    :Image.network(
-                      widget.event.posterURL ,
-                      fit: BoxFit.cover,
-                    )
+        padding: const EdgeInsets.all(15.0),
+        child: PhysicalModel(
+          color: Colors.transparent,
+          elevation: 8.0,
+          child: Container(
+            height: vpH * 0.15,
+            width: vpW * 0.85,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).cardColor,
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black12,
+              //     offset: Offset(3, 8),
+              //     blurRadius: 1.0,
+              //     spreadRadius: 2.0,
+              //   ),
+              // ],
+            ),
+            child: Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Hero(
+                    tag: widget.event.eventName,
+                    child: Container(
+                      height: vpH * 0.15,
+                      width: vpW * 0.3,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: widget.event.posterURL == ""
+                              ? SvgPicture.asset(
+                                  'assets/illustrations/events.svg',
+                                  fit: BoxFit.contain)
+                              : Image.network(
+                                  widget.event.posterURL,
+                                  fit: BoxFit.cover,
+                                )),
+                    ),
                   ),
                 ),
-              ),
-              Flexible(
-                flex: 2,
-                fit: FlexFit.tight,
-                child: Container(
-                  margin: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.event.eventName!=null ? widget.event.eventName : "",
-                        overflow: TextOverflow.ellipsis,
-                        style: _titlestyle,
-                      ),
-                      Text(
-                        widget.event.date!=null ? widget.event.date  : "",
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "AMURoboclub",
+                Flexible(
+                  flex: 2,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.event.eventName != null
+                              ? widget.event.eventName
+                              : "",
+                          overflow: TextOverflow.ellipsis,
+                          style: _titlestyle,
+                        ),
+                        Text(
+                          widget.event.date != null ? widget.event.date : "",
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "AMURoboclub",
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),);
+    );
   }
 }
