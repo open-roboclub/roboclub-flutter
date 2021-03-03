@@ -151,8 +151,7 @@ class _ProjectFormState extends State<ProjectForm> {
         style: kLabelStyle,
       ),
       onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProjectScreen()));
+        Navigator.of(context).pop();
       },
     );
 

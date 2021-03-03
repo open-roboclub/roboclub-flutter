@@ -163,8 +163,7 @@ class _EventFormState extends State<EventForm> {
           link: _regFormLink,
           date:_date,
         );
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EventScreen()));
+        Navigator.of(context).pop();
       },
     );
 
