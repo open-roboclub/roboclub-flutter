@@ -110,7 +110,9 @@ class _EventFormState extends State<EventForm> {
         if(result!=null)
         {
           filePicked=true;
-          file = File(result.files.single.path);
+          setState(() {
+            file = File(result.files.single.path);
+          }); 
           fileName = '$randomName';
         }
       }).catchError((error)
@@ -508,7 +510,7 @@ class _EventFormState extends State<EventForm> {
                             getImage();
                           },
                         ),
-                        fileName.isEmpty
+                        file==null
                         ? Text('Poster Image not Selected.',style: TextStyle(color: Colors.grey[400],fontSize: vpH*0.016,fontWeight:FontWeight.bold))
                         :Text('Poster Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.016, fontWeight:FontWeight.bold))
                       ],
