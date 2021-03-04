@@ -94,7 +94,8 @@ class _ContributionFormState extends State<ContributionForm> {
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ContributorScreen()));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 

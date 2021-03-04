@@ -545,7 +545,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfileForm(viewMode: true, member: _user,)));
                             }
                           },
-                          items: <String>['Sign Out']
+                          items: <String>['Edit Profile','Sign Out']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
