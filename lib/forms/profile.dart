@@ -14,8 +14,7 @@ class ProfileForm extends StatefulWidget {
   final bool viewMode;
   final User member;
 
-
-  const ProfileForm({Key key, this.viewMode = false, this.member})
+  const ProfileForm({Key key, this.viewMode = false, this.member,})
     : super(key: key);
   @override
   _ProfileFormState createState() => _ProfileFormState(member);
@@ -28,90 +27,83 @@ class _ProfileFormState extends State<ProfileForm> {
 
   
   String _name="";
-    String _batch="";
-    String _branch="";
-    String _about="";
-    String _contact="";
-    String _interests="";
-    String _cvLink="";
-    String _fbId="";
-    String _instaId="";
-    String _linkedinId="";
-    String _position="";
-    String _quote="";
+  String _batch="";
+  String _branch="";
+  String _about="";
+  String _contact="";
+  String _interests="";
+  String _cvLink="";
+  String _fbId="";
+  String _instaId="";
+  String _linkedinId="";
+  String _position="";
+  String _quote="";
      
-    bool filePicked = false;
+  bool filePicked = false;
    
-    StorageUploadTask uploadTask ;
-    File file;
-    String _img="";
-    String fileName='';
-    final User _user ;
+  StorageUploadTask uploadTask ;
+  File file;
+  String _img="";
+  String fileName='';
+  final User _user ;
 
   _ProfileFormState(this._user);
   // upload image
     
-    Future getImage()async{
-      setState(() async{
-        var rng = new Random();
-        String randomName="";
-        for (var i = 0; i < 20; i++) {
-          print(rng.nextInt(100));
-          randomName += rng.nextInt(100).toString();
-        }
-
-        FilePickerResult result =
-          await FilePicker.platform.pickFiles(type: FileType.image)
-          .then((result) async {
-            if(result!=null){
-              filePicked =true; 
-              setState(() { file = File(result.files.single.path);});
-             
-              fileName = '$randomName';
-            }
-          }).catchError((error){
-            print("Error: "+error.toString());
-          });      
-      });
-    }
-    Future saveImg(List<int> asset, String name) async {
-
-      StorageReference reference = FirebaseStorage.instance.ref().child(name);
-     
-      setState(() {
-        uploadTask = reference.putData(asset);
-      });
-      _img = await (await uploadTask.onComplete).ref.getDownloadURL();
-        print(_img);
+  Future getImage()async{
+    setState(() async{
+      var rng = new Random();
+      String randomName="";
+      for (var i = 0; i < 20; i++) {
+        randomName += rng.nextInt(100).toString();
+      }
+      FilePickerResult result =
+        await FilePicker.platform.pickFiles(type: FileType.image)
+        .then((result) async {
+          if(result!=null){
+            filePicked =true; 
+            setState(() { file = File(result.files.single.path);});
+            fileName = '$randomName';
+          }
+        }).catchError((error){
+          print("Error: "+error.toString());
+        });      
+    });
+  }
+  Future saveImg(List<int> asset, String name) async {
     
-    }
+    StorageReference reference = FirebaseStorage.instance.ref().child(name);
+    setState(() {
+      uploadTask = reference.putData(asset);
+    });
+    _img = await (await uploadTask.onComplete).ref.getDownloadURL();
+       
     
-   Future<void> updateProfile(User user) async {
+  }
+    
+  Future<void> updateProfile(User user) async {
 
-     Map<String, dynamic>userObject = 
-     {'about': _about.isEmpty ? user.about : _about,
-                  'batch':_batch.isEmpty ? user.batch : _batch ,
-                  'name': _name.isEmpty ? user.name : _name,
-                  'profileImageUrl': _img.isEmpty?user.profileImageUrl : _img,
-                  'contact': _contact.isEmpty ? user.contact : _contact,
-                  'quote': _quote.isEmpty ? user.quote : _quote,
-                  'cvLink': _cvLink.isEmpty ? user.cvLink : _cvLink,
-                  'fbId': _fbId.isEmpty ? user.fbId : _fbId,
-                  'instaId': _instaId.isEmpty ? user.instaId : _instaId,
-                  'interests': _interests.isEmpty ? user.interests : _interests,
-                  'branch': _branch.isEmpty ? user.branch : _branch,
-                  'linkedinId': _linkedinId.isEmpty ? user.linkedinId : _linkedinId,
-                  'position': _position.isEmpty ? user.position : _position,
+    Map<String, dynamic>userObject ={
+      'about': _about.isEmpty ? user.about : _about,
+      'batch':_batch.isEmpty ? user.batch : _batch ,
+      'name': _name.isEmpty ? user.name : _name,
+      'profileImageUrl': _img.isEmpty?user.profileImageUrl : _img,
+      'contact': _contact.isEmpty ? user.contact : _contact,
+      'quote': _quote.isEmpty ? user.quote : _quote,
+      'cvLink': _cvLink.isEmpty ? user.cvLink : _cvLink,
+      'fbId': _fbId.isEmpty ? user.fbId : _fbId,
+      'instaId': _instaId.isEmpty ? user.instaId : _instaId,
+      'interests': _interests.isEmpty ? user.interests : _interests,
+      'branch': _branch.isEmpty ? user.branch : _branch,
+      'linkedinId': _linkedinId.isEmpty ? user.linkedinId : _linkedinId,
+      'position': _position.isEmpty ? user.position : _position,
     };
-    Firestore.instance
-              .collection('/users')
-              .document(user.email)
-              .updateData(userObject)
-              .then((value) => print("User Profile Updated"))
-              .catchError(
-                (error) => print("Failed to update progress: $error"));
-   
-    }
+    Firestore.instance.collection('/users')
+      .document(user.email)
+      .updateData(userObject)
+      .then((value) => print("User Profile Updated"))
+      .catchError((error) => print("Failed to update progress: $error"));
+  }
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -163,7 +155,6 @@ class _ProfileFormState extends State<ProfileForm> {
        backgroundColor: Color(0xFFE8EAF6),
         body: Container(
           height: double.infinity, width: double.infinity,
-         
           child: SingleChildScrollView(
             child: Form(
                key:_formKey,
@@ -189,8 +180,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                   :NetworkImage(_user.profileImageUrl),
                               ),
                           ),
-                          ),
-                      
+                        ),
                         IconButton(icon: Icon(Icons.add_a_photo,size: vpH*0.04,color: Color(0xff7c56dc),),
                           onPressed: ()async{
                             await getImage();
