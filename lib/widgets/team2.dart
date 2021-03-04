@@ -47,7 +47,7 @@ class Team2Card extends StatelessWidget {
                 iconSize: vpW * 0.060,
                 onPressed: () {
                   Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileScreen(viewMode: true,member: member,),),);
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileForm(viewMode: false,member: member,),),);
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileForm(member: member,),),);
                 },
               )
             : Container(

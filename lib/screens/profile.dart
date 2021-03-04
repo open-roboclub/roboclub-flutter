@@ -541,8 +541,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             }
                             if(newValue == 'Edit Profile'){
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfileScreen(viewMode:true, member:_user,)));
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfileForm(viewMode: true, member: _user,)));
+                             
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfileForm(member: _user,)));
                             }
                           },
                           items: <String>['Edit Profile','Sign Out']

@@ -11,10 +11,9 @@ import '../widgets/appBar.dart';
 
 class ProfileForm extends StatefulWidget {
 
-  final bool viewMode;
   final User member;
 
-  const ProfileForm({Key key, this.viewMode = false, this.member,})
+  const ProfileForm({Key key,this.member,})
     : super(key: key);
   @override
   _ProfileFormState createState() => _ProfileFormState(member);
@@ -128,7 +127,6 @@ class _ProfileFormState extends State<ProfileForm> {
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
-        Navigator.of(context).pop();
         Navigator.of(context).pop();
         Navigator.of(context).pop();
       },  
@@ -342,7 +340,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
                         initialValue: _user.about,
-                        maxLength: 100,
+                        maxLength: 500,
                         maxLengthEnforced: true,
                         style: TextStyle(
                           color: Colors.purple[200],
@@ -407,7 +405,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
                         initialValue: _user.interests,
-                        maxLength: 100,
+                        maxLength: 500,
                         maxLengthEnforced: true,
                         style: TextStyle(
                           color: Colors.purple[200],
@@ -572,7 +570,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
                         initialValue: _user.quote,
-                        maxLength: 50,
+                        maxLength: 100,
                         maxLengthEnforced: true,
                         style: TextStyle(
                           color: Colors.purple[200],
