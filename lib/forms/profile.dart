@@ -42,15 +42,14 @@ class _ProfileFormState extends State<ProfileForm> {
      
     bool filePicked = false;
    
-    
+    StorageUploadTask uploadTask ;
     File file;
     String _img="";
     String fileName='';
     final User _user ;
 
   _ProfileFormState(this._user);
-  
-    // upload image
+  // upload image
     
     Future getImage()async{
       setState(() async{
@@ -60,17 +59,17 @@ class _ProfileFormState extends State<ProfileForm> {
           print(rng.nextInt(100));
           randomName += rng.nextInt(100).toString();
         }
+
         FilePickerResult result =
           await FilePicker.platform.pickFiles(type: FileType.image)
           .then((result) async {
-            if(result!=null)
-            {
-            filePicked =true; 
-              file = File(result.files.single.path);
+            if(result!=null){
+              filePicked =true; 
+              setState(() { file = File(result.files.single.path);});
+             
               fileName = '$randomName';
             }
-          }).catchError((error)
-          {
+          }).catchError((error){
             print("Error: "+error.toString());
           });      
       });
@@ -78,11 +77,15 @@ class _ProfileFormState extends State<ProfileForm> {
     Future saveImg(List<int> asset, String name) async {
 
       StorageReference reference = FirebaseStorage.instance.ref().child(name);
-      StorageUploadTask uploadTask = reference.putData(asset);
+     
+      setState(() {
+        uploadTask = reference.putData(asset);
+      });
       _img = await (await uploadTask.onComplete).ref.getDownloadURL();
-      print(_img);
+        print(_img);
     
     }
+    
    Future<void> updateProfile(User user) async {
 
      Map<String, dynamic>userObject = 
@@ -135,6 +138,7 @@ class _ProfileFormState extends State<ProfileForm> {
       onPressed: () {  
         Navigator.of(context).pop();
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 
@@ -173,13 +177,20 @@ class _ProfileFormState extends State<ProfileForm> {
                           alignment: Alignment.center,
                           child: Padding(
                             padding: EdgeInsets.only(top:vpH*0.02, left: vpW*0.02, right: vpW*0.02, bottom:vpH*0.01),
-                            child: CircleAvatar(
-                              radius: 80,
-                              backgroundImage:
-                                NetworkImage(_user.profileImageUrl),
-                            ),
+                            child: file!=null 
+                              ?CircleAvatar(
+                                radius: 80,
+                                child:Image.file(file),
+                              )
+                              : CircleAvatar(
+                                radius: 80,
+                                backgroundImage:_user.profileImageUrl.isEmpty
+                                  ?AssetImage('assets/img/teamMember.png')
+                                  :NetworkImage(_user.profileImageUrl),
+                              ),
                           ),
-                        ),
+                          ),
+                      
                         IconButton(icon: Icon(Icons.add_a_photo,size: vpH*0.04,color: Color(0xff7c56dc),),
                           onPressed: ()async{
                             await getImage();
