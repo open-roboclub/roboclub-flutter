@@ -17,7 +17,7 @@ class Team2Card extends StatelessWidget {
     var vpW = getViewportWidth(context);
     var _currUser = Provider.of<UserProvider>(context).getUser;
     TextStyle _titlestyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.028);
+        TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.028, color: Colors.black);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(

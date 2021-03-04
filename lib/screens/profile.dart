@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/forms/notifications.dart';
+import 'package:roboclub_flutter/forms/profile.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -539,8 +540,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 );
                               });
                             }
+                            if(newValue == 'Edit Profile'){
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileForm(),
+                                ),
+                              );
+                            }
                           },
-                          items: <String>['Sign Out']
+                          items: <String>['Edit Profile','Sign Out']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
