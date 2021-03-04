@@ -136,6 +136,7 @@ class _EventScreenState extends State<EventScreen> {
         tempList.add(item);
       } else {
         item.date = DateFormat('MMMEd').format(_parsed);
+        item.regFormLink = "";
         pastEventsList.add(item);
       }
     });

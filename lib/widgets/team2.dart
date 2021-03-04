@@ -1,15 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
-import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
-  final User member;
-  final Image dp;
+  final dynamic member;
 
-  const Team2Card({Key key, this.member, this.dp}) : super(key: key);
+  const Team2Card({Key key, this.member}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +29,14 @@ class Team2Card extends StatelessWidget {
             print(exception);
           },
           backgroundColor: Colors.black,
-          // child: dp,
-          backgroundImage: dp.image,
+          backgroundImage:
+              CachedNetworkImageProvider(member['profileImageUrl']),
         ),
         title: Text(
-          member.name ?? " ",
+          member['name'] ?? " ",
           style: _titlestyle,
         ),
-        subtitle: Text(member.position ?? " "),
+        subtitle: Text(member['position'] ?? " "),
         trailing: _currUser.isAdmin
             ? IconButton(
                 icon: Icon(MyFlutterApp.edit),

@@ -26,15 +26,21 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
           width: vpW,
           child: Stack(
             children: [
-              Container(
-                  height: vpH * 0.35,
-                  width: vpW,
-                  child: widget.eventinfo.posterURL == ""
-                      ? SvgPicture.asset('assets/illustrations/events.svg', fit: BoxFit.contain,)
-                      : Image.network(
-                          widget.eventinfo.posterURL,
-                          fit: BoxFit.cover,
-                        )),
+              Hero(
+                tag: widget.eventinfo.eventName,
+                child: Container(
+                    height: vpH * 0.35,
+                    width: vpW,
+                    child: widget.eventinfo.posterURL == ""
+                        ? SvgPicture.asset(
+                            'assets/illustrations/events.svg',
+                            fit: BoxFit.contain,
+                          )
+                        : Image.network(
+                            widget.eventinfo.posterURL,
+                            fit: BoxFit.cover,
+                          )),
+              ),
               Container(
                 height: vpH,
                 child: SingleChildScrollView(
