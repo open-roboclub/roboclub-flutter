@@ -33,11 +33,11 @@ class NotificationService {
       {@required String title,
       @required String msg,
       @required String img,
-      @required String date,
-      String link,
       @required String screen}) async {
     List<String> tokens = await getFCMTokens();
-
+    tokens.forEach((element) {
+      print(element);
+    });
     final Map<String, dynamic> body = {
       // "to": token,
       "registration_ids": tokens,
@@ -45,8 +45,6 @@ class NotificationService {
       "notification": {
         "title": title,
         "body": msg,
-        "date": date,
-        "link": link,
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "image": img
       }
@@ -75,12 +73,9 @@ class NotificationService {
       print(err);
     }
   }
+
   Future<bool> postNotification(
-    {String title,
-    String msg,
-    String link,
-    String date}) async {
-        
+      {String title, String msg, String link, String date}) async {
     Map<String, dynamic> data = {
       "title": title,
       "msg": msg,
@@ -89,10 +84,8 @@ class NotificationService {
     };
 
     await _firestore.collection("/notifications").add(data).then((value) {
-
       print(value);
     });
     return true;
   }
-
 }
