@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
@@ -17,10 +16,11 @@ class ProfileForm extends StatefulWidget {
   final bool viewMode;
   final User member;
 
+
   const ProfileForm({Key key, this.viewMode = false, this.member})
     : super(key: key);
   @override
-  _ProfileFormState createState() => _ProfileFormState();
+  _ProfileFormState createState() => _ProfileFormState(member);
 }
 
 class _ProfileFormState extends State<ProfileForm> {
@@ -28,99 +28,30 @@ class _ProfileFormState extends State<ProfileForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-
-  String _name;
-  String _batch;
-  String _branch;
-  String _about;
-  String _contact;
-  String _interests;
-  String _cvLink;
-  String _email;
-  String _fbId;
-  String _instaId;
-  String _linkedinId;
-  String _position;
-  String _quote;
-  bool filePicked = false;
-
-  // final nameController = TextEditingController();
-  // final batchController = TextEditingController();
-  // final branchController = TextEditingController();
-  // final aboutController = TextEditingController();
-  // final interestsController = TextEditingController();
-  // final cvLinkController = TextEditingController();
-  // final contactController = TextEditingController();
-  // final emailController = TextEditingController();
-  // final fbIdController = TextEditingController();
-  // final instaIdController = TextEditingController();
-  // final linkedinIdController = TextEditingController();
-  // final positionController = TextEditingController();
-  // final quoteController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    var vpH = getViewportHeight(context);
-    var vpW = getViewportWidth(context);
-
-    var _userProvider, _user, _currUser;
-    _userProvider = Provider.of<UserProvider>(context);
-    if (!widget.viewMode) {
-      _user = _userProvider.getUser;
-      _currUser = _userProvider.getUser;
-    } else {
-      _user = widget.member;
-      _currUser = _userProvider.getUser;
-    }
-
-    // if(_user!=null){
-    //   if(_currUser.name != ""){
-    //     nameController.text =_currUser.name;
-    //   }
-    //   if(_currUser.batch != ""){
-    //     batchController.text =_currUser.batch;
-    //   }
-    //   if(_currUser.about != ""){
-    //     aboutController.text =_currUser.about;
-    //   }
-    //   if(_currUser.branch != ""){
-    //     branchController.text =_currUser.branch;
-    //   }
-    //   if(_currUser.interests != ""){
-    //     interestsController.text =_currUser.interests;
-    //   }
-    //   if(_currUser.contact != ""){
-    //     contactController.text =_currUser.contact;
-    //   }
-    //   if(_currUser.cvLink != ""){
-    //     cvLinkController.text =_currUser.cvLink;
-    //   }
-    //   if(_currUser.email != ""){
-    //     emailController.text =_currUser.email;
-    //   }
-    //   if(_currUser.fbId != ""){
-    //     fbIdController.text =_currUser.fbId;
-    //   }
-    //   if(_currUser.instaId != ""){
-    //     instaIdController.text =_currUser.instaId;
-    //   }
-    //   if(_currUser.linkedinId != ""){
-    //     linkedinIdController.text =_currUser.linkedinId;
-    //   }
-    //   if(_currUser.position != ""){
-    //     positionController.text =_currUser.position;
-    //   }
-    //   if(_currUser.quote != "What quote describes you"){
-    //     quoteController.text =_currUser.quote;
-    //   }
+  
+  String _name="";
+    String _batch="";
+    String _branch="";
+    String _about="";
+    String _contact="";
+    String _interests="";
+    String _cvLink="";
+    String _fbId="";
+    String _instaId="";
+    String _linkedinId="";
+    String _position="";
+    String _quote="";
      
-    // }
-
+    bool filePicked = false;
+   
     
     File file;
     String _img="";
     String fileName='';
+    final User _user ;
 
+  _ProfileFormState(this._user);
+  
     // upload image
     
     Future getImage()async{
@@ -154,6 +85,37 @@ class _ProfileFormState extends State<ProfileForm> {
       print(_img);
     
     }
+   Future<void> updateProfile(User user) async {
+
+     Map<String, dynamic>userObject = 
+     {'about': _about.isEmpty ? user.about : _about,
+                  'batch':_batch.isEmpty ? user.batch : _batch ,
+                  'name': _name.isEmpty ? user.name : _name,
+                  'profileImageUrl': _img.isEmpty?user.profileImageUrl : _img,
+                  'contact': _contact.isEmpty ? user.contact : _contact,
+                  'quote': _quote.isEmpty ? user.quote : _quote,
+                  'cvLink': _cvLink.isEmpty ? user.cvLink : _cvLink,
+                  'fbId': _fbId.isEmpty ? user.fbId : _fbId,
+                  'instaId': _instaId.isEmpty ? user.instaId : _instaId,
+                  'interests': _interests.isEmpty ? user.interests : _interests,
+                  'branch': _branch.isEmpty ? user.branch : _branch,
+                  'linkedinId': _linkedinId.isEmpty ? user.linkedinId : _linkedinId,
+                  'position': _position.isEmpty ? user.position : _position,
+    };
+    Firestore.instance
+              .collection('/users')
+              .document(user.email)
+              .updateData(userObject)
+              .then((value) => print("User Profile Updated"))
+              .catchError(
+                (error) => print("Failed to update progress: $error"));
+   
+    }
+  @override
+  Widget build(BuildContext context) {
+    var vpH = getViewportHeight(context);
+    var vpW = getViewportWidth(context);
+   
 
     // TextFormFiels styling 
     final kHintTextStyle = TextStyle(
@@ -174,6 +136,7 @@ class _ProfileFormState extends State<ProfileForm> {
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 
@@ -184,57 +147,7 @@ class _ProfileFormState extends State<ProfileForm> {
       ],  
     );  
 
-    Future<void> updateUserProfile() async {
-      
-      // _name = nameController.text;
-      // _batch = batchController.text;
-      // _branch = branchController.text;
-      // _about =aboutController.text;
-      // _contact =contactController.text;
-      // _interests =instaIdController.text;
-      // _cvLink =cvLinkController.text;
-      // _email =emailController.text;
-      // _fbId =fbIdController.text;
-      // _instaId =instaIdController.text;
-      // _linkedinId =linkedinIdController.text;
-      // _position =positionController.text;
-      // _quote =quoteController.text;
-
-      
-      String id;
-      Firestore.instance.collection('users').getDocuments().then((users) {
-        users.documents.forEach((user) {
-          if (user['email'] == _currUser.email) {
-            id = user.documentID;
-            print(id);
-            return Firestore.instance
-              .collection('users')
-              .document(id)
-              .updateData(
-                {'about': _about,
-                  'email':_email,
-                  'batch':_user.batch ,
-                  'name': _name,
-                  'profileImageUrl': _img.isEmpty?_user.photoUrl : _img,
-                  'contact': _contact,
-                  'quote': _quote,
-                  'cvLink': _cvLink,
-                  'fbId': _fbId,
-                  'instaId': _instaId,
-                  'interests': _interests,
-                  'branch': _branch,
-                  'linkedinId': _linkedinId,
-                  'position': _position,
-                }
-              )
-              .then((value) => print("User Profile Updated"))
-              .catchError(
-                (error) => print("Failed to update progress: $error"));
-          }
-        });
-      });
-    }
-
+   
     return SafeArea(
       child:Scaffold(
        key: _scaffoldKey,
@@ -287,8 +200,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        // controller: nameController,
-                        initialValue: _currUser.name,
+                        initialValue: _user.name,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -310,7 +222,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         },
                         onChanged:(val) {
                         setState(() {
-                           _name = val;
+                          _name = val;
+                        
                         });
                         }, 
                         
@@ -326,8 +239,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        // controller: positionController,
-                        initialValue: _currUser.position,
+                        initialValue: _user.position,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -357,7 +269,7 @@ class _ProfileFormState extends State<ProfileForm> {
                        
                       ),
                     ),
-                     Container(
+                    Container(
                       padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.002),
                       alignment: Alignment.topLeft,
                       child:Text('Batch',style: kLabelStyle,
@@ -367,8 +279,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        // controller: batchController,
-                        initialValue: _currUser.batch,
+                        initialValue: _user.batch,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -390,7 +301,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         },
                       ),
                     ),
-                     Container(
+                    Container(
                       padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.002),
                       alignment: Alignment.topLeft,
                       child:Text('Branch',style: kLabelStyle,
@@ -400,8 +311,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        // controller: branchController,
-                        initialValue: _currUser.branch,
+                        initialValue: _user.branch,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -432,8 +342,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: aboutController,
+                        initialValue: _user.about,
                         maxLength: 100,
                         maxLengthEnforced: true,
                         style: TextStyle(
@@ -449,7 +358,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(Icons.book),
                           ),
                         ),
-                        onFieldSubmitted:(val) {
+                        onChanged:(val) {
                           setState(() {
                             _about = val;
                           });
@@ -465,8 +374,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: cvLinkController,
+                        initialValue: _user.cvLink,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -480,6 +388,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(Icons.link),
                           ),
                         ),
+                        onChanged:(val) {
+                          setState(() {
+                            _cvLink=val;
+                          });
+
+                        }, 
                       
                       ),
                     ),
@@ -493,7 +407,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
                         textCapitalization: TextCapitalization.words,
-                        // controller: interestsController,
+                        initialValue: _user.interests,
                         maxLength: 100,
                         maxLengthEnforced: true,
                         style: TextStyle(
@@ -509,7 +423,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(Icons.face),
                           ),
                         ),
-                        
+                        onChanged:(val) {
+                          setState(() {
+                            _interests=val;
+                          });
+
+                        }, 
                       ),
                     ),
                      Container(
@@ -523,7 +442,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       child: TextFormField(
                         maxLength: 10,
                         maxLengthEnforced: true,
-                        // controller: contactController,
+                        initialValue: _user.contact,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -538,42 +457,15 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(Icons.phone),
                           ),
                         ),
+                        onChanged:(val) {
+                          setState(() {
+                            _contact=val;
+                          });
+
+                        }, 
                       ),
                     ),
-                     Container(
-                      padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.002),
-                      alignment: Alignment.topLeft,
-                      child:Text('Email',style: kLabelStyle,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: emailController,
-                        style: TextStyle(
-                          color: Colors.purple[200],
-                          fontFamily: 'OpenSans',
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Email',
-                          hintStyle: kHintTextStyle,
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Icon(Icons.email),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Please enter your email";
-                          }
-                          return null;
-                        },
-                       
-                      ),
-                    ),
+                    
                      Container(
                       padding: EdgeInsets.only(left:vpW*0.05,right:vpW*0.05, top: vpH*0.005),
                       alignment: Alignment.topLeft,
@@ -583,8 +475,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: fbIdController,
+                        initialValue: _user.fbId,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -599,7 +490,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(SocialMedia.facebook),
                           ),
                         ),
-                       
+                        onChanged:(val) {
+                          setState(() {
+                            _fbId=val;
+                          });
+
+                        }, 
                       ),
                     ),
                     Container(
@@ -611,8 +507,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: instaIdController,
+                        initialValue: _user.instaId,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -627,7 +522,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(SocialMedia.instagram),
                           ),
                         ),
-                       
+                        onChanged:(val) {
+                          setState(() {
+                            _instaId=val;
+                          });
+
+                        }, 
                       ),
                     ),
                     Container(
@@ -639,8 +539,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.005),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: linkedinIdController,
+                        initialValue: _user.linkedinId,
                         style: TextStyle(
                           color: Colors.purple[200],
                           fontFamily: 'OpenSans',
@@ -655,7 +554,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(SocialMedia.linkedin),
                           ),
                         ),
-                       
+                        onChanged:(val) {
+                          setState(() {
+                            _linkedinId=val;
+                          });
+
+                        }, 
                       ),
                     ),
                   
@@ -668,8 +572,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal:vpW*0.05, vertical: vpH*0.002),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
-                        // controller: quoteController,
+                        initialValue: _user.quote,
                         maxLength: 50,
                         maxLengthEnforced: true,
                         style: TextStyle(
@@ -686,7 +589,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: Icon(Icons.format_quote),
                           ),
                         ),
-                       
+                        onChanged:(val) {
+                          setState(() {
+                            _quote=val;
+                          });
+
+                        }, 
                       ),
                     ),
                     Container(
@@ -704,7 +612,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           }
                           else{
                             _formKey.currentState.save();
-                            await updateUserProfile();
+                            await updateProfile(_user);
                             showDialog(  
                               context: context,  
                               builder: (BuildContext context) {  

@@ -68,6 +68,7 @@ class _NotificationFormState extends State<NotificationForm> {
           date:_date,
         );  
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 

@@ -95,6 +95,7 @@ class _ContributionFormState extends State<ContributionForm> {
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 

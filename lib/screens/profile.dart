@@ -123,11 +123,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  _user.name,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: vpH * 0.025,
+                                Container(
+                                  width: vpW*0.5,
+                                  child: Text(
+                                    _user.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: vpH * 0.025,
+                                    ),
                                   ),
                                 ),
                                 Text(

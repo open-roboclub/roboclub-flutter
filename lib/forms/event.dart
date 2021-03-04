@@ -164,6 +164,7 @@ class _EventFormState extends State<EventForm> {
           date:_date,
         );
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
