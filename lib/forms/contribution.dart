@@ -31,17 +31,16 @@ class _ContributionFormState extends State<ContributionForm> {
   String fileName='';
   bool filePicked=false;
  
- final nameController = TextEditingController();
- final descriptionController = TextEditingController();
- final amountController = TextEditingController();
- TextEditingController date = TextEditingController();
+  final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final amountController = TextEditingController();
+  TextEditingController date = TextEditingController();
   // upload image
   
   Future getImage()async{
     var rng = new Random();
     String randomName="";
     for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
       randomName += rng.nextInt(100).toString();
     }
      FilePickerResult result =
@@ -50,7 +49,9 @@ class _ContributionFormState extends State<ContributionForm> {
         if(result!=null)
         {
           filePicked=true;
-          file = File(result.files.single.path);
+          setState(() {
+            file = File(result.files.single.path);
+          });
           fileName = '$randomName';
         }
       }).catchError((error)
@@ -60,13 +61,11 @@ class _ContributionFormState extends State<ContributionForm> {
   }
   Future saveImg(List<int> asset, String name) async {
 
-  StorageReference reference = FirebaseStorage.instance.ref().child(name);
-  StorageUploadTask uploadTask = reference.putData(asset);
-  _img = await (await uploadTask.onComplete).ref.getDownloadURL();
-  print(_img);
-
+    StorageReference reference = FirebaseStorage.instance.ref().child(name);
+    StorageUploadTask uploadTask = reference.putData(asset);
+    _img = await (await uploadTask.onComplete).ref.getDownloadURL();
   
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +93,8 @@ class _ContributionFormState extends State<ContributionForm> {
     Widget okButton =FlatButton(  
       child: Text("OK",style: kLabelStyle,),  
       onPressed: () {  
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ContributorScreen()));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 
@@ -308,7 +308,7 @@ class _ContributionFormState extends State<ContributionForm> {
                             getImage();
                           },
                         ),
-                        fileName.isEmpty
+                        file==null
                         ?  Text('Image not Selected.',style: TextStyle(color: Colors.grey[600],fontSize: vpH*0.02,fontWeight:FontWeight.bold))
                         :Text('Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.02, fontWeight:FontWeight.bold))
                       ],),

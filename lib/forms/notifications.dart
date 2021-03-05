@@ -67,7 +67,8 @@ class _NotificationFormState extends State<NotificationForm> {
           link: _link,
           date:_date,
         );  
-        Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationScreen()));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },  
     );
 

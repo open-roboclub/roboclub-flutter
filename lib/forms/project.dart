@@ -72,15 +72,16 @@ class _ProjectFormState extends State<ProjectForm> {
     }
 
     FilePickerResult result = await FilePicker.platform
-        .pickFiles(allowMultiple: true, type: FileType.image)
-        .then((result) async {
-      if (result != null) {
-        imagePicked = true;
-        imageList = result.paths.map((path) => File(path)).toList();
-        print(imageList.length);
-        fileName = '$randomName';
-      }
-    }).catchError((error) {
+      .pickFiles(allowMultiple: true, type: FileType.image)
+      .then((result) async {
+        if (result != null) {
+          imagePicked = true;
+          setState(() {
+            imageList = result.paths.map((path) => File(path)).toList();
+          });
+          fileName = '$randomName';
+        }
+      }).catchError((error) {
       print("Error: " + error.toString());
     });
   }
@@ -94,8 +95,6 @@ class _ProjectFormState extends State<ProjectForm> {
       String url = await (await uploadTask.onComplete).ref.getDownloadURL();
       _imageUrls.add(url);
     }
-    print(_imageUrls);
-    print("Images posted");
   }
 
   // upload pdf
@@ -111,7 +110,10 @@ class _ProjectFormState extends State<ProjectForm> {
         allowedExtensions: ['pdf', 'doc']).then((result) async {
       if (result != null) {
         filePicked = true;
-        pdfFile = File(result.files.single.path);
+        setState(() {
+          pdfFile = File(result.files.single.path);
+        });
+       
         pdfFileName = '$randomName.pdf';
       }
     }).catchError((error) {
@@ -123,7 +125,7 @@ class _ProjectFormState extends State<ProjectForm> {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
     StorageUploadTask uploadTask = reference.putData(asset);
     _fileUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-    print(_fileUrl);
+   
   }
 
   void addMember(String member, String linkedinId) {
@@ -151,8 +153,8 @@ class _ProjectFormState extends State<ProjectForm> {
         style: kLabelStyle,
       ),
       onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProjectScreen()));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
@@ -293,7 +295,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             getImage();
                           },
                         ),
-                        fileName.isEmpty
+                        imageList==null
                             ? Text('No Image Selected.',
                                 style: TextStyle(
                                     color: Colors.grey[600],
@@ -323,7 +325,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             getPdfAndUpload();
                           },
                         ),
-                        pdfFileName.isEmpty
+                        pdfFile==null
                             ? Text('No File Selected.',
                                 style: TextStyle(
                                     color: Colors.grey[600],
