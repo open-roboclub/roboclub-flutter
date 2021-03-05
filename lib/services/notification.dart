@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:device_info/device_info.dart';
+
 import '../models/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,13 +12,20 @@ final Firestore _firestore = Firestore.instance;
 
 class NotificationService {
   Future<Null> postDeviceToken({String fcmToken}) async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    print(androidInfo.androidId);
     Map<String, dynamic> data = {
       "deviceToken": fcmToken,
       "createdAt": FieldValue.serverTimestamp(),
-      "platform": Platform.operatingSystem
+      "platform": Platform.operatingSystem,
+      "androidId": androidInfo.androidId,
     };
 
-    await _firestore.collection("/pushTokens").document(fcmToken).setData(data);
+    await _firestore
+        .collection("/pushTokens")
+        .document(androidInfo.androidId)
+        .setData(data);
   }
 
   Future<List<String>> getFCMTokens() async {
