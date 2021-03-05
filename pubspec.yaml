@@ -50,6 +50,8 @@ dependencies:
   flutter_dotenv: ^3.1.0
   carousel_slider: ^2.1.0
   percent_indicator: ^2.1.9+1
+
+  
   progress_dialog: ^1.2.0
 
 dev_dependencies:

@@ -13,7 +13,7 @@ class ProfileForm extends StatefulWidget {
 
   final User member;
 
-  const ProfileForm({Key key,this.member,})
+  const ProfileForm({Key key ,this.member,})
     : super(key: key);
   @override
   _ProfileFormState createState() => _ProfileFormState(member);
