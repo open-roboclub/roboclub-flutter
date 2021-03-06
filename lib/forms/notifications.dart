@@ -220,6 +220,7 @@ class _NotificationFormState extends State<NotificationForm> {
                   ),
                   Container(
                     padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
@@ -253,7 +254,7 @@ class _NotificationFormState extends State<NotificationForm> {
                       ),
                       color: Color(0xFFFF9C01),
                       child: Text(
-                        "Update",
+                        "Send",
                         style: TextStyle(
                           color: Colors.white,
                           letterSpacing: vpW * 0.005,

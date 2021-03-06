@@ -79,7 +79,7 @@ class _AboutScreenState extends State<AboutScreen>
                                       horizontal: vpW * 0.028,
                                       vertical: vpH * 0.005),
                                   child: Text(
-                                      "Thank you for all the people who contributed in making AMURoboclub what it is today.We couldn't have reached this place without your support.",
+                                      "Have you ever wondered how robots are made and function? Do you want to build your robot or understand the science and technology behind it? If yes, then you have visited the right place!",
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,
                                           fontSize: vpH * 0.020)),
@@ -98,13 +98,15 @@ class _AboutScreenState extends State<AboutScreen>
                                           onTap: () {
                                             launch('https://amuroboclub.in/');
                                           },
-                                          child: Image.asset(
-                                            'assets/img/NoPath.png',
-                                            // width: vpW * 0.24,
-                                            // height: vpH * 0.13,
-                                            width: _animation.value,
-                                            height: _animation.value,
-                                            // fit: BoxFit.fill,
+                                          child: Column(
+                                            children: [
+                                              Text("Click ME !!",style: TextStyle(fontSize:vpH*0.02,color: Colors.pink[300],fontWeight: FontWeight.w600,),),
+                                              Image.asset(
+                                                'assets/img/NoPath.png',
+                                                width: _animation.value,
+                                                height: _animation.value,
+                                              ),
+                                            ],
                                           ),
                                         );
                                       }),
@@ -301,12 +303,12 @@ class _AboutScreenState extends State<AboutScreen>
                                 child: Column(
                                   children: [
                                     DeveloperCard(
-                                        name: "Samiksha Agrawal",
-                                        img: 'assets/img/samiksha.jpeg'),
-                                    DeveloperCard(
                                       name: "Rishabh Sharma",
                                       img: 'assets/img/rishabh.jpg',
                                     ),
+                                    DeveloperCard(
+                                        name: "Samiksha Agrawal",
+                                        img: 'assets/img/samiksha.jpeg'),
                                   ],
                                 )),
                           ],

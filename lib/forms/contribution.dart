@@ -336,6 +336,7 @@ class _ContributionFormState extends State<ContributionForm> {
                   ),
                   Container(
                     padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
