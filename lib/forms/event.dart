@@ -106,7 +106,9 @@ class _EventFormState extends State<EventForm> {
         .then((result) async {
       if (result != null) {
         filePicked = true;
-        file = File(result.files.single.path);
+        setState(() {
+          file = File(result.files.single.path);
+        });
         fileName = '$randomName';
       }
     }).catchError((error) {
@@ -153,8 +155,8 @@ class _EventFormState extends State<EventForm> {
           img: _posterUrl,
           screen: 'event',
         );
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EventScreen()));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
@@ -498,7 +500,7 @@ class _EventFormState extends State<EventForm> {
                             getImage();
                           },
                         ),
-                        fileName.isEmpty
+                        file == null
                             ? Text('Poster Image not Selected.',
                                 style: TextStyle(
                                     color: Colors.grey[400],

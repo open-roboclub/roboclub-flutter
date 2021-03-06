@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/profile.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
+import 'package:roboclub_flutter/screens/profile.dart';
 import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
@@ -42,7 +44,10 @@ class Team2Card extends StatelessWidget {
                 icon: Icon(MyFlutterApp.edit),
                 color: Color(0xFFFF9C01),
                 iconSize: vpW * 0.060,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileScreen(viewMode: true,member: member,),),);
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileForm(member: member,),),);
+                },
               )
             : Container(
                 height: 0,

@@ -63,8 +63,8 @@ class _NotificationFormState extends State<NotificationForm> {
               "https://www.biznessapps.com/blog/wp-content/uploads/2016/01/push.png",
           screen: 'notification',
         );
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => NotificationScreen()));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
