@@ -82,7 +82,8 @@ class _AboutScreenState extends State<AboutScreen>
                                       "Have you ever wondered how robots are made and function? Do you want to build your robot or understand the science and technology behind it? If yes, then you have visited the right place!",
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,
-                                          fontSize: vpH * 0.020)),
+                                          fontSize: vpH * 0.020,
+                                          fontStyle: FontStyle.italic)),
                                 ),
                               ),
                               Expanded(

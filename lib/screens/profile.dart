@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var vpW = getViewportWidth(context);
     TextStyle lowPriorityText = TextStyle(
       fontStyle: FontStyle.italic,
-      fontSize: vpH * 0.02,
+      fontSize: vpH * 0.023,
       color: Colors.grey,
     );
     var _userProvider, _user, _currUser;
@@ -118,17 +118,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Container(
+                          width: vpW*0.5,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  _user.name,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: vpH * 0.025,
+                                Container(
+                                  child: Text(
+                                    _user.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: vpH * 0.027,
+                                    ),
                                   ),
                                 ),
                                 Text(
