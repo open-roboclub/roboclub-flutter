@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -92,9 +93,25 @@ class _TutorialScreenState extends State<TutorialScreen> {
                                   child: Column(
                                     children: [
                                       Container(
-                                        child: Image.network(
-                                            'https://img.youtube.com/vi/${list[index]['videoId']}/0.jpg'),
-                                      ),
+                                          child: CachedNetworkImage(
+                                        imageUrl:
+                                            'https://img.youtube.com/vi/${list[index]['videoId']}/0.jpg',
+                                        placeholder:
+                                            (BuildContext context, String str) {
+                                          return Container(
+                                            height: vpH * 0.4,
+                                            width: vpW * 0.7,
+                                            child: SvgPicture.asset(
+                                              'assets/illustrations/playlist.svg',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          );
+                                        },
+                                        fadeInCurve: Curves.easeIn,
+                                        fadeInDuration:
+                                            Duration(milliseconds: 500),
+                                        fit: BoxFit.cover,
+                                      )),
                                       ListTile(
                                         tileColor: Colors.grey.withOpacity(0.4),
                                         leading: Icon(

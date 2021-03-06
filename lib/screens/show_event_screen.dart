@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -29,17 +30,20 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
               Hero(
                 tag: widget.eventinfo.eventName,
                 child: Container(
-                    height: vpH * 0.35,
-                    width: vpW,
-                    child: widget.eventinfo.posterURL == ""
-                        ? SvgPicture.asset(
-                            'assets/illustrations/events.svg',
-                            fit: BoxFit.contain,
-                          )
-                        : Image.network(
-                            widget.eventinfo.posterURL,
-                            fit: BoxFit.cover,
-                          )),
+                  height: vpH * 0.35,
+                  width: vpW,
+                  child: widget.eventinfo.posterURL == ""
+                      ? SvgPicture.asset(
+                          'assets/illustrations/events.svg',
+                          fit: BoxFit.contain,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: widget.eventinfo.posterURL,
+                          fadeInCurve: Curves.easeIn,
+                          fadeInDuration: Duration(milliseconds: 500),
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
               Container(
                 height: vpH,

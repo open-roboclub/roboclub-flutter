@@ -490,7 +490,7 @@ class _EventFormState extends State<EventForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Pick a poster Image',
+                          'Pick a poster Img',
                           style: kLabelStyle,
                         ),
                         IconButton(
@@ -500,12 +500,12 @@ class _EventFormState extends State<EventForm> {
                           },
                         ),
                         file == null
-                            ? Text('Poster Image not Selected.',
+                            ? Text('Img not Selected.',
                                 style: TextStyle(
                                     color: Colors.grey[400],
                                     fontSize: vpH * 0.016,
                                     fontWeight: FontWeight.bold))
-                            : Text('Poster Image Selected.',
+                            : Text('Img Selected.',
                                 style: TextStyle(
                                     color: Colors.limeAccent[400],
                                     fontSize: vpH * 0.016,

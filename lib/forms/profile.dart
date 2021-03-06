@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -185,7 +186,13 @@ class _ProfileFormState extends State<ProfileForm> {
                                   radius: 80,
                                   backgroundImage: _user.profileImageUrl.isEmpty
                                       ? AssetImage('assets/img/teamMember.png')
-                                      : NetworkImage(_user.profileImageUrl),
+                                      : CachedNetworkImage(
+                                          imageUrl: _user.profileImageUrl,
+                                          fadeInCurve: Curves.easeIn,
+                                          fadeInDuration:
+                                              Duration(milliseconds: 500),
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                         ),
                       ),

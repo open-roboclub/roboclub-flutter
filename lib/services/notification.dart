@@ -13,7 +13,6 @@ class NotificationService {
   Future<Null> postDeviceToken({String fcmToken}) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    print(androidInfo.androidId);
     Map<String, dynamic> data = {
       "deviceToken": fcmToken,
       "createdAt": FieldValue.serverTimestamp(),
@@ -43,9 +42,6 @@ class NotificationService {
       @required String img,
       @required String screen}) async {
     List<String> tokens = await getFCMTokens();
-    tokens.forEach((element) {
-      print(element);
-    });
     final Map<String, dynamic> body = {
       // "to": token,
       "registration_ids": tokens,

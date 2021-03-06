@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -58,15 +59,18 @@ class _EventCardState extends State<EventCard> {
                       height: vpH * 0.15,
                       width: vpW * 0.3,
                       child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: widget.event.posterURL == ""
-                              ? SvgPicture.asset(
-                                  'assets/illustrations/events.svg',
-                                  fit: BoxFit.contain)
-                              : Image.network(
-                                  widget.event.posterURL,
-                                  fit: BoxFit.cover,
-                                )),
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: widget.event.posterURL == ""
+                            ? SvgPicture.asset(
+                                'assets/illustrations/events.svg',
+                                fit: BoxFit.contain)
+                            : CachedNetworkImage(
+                                imageUrl: widget.event.posterURL,
+                                fadeInCurve: Curves.easeIn,
+                                fadeInDuration: Duration(milliseconds: 500),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     ),
                   ),
                 ),
