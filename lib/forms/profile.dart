@@ -370,6 +370,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.002),
                     child: TextFormField(
                       initialValue: _user.about,
+                      maxLines: null,
                       maxLength: 500,
                       maxLengthEnforced: true,
                       style: TextStyle(
@@ -441,6 +442,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       initialValue: _user.interests,
+                      maxLines: null,
                       maxLength: 500,
                       maxLengthEnforced: true,
                       style: TextStyle(

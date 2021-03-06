@@ -156,31 +156,33 @@ class _NotificationFormState extends State<NotificationForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    child: TextFormField(
-                      textCapitalization: TextCapitalization.words,
-                      controller: msgController,
-                      maxLines: 3,
-                      style: TextStyle(
-                        color: Colors.purple[200],
-                        fontFamily: 'OpenSans',
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: ' Enter Notigication Message',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                    child: Container(
+                      child: TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        controller: msgController,
+                        maxLines: null,
+                        style: TextStyle(
+                          color: Colors.purple[200],
+                          fontFamily: 'OpenSans',
                         ),
+                        decoration: InputDecoration(
+                          fillColor: Color(0xFFE8EAF6),
+                          hintText: ' Enter Notigication Message',
+                          hintStyle: kHintTextStyle,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter some message';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _msg = value;
+                        },
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter some message';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _msg = value;
-                      },
                     ),
                   ),
                   Container(
@@ -217,61 +219,6 @@ class _NotificationFormState extends State<NotificationForm> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Date',
-                      style: kLabelStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    child: TextFormField(
-                      controller: date,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: vpH * 0.02,
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Pick a Date',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Icon(Icons.calendar_today),
-                        ),
-                      ),
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime dateTime = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2030),
-                        );
-                        DateFormat formatter =
-                            DateFormat("yyyy-MM-dd hh:mm:ss");
-                        String formatted = formatter.format(dateTime);
-                        print(formatted);
-                        date.text = formatted;
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please select date';
-                        }
-                        return null;
-                      },
-                      onSaved: (String value) {
-                        _date = value;
-                      },
-                    ),
-                  ),
-                  Container(
                     padding: EdgeInsets.all(15),
                     child: RaisedButton(
                       elevation: vpH * 0.5,
@@ -285,7 +232,7 @@ class _NotificationFormState extends State<NotificationForm> {
                               title: _title,
                               msg: _msg,
                               link: _link,
-                              date: _date);
+                              date: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()));
 
                           print("saved");
                           titleController.clear();
