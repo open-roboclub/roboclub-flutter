@@ -136,7 +136,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
                           child: FlatButton(
                             color: Color(0xFFFF9C01),
                             child: Container(
-                              width: vpW * 0.09,
+                              width: vpW * 0.12,
                               child: Text(
                                 "View",
                                 style: TextStyle(

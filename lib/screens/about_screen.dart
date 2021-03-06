@@ -46,85 +46,95 @@ class _AboutScreenState extends State<AboutScreen>
           strTitle: "About Us",
           isDrawer: true,
           isNotification: false,
+          isFaq: true,
           scaffoldKey: _scaffoldKey,
         ),
         body: Container(
           child: CustomScrollView(
             physics: BouncingScrollPhysics(),
             slivers: <Widget>[
-              SliverAppBar(
-                leading: new Container(),
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                expandedHeight: vpH * 0.60,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.020),
-                    child: Container(
-                      width: vpW * 0.90,
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text("Introduction", style: title),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: vpW * 0.028,
-                                      vertical: vpH * 0.005),
-                                  child: Text(
-                                      "Have you ever wondered how robots are made and function? Do you want to build your robot or understand the science and technology behind it? If yes, then you have visited the right place!",
-                                      style: TextStyle(
+              Container(
+                child: SliverAppBar(
+                  leading: new Container(),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  expandedHeight: vpH * 0.60,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: vpW * 0.05, vertical: vpH * 0.020),
+                      child: Container(
+                        width: vpW * 0.90,
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text("Introduction", style: title),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: vpW * 0.028,
+                                        vertical: vpH * 0.005),
+                                    child: Container(
+                                      child: Text(
+                                        "Have you ever wondered how robots are made and function? Do you want to build your robot or understand the science and technology behind it? If yes, then you have visited the right place!",
+                                        style: TextStyle(
                                           fontWeight: FontWeight.normal,
                                           fontSize: vpH * 0.020,
-                                          fontStyle: FontStyle.italic)),
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: vpW * 0.028,
-                                      vertical: vpH * 0.015),
-                                  child: AnimatedBuilder(
-                                      animation: _animation,
-                                      builder: (context, _) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            launch('https://amuroboclub.in/');
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Text("Click ME !!",style: TextStyle(fontSize:vpH*0.02,color: Colors.pink[300],fontWeight: FontWeight.w600,),),
-                                              Image.asset(
-                                                'assets/img/NoPath.png',
-                                                width: _animation.value,
-                                                height: _animation.value,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }),
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: vpW * 0.028,
+                                        vertical: vpH * 0.015),
+                                    child: AnimatedBuilder(
+                                        animation: _animation,
+                                        builder: (context, _) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              launch('https://amuroboclub.in/');
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Text("Click ME !!",style: TextStyle(fontSize:vpH*0.02,color: Colors.pink[300],fontWeight: FontWeight.w600,),),
+                                                Image.asset(
+                                                  'assets/img/NoPath.png',
+                                                  width: _animation.value,
+                                                  height: _animation.value,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }),
+                                  ),
                                 ),
+                              ],
+                            ),
+                            Container(
+                              color: Colors.pink,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: vpW * 0.028, vertical: vpH * 0.005),
+                                child: Text(
+                                    "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: vpH * 0.020)),
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: vpW * 0.028, vertical: vpH * 0.005),
-                            child: Text(
-                                "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University.",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: vpH * 0.020)),
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

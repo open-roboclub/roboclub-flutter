@@ -68,7 +68,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var textStyle =
-        TextStyle(fontSize: vpH * 0.022, fontWeight: FontWeight.normal);
+        TextStyle(fontSize: vpH * 0.02, fontWeight: FontWeight.normal);
     User _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(

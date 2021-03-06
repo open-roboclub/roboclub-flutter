@@ -112,12 +112,12 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle1: TextStyle(
-      color: Color(0xddFF9C01),
-      fontSize: null,
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-    ),
+    // subtitle1: TextStyle(
+    //   color: Color(0xddFF9C01),
+    //   fontSize: null,
+    //   fontWeight: FontWeight.w400,
+    //   fontStyle: FontStyle.normal,
+    // ),
     bodyText1: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,

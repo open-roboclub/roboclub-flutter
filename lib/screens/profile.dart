@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var vpW = getViewportWidth(context);
     TextStyle lowPriorityText = TextStyle(
       fontStyle: FontStyle.italic,
-      fontSize: vpH * 0.023,
+      fontSize: vpH * 0.021,
       color: Colors.grey,
     );
     var _userProvider, _user, _currUser;
