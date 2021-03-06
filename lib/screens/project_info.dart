@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -117,10 +118,15 @@ class _ProjectInfoState extends State<ProjectInfo> {
                                         margin:
                                             EdgeInsets.symmetric(horizontal: 5),
                                         child: FittedBox(
-                                          fit: BoxFit.fill,
-                                          child: Image.network(
-                                              widget.project.projectImg[index]),
-                                        ));
+                                            fit: BoxFit.fill,
+                                            child: CachedNetworkImage(
+                                              imageUrl: widget
+                                                  .project.projectImg[index],
+                                              fadeInCurve: Curves.easeIn,
+                                              fadeInDuration:
+                                                  Duration(milliseconds: 500),
+                                              fit: BoxFit.cover,
+                                            )));
                                   },
                                 ),
                               ])),

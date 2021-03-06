@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:date_format/date_format.dart';
 import 'package:roboclub_flutter/services/notification.dart';
@@ -22,15 +21,15 @@ class _EventFormState extends State<EventForm> {
 
   String _eventName,
       _details,
-      _posterUrl="",
+      _posterUrl = "",
       _setEndTime,
       _place,
       _setStartTime,
       _date,
-      fileName='',
+      fileName = '',
       _regFormLink;
 
-  bool filePicked =false;
+  bool filePicked = false;
   File file;
   String _hour, _minute, _time;
   String dateTime;
@@ -44,8 +43,6 @@ class _EventFormState extends State<EventForm> {
   TextEditingController eventNameController = TextEditingController();
   TextEditingController detailController = TextEditingController();
   TextEditingController regFormController = TextEditingController();
-  
- 
 
   Future<Null> _selectStartTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
@@ -96,39 +93,33 @@ class _EventFormState extends State<EventForm> {
   }
   // upload image
 
-  Future getImage()async{
-
+  Future getImage() async {
     var rng = new Random();
-    String randomName="";
+    String randomName = "";
     for (var i = 0; i < 20; i++) {
       randomName += rng.nextInt(100).toString();
     }
-   
-    FilePickerResult result =
-      await FilePicker.platform.pickFiles(type: FileType.image)
-      .then((result) async {
-        if(result!=null)
-        {
-          filePicked=true;
-          setState(() {
-            file = File(result.files.single.path);
-          }); 
-          fileName = '$randomName';
-        }
-      }).catchError((error)
-      {
-        print("Error: "+error.toString());
-      });
-   
-    }
+
+    await FilePicker.platform
+        .pickFiles(type: FileType.image)
+        .then((result) async {
+      if (result != null) {
+        filePicked = true;
+        setState(() {
+          file = File(result.files.single.path);
+        });
+        fileName = '$randomName';
+      }
+    }).catchError((error) {
+      print("Error: " + error.toString());
+    });
+  }
+
   Future saveImg(List<int> asset, String name) async {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
     StorageUploadTask uploadTask = reference.putData(asset);
     _posterUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-    
   }
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -156,14 +147,12 @@ class _EventFormState extends State<EventForm> {
         "OK",
         style: kLabelStyle,
       ),
-      onPressed: () async{
+      onPressed: () async {
         await NotificationService().pushNotification(
-          title:  _eventName,
+          title: _eventName,
           msg: _details,
-          img:_posterUrl,
+          img: _posterUrl,
           screen: 'event',
-          link: _regFormLink,
-          date:_date,
         );
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -337,7 +326,7 @@ class _EventFormState extends State<EventForm> {
                       style: kLabelStyle,
                     ),
                   ),
-                 Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
@@ -366,7 +355,8 @@ class _EventFormState extends State<EventForm> {
                           firstDate: DateTime(1990),
                           lastDate: DateTime(2030),
                         );
-                        DateFormat formatter = DateFormat("yyyy-MM-dd hh:mm:ss");
+                        DateFormat formatter =
+                            DateFormat("yyyy-MM-dd hh:mm:ss");
                         String formatted = formatter.format(dateTime);
                         print(formatted);
                         date.text = formatted;
@@ -460,7 +450,7 @@ class _EventFormState extends State<EventForm> {
                       },
                     ),
                   ),
-                   Container(
+                  Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.005),
                     alignment: Alignment.topLeft,
@@ -487,7 +477,6 @@ class _EventFormState extends State<EventForm> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                    
                       onSaved: (value) {
                         _regFormLink = value;
                       },
@@ -501,7 +490,7 @@ class _EventFormState extends State<EventForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Pick a poster Image',
+                          'Pick a poster Img',
                           style: kLabelStyle,
                         ),
                         IconButton(
@@ -510,20 +499,26 @@ class _EventFormState extends State<EventForm> {
                             getImage();
                           },
                         ),
-                        file==null
-                        ? Text('Poster Image not Selected.',style: TextStyle(color: Colors.grey[400],fontSize: vpH*0.016,fontWeight:FontWeight.bold))
-                        :Text('Poster Image Selected.',style: TextStyle(color: Colors.limeAccent[400],fontSize: vpH*0.016, fontWeight:FontWeight.bold))
+                        file == null
+                            ? Text('Img not Selected.',
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: vpH * 0.016,
+                                    fontWeight: FontWeight.bold))
+                            : Text('Img Selected.',
+                                style: TextStyle(
+                                    color: Colors.limeAccent[400],
+                                    fontSize: vpH * 0.016,
+                                    fontWeight: FontWeight.bold))
                       ],
                     ),
                   ),
-                 
                   Container(
                     padding: EdgeInsets.all(15),
                     child: RaisedButton(
                       elevation: vpH * 0.5,
-                      onPressed: ()async {
-                        if(filePicked)
-                        {
+                      onPressed: () async {
+                        if (filePicked) {
                           await saveImg(file.readAsBytesSync(), fileName);
                         }
                         if (!_formKey.currentState.validate()) {
@@ -541,7 +536,7 @@ class _EventFormState extends State<EventForm> {
                             posterURL: _posterUrl,
                             regFormLink: _regFormLink,
                           );
-                          
+
                           print("saved");
                           eventNameController.clear();
                           detailController.clear();
@@ -550,14 +545,13 @@ class _EventFormState extends State<EventForm> {
                           _endTimeController.clear();
                           placeController.clear();
                           regFormController.clear();
-                          
+
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return alert;
                             },
                           );
-                          
                         }
                       },
                       padding: EdgeInsets.all(15),
@@ -569,7 +563,7 @@ class _EventFormState extends State<EventForm> {
                         "Create",
                         style: TextStyle(
                           color: Colors.white,
-                          letterSpacing: vpW*0.005,
+                          letterSpacing: vpW * 0.005,
                           fontSize: vpH * 0.025,
                           fontWeight: FontWeight.bold,
                         ),

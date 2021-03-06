@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/profile.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
+import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
 import '../helper/dimensions.dart';
@@ -17,6 +19,7 @@ class Team2Card extends StatelessWidget {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var _currUser = Provider.of<UserProvider>(context).getUser;
+    User user;
     TextStyle _titlestyle =
         TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.028);
     return Padding(
@@ -44,9 +47,31 @@ class Team2Card extends StatelessWidget {
                 icon: Icon(MyFlutterApp.edit),
                 color: Color(0xFFFF9C01),
                 iconSize: vpW * 0.060,
-                onPressed: () {
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileScreen(viewMode: true,member: member,),),);
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ProfileForm(member: member,),),);
+                onPressed: () async {
+                  final Firestore _firestore = Firestore.instance;
+
+                  DocumentSnapshot snap = await _firestore
+                      .collection('/users')
+                      .document(member['email'])
+                      .get();
+                  user = User.fromMap(snap.data);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        viewMode: true,
+                        member: user,
+                      ),
+                    ),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileForm(
+                        member: user,
+                      ),
+                    ),
+                  );
                 },
               )
             : Container(

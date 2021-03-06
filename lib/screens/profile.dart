@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -111,8 +112,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(30),
                             child: CircleAvatar(
                               radius: 50,
-                              backgroundImage:
-                                  NetworkImage(_user.profileImageUrl),
+                              backgroundImage: CachedNetworkImageProvider(
+                                  _user.profileImageUrl),
                             ),
                           ),
                         ),
@@ -540,12 +541,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 );
                               });
                             }
-                            if(newValue == 'Edit Profile'){
-                             
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfileForm(member: _user,)));
+                            if (newValue == 'Edit Profile') {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileForm(
+                                            member: _user,
+                                          )));
                             }
                           },
-                          items: <String>['Edit Profile','Sign Out']
+                          items: <String>['Edit Profile', 'Sign Out']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,

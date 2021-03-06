@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/models/project.dart';
@@ -61,9 +62,14 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                             height: vpH * 0.038,
                             width: vpW * 0.080,
                             child: widget.ongoingProject.projectImg.length == 0
-                                ? SvgPicture.asset('assets/illustrations/project.svg',fit: BoxFit.contain)
-                                : Image.network(
-                                    widget.ongoingProject.projectImg[0],
+                                ? SvgPicture.asset(
+                                    'assets/illustrations/project.svg',
+                                    fit: BoxFit.contain)
+                                : CachedNetworkImage(
+                                    imageUrl:
+                                        widget.ongoingProject.projectImg[0],
+                                    fadeInCurve: Curves.easeIn,
+                                    fadeInDuration: Duration(milliseconds: 500),
                                     fit: BoxFit.cover,
                                   )),
                       ),

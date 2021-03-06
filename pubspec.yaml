@@ -51,6 +51,7 @@ dependencies:
   carousel_slider: ^2.1.0
   percent_indicator: ^2.1.9+1
   cached_network_image: ^2.5.0
+  device_info: ^1.0.0
 
   
   progress_dialog: ^1.2.0

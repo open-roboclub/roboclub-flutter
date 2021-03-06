@@ -27,8 +27,6 @@ class TutorialService {
         list.add(element.data);
       });
     });
-    print(list[0]['title']);
-    print(list[0]['url']);
     return list;
   }
 }
