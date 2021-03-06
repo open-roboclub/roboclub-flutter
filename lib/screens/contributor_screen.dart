@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -26,10 +25,9 @@ class _ContributorScreenState extends State<ContributorScreen> {
   @override
   void initState() {
     ContributorService().fetchContributors().then((value) {
-      value.forEach((element){
+      value.forEach((element) {
         DateTime _parsed = DateTime.parse(element.date);
         element.date = DateFormat('yMMMd').format(_parsed);
-
       });
       addContriList(value);
       setState(() {
@@ -41,7 +39,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
 
   void addContriList(List<Contributor> contribution) {
     contribution.forEach((item) {
-     contributorsList.add(item);
+      contributorsList.add(item);
     });
   }
 
@@ -128,30 +126,30 @@ class _ContributorScreenState extends State<ContributorScreen> {
                 height: vpH * 0.6,
                 width: vpW,
                 child: isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : contributorsList.length == 0
                     ? Center(
-                        child: Container(
-                          width: vpW * 0.7,
-                          height: vpH * 0.6,
-                          child: SvgPicture.asset(
-                            'assets/illustrations/transfer_money.svg',
-                            fit: BoxFit.contain,
+                        child: CircularProgressIndicator(),
+                      )
+                    : contributorsList.length == 0
+                        ? Center(
+                            child: Container(
+                              width: vpW * 0.7,
+                              height: vpH * 0.6,
+                              child: SvgPicture.asset(
+                                'assets/illustrations/transfer_money.svg',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: contributorsList.length,
+                            itemBuilder: (context, index) {
+                              return ContriCard(
+                                contributor: contributorsList[index],
+                              );
+                            },
                           ),
-                        ),
-                    )
-                  : ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: contributorsList.length,
-                  itemBuilder: (context, index) {
-                    return ContriCard(
-                      contributor: contributorsList[index],
-                    );
-                  },
-                ),
               )
             ],
           ),

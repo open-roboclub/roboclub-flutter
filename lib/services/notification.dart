@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
 
-import '../models/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

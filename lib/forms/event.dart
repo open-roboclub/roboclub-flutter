@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:date_format/date_format.dart';
 import 'package:roboclub_flutter/services/notification.dart';
@@ -101,7 +100,7 @@ class _EventFormState extends State<EventForm> {
       randomName += rng.nextInt(100).toString();
     }
 
-    FilePickerResult result = await FilePicker.platform
+    await FilePicker.platform
         .pickFiles(type: FileType.image)
         .then((result) async {
       if (result != null) {

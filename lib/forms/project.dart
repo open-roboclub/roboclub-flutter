@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
-import 'package:roboclub_flutter/screens/project_screen.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/project.dart';
@@ -60,7 +59,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final projectImgController = TextEditingController();
   final linkController = TextEditingController();
   TextEditingController date = TextEditingController();
-  TextEditingController _teamMember = new TextEditingController();
+  // TextEditingController _teamMember = new TextEditingController();
   // TextEditingController memberName = new TextEditingController();
 
   // upload image
@@ -71,17 +70,17 @@ class _ProjectFormState extends State<ProjectForm> {
       randomName += rng.nextInt(100).toString();
     }
 
-    FilePickerResult result = await FilePicker.platform
-      .pickFiles(allowMultiple: true, type: FileType.image)
-      .then((result) async {
-        if (result != null) {
-          imagePicked = true;
-          setState(() {
-            imageList = result.paths.map((path) => File(path)).toList();
-          });
-          fileName = '$randomName';
-        }
-      }).catchError((error) {
+    await FilePicker.platform
+        .pickFiles(allowMultiple: true, type: FileType.image)
+        .then((result) async {
+      if (result != null) {
+        imagePicked = true;
+        setState(() {
+          imageList = result.paths.map((path) => File(path)).toList();
+        });
+        fileName = '$randomName';
+      }
+    }).catchError((error) {
       print("Error: " + error.toString());
     });
   }
@@ -105,7 +104,7 @@ class _ProjectFormState extends State<ProjectForm> {
     for (var i = 0; i < 20; i++) {
       randomName += rng.nextInt(100).toString();
     }
-    FilePickerResult result = await FilePicker.platform.pickFiles(
+    await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc']).then((result) async {
       if (result != null) {
@@ -113,7 +112,7 @@ class _ProjectFormState extends State<ProjectForm> {
         setState(() {
           pdfFile = File(result.files.single.path);
         });
-       
+
         pdfFileName = '$randomName.pdf';
       }
     }).catchError((error) {
@@ -125,7 +124,6 @@ class _ProjectFormState extends State<ProjectForm> {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
     StorageUploadTask uploadTask = reference.putData(asset);
     _fileUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-   
   }
 
   void addMember(String member, String linkedinId) {
@@ -295,7 +293,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             getImage();
                           },
                         ),
-                        imageList==null
+                        imageList == null
                             ? Text('No Image Selected.',
                                 style: TextStyle(
                                     color: Colors.grey[600],
@@ -325,7 +323,7 @@ class _ProjectFormState extends State<ProjectForm> {
                             getPdfAndUpload();
                           },
                         ),
-                        pdfFile==null
+                        pdfFile == null
                             ? Text('No File Selected.',
                                 style: TextStyle(
                                     color: Colors.grey[600],
