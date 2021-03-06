@@ -38,6 +38,7 @@ class _ProfileFormState extends State<ProfileForm> {
   String _position = "";
   String _quote = "";
 
+
   bool filePicked = false;
 
   StorageUploadTask uploadTask;

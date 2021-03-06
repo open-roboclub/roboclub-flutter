@@ -467,41 +467,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    _user.cvLink.isEmpty 
+                    ?SizedBox(
                       height: vpH * 0.05,
+                    )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal:vpW*0.08, vertical: vpH*0.01),
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0)
+                          ),
+                        textColor: Colors.white,
+                        color: Color(0xff6739d6),
+                        onPressed: (){ 
+                          launch(_user.cvLink);
+                        },
+                        child: Text("View CV",style: TextStyle(fontSize: vpH*0.02),),
+                      ),
                     ),
-                    PhysicalModel(
-                      color: Colors.transparent,
-                      shadowColor: Colors.blue.withOpacity(0.3),
-                      elevation: 8.0,
-                      child: Container(
-                        width: vpW * 0.85,
-                        // height: vpH * 0.1,
-                        // color: Colors.white,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
+                  PhysicalModel(
+                    color: Colors.transparent,
+                    shadowColor: Colors.blue.withOpacity(0.3),
+                    elevation: 8.0,
+                    child: Container(
+                      width: vpW * 0.85,
+                      // height: vpH * 0.1,
+                      // color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 20.0,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "\" " + _user.quote + " \"",
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 20.0,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "\" " + _user.quote + " \"",
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
                       ),
                     ),
+                  )
                   ],
                 ),
               ),
