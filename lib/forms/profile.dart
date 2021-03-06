@@ -186,12 +186,8 @@ class _ProfileFormState extends State<ProfileForm> {
                                   radius: 80,
                                   backgroundImage: _user.profileImageUrl.isEmpty
                                       ? AssetImage('assets/img/teamMember.png')
-                                      : CachedNetworkImage(
-                                          imageUrl: _user.profileImageUrl,
-                                          fadeInCurve: Curves.easeIn,
-                                          fadeInDuration:
-                                              Duration(milliseconds: 500),
-                                          fit: BoxFit.cover,
+                                      : CachedNetworkImageProvider(
+                                          _user.profileImageUrl,
                                         ),
                                 ),
                         ),

@@ -18,7 +18,7 @@ class Team2Screen extends StatefulWidget {
 
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  User user;
   @override
   void initState() {
     widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
@@ -64,13 +64,13 @@ class _Team2ScreenState extends State<Team2Screen> {
                               .collection('/users')
                               .document(widget.members[i]['email'])
                               .get();
-                          User member = User.fromMap(snap.data);
+                          user = User.fromMap(snap.data);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProfileScreen(
                                 viewMode: true,
-                                member: member,
+                                member: user,
                               ),
                             ),
                           );
