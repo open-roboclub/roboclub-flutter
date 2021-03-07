@@ -122,7 +122,6 @@ class _AboutScreenState extends State<AboutScreen>
                               ],
                             ),
                             Container(
-                              color: Colors.pink,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: vpW * 0.028, vertical: vpH * 0.005),
