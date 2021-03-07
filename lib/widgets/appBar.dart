@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
+import 'package:roboclub_flutter/screens/faqs.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 
 AppBar appBar(context,
     {String strTitle,
     bool isNotification = false,
     isDrawer = false,
+    isFaq =false,
     GlobalKey<ScaffoldState> scaffoldKey}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
@@ -62,7 +64,19 @@ AppBar appBar(context,
                   ),
                 ),
               )
-            : null,
+            : isFaq
+            ? IconButton(
+                icon: Icon(Icons.question_answer),
+                color: iconcolor,
+                iconSize: vpW * 0.080,
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FAQPage(),
+                  ),
+                ),
+              )
+              :null
       ),
     ],
     backgroundColor: isDrawer ? bgcolor : Colors.white,

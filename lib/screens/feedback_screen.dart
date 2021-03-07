@@ -49,7 +49,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             children: [
               Container(
                 width: vpW * 1.0,
-                height: vpH * 0.21,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: vpW * 0.12, vertical: vpH * 0.05),

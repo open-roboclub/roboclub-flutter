@@ -253,7 +253,7 @@ class _EventFormState extends State<EventForm> {
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.005),
                     child: TextFormField(
-                      maxLines: 3,
+                      maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: detailController,
                       style: TextStyle(
@@ -515,6 +515,7 @@ class _EventFormState extends State<EventForm> {
                   ),
                   Container(
                     padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {

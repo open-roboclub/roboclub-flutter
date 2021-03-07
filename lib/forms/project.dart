@@ -250,7 +250,7 @@ class _ProjectFormState extends State<ProjectForm> {
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
-                      maxLines: 3,
+                      maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: descriptionController,
                       style: TextStyle(
