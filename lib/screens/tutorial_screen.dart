@@ -22,7 +22,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   @override
   void initState() {
-    TutorialService().fetchProjects().then((value) {
+    TutorialService().fetchTutorials().then((value) {
       list = value;
       list.forEach((element) {
         String videoId = YoutubePlayer.convertUrlToId(element['url']);

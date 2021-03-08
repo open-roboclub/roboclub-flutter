@@ -107,7 +107,15 @@ class _AboutScreenState extends State<AboutScreen>
                                             },
                                             child: Column(
                                               children: [
-                                                Text("Click ME !!",style: TextStyle(fontSize:vpH*0.02,color: Colors.pink[300],fontWeight: FontWeight.w600,),),
+                                                Text(
+                                                  "{ Website }",
+                                                  style: TextStyle(
+                                                    fontSize: vpH * 0.02,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
                                                 Image.asset(
                                                   'assets/img/NoPath.png',
                                                   width: _animation.value,
@@ -124,7 +132,8 @@ class _AboutScreenState extends State<AboutScreen>
                             Container(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: vpW * 0.028, vertical: vpH * 0.005),
+                                    horizontal: vpW * 0.028,
+                                    vertical: vpH * 0.005),
                                 child: Text(
                                     "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
                                     style: TextStyle(

@@ -19,6 +19,7 @@ class Team2Screen extends StatefulWidget {
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   User user;
+  bool _isLoading = false;
   @override
   void initState() {
     widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
@@ -41,48 +42,57 @@ class _Team2ScreenState extends State<Team2Screen> {
           isNotification: false,
           scaffoldKey: _scaffoldKey,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: vpH * 0.005,
-              ),
-              Container(
-                height: vpH * 0.9,
-                width: vpW,
-                child: ListView(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Column(
                   children: [
-                    for (int i = 0; i < widget.members.length; i++)
-                      GestureDetector(
-                        onTap: () async {
-                          final Firestore _firestore = Firestore.instance;
-
-                          DocumentSnapshot snap = await _firestore
-                              .collection('/users')
-                              .document(widget.members[i]['email'])
-                              .get();
-                          user = User.fromMap(snap.data);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfileScreen(
-                                viewMode: true,
-                                member: user,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Team2Card(member: widget.members[i]),
-                      )
+                    SizedBox(
+                      height: vpH * 0.005,
+                    ),
+                    Container(
+                      height: vpH * 0.9,
+                      width: vpW,
+                      child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          for (int i = 0; i < widget.members.length; i++)
+                            GestureDetector(
+                              onTap: () async {
+                                final Firestore _firestore = Firestore.instance;
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                DocumentSnapshot snap = await _firestore
+                                    .collection('/users')
+                                    .document(widget.members[i]['email'])
+                                    .get();
+                                user = User.fromMap(snap.data);
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(
+                                      viewMode: true,
+                                      member: user,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Team2Card(member: widget.members[i]),
+                            )
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-        ),
+              ),
       ),
     );
   }
