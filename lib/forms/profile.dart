@@ -14,11 +14,9 @@ import '../widgets/appBar.dart';
 
 class ProfileForm extends StatefulWidget {
   final User member;
+  final void Function(User) callback;
 
-  const ProfileForm({
-    Key key,
-    this.member,
-  }) : super(key: key);
+  const ProfileForm({Key key, this.member, this.callback}) : super(key: key);
   @override
   _ProfileFormState createState() => _ProfileFormState(member);
 }
@@ -26,6 +24,7 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  User updatedUser;
 
   String _name = "";
   String _batch = "";
@@ -102,8 +101,8 @@ class _ProfileFormState extends State<ProfileForm> {
     userObject['isAdmin'] = widget.member.isAdmin;
     userObject['email'] = widget.member.email;
     userObject['isMember'] = widget.member.isMember;
-    Provider.of<UserProvider>(context, listen: false).setUser =
-        User.fromMap(userObject);
+    updatedUser = User.fromMap(userObject);
+
     Firestore.instance
         .collection('/users')
         .document(user.email)
@@ -140,6 +139,13 @@ class _ProfileFormState extends State<ProfileForm> {
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
+        if (updatedUser.email ==
+            Provider.of<UserProvider>(context, listen: false).getUser.email) {
+          Provider.of<UserProvider>(context, listen: false).setUser =
+              updatedUser;
+        } else {
+          widget.callback(updatedUser);
+        }
       },
     );
 

@@ -28,6 +28,20 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool drag = false;
+  User _user, _currUser;
+
+  @override
+  void didChangeDependencies() {
+    UserProvider _userProvider = Provider.of<UserProvider>(context);
+    if (!widget.viewMode) {
+      _user = _userProvider.getUser;
+      _currUser = _userProvider.getUser;
+    } else {
+      _user = widget.member;
+      _currUser = _userProvider.getUser;
+    }
+    super.didChangeDependencies();
+  }
 
   Widget _quickOptions(var vpH, IconData iconData, Object navigateTo) {
     return Stack(
@@ -72,16 +86,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       fontSize: vpH * 0.021,
       color: Colors.grey,
     );
-    UserProvider _userProvider;
-    User _user, _currUser;
-    _userProvider = Provider.of<UserProvider>(context);
-    if (!widget.viewMode) {
-      _user = _userProvider.getUser;
-      _currUser = _userProvider.getUser;
-    } else {
-      _user = widget.member;
-      _currUser = _userProvider.getUser;
-    }
 
     return SafeArea(
       child: Scaffold(

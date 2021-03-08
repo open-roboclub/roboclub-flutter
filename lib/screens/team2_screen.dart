@@ -26,6 +26,18 @@ class _Team2ScreenState extends State<Team2Screen> {
     super.initState();
   }
 
+  void updateProfile(User updatedUser) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(
+          viewMode: true,
+          member: updatedUser,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -85,7 +97,10 @@ class _Team2ScreenState extends State<Team2Screen> {
                                   ),
                                 );
                               },
-                              child: Team2Card(member: widget.members[i]),
+                              child: Team2Card(
+                                member: widget.members[i],
+                                callback: updateProfile,
+                              ),
                             )
                         ],
                       ),
