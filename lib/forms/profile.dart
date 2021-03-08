@@ -5,8 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
+import 'package:roboclub_flutter/provider/user_provider.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 
@@ -37,7 +39,6 @@ class _ProfileFormState extends State<ProfileForm> {
   String _linkedinId = "";
   String _position = "";
   String _quote = "";
-
 
   bool filePicked = false;
 
@@ -82,7 +83,7 @@ class _ProfileFormState extends State<ProfileForm> {
     _img = await (await uploadTask.onComplete).ref.getDownloadURL();
   }
 
-  Future<void> updateProfile(User user) async {
+  Future<void> updateProfile(User user, BuildContext context) async {
     Map<String, dynamic> userObject = {
       'about': _about.isEmpty ? user.about : _about,
       'batch': _batch.isEmpty ? user.batch : _batch,
@@ -98,6 +99,11 @@ class _ProfileFormState extends State<ProfileForm> {
       'linkedinId': _linkedinId.isEmpty ? user.linkedinId : _linkedinId,
       'position': _position.isEmpty ? user.position : _position,
     };
+    userObject['isAdmin'] = widget.member.isAdmin;
+    userObject['email'] = widget.member.email;
+    userObject['isMember'] = widget.member.isMember;
+    Provider.of<UserProvider>(context, listen: false).setUser =
+        User.fromMap(userObject);
     Firestore.instance
         .collection('/users')
         .document(user.email)
@@ -659,7 +665,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           return null;
                         } else {
                           _formKey.currentState.save();
-                          await updateProfile(_user);
+                          await updateProfile(_user, context);
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
