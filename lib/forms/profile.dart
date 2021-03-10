@@ -179,9 +179,10 @@ class _ProfileFormState extends State<ProfileForm> {
                               right: vpW * 0.02,
                               bottom: vpH * 0.01),
                           child: file != null
-                              ? CircleAvatar(
-                                  radius: 80,
-                                  child: Image.file(file),
+                              ? Container(
+                                width: vpW*0.3,
+                                height: vpH*0.3,
+                                child: Image.file(file),
                                 )
                               : CircleAvatar(
                                   radius: 80,

@@ -43,9 +43,9 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: widget.completedProject.projectImg.length == 0
-                      ? SvgPicture.asset(
-                          'assets/illustrations/project.svg',
-                          fit: BoxFit.contain,
+                      ? Image.asset(
+                          'assets/img/projectPlaceholder.jpg',
+                          fit: BoxFit.fill,
                         )
                       : CachedNetworkImage(
                           imageUrl: widget.completedProject.projectImg[0],
