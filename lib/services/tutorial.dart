@@ -19,7 +19,7 @@ class TutorialService {
     return Future.value(false);
   }
 
-  Future<List<dynamic>> fetchProjects() async {
+  Future<List<dynamic>> fetchTutorials() async {
     List<dynamic> list = [];
 
     await _firestore.collection("/tutorials").getDocuments().then((value) {

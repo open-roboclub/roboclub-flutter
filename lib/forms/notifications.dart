@@ -16,7 +16,6 @@ class _NotificationFormState extends State<NotificationForm> {
   String _title;
   String _msg;
   String _link = "";
-  String _date;
 
   TextEditingController date = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -233,7 +232,8 @@ class _NotificationFormState extends State<NotificationForm> {
                               title: _title,
                               msg: _msg,
                               link: _link,
-                              date: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()));
+                              date: DateFormat("yyyy-MM-dd hh:mm:ss")
+                                  .format(DateTime.now()));
 
                           print("saved");
                           titleController.clear();

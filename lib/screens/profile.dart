@@ -28,6 +28,20 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool drag = false;
+  User _user, _currUser;
+
+  @override
+  void didChangeDependencies() {
+    UserProvider _userProvider = Provider.of<UserProvider>(context);
+    if (!widget.viewMode) {
+      _user = _userProvider.getUser;
+      _currUser = _userProvider.getUser;
+    } else {
+      _user = widget.member;
+      _currUser = _userProvider.getUser;
+    }
+    super.didChangeDependencies();
+  }
 
   Widget _quickOptions(var vpH, IconData iconData, Object navigateTo) {
     return Stack(
@@ -73,15 +87,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       fontSize: vpH * 0.021,
       color: Colors.grey,
     );
-    var _userProvider, _user, _currUser;
-    _userProvider = Provider.of<UserProvider>(context);
-    if (!widget.viewMode) {
-      _user = _userProvider.getUser;
-      _currUser = _userProvider.getUser;
-    } else {
-      _user = widget.member;
-      _currUser = _userProvider.getUser;
-    }
 
     List<String> interests =_user.interests.split(',');
     
@@ -122,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Container(
-                          width: vpW*0.5,
+                          width: vpW * 0.5,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Column(
@@ -480,56 +485,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    _user.cvLink.isEmpty 
-                    ?SizedBox(
-                      height: vpH * 0.05,
-                    )
-                    : Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.08, vertical: vpH*0.01),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0)
+                    _user.cvLink.isEmpty
+                        ? SizedBox(
+                            height: vpH * 0.05,
+                          )
+                        : Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: vpW * 0.08, vertical: vpH * 0.01),
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),
+                              textColor: Colors.white,
+                              color: Color(0xff6739d6),
+                              onPressed: () {
+                                launch(_user.cvLink);
+                              },
+                              child: Text(
+                                "View CV",
+                                style: TextStyle(fontSize: vpH * 0.02),
+                              ),
+                            ),
                           ),
-                        textColor: Colors.white,
-                        color: Color(0xff6739d6),
-                        onPressed: (){ 
-                          launch(_user.cvLink);
-                        },
-                        child: Text("View CV",style: TextStyle(fontSize: vpH*0.02),),
-                      ),
-                    ),
-                  PhysicalModel(
-                    color: Colors.transparent,
-                    shadowColor: Colors.blue.withOpacity(0.3),
-                    elevation: 8.0,
-                    child: Container(
-                      width: vpW * 0.85,
-                      // height: vpH * 0.1,
-                      // color: Colors.white,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                    PhysicalModel(
+                      color: Colors.transparent,
+                      shadowColor: Colors.blue.withOpacity(0.3),
+                      elevation: 8.0,
+                      child: Container(
+                        width: vpW * 0.85,
+                        // height: vpH * 0.1,
+                        // color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 20.0,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "\" " + _user.quote + " \"",
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 20.0,
+                          ),
+                          child: Center(
+                            child: Text(
+                              "\" " + _user.quote + " \"",
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  )
+                    )
                   ],
                 ),
               ),
@@ -560,7 +568,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onChanged: (String newValue) async {
                             if (newValue == "Sign Out") {
                               await AuthService().signOutGoogle().then((value) {
-                                _userProvider.setUser = User();
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .setUser = User();
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

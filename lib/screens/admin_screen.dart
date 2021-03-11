@@ -21,7 +21,6 @@ class _AdminScreenState extends State<AdminScreen> {
   AuthService _auth = AuthService();
 
   Widget _button(String title, BuildContext context, bool isGoogle) {
-    var _userProvider = Provider.of<UserProvider>(context);
     return FlatButton(
       color: isGoogle ? Color(0xffFF9C01) : Colors.white,
       textColor: !isGoogle ? Color(0xffFF9C01) : Colors.white,
@@ -33,7 +32,7 @@ class _AdminScreenState extends State<AdminScreen> {
           });
           _auth.signInWithGoogle().then((user) {
             if (user != null) {
-              _userProvider.setUser = user;
+              Provider.of<UserProvider>(context, listen: false).setUser = user;
             }
             setState(() {
               _isLoading = false;
