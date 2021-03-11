@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import 'package:roboclub_flutter/screens/project_info.dart';
@@ -43,9 +42,9 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: widget.completedProject.projectImg.length == 0
-                      ? SvgPicture.asset(
-                          'assets/illustrations/project.svg',
-                          fit: BoxFit.contain,
+                      ? Image.asset(
+                          'assets/img/projectPlaceholder.jpg',
+                          fit: BoxFit.fill,
                         )
                       : CachedNetworkImage(
                           imageUrl: widget.completedProject.projectImg[0],

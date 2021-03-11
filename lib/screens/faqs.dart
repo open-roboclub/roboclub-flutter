@@ -20,6 +20,7 @@ class FAQPage extends StatelessWidget {
                 DataSource.questionAnswers[index]['question'],
                 style: TextStyle(fontWeight: FontWeight.bold,),
               ),
+              leading: Icon(Icons.directions),
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(12.0),

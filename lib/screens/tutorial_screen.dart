@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/screens/playlist.dart';
 import 'package:roboclub_flutter/services/tutorial.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
+import 'package:roboclub_flutter/widgets/tutorial_card.dart';
 
 class TutorialScreen extends StatefulWidget {
   @override
@@ -79,13 +79,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
                                   ),
                                 ),
                               ),
-                              child: ListTile(
-                                title: Text(playlist[index]['title']),
-                                leading: Icon(
-                                  SocialMedia.youtube,
-                                  color: Colors.red,
-                                ),
-                              ),
+                              child:
+                                  TutorialCard(title: playlist[index]['title']),
                             );
                           },
                         ),

@@ -27,7 +27,7 @@ class _AboutScreenState extends State<AboutScreen>
       vsync: this,
     );
 
-    _animation = Tween(begin: 60.0, end: 85.0).animate(_animationController);
+    _animation = Tween(begin: 60.0, end: 75.0).animate(_animationController);
     _animationController.repeat(reverse: true);
     super.initState();
   }
@@ -57,13 +57,13 @@ class _AboutScreenState extends State<AboutScreen>
                 child: SliverAppBar(
                   leading: new Container(),
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  expandedHeight: vpH * 0.60,
+                  expandedHeight: vpH * 0.65,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: vpW * 0.05, vertical: vpH * 0.020),
                       child: Container(
-                        width: vpW * 0.90,
+                        width: vpW * 0.92,
                         color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +75,7 @@ class _AboutScreenState extends State<AboutScreen>
                             Row(
                               children: [
                                 Expanded(
-                                  flex: 3,
+                                  flex: 17,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: vpW * 0.028,
@@ -93,38 +93,43 @@ class _AboutScreenState extends State<AboutScreen>
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 2,
+                                  flex: 16,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: vpW * 0.028,
                                         vertical: vpH * 0.015),
-                                    child: AnimatedBuilder(
-                                        animation: _animation,
-                                        builder: (context, _) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              launch('https://amuroboclub.in/');
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "{ Website }",
-                                                  style: TextStyle(
-                                                    fontSize: vpH * 0.02,
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                    fontWeight: FontWeight.w600,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: AnimatedBuilder(
+                                          animation: _animation,
+                                          builder: (context, _) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                launch(
+                                                    'https://amuroboclub.in/');
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    "{ Website }",
+                                                    style: TextStyle(
+                                                      fontSize: vpH * 0.02,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
                                                   ),
-                                                ),
-                                                Image.asset(
-                                                  'assets/img/NoPath.png',
-                                                  width: _animation.value,
-                                                  height: _animation.value,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }),
+                                                  Image.asset(
+                                                    'assets/img/NoPath.png',
+                                                    width: _animation.value,
+                                                    height: _animation.value,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    ),
                                   ),
                                 ),
                               ],
