@@ -63,6 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -81,6 +82,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _user = widget.member;
       _currUser = _userProvider.getUser;
     }
+
+    List<String> interests =_user.interests.split(',');
+    
 
     return SafeArea(
       child: Scaffold(
@@ -289,14 +293,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                           ),
                                           _user.interests.isNotEmpty
-                                              ? Text(
-                                                  _user.interests,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                            ? ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: interests.length,
+                                                itemBuilder: (context, index) {
+                                                  return Text(interests[index],
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
                                                       color: Colors.blueGrey,
-                                                      fontStyle:
-                                                          FontStyle.italic),
-                                                )
+                                                      fontStyle:FontStyle.italic,
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                             
                                               : Center(
                                                   child: Column(
                                                     children: [
