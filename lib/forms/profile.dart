@@ -38,7 +38,6 @@ class _ProfileFormState extends State<ProfileForm> {
   String _position = "";
   String _quote = "";
 
-
   bool filePicked = false;
 
   StorageUploadTask uploadTask;
@@ -100,7 +99,7 @@ class _ProfileFormState extends State<ProfileForm> {
     };
     Firestore.instance
         .collection('/users')
-        .document(user.email)
+        .document(user.uid)
         .updateData(userObject)
         .then((value) => print("User Profile Updated"))
         .catchError((error) => print("Failed to update progress: $error"));
@@ -180,9 +179,9 @@ class _ProfileFormState extends State<ProfileForm> {
                               bottom: vpH * 0.01),
                           child: file != null
                               ? Container(
-                                width: vpW*0.3,
-                                height: vpH*0.3,
-                                child: Image.file(file),
+                                  width: vpW * 0.3,
+                                  height: vpH * 0.3,
+                                  child: Image.file(file),
                                 )
                               : CircleAvatar(
                                   radius: 80,

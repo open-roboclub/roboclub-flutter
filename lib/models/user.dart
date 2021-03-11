@@ -1,5 +1,5 @@
 class User {
-  // String uid;
+  String uid;
   String name;
   String email;
   String profileImageUrl;
@@ -18,7 +18,7 @@ class User {
   bool isAdmin;
 
   User({
-    // this.uid = "",
+    this.uid = "",
     this.name = "",
     this.email = "",
     this.profileImageUrl = "",
@@ -39,7 +39,7 @@ class User {
 
   Map toMap(User user) {
     var data = Map<String, dynamic>();
-    // data['uid'] = user.uid;
+    data['uid'] = user.uid;
     data['name'] = user.name;
     data['email'] = user.email;
     data["profileImageUrl"] = user.profileImageUrl;
@@ -62,7 +62,7 @@ class User {
 
   // Named constructor
   User.fromMap(Map<String, dynamic> mapData) {
-    // this.uid = mapData['uid'];
+    this.uid = mapData['uid'];
     this.name = mapData['name'];
     this.email = mapData['email'];
     this.profileImageUrl = mapData['profileImageUrl'];

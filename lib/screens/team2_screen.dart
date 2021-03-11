@@ -62,7 +62,7 @@ class _Team2ScreenState extends State<Team2Screen> {
 
                           DocumentSnapshot snap = await _firestore
                               .collection('/users')
-                              .document(widget.members[i]['email'])
+                              .document(widget.members[i]['uid'])
                               .get();
                           user = User.fromMap(snap.data);
                           Navigator.push(

@@ -63,7 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -83,8 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _currUser = _userProvider.getUser;
     }
 
-    List<String> interests =_user.interests.split(',');
-    
+    List<String> interests = _user.interests.split(',');
 
     return SafeArea(
       child: Scaffold(
@@ -122,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Container(
-                          width: vpW*0.5,
+                          width: vpW * 0.5,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Column(
@@ -293,20 +291,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                           ),
                                           _user.interests.isNotEmpty
-                                            ? ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: interests.length,
-                                                itemBuilder: (context, index) {
-                                                  return Text(interests[index],
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.blueGrey,
-                                                      fontStyle:FontStyle.italic,
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                             
+                                              ? ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount: interests.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Text(
+                                                      interests[index],
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.blueGrey,
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                      ),
+                                                    );
+                                                  },
+                                                )
                                               : Center(
                                                   child: Column(
                                                     children: [
@@ -374,8 +375,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     : Colors.grey,
                                                 onPressed: () {
                                                   if (_user.fbId.isNotEmpty) {
-                                                    launch(
-                                                        'https://www.facebook.com/groups/amuroboculb/');
+                                                    launch(_user.fbId);
                                                   }
                                                 },
                                               ),
@@ -390,8 +390,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 onPressed: () {
                                                   if (_user
                                                       .linkedinId.isNotEmpty) {
-                                                    launch(
-                                                        'https://www.linkedin.com/in/amuroboclub');
+                                                    launch(_user.linkedinId);
                                                   }
                                                 },
                                               ),
@@ -425,8 +424,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 onTap: () {
                                                   if (_user
                                                       .instaId.isNotEmpty) {
-                                                    launch(
-                                                        'https://www.instagram.com/amuroboclub');
+                                                    launch(_user.instaId);
                                                   }
                                                 },
                                                 child: Image.asset(
@@ -480,56 +478,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    _user.cvLink.isEmpty 
-                    ?SizedBox(
-                      height: vpH * 0.05,
-                    )
-                    : Padding(
-                        padding: EdgeInsets.symmetric(horizontal:vpW*0.08, vertical: vpH*0.01),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0)
+                    _user.cvLink.isEmpty
+                        ? SizedBox(
+                            height: vpH * 0.05,
+                          )
+                        : Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: vpW * 0.08, vertical: vpH * 0.01),
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),
+                              textColor: Colors.white,
+                              color: Color(0xff6739d6),
+                              onPressed: () {
+                                launch(_user.cvLink);
+                              },
+                              child: Text(
+                                "View CV",
+                                style: TextStyle(fontSize: vpH * 0.02),
+                              ),
+                            ),
                           ),
-                        textColor: Colors.white,
-                        color: Color(0xff6739d6),
-                        onPressed: (){ 
-                          launch(_user.cvLink);
-                        },
-                        child: Text("View CV",style: TextStyle(fontSize: vpH*0.02),),
-                      ),
-                    ),
-                  PhysicalModel(
-                    color: Colors.transparent,
-                    shadowColor: Colors.blue.withOpacity(0.3),
-                    elevation: 8.0,
-                    child: Container(
-                      width: vpW * 0.85,
-                      // height: vpH * 0.1,
-                      // color: Colors.white,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                    PhysicalModel(
+                      color: Colors.transparent,
+                      shadowColor: Colors.blue.withOpacity(0.3),
+                      elevation: 8.0,
+                      child: Container(
+                        width: vpW * 0.85,
+                        // height: vpH * 0.1,
+                        // color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 20.0,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "\" " + _user.quote + " \"",
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 20.0,
+                          ),
+                          child: Center(
+                            child: Text(
+                              "\" " + _user.quote + " \"",
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  )
+                    )
                   ],
                 ),
               ),
@@ -568,8 +569,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 );
                               });
-                            }
-                            if (newValue == 'Edit Profile') {
+                            } else if (newValue == 'Edit Profile') {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

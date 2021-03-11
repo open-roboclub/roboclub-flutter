@@ -49,7 +49,7 @@ class AuthService {
     }
     await _firestore
         .collection('/users')
-        .document(currentUser.email)
+        .document(currentUser.uid)
         .get()
         .then((snapshot) {
       if (snapshot.exists) {
@@ -58,6 +58,7 @@ class AuthService {
         print("Signin: User Data doesn't exist in firestore!");
         _tempUser = {
           'name': user.displayName,
+          'uid': user.uid,
           'email': user.email,
           'profileImageUrl': user.photoUrl,
           'about': "",
@@ -70,11 +71,11 @@ class AuthService {
           'interests': "",
           'branch': "",
           'isAdmin': false,
-          'isMember': false,
+          'isMember': true,
           'linkedinId': "",
           'position': "N/A",
         };
-        _firestore.collection('/users').document(user.email).setData(_tempUser);
+        _firestore.collection('/users').document(user.uid).setData(_tempUser);
       }
     });
     // Only taking the first part of the name, i.e., First Name
@@ -97,7 +98,7 @@ class AuthService {
     } else {
       await _firestore
           .collection('/users')
-          .document(currentUser.email)
+          .document(currentUser.uid)
           .get()
           .then((snapshot) {
         if (snapshot.exists) {
