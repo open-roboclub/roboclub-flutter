@@ -6,13 +6,13 @@ import 'package:roboclub_flutter/forms/profile.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
-import 'package:roboclub_flutter/screens/profile.dart';
 import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
   final dynamic member;
+  final void Function(User) callback;
 
-  const Team2Card({Key key, this.member}) : super(key: key);
+  const Team2Card({Key key, this.member, this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,20 +57,13 @@ class Team2Card extends StatelessWidget {
                       .document(member['uid'])
                       .get();
                   user = User.fromMap(snap.data);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileScreen(
-                        viewMode: true,
-                        member: user,
-                      ),
-                    ),
-                  );
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfileForm(
                         member: user,
+                        callback: callback,
                       ),
                     ),
                   );

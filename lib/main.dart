@@ -18,10 +18,20 @@ import 'package:roboclub_flutter/services/shared_prefs.dart';
 void main() async {
   // debugPaintSizeEnabled = true;
 
+  MyLocalStorage _storage = MyLocalStorage();
+  final FirebaseMessaging _messaging = FirebaseMessaging();
   WidgetsFlutterBinding.ensureInitialized();
   await DotEnv.load(fileName: ".env");
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  MyLocalStorage _storage = MyLocalStorage();
+  _storage.getDeviceToken().then((value) {
+    if (value == null) {
+      _messaging.getToken().then((fcmToken) {
+        print("fcm saved to storage!");
+        NotificationService().postDeviceToken(fcmToken: fcmToken);
+        _storage.setDeviceToken(fcmToken);
+      });
+    }
+  });
   var isOnboarding = await _storage.getOnboarding() ?? false;
   var darkModeOn = await _storage.getThemepref() ?? false;
   runApp(
@@ -30,8 +40,8 @@ void main() async {
         ChangeNotifierProvider<ThemeNotifier>(
           create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
         ),
-        ChangeNotifierProvider<UserProvider>(
-          create: (_) => UserProvider(),
+        ChangeNotifierProvider.value(
+          value: UserProvider(),
         ),
       ],
       child: MyApp(
@@ -41,31 +51,10 @@ void main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
-  final isOnboarding;
+class MyApp extends StatelessWidget {
+  final bool isOnboarding;
 
   const MyApp({Key key, this.isOnboarding}) : super(key: key);
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final FirebaseMessaging _messaging = FirebaseMessaging();
-
-  MyLocalStorage _storage = MyLocalStorage();
-  @override
-  void initState() {
-    _storage.getDeviceToken().then((value) {
-      if (value == null) {
-        _messaging.getToken().then((fcmToken) {
-          print("fcm saved to storage!");
-          NotificationService().postDeviceToken(fcmToken: fcmToken);
-          _storage.setDeviceToken(fcmToken);
-        });
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +70,11 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       title: 'AMURoboclub',
-
       debugShowCheckedModeBanner: false,
       theme: themeNotifier.getTheme(),
       // theme: ThemeData(),
       // darkTheme: darkTheme,
-
-      home: !widget.isOnboarding ? OnboardingScreen() : EventScreen(),
+      home: !isOnboarding ? OnboardingScreen() : EventScreen(),
     );
   }
 }
