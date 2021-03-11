@@ -54,7 +54,7 @@ class Team2Card extends StatelessWidget {
 
                   DocumentSnapshot snap = await _firestore
                       .collection('/users')
-                      .document(member['email'])
+                      .document(member['uid'])
                       .get();
                   user = User.fromMap(snap.data);
 

@@ -13,7 +13,7 @@ class TutorialCard extends StatelessWidget {
     var _style = TextStyle(
       fontSize: vpH * 0.025,
       fontWeight: FontWeight.bold,
-      // color: Colors.white,
+      color: Colors.white,
     );
     return Padding(
       padding: EdgeInsets.all(20.0),
