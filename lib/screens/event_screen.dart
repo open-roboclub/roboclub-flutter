@@ -188,21 +188,24 @@ class _EventScreenState extends State<EventScreen> {
                       height: vpH * 0.04,
                     ),
                     _title('Featured Events', vpH, vpW),
-                    Container(
+                    featuredEventsList.isEmpty 
+                    ?  Center(
+                      child: Padding(
+                        padding:  EdgeInsets.only(top: vpH*0.02),
+                        child: Container(
+                          height: vpH * 0.2,
+                          width: vpW * 0.6,
+                          child: SvgPicture.asset(
+                            'assets/illustrations/events.svg',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    )
+                    : Container(
                         height: vpH * 0.34,
                         width: vpW,
-                        child: featuredEventsList.isEmpty
-                            ? Center(
-                                child: Container(
-                                  height: vpH * 0.2,
-                                  width: vpW * 0.6,
-                                  child: SvgPicture.asset(
-                                    'assets/illustrations/events.svg',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              )
-                            : ListView.builder(
+                        child:ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: featuredEventsList.length,
@@ -217,20 +220,23 @@ class _EventScreenState extends State<EventScreen> {
                       height: vpH * 0.04,
                     ),
                     _title('Upcoming Events', vpH, vpW),
-                    Container(
+                    upcomingEventsList.isEmpty
+                    ? Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top:vpH*0.02),
+                        child: Container(
+                          height: vpH * 0.2,
+                          width: vpW * 0.6,
+                          child: SvgPicture.asset(
+                            'assets/illustrations/calendar.svg',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    )
+                    :Container(
                         width: vpW,
-                        child: upcomingEventsList.isEmpty
-                            ? Center(
-                                child: Container(
-                                  height: vpH * 0.3,
-                                  width: vpW * 0.6,
-                                  child: SvgPicture.asset(
-                                    'assets/illustrations/calendar.svg',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              )
-                            : ListView.builder(
+                        child: ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: upcomingEventsList.length,
