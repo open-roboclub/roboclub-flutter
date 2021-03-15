@@ -22,6 +22,7 @@ class _Team2ScreenState extends State<Team2Screen> {
   bool _isLoading = false;
   @override
   void initState() {
+    widget.members.sort((a, b) => a['name'].compareTo(b['name']));
     widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
     super.initState();
   }

@@ -86,25 +86,31 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  Icons.send,
-                                  color: Color(0xFFFF9C01),
+                              suffixIcon: Builder(
+                                builder: (context)=>IconButton(
+                                  icon: Icon(
+                                    Icons.send,
+                                    color: Color(0xFFFF9C01),
+                                  ),
+                                  onPressed: () async{
+                                    if (_feedback.isNotEmpty){
+                                      // var _user =
+                                      //     Provider.of<UserProvider>(context)
+                                      //         .getUser;
+                                      await FeedbackService()
+                                          .postFeedback(_controller.text, true);
+                                      setState(() {
+                                        _controller.clear();
+                                        FocusScope.of(context)
+                                            .requestFocus(new FocusNode());
+                                      });
+                                      Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: Text('Thanks for the Feedback!'),
+                                        duration: Duration(seconds: 3),
+                                      ));
+                                    }
+                                  },
                                 ),
-                                onPressed: () {
-                                  if (_feedback.isNotEmpty) {
-                                    // var _user =
-                                    //     Provider.of<UserProvider>(context)
-                                    //         .getUser;
-                                    FeedbackService()
-                                        .postFeedback(_controller.text, true);
-                                    setState(() {
-                                      _controller.clear();
-                                      FocusScope.of(context)
-                                          .requestFocus(new FocusNode());
-                                    });
-                                  }
-                                },
                               ),
                             ),
                             onChanged: (value) {
