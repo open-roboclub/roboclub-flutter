@@ -520,7 +520,7 @@ class _EventFormState extends State<EventForm> {
                       elevation: vpH * 0.5,
                       onPressed: () async {
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), fileName);
+                          await saveImg(file.readAsBytesSync(), 'events/${eventNameController.text}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");

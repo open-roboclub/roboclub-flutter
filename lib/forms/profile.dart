@@ -666,7 +666,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       elevation: vpH * 0.5,
                       onPressed: () async {
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), fileName);
+                          await saveImg(file.readAsBytesSync(), 'users/${_user.name}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");

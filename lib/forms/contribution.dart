@@ -151,7 +151,7 @@ class _ContributionFormState extends State<ContributionForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: nameController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
@@ -186,10 +186,11 @@ class _ContributionFormState extends State<ContributionForm> {
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
+                      maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: descriptionController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
@@ -227,7 +228,7 @@ class _ContributionFormState extends State<ContributionForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: amountController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
@@ -341,7 +342,7 @@ class _ContributionFormState extends State<ContributionForm> {
                       elevation: vpH * 0.5,
                       onPressed: () async {
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), fileName);
+                          await saveImg(file.readAsBytesSync(), 'contributions/${nameController.text}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");

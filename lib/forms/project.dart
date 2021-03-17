@@ -476,10 +476,10 @@ class _ProjectFormState extends State<ProjectForm> {
                       elevation: vpH * 0.5,
                       onPressed: () async {
                         if (filePicked) {
-                          await savePdf(pdfFile.readAsBytesSync(), pdfFileName);
+                          await savePdf(pdfFile.readAsBytesSync(), 'projects/${nameController.text}/$pdfFileName');
                         }
                         if (imagePicked) {
-                          await postImages(imageList, fileName);
+                          await postImages(imageList, 'projects/${nameController.text}/$fileName');
                         }
                         // await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
                         if (_formKey.currentState.validate()) {

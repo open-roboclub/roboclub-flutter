@@ -121,7 +121,7 @@ class _NotificationFormState extends State<NotificationForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: titleController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
@@ -161,7 +161,7 @@ class _NotificationFormState extends State<NotificationForm> {
                         controller: msgController,
                         maxLines: null,
                         style: TextStyle(
-                          color: Colors.purple[200],
+                          color: Colors.black,
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
@@ -200,7 +200,7 @@ class _NotificationFormState extends State<NotificationForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: linkController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
