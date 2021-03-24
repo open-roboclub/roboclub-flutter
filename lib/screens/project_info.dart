@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
@@ -76,9 +77,29 @@ class _ProjectInfoState extends State<ProjectInfo> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              _user!=null && _user.isAdmin
+              ?IconButton(
+                icon: Icon(MyFlutterApp.edit),
+                color: Color(0xFFFF9C01),
+                iconSize: vpW * 0.065,
+                onPressed: (){
+                  
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return ProjectForm(editMode: true,project: widget.project);
+                      }
+                    ) 
+                  );
+                }
+              ) 
+              :Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: vpH * 0.01, horizontal: vpW * 0.05),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: vpH * 0.03, horizontal: vpW * 0.05),
+                    vertical: vpH * 0.01, horizontal: vpW * 0.05),
                 child: Container(
                   child: Text(
                     widget.project.name,
@@ -87,6 +108,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   ),
                 ),
               ),
+              
               Padding(
                 padding: EdgeInsets.symmetric(vertical: vpH * 0.03),
                 child: Center(

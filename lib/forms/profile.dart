@@ -109,7 +109,7 @@ class _ProfileFormState extends State<ProfileForm> {
         .document(user.uid)
         .updateData(userObject)
         .then((value) => print("User Profile Updated"))
-        .catchError((error) => print("Failed to update progress: $error"));
+        .catchError((error) => print("Failed to update profile: $error"));
   }
 
   @override
@@ -187,24 +187,24 @@ class _ProfileFormState extends State<ProfileForm> {
                         alignment: Alignment.center,
                         child: Padding(
                           padding: EdgeInsets.only(
-                              top: vpH * 0.02,
-                              left: vpW * 0.02,
-                              right: vpW * 0.02,
-                              bottom: vpH * 0.01),
+                            top: vpH * 0.02,
+                            left: vpW * 0.02,
+                            right: vpW * 0.02,
+                            bottom: vpH * 0.01),
                           child: file != null
-                              ? Container(
-                                  width: vpW * 0.3,
-                                  height: vpH * 0.3,
-                                  child: Image.file(file),
-                                )
-                              : CircleAvatar(
-                                  radius: 80,
-                                  backgroundImage: _user.profileImageUrl.isEmpty
-                                      ? AssetImage('assets/img/teamMember.png')
-                                      : CachedNetworkImageProvider(
-                                          _user.profileImageUrl,
-                                        ),
-                                ),
+                          ? Container(
+                              width: vpW * 0.3,
+                              height: vpH * 0.3,
+                              child: Image.file(file),
+                            )
+                          : CircleAvatar(
+                              radius: 80,
+                              backgroundImage: _user.profileImageUrl.isEmpty
+                              ? AssetImage('assets/img/teamMember.png')
+                              : CachedNetworkImageProvider(
+                                  _user.profileImageUrl,
+                              ),
+                            ),
                         ),
                       ),
                       IconButton(

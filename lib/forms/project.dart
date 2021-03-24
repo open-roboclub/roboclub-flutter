@@ -1,15 +1,24 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:roboclub_flutter/models/project.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/project.dart';
 import 'package:intl/intl.dart';
 
 class ProjectForm extends StatefulWidget {
+
+  final Project project;
+  final bool editMode;
+  final void Function(Project) callback;
+
+  const ProjectForm({Key key, this.project, this.editMode, this.callback}) : super(key: key);
   @override
   _ProjectFormState createState() => _ProjectFormState();
 }
@@ -35,63 +44,62 @@ final kLabelStyle = TextStyle(
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  Project updatedProject;
 
-  List<dynamic> dynamicList = [];
-  String _projectName;
-  String _description;
-  String _date;
+  String _projectName="";
+  String _description="";
+  String _date="";
   String _link = "";
   String _fileUrl = "";
+  String fileName = '';
+  String pdfFileName = '';
+  File pdfFile;
+  List<dynamic> dynamicList = [];
   List<dynamic> _imageUrls = List();
   List<File> imageList = List();
   List<dynamic> _teamMembers = List();
   String dropdownValue = '1';
-
-  String fileName = '';
-  String pdfFileName = '';
-  File pdfFile;
-
   bool imagePicked = false;
   bool filePicked = false;
-
-  final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final projectImgController = TextEditingController();
-  final linkController = TextEditingController();
-  TextEditingController date = TextEditingController();
-  // TextEditingController _teamMember = new TextEditingController();
-  // TextEditingController memberName = new TextEditingController();
-
+  bool dateUPdated=false;
+  StorageUploadTask uploadTask;
+  StorageUploadTask pdfUploadTask;
+  String url ="";
+  DateTime dateTime;
+  
   // upload image
   Future getImage() async {
-    var rng = new Random();
-    String randomName = "";
-    for (var i = 0; i < 20; i++) {
-      randomName += rng.nextInt(100).toString();
-    }
-
-    await FilePicker.platform
-        .pickFiles(allowMultiple: true, type: FileType.image)
-        .then((result) async {
-      if (result != null) {
-        imagePicked = true;
-        setState(() {
-          imageList = result.paths.map((path) => File(path)).toList();
-        });
-        fileName = '$randomName';
+    setState(() async{
+      var rng = new Random();
+      String randomName = "";
+      for (var i = 0; i < 20; i++) {
+        randomName += rng.nextInt(100).toString();
       }
-    }).catchError((error) {
-      print("Error: " + error.toString());
+
+      await FilePicker.platform
+          .pickFiles(allowMultiple: true, type: FileType.image)
+          .then((result) async {
+        if (result != null) {
+          imagePicked = true;
+          setState(() {
+            imageList = result.paths.map((path) => File(path)).toList();
+          });
+          fileName = '$randomName';
+        }
+      }).catchError((error) {
+        print("Error: " + error.toString());
+      });
     });
   }
 
   Future postImages(List<File> imageList, String name) async {
     for (int i = 0; i < imageList.length; i++) {
-      final StorageReference storageReference =
+      StorageReference storageReference =
           FirebaseStorage().ref().child("$name$i");
-      final StorageUploadTask uploadTask =
-          storageReference.putFile(imageList[i]);
-      String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+      setState(() {
+        uploadTask = storageReference.putFile(imageList[i]);
+      });
+      url = await (await uploadTask.onComplete).ref.getDownloadURL();
       _imageUrls.add(url);
     }
   }
@@ -99,31 +107,36 @@ class _ProjectFormState extends State<ProjectForm> {
   // upload pdf
 
   Future getPdfAndUpload() async {
-    var rng = new Random();
-    String randomName = "";
-    for (var i = 0; i < 20; i++) {
-      randomName += rng.nextInt(100).toString();
-    }
-    await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc']).then((result) async {
-      if (result != null) {
-        filePicked = true;
-        setState(() {
-          pdfFile = File(result.files.single.path);
-        });
-
-        pdfFileName = '$randomName.pdf';
+    setState(() async{
+      var rng = new Random();
+      String randomName = "";
+      for (var i = 0; i < 20; i++) {
+        randomName += rng.nextInt(100).toString();
       }
-    }).catchError((error) {
-      print("Error: " + error.toString());
+      await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['pdf', 'doc']).then((result) async {
+        if (result != null) {
+          filePicked = true;
+          setState(() {
+            pdfFile = File(result.files.single.path);
+          });
+
+          pdfFileName = '$randomName.pdf';
+        }
+      }).catchError((error) {
+        print("Error: " + error.toString());
+      });
     });
+    
   }
 
   Future savePdf(List<int> asset, String name) async {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
-    StorageUploadTask uploadTask = reference.putData(asset);
-    _fileUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    setState(() {
+      pdfUploadTask = reference.putData(asset);
+    });
+    _fileUrl = await (await pdfUploadTask.onComplete).ref.getDownloadURL();
   }
 
   void addMember(String member, String linkedinId) {
@@ -138,14 +151,62 @@ class _ProjectFormState extends State<ProjectForm> {
     return DynamicWidget(callback: addMember);
   }
 
+
+  Future<void> updateProject(Project project, BuildContext context) async {
+    print("updateProject entered");
+    // widget.callback(updatedProject);
+    if(_date.isEmpty){ 
+      String dateStr = project.date;
+      final formatter = DateFormat('MMM dd, yyyy');
+      final dateTimeFromStr = formatter.parse(dateStr);
+      project.date =DateFormat('yyyy-MM-dd').format(dateTimeFromStr);
+    }
+    Map<String, dynamic> projectObject = {
+      'name': _projectName.isEmpty ? project.name: _projectName,
+      'projectImg': _imageUrls.isEmpty ? project.projectImg: _imageUrls,
+      'description': _description.isEmpty ? project.description : _description,
+      'date': _date.isEmpty ? project.date : _date,
+      'fileUrl': _fileUrl.isEmpty ? project.fileUrl : _fileUrl,
+      'link': _link.isEmpty ? project.link : _link,
+    };
+    updatedProject = Project.fromMap(projectObject);
+    String id;
+      Firestore.instance.collection('/projects').getDocuments().then((projects) {
+        projects.documents.forEach((project) {
+          if (project['name'] == widget.project.name) {
+            print(project['name']);
+            id = project.documentID;
+            return Firestore.instance
+              .collection('/projects')
+              .document(id)
+              .updateData(projectObject)
+              .then((value) => print("Project Updated"))
+              .catchError((error) => print("Failed to update project: $error"));
+          }
+        });
+      });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var projects = ProjectService();
 
+    TextEditingController date = TextEditingController();
+    
+    setState(() {
+      final dateStr = widget.project.date;
+      final formatter = DateFormat('MMM dd, yyyy');
+      final dateTimeFromStr = formatter.parse(dateStr);
+      String currDate =DateFormat('yyyy-MM-dd').format(dateTimeFromStr);
+      print(currDate);
+      date.text=widget.editMode ? _date=="" ? currDate :_date : _date;      
+    });
     // alert after successful form submission
     Widget okButton = FlatButton(
+                      
       child: Text(
         "OK",
         style: kLabelStyle,
@@ -153,6 +214,7 @@ class _ProjectFormState extends State<ProjectForm> {
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
+        widget.callback(updatedProject);
       },
     );
 
@@ -171,7 +233,7 @@ class _ProjectFormState extends State<ProjectForm> {
         key: _scaffoldKey,
         appBar: appBar(
           context,
-          strTitle: "Update Projects",
+          strTitle: widget.editMode ? "Update Project" : "Create Project",
           isDrawer: false,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -213,7 +275,7 @@ class _ProjectFormState extends State<ProjectForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: nameController,
+                      initialValue: widget.editMode ? widget.project.name : _projectName,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -232,8 +294,11 @@ class _ProjectFormState extends State<ProjectForm> {
                         }
                         return null;
                       },
-                      onSaved: (value) {
-                        _projectName = value;
+                      onChanged: (value) {
+                        setState(() {
+                          _projectName = value;
+                        });
+                       
                       },
                     ),
                   ),
@@ -252,7 +317,7 @@ class _ProjectFormState extends State<ProjectForm> {
                     child: TextFormField(
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
-                      controller: descriptionController,
+                      initialValue: widget.editMode? widget.project.description : _description,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -272,8 +337,10 @@ class _ProjectFormState extends State<ProjectForm> {
                         }
                         return null;
                       },
-                      onSaved: (value) {
-                        _description = value;
+                      onChanged: (value) {
+                        setState(() {
+                          _description = value;
+                        });
                       },
                     ),
                   ),
@@ -293,17 +360,32 @@ class _ProjectFormState extends State<ProjectForm> {
                             getImage();
                           },
                         ),
-                        imageList == null
-                            ? Text('No Image Selected.',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
-                            : Text('${imageList.length}: Images Selected.',
-                                style: TextStyle(
-                                    color: Colors.limeAccent[400],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
+                        widget.editMode 
+                        ? widget.project.projectImg.isEmpty 
+                          ? Text('No Image Selected.',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold),
+                          ) 
+                          : Text('${widget.project.projectImg.length}: Images Selected.',
+                              style: TextStyle(
+                                color: Colors.limeAccent[400],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold),
+                          )
+                        : imageList == null
+                          ? Text('No Image Selected.',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold))
+                          : Text('${imageList.length}: Images Selected.',
+                              style: TextStyle(
+                                color: Colors.limeAccent[400],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold),
+                          )
                       ],
                     ),
                   ),
@@ -323,17 +405,34 @@ class _ProjectFormState extends State<ProjectForm> {
                             getPdfAndUpload();
                           },
                         ),
-                        pdfFile == null
-                            ? Text('No File Selected.',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
-                            : Text('File Selected.',
-                                style: TextStyle(
-                                    color: Colors.limeAccent[400],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
+                        widget.editMode 
+                        ? widget.project.fileUrl.isEmpty 
+                          ? Text('No File Selected.',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold),
+                          )
+                          :Text('File Selected.',
+                            style: TextStyle(
+                              color: Colors.limeAccent[400],
+                              fontSize: vpH * 0.02,
+                              fontWeight: FontWeight.bold,
+                            )
+                          )
+                        :  pdfFile == null
+                          ? Text('No File Selected.',
+                              style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: vpH * 0.02,
+                                  fontWeight: FontWeight.bold))
+                          : Text('File Selected.',
+                            style: TextStyle(
+                              color: Colors.limeAccent[400],
+                              fontSize: vpH * 0.02,
+                              fontWeight: FontWeight.bold,
+                            )
+                          )
                       ],
                     ),
                   ),
@@ -351,7 +450,7 @@ class _ProjectFormState extends State<ProjectForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: linkController,
+                      initialValue:widget.editMode ? widget.project.link : _link,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -364,10 +463,13 @@ class _ProjectFormState extends State<ProjectForm> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      onSaved: (value) {
-                        _link = value;
+                      onChanged: (value) {
+                        setState(() {
+                          _link = value;
+                        });
                       },
                     ),
+                      
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
@@ -401,17 +503,22 @@ class _ProjectFormState extends State<ProjectForm> {
                       ),
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime dateTime = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2030),
-                        );
-
-                        DateFormat formatter = DateFormat('yyyy-MM-dd');
-                        String formatted = formatter.format(dateTime);
-                        print(formatted);
-                        date.text = formatted;
+                          setState(() async{
+                            dateTime = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1990),
+                              lastDate: DateTime(2030),
+                            );
+                            
+                            DateFormat formatter = DateFormat('yyyy-MM-dd');
+                            String formatted = formatter.format(dateTime);
+                            print(formatted);
+                            _date = formatted;
+                            date.text=formatted;
+                            dateUPdated=true;
+                          });
+                          
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -419,8 +526,11 @@ class _ProjectFormState extends State<ProjectForm> {
                         }
                         return null;
                       },
-                      onSaved: (String value) {
-                        _date = value;
+                      onChanged: (String value) {
+                        setState(() {
+                          _date = value;
+                          print(_date);
+                        });  
                       },
                     ),
                   ),
@@ -439,7 +549,7 @@ class _ProjectFormState extends State<ProjectForm> {
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         dropdownColor: Color(0xFFE8EAF6),
-                        value: dropdownValue,
+                        value: widget.editMode ? widget.project.teamMembers.length.toString() : dropdownValue,
                         isDense: true,
                         onChanged: (String newValue) {
                           setState(() {
@@ -476,28 +586,38 @@ class _ProjectFormState extends State<ProjectForm> {
                       elevation: vpH * 0.5,
                       onPressed: () async {
                         if (filePicked) {
-                          await savePdf(pdfFile.readAsBytesSync(), 'projects/${nameController.text}/$pdfFileName');
+                          await savePdf(pdfFile.readAsBytesSync(), 'projects/${widget.project.name}/$pdfFileName');
                         }
                         if (imagePicked) {
-                          await postImages(imageList, 'projects/${nameController.text}/$fileName');
+                          await postImages(imageList, 'projects/${widget.project.name}/$fileName');
                         }
-                        // await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          projects.postProjects(
-                            link: _link,
-                            description: _description,
-                            name: _projectName,
-                            projectImg: _imageUrls,
-                            date: _date,
-                            fileUrl: _fileUrl,
-                            teamMembers: _teamMembers,
-                          );
+                        if (!_formKey.currentState.validate()){
+                          print("not valid");
+                          return null;
+                        }
+                        else {
+                           if(widget.editMode){
+                            _formKey.currentState.save();
+                            await updateProject(widget.project, context);
+                          }
+                          else{
+                            _formKey.currentState.save();
+                            await projects.postProjects(
+                              link: _link,
+                              description: _description,
+                              name: _projectName,
+                              projectImg: _imageUrls,
+                              date: _date,
+                              fileUrl: _fileUrl,
+                              teamMembers: _teamMembers,
+                              progress: "",
+                            );
+                          }
                           print("saved");
-                          nameController.clear();
-                          descriptionController.clear();
-                          projectImgController.clear();
-                          linkController.clear();
+                          // nameController.clear();
+                          // descriptionController.clear();
+                          // projectImgController.clear();
+                          // linkController.clear();
 
                           showDialog(
                             context: context,
@@ -505,9 +625,7 @@ class _ProjectFormState extends State<ProjectForm> {
                               return alert;
                             },
                           );
-                        } else {
-                          print("not valid");
-                          return null;
+                          
                         }
                       },
                       padding: EdgeInsets.all(15),
@@ -515,8 +633,9 @@ class _ProjectFormState extends State<ProjectForm> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       color: Color(0xFFFF9C01),
-                      child: Text(
-                        "Update",
+                      child: Text( widget.editMode
+                        ? "Update" 
+                        :"Create",
                         style: TextStyle(
                           color: Colors.white,
                           letterSpacing: vpW * 0.005,
@@ -557,12 +676,12 @@ class DynamicWidget extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
                 child: TextFormField(
                   controller: _teamMember,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Please enter name";
-                    }
-                    return null;
-                  },
+                  // validator: (value) {
+                  //   if (value.isEmpty) {
+                  //     return "Please enter name";
+                  //   }
+                  //   return null;
+                  // },
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: vpH * 0.02,
@@ -575,7 +694,7 @@ class DynamicWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  onSaved: (newValue) {},
+                  onChanged: (newValue) {},
                 ),
               ),
             ],
@@ -599,7 +718,7 @@ class DynamicWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  onSaved: (newValue) {
+                  onChanged: (newValue) {
                     callback(_teamMember.text, _linkedinId.text);
                   },
                 ),

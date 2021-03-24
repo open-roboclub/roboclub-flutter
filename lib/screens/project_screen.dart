@@ -206,7 +206,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) {
-                            return ProjectForm();
+                            return ProjectForm(editMode: false,);
                           },
                         ),
                       );
