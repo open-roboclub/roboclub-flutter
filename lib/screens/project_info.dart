@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -30,7 +31,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
   var vpW;
 
   int _currprogress;
-
+ 
   @override
   void initState() {
     _currprogress =
@@ -64,6 +65,11 @@ class _ProjectInfoState extends State<ProjectInfo> {
       });
     }
 
+    final dateStr = widget.project.date;
+    final formatter = DateFormat('MMM dd, yyyy');
+    final dateTimeFromStr = formatter.parse(dateStr);
+    String genericDate = DateFormat('yyyy-MM-dd').format(dateTimeFromStr);
+    
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
@@ -87,7 +93,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return ProjectForm(editMode: true,project: widget.project);
+                        return ProjectForm(editMode: true,project: widget.project, date:genericDate);
                       }
                     ) 
                   );

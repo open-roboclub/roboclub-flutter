@@ -16,9 +16,10 @@ class ProjectForm extends StatefulWidget {
 
   final Project project;
   final bool editMode;
+  final String date;
   final void Function(Project) callback;
 
-  const ProjectForm({Key key, this.project, this.editMode, this.callback}) : super(key: key);
+  const ProjectForm({Key key, this.project, this.editMode, this.date, this.callback}) : super(key: key);
   @override
   _ProjectFormState createState() => _ProjectFormState();
 }
@@ -61,7 +62,6 @@ class _ProjectFormState extends State<ProjectForm> {
   String dropdownValue = '1';
   bool imagePicked = false;
   bool filePicked = false;
-  bool dateUPdated=false;
   StorageUploadTask uploadTask;
   StorageUploadTask pdfUploadTask;
   String url ="";
@@ -154,20 +154,13 @@ class _ProjectFormState extends State<ProjectForm> {
 
   Future<void> updateProject(Project project, BuildContext context) async {
     print("updateProject entered");
-    // widget.callback(updatedProject);
-    if(_date.isEmpty){ 
-      String dateStr = project.date;
-      final formatter = DateFormat('MMM dd, yyyy');
-      final dateTimeFromStr = formatter.parse(dateStr);
-      project.date =DateFormat('yyyy-MM-dd').format(dateTimeFromStr);
-    }
     Map<String, dynamic> projectObject = {
       'name': _projectName.isEmpty ? project.name: _projectName,
       'projectImg': _imageUrls.isEmpty ? project.projectImg: _imageUrls,
       'description': _description.isEmpty ? project.description : _description,
-      'date': _date.isEmpty ? project.date : _date,
       'fileUrl': _fileUrl.isEmpty ? project.fileUrl : _fileUrl,
       'link': _link.isEmpty ? project.link : _link,
+      'date': _date.isEmpty? widget.date : _date,
     };
     updatedProject = Project.fromMap(projectObject);
     String id;
@@ -195,15 +188,10 @@ class _ProjectFormState extends State<ProjectForm> {
     var projects = ProjectService();
 
     TextEditingController date = TextEditingController();
-    
-    setState(() {
-      final dateStr = widget.project.date;
-      final formatter = DateFormat('MMM dd, yyyy');
-      final dateTimeFromStr = formatter.parse(dateStr);
-      String currDate =DateFormat('yyyy-MM-dd').format(dateTimeFromStr);
-      print(currDate);
-      date.text=widget.editMode ? _date=="" ? currDate :_date : _date;      
-    });
+    if(widget.editMode){
+      date.text = widget.date;
+    }
+
     // alert after successful form submission
     Widget okButton = FlatButton(
                       
@@ -503,22 +491,22 @@ class _ProjectFormState extends State<ProjectForm> {
                       ),
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                          setState(() async{
-                            dateTime = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1990),
-                              lastDate: DateTime(2030),
-                            );
+                        setState(() async{
+                          dateTime = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1990),
+                            lastDate: DateTime(2030),
+                          );
                             
-                            DateFormat formatter = DateFormat('yyyy-MM-dd');
-                            String formatted = formatter.format(dateTime);
-                            print(formatted);
-                            _date = formatted;
-                            date.text=formatted;
-                            dateUPdated=true;
-                          });
-                          
+                          DateFormat formatter = DateFormat('yyyy-MM-dd');
+                          String formatted = formatter.format(dateTime);
+                          print(formatted);
+                          date.text=formatted;
+                          _date = formatted;
+                          date.text=formatted;
+                        });
+                           
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -529,8 +517,7 @@ class _ProjectFormState extends State<ProjectForm> {
                       onChanged: (String value) {
                         setState(() {
                           _date = value;
-                          print(_date);
-                        });  
+                        });
                       },
                     ),
                   ),

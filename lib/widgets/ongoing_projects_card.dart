@@ -9,7 +9,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 class OngoingProjectCard extends StatefulWidget {
   final Project ongoingProject;
   final void Function(Project, String) callback;
-  OngoingProjectCard({Key key, this.ongoingProject, this.callback})
+  final String date;
+  OngoingProjectCard({Key key, this.ongoingProject, this.callback, this.date})
       : super(key: key);
 
   @override
