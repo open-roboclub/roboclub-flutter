@@ -69,6 +69,7 @@ class _ProjectFormState extends State<ProjectForm> {
   bool _loading;
   bool filePicked = false;
   bool showPdf = false;
+  bool showImg = false;
   StorageUploadTask uploadTask;
   StorageUploadTask pdfUploadTask;
   String url = "";
@@ -130,12 +131,16 @@ class _ProjectFormState extends State<ProjectForm> {
       showPdf = widget.currproject.fileUrl.isNotEmpty;
       dropdownValue = widget.currproject.teamMembers.length.toString();
       imgFiles = widget.currproject.projectImg.length;
+      showImg = widget.currproject.projectImg.isNotEmpty;
     }
     super.initState();
   }
 
   // upload image
   Future getImage() async {
+    setState(() {
+      showImg = false;
+    });
     var rng = new Random();
     String randomName = "";
     for (var i = 0; i < 20; i++) {
@@ -151,6 +156,9 @@ class _ProjectFormState extends State<ProjectForm> {
           imgFiles = imageList.length;
         });
         fileName = '$randomName';
+        setState(() {
+          showImg=true;
+        });
       }
     }).catchError((error) {
       print("Error: " + error.toString());
@@ -340,7 +348,7 @@ class _ProjectFormState extends State<ProjectForm> {
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        "Project added Successfully !!",
+        widget.editMode ? "Project Updated Successfully!! " : "Project added Successfully !!",
         style: kLabelStyle,
       ),
       actions: [
@@ -492,13 +500,21 @@ class _ProjectFormState extends State<ProjectForm> {
                                         fontSize: vpH * 0.02,
                                         fontWeight: FontWeight.bold),
                                   )
-                                : Text(
+                                : showImg 
+                                  ?Text(
                                     '${imgFiles.toString()}: Images Selected.',
                                     style: TextStyle(
                                         color: Colors.limeAccent[400],
                                         fontSize: vpH * 0.02,
                                         fontWeight: FontWeight.bold),
                                   )
+                                  : Text(
+                                    'Picking Images....',
+                                    style: TextStyle(
+                                        color: Colors.limeAccent[400],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold),
+                                  ) 
                             : imageList == null
                                 ? Text('No Image Selected.',
                                     style: TextStyle(
