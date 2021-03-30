@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: Icon(
             iconData,
             color: Colors.black.withOpacity(0.8),
-            size: vpH * 0.045,
+            size: vpH * 0.04,
           ),
           onPressed: () => Navigator.of(context).push(
             MaterialPageRoute(
@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Icon(
               Icons.add,
               color: Colors.orangeAccent.withOpacity(0.8),
-              size: vpH * 0.025,
+              size: vpH * 0.022,
             ),
           ),
         )
@@ -83,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var vpW = getViewportWidth(context);
     TextStyle lowPriorityText = TextStyle(
       fontStyle: FontStyle.italic,
-      fontSize: vpH * 0.021,
+      fontSize: vpH * 0.02,
       color: Colors.grey,
     );
 
@@ -493,7 +493,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           )
                         : Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: vpW * 0.08, vertical: vpH * 0.01),
+                                horizontal: vpW * 0.08, vertical: vpH * 0.005),
                             child: FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4.0)),
@@ -525,7 +525,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8.0,
-                            vertical: 20.0,
+                            vertical: 15.0,
                           ),
                           child: Center(
                             child: Text(

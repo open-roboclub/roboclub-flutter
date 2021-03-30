@@ -25,6 +25,7 @@ class _ContributionFormState extends State<ContributionForm> {
   File file;
   String fileName = '';
   bool filePicked = false;
+  bool _loading;
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -58,6 +59,13 @@ class _ContributionFormState extends State<ContributionForm> {
     StorageUploadTask uploadTask = reference.putData(asset);
     _img = await (await uploadTask.onComplete).ref.getDownloadURL();
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -335,12 +343,28 @@ class _ContributionFormState extends State<ContributionForm> {
                       ],
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading = !_loading;
+                        });
                         if (filePicked) {
                           await saveImg(file.readAsBytesSync(), 'contributions/${nameController.text}/$fileName');
                         }

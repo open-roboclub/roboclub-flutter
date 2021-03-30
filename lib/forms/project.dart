@@ -66,6 +66,7 @@ class _ProjectFormState extends State<ProjectForm> {
   List<dynamic> _teamMembers = List();
   String dropdownValue = '1';
   bool imagePicked = false;
+  bool _loading;
   bool filePicked = false;
   bool showPdf = false;
   StorageUploadTask uploadTask;
@@ -99,6 +100,7 @@ class _ProjectFormState extends State<ProjectForm> {
 
   @override
   void initState() {
+    _loading = false;
     teamController = [
       _teamMember1,
       _teamMember2,
@@ -702,92 +704,130 @@ class _ProjectFormState extends State<ProjectForm> {
                   ),
                   for (int i = 0; i < int.parse(dropdownValue); i++)
                     memberField(i),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () async {
-                        if (!_formKey.currentState.validate()) {
-                          print("not valid");
-                          return null;
-                        } else {
-                          for (int i = 0; i < int.parse(dropdownValue); i++) {
-                            _teamMembers.add({
-                              "member": teamController[i].text,
-                              "linkedinId": linkedinController[i].text
-                            });
-                          }
-                          if (_teamMembers.length == 0) {
-                            print("Validation Error: No team member selected");
-                            return null;
-                          }
-                          if (imagePicked) {
-                            widget.editMode
-                                ? await postImages(imageList,
-                                    'projects/${widget.currproject.name}/$fileName')
-                                : await postImages(imageList,
-                                    'projects/$_projectName/$fileName');
-                          } else {
-                            if (!widget.editMode) {
-                              print("Validation Error: No image is picked");
-                              _teamMembers = [];
-                              return null;
-                            }
-                          }
-                          if (filePicked) {
-                            widget.editMode
-                                ? await savePdf(pdfFile.readAsBytesSync(),
-                                    'projects/${widget.currproject.name}/$pdfFileName')
-                                : await savePdf(pdfFile.readAsBytesSync(),
-                                    'projects/$_projectName/$pdfFileName');
-                          }
-                          _formKey.currentState.save();
-                          if (widget.editMode) {
-                            await updateProject(widget.currproject, context);
-                          } else {
-                            var projectService = ProjectService();
-                            await projectService.postProjects(
-                              link: _link,
-                              description: _description,
-                              name: _projectName,
-                              projectImg: _imageUrls,
-                              date: _date,
-                              fileUrl: _fileUrl,
-                              teamMembers: _teamMembers,
-                              progress: "",
-                            );
-                            print("saved");
-                            // nameController.clear();
-                            // descriptionController.clear();
-                            // projectImgController.clear();
-                            // linkController.clear();
+                  _loading
+                      ? Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () {},
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: CircularProgressIndicator(),
+                          ))
+                      : Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () async {
+                              setState(() {
+                                _loading = true;
+                              });
+                              if (!_formKey.currentState.validate()) {
+                                print("not valid");
 
-                          }
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alert;
+                                setState(() {
+                                  _loading = false;
+                                });
+                                return null;
+                              } else {
+                                for (int i = 0;
+                                    i < int.parse(dropdownValue);
+                                    i++) {
+                                  _teamMembers.add({
+                                    "member": teamController[i].text,
+                                    "linkedinId": linkedinController[i].text
+                                  });
+                                }
+                                if (_teamMembers.length == 0) {
+                                  print(
+                                      "Validation Error: No team member selected");
+
+                                  setState(() {
+                                    _loading = false;
+                                  });
+                                  return null;
+                                }
+                                if (imagePicked) {
+                                  widget.editMode
+                                      ? await postImages(imageList,
+                                          'projects/${widget.currproject.name}/$fileName')
+                                      : await postImages(imageList,
+                                          'projects/$_projectName/$fileName');
+                                } else {
+                                  if (!widget.editMode) {
+                                    print(
+                                        "Validation Error: No image is picked");
+                                    _teamMembers = [];
+
+                                    setState(() {
+                                      _loading = false;
+                                    });
+                                    return null;
+                                  }
+                                }
+                                if (filePicked) {
+                                  widget.editMode
+                                      ? await savePdf(pdfFile.readAsBytesSync(),
+                                          'projects/${widget.currproject.name}/$pdfFileName')
+                                      : await savePdf(pdfFile.readAsBytesSync(),
+                                          'projects/$_projectName/$pdfFileName');
+                                }
+                                _formKey.currentState.save();
+                                if (widget.editMode) {
+                                  await updateProject(
+                                      widget.currproject, context);
+                                } else {
+                                  var projectService = ProjectService();
+                                  await projectService.postProjects(
+                                    link: _link,
+                                    description: _description,
+                                    name: _projectName,
+                                    projectImg: _imageUrls,
+                                    date: _date,
+                                    fileUrl: _fileUrl,
+                                    teamMembers: _teamMembers,
+                                    progress: "",
+                                  );
+                                  print("saved");
+                                  // nameController.clear();
+                                  // descriptionController.clear();
+                                  // projectImgController.clear();
+                                  // linkController.clear();
+
+                                }
+
+                                setState(() {
+                                  _loading = false;
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alert;
+                                  },
+                                );
+                              }
                             },
-                          );
-                        }
-                      },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child: Text(
-                        widget.editMode ? "Update" : "Create",
-                        style: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: vpW * 0.005,
-                          fontSize: vpH * 0.025,
-                          fontWeight: FontWeight.bold,
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: Text(
+                              widget.editMode ? "Update" : "Create",
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: vpW * 0.005,
+                                fontSize: vpH * 0.025,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
