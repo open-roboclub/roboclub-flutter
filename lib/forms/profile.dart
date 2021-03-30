@@ -111,6 +111,11 @@ class _ProfileFormState extends State<ProfileForm> {
         .then((value) => print("User Profile Updated"))
         .catchError((error) => print("Failed to update profile: $error"));
   }
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
 
   @override
   void initState() {
@@ -665,6 +670,19 @@ class _ProfileFormState extends State<ProfileForm> {
                       },
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     width: vpW * 0.5,
                     padding: EdgeInsets.all(15),

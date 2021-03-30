@@ -65,6 +65,13 @@ class _ContributionFormState extends State<ContributionForm> {
     _loading=false;
   }
   @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
@@ -340,6 +347,19 @@ class _ContributionFormState extends State<ContributionForm> {
                       ],
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
