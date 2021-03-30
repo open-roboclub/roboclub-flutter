@@ -29,6 +29,7 @@ class _EventFormState extends State<EventForm> {
       fileName = '',
       _regFormLink;
 
+  bool _loading;
   bool filePicked = false;
   File file;
   String _hour, _minute, _time;
@@ -90,6 +91,7 @@ class _EventFormState extends State<EventForm> {
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
         [hh, ':', nn, " ", am]).toString();
     super.initState();
+    _loading=false;
   }
   // upload image
 
@@ -519,11 +521,17 @@ class _EventFormState extends State<EventForm> {
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading=true;
+                        });
                         if (filePicked) {
                           await saveImg(file.readAsBytesSync(), 'events/${eventNameController.text}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
+                          setState(() {
+                            _loading=false;
+                          });
                           return null;
                         } else {
                           _formKey.currentState.save();

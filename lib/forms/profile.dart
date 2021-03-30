@@ -38,7 +38,7 @@ class _ProfileFormState extends State<ProfileForm> {
   String _linkedinId = "";
   String _position = "";
   String _quote = "";
-
+  bool _loading;
   bool filePicked = false;
 
   StorageUploadTask uploadTask;
@@ -110,6 +110,12 @@ class _ProfileFormState extends State<ProfileForm> {
         .updateData(userObject)
         .then((value) => print("User Profile Updated"))
         .catchError((error) => print("Failed to update profile: $error"));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
   }
 
   @override
@@ -665,11 +671,17 @@ class _ProfileFormState extends State<ProfileForm> {
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading=true;
+                        });
                         if (filePicked) {
                           await saveImg(file.readAsBytesSync(), 'users/${_user.name}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
+                          setState(() {
+                            _loading=false;
+                          });
                           return null;
                         } else {
                           _formKey.currentState.save();

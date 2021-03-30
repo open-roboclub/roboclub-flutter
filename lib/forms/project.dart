@@ -62,6 +62,7 @@ class _ProjectFormState extends State<ProjectForm> {
   String dropdownValue = '1';
   bool imagePicked = false;
   bool filePicked = false;
+  bool _loading;
   StorageUploadTask uploadTask;
   StorageUploadTask pdfUploadTask;
   String url ="";
@@ -170,7 +171,11 @@ class _ProjectFormState extends State<ProjectForm> {
       });
     
   }
-
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
@@ -562,11 +567,17 @@ class _ProjectFormState extends State<ProjectForm> {
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading =true;
+                        });
                          _teamMembers.add({'member': ' ', 'linkedinId': ''});
                         _imageUrls.add('');
                         if (!_formKey.currentState.validate()){
                          
                           print("not valid");
+                          setState(() {
+                            _loading=false;
+                          });
                           return null;
                         }
                         else if(_imageUrls.length==0 || _teamMembers.length==0){
