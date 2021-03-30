@@ -59,6 +59,7 @@ class _ProjectFormState extends State<ProjectForm> {
   String fileName = '';
   String pdfFileName = '';
   File pdfFile;
+  int imgFiles = 0;
   List<dynamic> dynamicList = [];
   List<dynamic> _imageUrls = List();
   List<File> imageList = List();
@@ -66,6 +67,7 @@ class _ProjectFormState extends State<ProjectForm> {
   String dropdownValue = '1';
   bool imagePicked = false;
   bool filePicked = false;
+  bool showPdf = false;
   StorageUploadTask uploadTask;
   StorageUploadTask pdfUploadTask;
   String url = "";
@@ -123,7 +125,9 @@ class _ProjectFormState extends State<ProjectForm> {
     ];
     if (widget.editMode) {
       date.text = widget.genericDate;
+      showPdf = widget.currproject.fileUrl.isNotEmpty;
       dropdownValue = widget.currproject.teamMembers.length.toString();
+      imgFiles = widget.currproject.projectImg.length;
     }
     super.initState();
   }
@@ -142,6 +146,7 @@ class _ProjectFormState extends State<ProjectForm> {
         imagePicked = true;
         setState(() {
           imageList = result.paths.map((path) => File(path)).toList();
+          imgFiles = imageList.length;
         });
         fileName = '$randomName';
       }
@@ -157,6 +162,9 @@ class _ProjectFormState extends State<ProjectForm> {
       uploadTask = storageReference.putFile(imageList[i]);
       url = await (await uploadTask.onComplete).ref.getDownloadURL();
       _imageUrls.add(url);
+    }
+    if (widget.editMode) {
+      widget.currproject.projectImg = _imageUrls;
     }
   }
 
@@ -175,6 +183,7 @@ class _ProjectFormState extends State<ProjectForm> {
         filePicked = true;
         setState(() {
           pdfFile = File(result.files.single.path);
+          showPdf = true;
         });
         pdfFileName = '$randomName.pdf';
       }
@@ -191,15 +200,18 @@ class _ProjectFormState extends State<ProjectForm> {
 
   Widget memberField(int index) {
     if (widget.editMode) {
-      teamController[index].value = TextEditingValue(
-          text: widget.currproject.teamMembers[index]['member'],
-          selection: TextSelection.fromPosition(TextPosition(
-              offset: widget.currproject.teamMembers[index]['member'].length)));
-      linkedinController[index].value = TextEditingValue(
-          text: widget.currproject.teamMembers[index]['linkedinId'],
-          selection: TextSelection.fromPosition(TextPosition(
-              offset:
-                  widget.currproject.teamMembers[index]['linkedinId'].length)));
+      if (widget.currproject.teamMembers.length >= index + 1) {
+        teamController[index].value = TextEditingValue(
+            text: widget.currproject.teamMembers[index]['member'],
+            selection: TextSelection.fromPosition(TextPosition(
+                offset:
+                    widget.currproject.teamMembers[index]['member'].length)));
+        linkedinController[index].value = TextEditingValue(
+            text: widget.currproject.teamMembers[index]['linkedinId'],
+            selection: TextSelection.fromPosition(TextPosition(
+                offset: widget
+                    .currproject.teamMembers[index]['linkedinId'].length)));
+      }
     }
     return Container(
       margin:
@@ -273,14 +285,13 @@ class _ProjectFormState extends State<ProjectForm> {
         ],
       ),
     );
-    // return DynamicWidget(callback: addMember);
   }
 
   Future<void> updateProject(Project project, BuildContext context) async {
     print("updateProject entered");
     Map<String, dynamic> projectObject = {
       'name': _projectName.isEmpty ? project.name : _projectName,
-      'projectImg': _imageUrls.isEmpty ? project.projectImg : _imageUrls,
+      'projectImg': project.projectImg,
       'description': _description.isEmpty ? project.description : _description,
       'fileUrl': _fileUrl.isEmpty ? project.fileUrl : _fileUrl,
       'link': _link.isEmpty ? project.link : _link,
@@ -288,11 +299,11 @@ class _ProjectFormState extends State<ProjectForm> {
       'teamMembers': _teamMembers,
     };
     updatedProject = Project.fromMap(projectObject);
+    updatedProject.progress = project.progress;
     String id;
     Firestore.instance.collection('/projects').getDocuments().then((projects) {
       projects.documents.forEach((project) {
         if (project['name'] == widget.currproject.name) {
-          print(project['name']);
           id = project.documentID;
           return Firestore.instance
               .collection('/projects')
@@ -300,8 +311,8 @@ class _ProjectFormState extends State<ProjectForm> {
               .updateData(projectObject)
               .then((value) {
             print("Project Updated");
-            widget.callback(updatedProject);
-            Navigator.of(context).pop();
+            // widget.callback(updatedProject);
+            // Navigator.of(context).pop();
           }).catchError((error) => print("Failed to update project: $error"));
         }
       });
@@ -472,7 +483,7 @@ class _ProjectFormState extends State<ProjectForm> {
                           },
                         ),
                         widget.editMode
-                            ? widget.currproject.projectImg.isEmpty
+                            ? imgFiles == 0
                                 ? Text(
                                     'No Image Selected.',
                                     style: TextStyle(
@@ -481,7 +492,7 @@ class _ProjectFormState extends State<ProjectForm> {
                                         fontWeight: FontWeight.bold),
                                   )
                                 : Text(
-                                    '${widget.currproject.projectImg.length}: Images Selected.',
+                                    '${imgFiles.toString()}: Images Selected.',
                                     style: TextStyle(
                                         color: Colors.limeAccent[400],
                                         fontSize: vpH * 0.02,
@@ -520,7 +531,7 @@ class _ProjectFormState extends State<ProjectForm> {
                           },
                         ),
                         widget.editMode
-                            ? widget.currproject.fileUrl.isEmpty
+                            ? !showPdf
                                 ? Text(
                                     'No File Selected.',
                                     style: TextStyle(
@@ -751,13 +762,14 @@ class _ProjectFormState extends State<ProjectForm> {
                             // descriptionController.clear();
                             // projectImgController.clear();
                             // linkController.clear();
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return alert;
-                              },
-                            );
+
                           }
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
                         }
                       },
                       padding: EdgeInsets.all(15),

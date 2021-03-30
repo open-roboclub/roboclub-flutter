@@ -43,6 +43,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
 
   void updateProjectCallback(Project updatedProject) {
     setState(() {
+      DateTime _parsed = DateTime.parse(updatedProject.date);
+      updatedProject.date = DateFormat('yMMMd').format(_parsed);
       currProject = updatedProject;
     });
   }
