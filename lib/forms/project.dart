@@ -66,19 +66,18 @@ class _ProjectFormState extends State<ProjectForm> {
   StorageUploadTask pdfUploadTask;
   String url ="";
   DateTime dateTime;
-  
+  TextEditingController date = TextEditingController();
+
   // upload image
   Future getImage() async {
-    setState(() async{
-      var rng = new Random();
-      String randomName = "";
-      for (var i = 0; i < 20; i++) {
-        randomName += rng.nextInt(100).toString();
-      }
-
-      await FilePicker.platform
-          .pickFiles(allowMultiple: true, type: FileType.image)
-          .then((result) async {
+    var rng = new Random();
+    String randomName = "";
+    for (var i = 0; i < 20; i++) {
+      randomName += rng.nextInt(100).toString();
+    }
+    await FilePicker.platform
+      .pickFiles(allowMultiple: true, type: FileType.image)
+      .then((result) async {
         if (result != null) {
           imagePicked = true;
           setState(() {
@@ -89,16 +88,12 @@ class _ProjectFormState extends State<ProjectForm> {
       }).catchError((error) {
         print("Error: " + error.toString());
       });
-    });
   }
 
   Future postImages(List<File> imageList, String name) async {
     for (int i = 0; i < imageList.length; i++) {
-      StorageReference storageReference =
-          FirebaseStorage().ref().child("$name$i");
-      setState(() {
-        uploadTask = storageReference.putFile(imageList[i]);
-      });
+      StorageReference storageReference = FirebaseStorage().ref().child("$name$i");
+      uploadTask = storageReference.putFile(imageList[i]);
       url = await (await uploadTask.onComplete).ref.getDownloadURL();
       _imageUrls.add(url);
     }
@@ -107,35 +102,30 @@ class _ProjectFormState extends State<ProjectForm> {
   // upload pdf
 
   Future getPdfAndUpload() async {
-    setState(() async{
-      var rng = new Random();
-      String randomName = "";
-      for (var i = 0; i < 20; i++) {
-        randomName += rng.nextInt(100).toString();
+    var rng = new Random();
+    String randomName = "";
+    for (var i = 0; i < 20; i++) {
+      randomName += rng.nextInt(100).toString();
+    }
+    await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc']).then((result) async {
+      if (result != null) {
+        filePicked = true;
+        setState(() {
+          pdfFile = File(result.files.single.path);
+        });
+        pdfFileName = '$randomName.pdf';
       }
-      await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['pdf', 'doc']).then((result) async {
-        if (result != null) {
-          filePicked = true;
-          setState(() {
-            pdfFile = File(result.files.single.path);
-          });
-
-          pdfFileName = '$randomName.pdf';
-        }
-      }).catchError((error) {
-        print("Error: " + error.toString());
-      });
+    }).catchError((error) {
+      print("Error: " + error.toString());
     });
     
   }
 
   Future savePdf(List<int> asset, String name) async {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
-    setState(() {
-      pdfUploadTask = reference.putData(asset);
-    });
+    pdfUploadTask = reference.putData(asset);
     _fileUrl = await (await pdfUploadTask.onComplete).ref.getDownloadURL();
   }
 
@@ -187,7 +177,7 @@ class _ProjectFormState extends State<ProjectForm> {
     vpW = getViewportWidth(context);
     var projects = ProjectService();
 
-    TextEditingController date = TextEditingController();
+    
     if(widget.editMode){
       date.text = widget.date;
     }
@@ -375,6 +365,7 @@ class _ProjectFormState extends State<ProjectForm> {
                                 fontWeight: FontWeight.bold),
                           )
                       ],
+                  
                     ),
                   ),
                   Container(
@@ -491,22 +482,20 @@ class _ProjectFormState extends State<ProjectForm> {
                       ),
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                        setState(() async{
-                          dateTime = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1990),
-                            lastDate: DateTime(2030),
-                          );
-                            
-                          DateFormat formatter = DateFormat('yyyy-MM-dd');
-                          String formatted = formatter.format(dateTime);
-                          print(formatted);
-                          date.text=formatted;
-                          _date = formatted;
-                          date.text=formatted;
-                        });
-                           
+                        dateTime = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(2030),
+                        );
+                          setState(() {
+                            DateFormat formatter = DateFormat('yyyy-MM-dd');
+                            String formatted = formatter.format(dateTime);
+                            print(formatted);
+                            date.text=formatted;
+                            print("2"+date.text);
+                            _date = formatted;
+                          });
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -517,6 +506,7 @@ class _ProjectFormState extends State<ProjectForm> {
                       onChanged: (String value) {
                         setState(() {
                           _date = value;
+                          print(date.text);
                         });
                       },
                     ),
@@ -572,18 +562,33 @@ class _ProjectFormState extends State<ProjectForm> {
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
-                        if (filePicked) {
-                          await savePdf(pdfFile.readAsBytesSync(), 'projects/${widget.project.name}/$pdfFileName');
-                        }
-                        if (imagePicked) {
-                          await postImages(imageList, 'projects/${widget.project.name}/$fileName');
-                        }
+                         _teamMembers.add({'member': ' ', 'linkedinId': ''});
+                        _imageUrls.add('');
                         if (!_formKey.currentState.validate()){
+                         
                           print("not valid");
                           return null;
                         }
-                        else {
-                           if(widget.editMode){
+                        else if(_imageUrls.length==0 || _teamMembers.length==0){
+                          if(_teamMembers.length==0){
+                            print("Pick atleast one team member");  
+                          }
+                          if(_imageUrls.length==0){
+                            print("Pick atleast one image");
+                          }
+                          return null;
+                        }
+                        else{
+                          if (filePicked) {
+                            widget.editMode?await savePdf(pdfFile.readAsBytesSync(), 'projects/${widget.project.name}/$pdfFileName') :
+                            await savePdf(pdfFile.readAsBytesSync(), 'projects/$_projectName/$pdfFileName');
+                          }
+                          if (imagePicked) {
+                            widget.editMode? await postImages(imageList, 'projects/${widget.project.name}/$fileName') :
+                            await postImages(imageList, 'projects/$_projectName/$fileName');
+                          }
+
+                          if(widget.editMode){
                             _formKey.currentState.save();
                             await updateProject(widget.project, context);
                           }
@@ -599,20 +604,18 @@ class _ProjectFormState extends State<ProjectForm> {
                               teamMembers: _teamMembers,
                               progress: "",
                             );
+                            print("saved");
+                            // nameController.clear();
+                            // descriptionController.clear();
+                            // projectImgController.clear();
+                            // linkController.clear();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alert;
+                              },
+                            );
                           }
-                          print("saved");
-                          // nameController.clear();
-                          // descriptionController.clear();
-                          // projectImgController.clear();
-                          // linkController.clear();
-
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alert;
-                            },
-                          );
-                          
                         }
                       },
                       padding: EdgeInsets.all(15),
