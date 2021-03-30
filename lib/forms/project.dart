@@ -67,6 +67,7 @@ class _ProjectFormState extends State<ProjectForm> {
   String url ="";
   DateTime dateTime;
   TextEditingController date = TextEditingController();
+  bool _loading;
 
   // upload image
   Future getImage() async {
@@ -170,7 +171,12 @@ class _ProjectFormState extends State<ProjectForm> {
       });
     
   }
-
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
+  
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
@@ -556,12 +562,28 @@ class _ProjectFormState extends State<ProjectForm> {
                   ),
                   for (int i = 0; i < int.parse(dropdownValue); i++)
                     memberField(i),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading =!_loading;
+                        });
                          _teamMembers.add({'member': ' ', 'linkedinId': ''});
                         _imageUrls.add('');
                         if (!_formKey.currentState.validate()){
