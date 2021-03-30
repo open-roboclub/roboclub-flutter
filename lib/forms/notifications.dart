@@ -16,11 +16,18 @@ class _NotificationFormState extends State<NotificationForm> {
   String _title;
   String _msg;
   String _link = "";
+  bool _loading;
 
   TextEditingController date = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController msgController = TextEditingController();
   TextEditingController linkController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,12 +224,28 @@ class _NotificationFormState extends State<NotificationForm> {
                       },
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading =!_loading;
+                        });
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
                           return null;
