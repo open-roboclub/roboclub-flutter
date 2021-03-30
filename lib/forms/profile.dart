@@ -118,12 +118,6 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _loading = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);

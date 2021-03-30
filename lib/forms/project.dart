@@ -321,11 +321,6 @@ class _ProjectFormState extends State<ProjectForm> {
     });
   }
   @override
-  void initState() {
-    super.initState();
-    _loading = false;
-  }
-  @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
