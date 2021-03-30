@@ -177,7 +177,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: vpH * 0.04,
                               ),
                               _quickOptions(
-                                  vpH, CustomIcons.projects, ProjectForm()),
+                                  vpH,
+                                  CustomIcons.projects,
+                                  ProjectForm(
+                                    editMode: false,
+                                  )),
                               Divider(
                                 height: vpH * 0.04,
                               ),
