@@ -1,15 +1,29 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:roboclub_flutter/models/project.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/project.dart';
 import 'package:intl/intl.dart';
 
 class ProjectForm extends StatefulWidget {
+  final Project currproject;
+  final bool editMode;
+  final String genericDate;
+  final void Function(Project) callback;
+
+  const ProjectForm(
+      {Key key,
+      this.currproject,
+      this.editMode,
+      this.genericDate,
+      this.callback})
+      : super(key: key);
   @override
   _ProjectFormState createState() => _ProjectFormState();
 }
@@ -35,41 +49,103 @@ final kLabelStyle = TextStyle(
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  Project updatedProject;
 
-  List<dynamic> dynamicList = [];
-  String _projectName;
-  String _description;
-  String _date;
+  String _projectName = "";
+  String _description = "";
+  String _date = "";
   String _link = "";
   String _fileUrl = "";
+  String fileName = '';
+  String pdfFileName = '';
+  File pdfFile;
+  int imgFiles = 0;
+  List<dynamic> dynamicList = [];
   List<dynamic> _imageUrls = List();
   List<File> imageList = List();
   List<dynamic> _teamMembers = List();
   String dropdownValue = '1';
-
-  String fileName = '';
-  String pdfFileName = '';
-  File pdfFile;
-
   bool imagePicked = false;
+  bool _loading;
   bool filePicked = false;
-
-  final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final projectImgController = TextEditingController();
-  final linkController = TextEditingController();
+  bool showPdf = false;
+  bool showImg = false;
+  StorageUploadTask uploadTask;
+  StorageUploadTask pdfUploadTask;
+  String url = "";
+  DateTime dateTime;
   TextEditingController date = TextEditingController();
-  // TextEditingController _teamMember = new TextEditingController();
-  // TextEditingController memberName = new TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  final TextEditingController _teamMember1 = new TextEditingController();
+  final TextEditingController _linkedinId1 = new TextEditingController();
+  final TextEditingController _teamMember2 = new TextEditingController();
+  final TextEditingController _linkedinId2 = new TextEditingController();
+  final TextEditingController _teamMember3 = new TextEditingController();
+  final TextEditingController _linkedinId3 = new TextEditingController();
+  final TextEditingController _teamMember4 = new TextEditingController();
+  final TextEditingController _linkedinId4 = new TextEditingController();
+  final TextEditingController _teamMember5 = new TextEditingController();
+  final TextEditingController _linkedinId5 = new TextEditingController();
+  final TextEditingController _teamMember6 = new TextEditingController();
+  final TextEditingController _linkedinId6 = new TextEditingController();
+  final TextEditingController _teamMember7 = new TextEditingController();
+  final TextEditingController _linkedinId7 = new TextEditingController();
+  final TextEditingController _teamMember8 = new TextEditingController();
+  final TextEditingController _linkedinId8 = new TextEditingController();
+  final TextEditingController _teamMember9 = new TextEditingController();
+  final TextEditingController _linkedinId9 = new TextEditingController();
+  final TextEditingController _teamMember10 = new TextEditingController();
+  final TextEditingController _linkedinId10 = new TextEditingController();
+  List<TextEditingController> teamController;
+  List<TextEditingController> linkedinController = [];
+
+  @override
+  void initState() {
+    _loading = false;
+    teamController = [
+      _teamMember1,
+      _teamMember2,
+      _teamMember3,
+      _teamMember4,
+      _teamMember5,
+      _teamMember6,
+      _teamMember7,
+      _teamMember8,
+      _teamMember9,
+      _teamMember10
+    ];
+    linkedinController = [
+      _linkedinId1,
+      _linkedinId2,
+      _linkedinId3,
+      _linkedinId4,
+      _linkedinId5,
+      _linkedinId6,
+      _linkedinId7,
+      _linkedinId8,
+      _linkedinId9,
+      _linkedinId10
+    ];
+    if (widget.editMode) {
+      date.text = widget.genericDate;
+      showPdf = widget.currproject.fileUrl.isNotEmpty;
+      dropdownValue = widget.currproject.teamMembers.length.toString();
+      imgFiles = widget.currproject.projectImg.length;
+      showImg = widget.currproject.projectImg.isNotEmpty;
+    }
+    super.initState();
+  }
 
   // upload image
   Future getImage() async {
+    setState(() {
+      showImg = false;
+    });
     var rng = new Random();
     String randomName = "";
     for (var i = 0; i < 20; i++) {
       randomName += rng.nextInt(100).toString();
     }
-
     await FilePicker.platform
         .pickFiles(allowMultiple: true, type: FileType.image)
         .then((result) async {
@@ -77,8 +153,12 @@ class _ProjectFormState extends State<ProjectForm> {
         imagePicked = true;
         setState(() {
           imageList = result.paths.map((path) => File(path)).toList();
+          imgFiles = imageList.length;
         });
         fileName = '$randomName';
+        setState(() {
+          showImg=true;
+        });
       }
     }).catchError((error) {
       print("Error: " + error.toString());
@@ -87,12 +167,14 @@ class _ProjectFormState extends State<ProjectForm> {
 
   Future postImages(List<File> imageList, String name) async {
     for (int i = 0; i < imageList.length; i++) {
-      final StorageReference storageReference =
+      StorageReference storageReference =
           FirebaseStorage().ref().child("$name$i");
-      final StorageUploadTask uploadTask =
-          storageReference.putFile(imageList[i]);
-      String url = await (await uploadTask.onComplete).ref.getDownloadURL();
+      uploadTask = storageReference.putFile(imageList[i]);
+      url = await (await uploadTask.onComplete).ref.getDownloadURL();
       _imageUrls.add(url);
+    }
+    if (widget.editMode) {
+      widget.currproject.projectImg = _imageUrls;
     }
   }
 
@@ -111,8 +193,8 @@ class _ProjectFormState extends State<ProjectForm> {
         filePicked = true;
         setState(() {
           pdfFile = File(result.files.single.path);
+          showPdf = true;
         });
-
         pdfFileName = '$randomName.pdf';
       }
     }).catchError((error) {
@@ -122,27 +204,134 @@ class _ProjectFormState extends State<ProjectForm> {
 
   Future savePdf(List<int> asset, String name) async {
     StorageReference reference = FirebaseStorage.instance.ref().child(name);
-    StorageUploadTask uploadTask = reference.putData(asset);
-    _fileUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
-  }
-
-  void addMember(String member, String linkedinId) {
-    Map<String, String> obj = {
-      'member': member,
-      'linkedinId': linkedinId,
-    };
-    _teamMembers.add(obj);
+    pdfUploadTask = reference.putData(asset);
+    _fileUrl = await (await pdfUploadTask.onComplete).ref.getDownloadURL();
   }
 
   Widget memberField(int index) {
-    return DynamicWidget(callback: addMember);
+    if (widget.editMode) {
+      if (widget.currproject.teamMembers.length >= index + 1) {
+        teamController[index].value = TextEditingValue(
+            text: widget.currproject.teamMembers[index]['member'],
+            selection: TextSelection.fromPosition(TextPosition(
+                offset:
+                    widget.currproject.teamMembers[index]['member'].length)));
+        linkedinController[index].value = TextEditingValue(
+            text: widget.currproject.teamMembers[index]['linkedinId'],
+            selection: TextSelection.fromPosition(TextPosition(
+                offset: widget
+                    .currproject.teamMembers[index]['linkedinId'].length)));
+      }
+    }
+    return Container(
+      margin:
+          EdgeInsets.symmetric(vertical: vpH * 0.005, horizontal: vpW * 0.05),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: vpW * 0.9,
+                padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                child: TextFormField(
+                  controller: teamController[index],
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Please enter name";
+                    }
+                    return null;
+                  },
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: vpH * 0.02,
+                  ),
+                  decoration: InputDecoration(
+                    fillColor: Color(0xFFE8EAF6),
+                    hintText: 'Member Name',
+                    hintStyle: kHintTextStyle,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  onChanged: (newValue) {
+                    if (widget.editMode) {
+                      widget.currproject.teamMembers[index]['member'] =
+                          newValue;
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                width: vpW * 0.9,
+                padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                child: TextFormField(
+                  controller: linkedinController[index],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: vpH * 0.02,
+                  ),
+                  decoration: InputDecoration(
+                    fillColor: Color(0xFFE8EAF6),
+                    hintText: 'Linkedin Id',
+                    hintStyle: kHintTextStyle,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  onChanged: (newValue) {
+                    if (widget.editMode) {
+                      widget.currproject.teamMembers[index]['linkedinId'] =
+                          newValue;
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
+  Future<void> updateProject(Project project, BuildContext context) async {
+    print("updateProject entered");
+    Map<String, dynamic> projectObject = {
+      'name': _projectName.isEmpty ? project.name : _projectName,
+      'projectImg': project.projectImg,
+      'description': _description.isEmpty ? project.description : _description,
+      'fileUrl': _fileUrl.isEmpty ? project.fileUrl : _fileUrl,
+      'link': _link.isEmpty ? project.link : _link,
+      'date': _date.isEmpty ? widget.genericDate : _date,
+      'teamMembers': _teamMembers,
+    };
+    updatedProject = Project.fromMap(projectObject);
+    updatedProject.progress = project.progress;
+    String id;
+    Firestore.instance.collection('/projects').getDocuments().then((projects) {
+      projects.documents.forEach((project) {
+        if (project['name'] == widget.currproject.name) {
+          id = project.documentID;
+          return Firestore.instance
+              .collection('/projects')
+              .document(id)
+              .updateData(projectObject)
+              .then((value) {
+            print("Project Updated");
+            // widget.callback(updatedProject);
+            // Navigator.of(context).pop();
+          }).catchError((error) => print("Failed to update project: $error"));
+        }
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
-    var projects = ProjectService();
 
     // alert after successful form submission
     Widget okButton = FlatButton(
@@ -153,12 +342,13 @@ class _ProjectFormState extends State<ProjectForm> {
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
+        widget.callback(updatedProject);
       },
     );
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        "Project added Successfully !!",
+        widget.editMode ? "Project Updated Successfully!! " : "Project added Successfully !!",
         style: kLabelStyle,
       ),
       actions: [
@@ -171,7 +361,7 @@ class _ProjectFormState extends State<ProjectForm> {
         key: _scaffoldKey,
         appBar: appBar(
           context,
-          strTitle: "Update Projects",
+          strTitle: widget.editMode ? "Update Project" : "Create Project",
           isDrawer: false,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -213,7 +403,9 @@ class _ProjectFormState extends State<ProjectForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: nameController,
+                      initialValue: widget.editMode
+                          ? widget.currproject.name
+                          : _projectName,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -232,8 +424,10 @@ class _ProjectFormState extends State<ProjectForm> {
                         }
                         return null;
                       },
-                      onSaved: (value) {
-                        _projectName = value;
+                      onChanged: (value) {
+                        setState(() {
+                          _projectName = value;
+                        });
                       },
                     ),
                   ),
@@ -252,7 +446,9 @@ class _ProjectFormState extends State<ProjectForm> {
                     child: TextFormField(
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
-                      controller: descriptionController,
+                      initialValue: widget.editMode
+                          ? widget.currproject.description
+                          : _description,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -272,8 +468,10 @@ class _ProjectFormState extends State<ProjectForm> {
                         }
                         return null;
                       },
-                      onSaved: (value) {
-                        _description = value;
+                      onChanged: (value) {
+                        setState(() {
+                          _description = value;
+                        });
                       },
                     ),
                   ),
@@ -293,17 +491,43 @@ class _ProjectFormState extends State<ProjectForm> {
                             getImage();
                           },
                         ),
-                        imageList == null
-                            ? Text('No Image Selected.',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
-                            : Text('${imageList.length}: Images Selected.',
-                                style: TextStyle(
-                                    color: Colors.limeAccent[400],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
+                        widget.editMode
+                            ? imgFiles == 0
+                                ? Text(
+                                    'No Image Selected.',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                : showImg 
+                                  ?Text(
+                                    '${imgFiles.toString()}: Images Selected.',
+                                    style: TextStyle(
+                                        color: Colors.limeAccent[400],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                  : Text(
+                                    'Picking Images....',
+                                    style: TextStyle(
+                                        color: Colors.limeAccent[400],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold),
+                                  ) 
+                            : imageList == null
+                                ? Text('No Image Selected.',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold))
+                                : Text(
+                                    '${imageList.length}: Images Selected.',
+                                    style: TextStyle(
+                                        color: Colors.limeAccent[400],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold),
+                                  )
                       ],
                     ),
                   ),
@@ -323,17 +547,33 @@ class _ProjectFormState extends State<ProjectForm> {
                             getPdfAndUpload();
                           },
                         ),
-                        pdfFile == null
-                            ? Text('No File Selected.',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
-                            : Text('File Selected.',
-                                style: TextStyle(
-                                    color: Colors.limeAccent[400],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
+                        widget.editMode
+                            ? !showPdf
+                                ? Text(
+                                    'No File Selected.',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                : Text('File Selected.',
+                                    style: TextStyle(
+                                      color: Colors.limeAccent[400],
+                                      fontSize: vpH * 0.02,
+                                      fontWeight: FontWeight.bold,
+                                    ))
+                            : pdfFile == null
+                                ? Text('No File Selected.',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: vpH * 0.02,
+                                        fontWeight: FontWeight.bold))
+                                : Text('File Selected.',
+                                    style: TextStyle(
+                                      color: Colors.limeAccent[400],
+                                      fontSize: vpH * 0.02,
+                                      fontWeight: FontWeight.bold,
+                                    ))
                       ],
                     ),
                   ),
@@ -351,7 +591,8 @@ class _ProjectFormState extends State<ProjectForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: linkController,
+                      initialValue:
+                          widget.editMode ? widget.currproject.link : _link,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: vpH * 0.02,
@@ -364,8 +605,10 @@ class _ProjectFormState extends State<ProjectForm> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      onSaved: (value) {
-                        _link = value;
+                      onChanged: (value) {
+                        setState(() {
+                          _link = value;
+                        });
                       },
                     ),
                   ),
@@ -401,17 +644,20 @@ class _ProjectFormState extends State<ProjectForm> {
                       ),
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime dateTime = await showDatePicker(
+                        dateTime = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1990),
                           lastDate: DateTime(2030),
                         );
-
-                        DateFormat formatter = DateFormat('yyyy-MM-dd');
-                        String formatted = formatter.format(dateTime);
-                        print(formatted);
-                        date.text = formatted;
+                        setState(() {
+                          DateFormat formatter = DateFormat('yyyy-MM-dd');
+                          String formatted = formatter.format(dateTime);
+                          print(formatted);
+                          date.text = formatted;
+                          print("2" + date.text);
+                          _date = formatted;
+                        });
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -419,8 +665,11 @@ class _ProjectFormState extends State<ProjectForm> {
                         }
                         return null;
                       },
-                      onSaved: (String value) {
-                        _date = value;
+                      onChanged: (String value) {
+                        setState(() {
+                          _date = value;
+                          print(date.text);
+                        });
                       },
                     ),
                   ),
@@ -443,6 +692,7 @@ class _ProjectFormState extends State<ProjectForm> {
                         isDense: true,
                         onChanged: (String newValue) {
                           setState(() {
+                            _teamMembers = [];
                             dropdownValue = newValue;
                           });
                         },
@@ -469,144 +719,135 @@ class _ProjectFormState extends State<ProjectForm> {
                   ),
                   for (int i = 0; i < int.parse(dropdownValue); i++)
                     memberField(i),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () async {
-                        if (filePicked) {
-                          await savePdf(pdfFile.readAsBytesSync(), pdfFileName);
-                        }
-                        if (imagePicked) {
-                          await postImages(imageList, fileName);
-                        }
-                        // await Future.wait([savePdf(pdfFile.readAsBytesSync(), pdfFileName),postImages(imageList,fileName)]);
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          projects.postProjects(
-                            link: _link,
-                            description: _description,
-                            name: _projectName,
-                            projectImg: _imageUrls,
-                            date: _date,
-                            fileUrl: _fileUrl,
-                            teamMembers: _teamMembers,
-                          );
-                          print("saved");
-                          nameController.clear();
-                          descriptionController.clear();
-                          projectImgController.clear();
-                          linkController.clear();
+                  _loading
+                      ? Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () {},
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: CircularProgressIndicator(),
+                          ))
+                      : Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () async {
+                              setState(() {
+                                _loading = true;
+                              });
+                              if (!_formKey.currentState.validate()) {
+                                print("not valid");
 
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alert;
+                                setState(() {
+                                  _loading = false;
+                                });
+                                return null;
+                              } else {
+                                for (int i = 0;
+                                    i < int.parse(dropdownValue);
+                                    i++) {
+                                  _teamMembers.add({
+                                    "member": teamController[i].text,
+                                    "linkedinId": linkedinController[i].text
+                                  });
+                                }
+                                if (_teamMembers.length == 0) {
+                                  print(
+                                      "Validation Error: No team member selected");
+
+                                  setState(() {
+                                    _loading = false;
+                                  });
+                                  return null;
+                                }
+                                if (imagePicked) {
+                                  widget.editMode
+                                      ? await postImages(imageList,
+                                          'projects/${widget.currproject.name}/$fileName')
+                                      : await postImages(imageList,
+                                          'projects/$_projectName/$fileName');
+                                } else {
+                                  if (!widget.editMode) {
+                                    print(
+                                        "Validation Error: No image is picked");
+                                    _teamMembers = [];
+
+                                    setState(() {
+                                      _loading = false;
+                                    });
+                                    return null;
+                                  }
+                                }
+                                if (filePicked) {
+                                  widget.editMode
+                                      ? await savePdf(pdfFile.readAsBytesSync(),
+                                          'projects/${widget.currproject.name}/$pdfFileName')
+                                      : await savePdf(pdfFile.readAsBytesSync(),
+                                          'projects/$_projectName/$pdfFileName');
+                                }
+                                _formKey.currentState.save();
+                                if (widget.editMode) {
+                                  await updateProject(
+                                      widget.currproject, context);
+                                } else {
+                                  var projectService = ProjectService();
+                                  await projectService.postProjects(
+                                    link: _link,
+                                    description: _description,
+                                    name: _projectName,
+                                    projectImg: _imageUrls,
+                                    date: _date,
+                                    fileUrl: _fileUrl,
+                                    teamMembers: _teamMembers,
+                                    progress: "",
+                                  );
+                                  print("saved");
+                                  // nameController.clear();
+                                  // descriptionController.clear();
+                                  // projectImgController.clear();
+                                  // linkController.clear();
+
+                                }
+
+                                setState(() {
+                                  _loading = false;
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alert;
+                                  },
+                                );
+                              }
                             },
-                          );
-                        } else {
-                          print("not valid");
-                          return null;
-                        }
-                      },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child: Text(
-                        "Update",
-                        style: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: vpW * 0.005,
-                          fontSize: vpH * 0.025,
-                          fontWeight: FontWeight.bold,
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: Text(
+                              widget.editMode ? "Update" : "Create",
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: vpW * 0.005,
+                                fontSize: vpH * 0.025,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class DynamicWidget extends StatelessWidget {
-  final TextEditingController _teamMember = new TextEditingController();
-  final TextEditingController _linkedinId = new TextEditingController();
-  final void Function(String, String) callback;
-
-  DynamicWidget({Key key, this.callback}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin:
-          EdgeInsets.symmetric(vertical: vpH * 0.005, horizontal: vpW * 0.05),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                width: vpW * 0.9,
-                padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                child: TextFormField(
-                  controller: _teamMember,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Please enter name";
-                    }
-                    return null;
-                  },
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: vpH * 0.02,
-                  ),
-                  decoration: InputDecoration(
-                    fillColor: Color(0xFFE8EAF6),
-                    hintText: 'Member Name',
-                    hintStyle: kHintTextStyle,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  onSaved: (newValue) {},
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Container(
-                width: vpW * 0.9,
-                padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                child: TextFormField(
-                  controller: _linkedinId,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: vpH * 0.02,
-                  ),
-                  decoration: InputDecoration(
-                    fillColor: Color(0xFFE8EAF6),
-                    hintText: 'Linkedin Id',
-                    hintStyle: kHintTextStyle,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  onSaved: (newValue) {
-                    callback(_teamMember.text, _linkedinId.text);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

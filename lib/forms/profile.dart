@@ -38,7 +38,7 @@ class _ProfileFormState extends State<ProfileForm> {
   String _linkedinId = "";
   String _position = "";
   String _quote = "";
-
+  bool _loading;
   bool filePicked = false;
 
   StorageUploadTask uploadTask;
@@ -109,7 +109,12 @@ class _ProfileFormState extends State<ProfileForm> {
         .document(user.uid)
         .updateData(userObject)
         .then((value) => print("User Profile Updated"))
-        .catchError((error) => print("Failed to update progress: $error"));
+        .catchError((error) => print("Failed to update profile: $error"));
+  }
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
   }
 
   @override
@@ -187,24 +192,24 @@ class _ProfileFormState extends State<ProfileForm> {
                         alignment: Alignment.center,
                         child: Padding(
                           padding: EdgeInsets.only(
-                              top: vpH * 0.02,
-                              left: vpW * 0.02,
-                              right: vpW * 0.02,
-                              bottom: vpH * 0.01),
+                            top: vpH * 0.02,
+                            left: vpW * 0.02,
+                            right: vpW * 0.02,
+                            bottom: vpH * 0.01),
                           child: file != null
-                              ? Container(
-                                  width: vpW * 0.3,
-                                  height: vpH * 0.3,
-                                  child: Image.file(file),
-                                )
-                              : CircleAvatar(
-                                  radius: 80,
-                                  backgroundImage: _user.profileImageUrl.isEmpty
-                                      ? AssetImage('assets/img/teamMember.png')
-                                      : CachedNetworkImageProvider(
-                                          _user.profileImageUrl,
-                                        ),
-                                ),
+                          ? Container(
+                              width: vpW * 0.3,
+                              height: vpH * 0.3,
+                              child: Image.file(file),
+                            )
+                          : CircleAvatar(
+                              radius: 80,
+                              backgroundImage: _user.profileImageUrl.isEmpty
+                              ? AssetImage('assets/img/teamMember.png')
+                              : CachedNetworkImageProvider(
+                                  _user.profileImageUrl,
+                              ),
+                            ),
                         ),
                       ),
                       IconButton(
@@ -659,17 +664,36 @@ class _ProfileFormState extends State<ProfileForm> {
                       },
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     width: vpW * 0.5,
                     padding: EdgeInsets.all(15),
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading=true;
+                        });
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), fileName);
+                          await saveImg(file.readAsBytesSync(), 'users/${_user.name}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
+                          setState(() {
+                            _loading=false;
+                          });
                           return null;
                         } else {
                           _formKey.currentState.save();

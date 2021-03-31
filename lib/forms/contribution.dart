@@ -25,6 +25,7 @@ class _ContributionFormState extends State<ContributionForm> {
   File file;
   String fileName = '';
   bool filePicked = false;
+  bool _loading;
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -58,7 +59,11 @@ class _ContributionFormState extends State<ContributionForm> {
     StorageUploadTask uploadTask = reference.putData(asset);
     _img = await (await uploadTask.onComplete).ref.getDownloadURL();
   }
-
+  @override
+  void initState(){
+    super.initState();
+    _loading=false;
+  }
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -151,7 +156,7 @@ class _ContributionFormState extends State<ContributionForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: nameController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
@@ -186,10 +191,11 @@ class _ContributionFormState extends State<ContributionForm> {
                     padding: EdgeInsets.symmetric(
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
+                      maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: descriptionController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
@@ -227,7 +233,7 @@ class _ContributionFormState extends State<ContributionForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: amountController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
@@ -334,17 +340,36 @@ class _ContributionFormState extends State<ContributionForm> {
                       ],
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading = true;
+                        });
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), fileName);
+                          await saveImg(file.readAsBytesSync(), 'contributions/${nameController.text}/$fileName');
                         }
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
+                          setState(() {
+                            _loading=false;
+                          });
                           return null;
                         } else {
                           _formKey.currentState.save();

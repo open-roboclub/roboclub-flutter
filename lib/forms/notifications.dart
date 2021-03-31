@@ -16,12 +16,17 @@ class _NotificationFormState extends State<NotificationForm> {
   String _title;
   String _msg;
   String _link = "";
-
+  bool _loading;
   TextEditingController date = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController msgController = TextEditingController();
   TextEditingController linkController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _loading = false;
+  }
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -121,7 +126,7 @@ class _NotificationFormState extends State<NotificationForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: titleController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
@@ -161,7 +166,7 @@ class _NotificationFormState extends State<NotificationForm> {
                         controller: msgController,
                         maxLines: null,
                         style: TextStyle(
-                          color: Colors.purple[200],
+                          color: Colors.black,
                           fontFamily: 'OpenSans',
                         ),
                         decoration: InputDecoration(
@@ -200,7 +205,7 @@ class _NotificationFormState extends State<NotificationForm> {
                       textCapitalization: TextCapitalization.words,
                       controller: linkController,
                       style: TextStyle(
-                        color: Colors.purple[200],
+                        color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
@@ -217,14 +222,33 @@ class _NotificationFormState extends State<NotificationForm> {
                       },
                     ),
                   ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
                     child: RaisedButton(
                       elevation: vpH * 0.5,
                       onPressed: () async {
+                        setState(() {
+                          _loading =true;
+                        });
                         if (!_formKey.currentState.validate()) {
                           print("not valid");
+                          setState(() {
+                            _loading=false;
+                          });
                           return null;
                         } else {
                           _formKey.currentState.save();

@@ -3,7 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/project.dart';
@@ -29,12 +31,22 @@ class _ProjectInfoState extends State<ProjectInfo> {
   var vpW;
 
   int _currprogress;
+  Project currProject;
 
   @override
   void initState() {
+    currProject = widget.project;
     _currprogress =
-        widget.project.progress == "" ? 0 : int.parse(widget.project.progress);
+        currProject.progress == "" ? 0 : int.parse(currProject.progress);
     super.initState();
+  }
+
+  void updateProjectCallback(Project updatedProject) {
+    setState(() {
+      DateTime _parsed = DateTime.parse(updatedProject.date);
+      updatedProject.date = DateFormat('yMMMd').format(_parsed);
+      currProject = updatedProject;
+    });
   }
 
   @override
@@ -45,11 +57,11 @@ class _ProjectInfoState extends State<ProjectInfo> {
     User _user = Provider.of<UserProvider>(context).getUser;
 
     Future<void> updateProgress() async {
-      widget.callback(widget.project, _currprogress.toString());
+      widget.callback(currProject, _currprogress.toString());
       String id;
       Firestore.instance.collection('projects').getDocuments().then((projects) {
         projects.documents.forEach((project) {
-          if (project['name'] == widget.project.name) {
+          if (project['name'] == currProject.name) {
             id = project.documentID;
             return Firestore.instance
                 .collection('projects')
@@ -63,11 +75,16 @@ class _ProjectInfoState extends State<ProjectInfo> {
       });
     }
 
+    final dateStr = currProject.date;
+    final formatter = DateFormat('MMM dd, yyyy');
+    final dateTimeFromStr = formatter.parse(dateStr);
+    String genericDate = DateFormat('yyyy-MM-dd').format(dateTimeFromStr);
+
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
           context,
-          strTitle: widget.project.progress == "100"
+          strTitle: currProject.progress == "100"
               ? "Completed Project"
               : "Ongoing Project",
           isDrawer: false,
@@ -76,12 +93,32 @@ class _ProjectInfoState extends State<ProjectInfo> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              _user != null && _user.isAdmin
+                  ? IconButton(
+                      icon: Icon(MyFlutterApp.edit),
+                      color: Color(0xFFFF9C01),
+                      iconSize: vpW * 0.065,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return ProjectForm(
+                            editMode: true,
+                            currproject: currProject,
+                            genericDate: genericDate,
+                            callback: updateProjectCallback,
+                          );
+                        }));
+                      })
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: vpH * 0.01, horizontal: vpW * 0.05),
+                    ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: vpH * 0.03, horizontal: vpW * 0.05),
+                    vertical: vpH * 0.01, horizontal: vpW * 0.05),
                 child: Container(
                   child: Text(
-                    widget.project.name,
+                    currProject.name,
                     style: heading,
                     textAlign: TextAlign.center,
                   ),
@@ -90,7 +127,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: vpH * 0.03),
                 child: Center(
-                    child: widget.project.projectImg.length == 0
+                    child: currProject.projectImg.length == 0
                         ? Container(
                             height: vpH * 0.20,
                             width: vpW * 0.9,
@@ -106,7 +143,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                                 CarouselSlider.builder(
-                                  itemCount: widget.project.projectImg.length,
+                                  itemCount: currProject.projectImg.length,
                                   options: CarouselOptions(
                                     autoPlay: true,
                                     enlargeCenterPage: true,
@@ -133,8 +170,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: vpW * 0.05),
-                child: widget.project.progress.isEmpty ||
-                        int.parse(widget.project.progress) < 100
+                child: currProject.progress.isEmpty ||
+                        int.parse(currProject.progress) < 100
                     ? Column(children: [
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: vpH * 0.01),
@@ -265,7 +302,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             child: Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                widget.project.date,
+                                currProject.date,
                                 style: TextStyle(fontSize: vpH * 0.02),
                               ),
                             ),
@@ -290,12 +327,12 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    widget.project.description,
+                    currProject.description,
                     style: TextStyle(fontSize: vpH * 0.02),
                   ),
                 ),
               ),
-              widget.project.fileUrl.isEmpty
+              currProject.fileUrl.isEmpty
                   ? SizedBox()
                   : Padding(
                       padding: EdgeInsets.symmetric(vertical: vpH * 0.02),
@@ -324,13 +361,13 @@ class _ProjectInfoState extends State<ProjectInfo> {
                               color: Color(0XFFFF9C01),
                             ),
                             onPressed: () {
-                              launch(widget.project.fileUrl);
+                              launch(currProject.fileUrl);
                             },
                           ),
                         ),
                       ),
                     ),
-              widget.project.link != ""
+              currProject.link != ""
                   ? Column(
                       children: [
                         Padding(
@@ -349,7 +386,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            launch(widget.project.link);
+                            launch(currProject.link);
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -357,7 +394,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             child: Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                widget.project.link,
+                                currProject.link,
                                 style: TextStyle(
                                     color: Colors.blue, fontSize: vpH * 0.02),
                               ),
@@ -383,23 +420,23 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: widget.project.teamMembers.length,
+                  itemCount: currProject.teamMembers.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     return ListTile(
                       trailing: IconButton(
                         icon: Icon(
                           SocialMedia.linkedin,
-                          color: widget.project.teamMembers[index]['linkedinId']
-                                  .isEmpty
+                          color: currProject
+                                  .teamMembers[index]['linkedinId'].isEmpty
                               ? Colors.grey
                               : Colors.blue[700],
                         ),
                         onPressed: () {
-                          if (!widget.project.teamMembers[index]['linkedinId']
-                              .isEmpty) {
-                            launch(widget.project.teamMembers[index]
-                                ['linkedinId']);
+                          if (!currProject
+                              .teamMembers[index]['linkedinId'].isEmpty) {
+                            launch(
+                                currProject.teamMembers[index]['linkedinId']);
                           }
                         },
                       ),
@@ -409,7 +446,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                             AssetImage('assets/img/teamMember.png'),
                       ),
                       title: Text(
-                        widget.project.teamMembers[index]['member'],
+                        currProject.teamMembers[index]['member'],
                         style: TextStyle(
                             color: Colors.black, fontSize: vpH * 0.025),
                       ),

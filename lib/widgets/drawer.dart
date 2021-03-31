@@ -97,7 +97,7 @@ Drawer appdrawer(context, {String page}) {
           style: TextStyle(
             color: isActive ? activeColor : inActiveColor,
             fontWeight: FontWeight.bold,
-            fontSize: vpH * 0.025,
+            fontSize: vpH * 0.023,
           ),
         ),
       ),
@@ -109,7 +109,7 @@ Drawer appdrawer(context, {String page}) {
     child: Column(
       children: [
         Container(
-          height: vpH * 0.24,
+          height: vpH * 0.178,
           width: vpW,
           // color: Colors.yellow,
           child: Image.asset(
@@ -130,7 +130,7 @@ Drawer appdrawer(context, {String page}) {
           endIndent: vpW * 0.04,
         ),
         SizedBox(
-          height: vpH * 0.01,
+          height: vpH * 0.005,
         ),
         _tileBuilder(CustomIcons.feedback, "Feedback", page == "Feedback"),
         _tileBuilder(CustomIcons.info, "About us", page == "About us"),
