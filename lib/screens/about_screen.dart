@@ -348,4 +348,10 @@ class _AboutScreenState extends State<AboutScreen>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 }

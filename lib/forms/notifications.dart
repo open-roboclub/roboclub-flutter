@@ -27,6 +27,7 @@ class _NotificationFormState extends State<NotificationForm> {
     super.initState();
     _loading = false;
   }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -171,7 +172,7 @@ class _NotificationFormState extends State<NotificationForm> {
                         ),
                         decoration: InputDecoration(
                           fillColor: Color(0xFFE8EAF6),
-                          hintText: ' Enter Notigication Message',
+                          hintText: ' Enter Notification Message',
                           hintStyle: kHintTextStyle,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -222,72 +223,73 @@ class _NotificationFormState extends State<NotificationForm> {
                       },
                     ),
                   ),
-                  _loading ?Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () {} ,
-                       padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child:  CircularProgressIndicator(),
-                    )):
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () async {
-                        setState(() {
-                          _loading =true;
-                        });
-                        if (!_formKey.currentState.validate()) {
-                          print("not valid");
-                          setState(() {
-                            _loading=false;
-                          });
-                          return null;
-                        } else {
-                          _formKey.currentState.save();
-                          notifications.postNotification(
-                              title: _title,
-                              msg: _msg,
-                              link: _link,
-                              date: DateFormat("yyyy-MM-dd hh:mm:ss")
-                                  .format(DateTime.now()));
+                  _loading
+                      ? Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () {},
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: CircularProgressIndicator(),
+                          ))
+                      : Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () async {
+                              setState(() {
+                                _loading = true;
+                              });
+                              if (!_formKey.currentState.validate()) {
+                                print("not valid");
+                                setState(() {
+                                  _loading = false;
+                                });
+                                return null;
+                              } else {
+                                _formKey.currentState.save();
+                                notifications.postNotification(
+                                    title: _title,
+                                    msg: _msg,
+                                    link: _link,
+                                    date: DateFormat("yyyy-MM-dd hh:mm:ss")
+                                        .format(DateTime.now()));
 
-                          print("saved");
-                          titleController.clear();
-                          linkController.clear();
-                          msgController.clear();
+                                print("saved");
+                                titleController.clear();
+                                linkController.clear();
+                                msgController.clear();
 
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alert;
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alert;
+                                  },
+                                );
+                              }
                             },
-                          );
-                        }
-                      },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child: Text(
-                        "Send",
-                        style: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: vpW * 0.005,
-                          fontSize: vpH * 0.025,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  )
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: Text(
+                              "Send",
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: vpW * 0.005,
+                                fontSize: vpH * 0.025,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),
