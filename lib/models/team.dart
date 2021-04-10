@@ -3,8 +3,14 @@ class Team {
   String description;
   String teamImg;
   List<dynamic> members;
+  bool showProfile;
 
-  Team({this.description, this.teamName, this.teamImg, this.members});
+  Team(
+      {this.description,
+      this.teamName,
+      this.teamImg,
+      this.members,
+      this.showProfile});
 
   Map toMap(Team contributor) {
     var data = Map<String, dynamic>();
@@ -12,6 +18,7 @@ class Team {
     data['description'] = contributor.description;
     data['teamImg'] = contributor.teamImg;
     data['members'] = contributor.members;
+    data['showProfile'] = contributor.showProfile;
     return data;
   }
 
@@ -21,5 +28,6 @@ class Team {
     this.description = mapData['description'];
     this.teamImg = mapData['teamImg'];
     this.members = mapData['members'];
+    this.showProfile = mapData['showProfile'];
   }
 }
