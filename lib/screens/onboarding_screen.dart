@@ -86,17 +86,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         builder: (context) => EventScreen(),
                       ));
                     },
-                    child: Text(
-                      'Skip',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                      ),
-                    ),
+                    child: _currentPage != _numPages - 1
+                        ? Text(
+                            'Skip',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                            ),
+                          )
+                        : Container(),
                   ),
                 ),
                 Container(
-                  height: vpH * 0.8,
+                  height: vpH * 0.75,
                   child: PageView(
                     physics: ClampingScrollPhysics(),
                     controller: _pageController,
@@ -113,8 +115,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           children: <Widget>[
                             Center(
                               child: Container(
-                                height: vpH * 0.4,
-                                width: vpH * 0.4,
+                                height: vpH * 0.36,
+                                width: vpH * 0.36,
                                 child: SvgPicture.asset(
                                   'assets/illustrations/events.svg',
                                   fit: BoxFit.contain,
@@ -141,8 +143,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           children: <Widget>[
                             Center(
                               child: Container(
-                                height: vpH * 0.4,
-                                width: vpH * 0.4,
+                                height: vpH * 0.36,
+                                width: vpH * 0.36,
                                 child: SvgPicture.asset(
                                   'assets/illustrations/robo.svg',
                                   fit: BoxFit.contain,
@@ -169,8 +171,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           children: <Widget>[
                             Center(
                               child: Container(
-                                height: vpH * 0.4,
-                                width: vpH * 0.4,
+                                height: vpH * 0.36,
+                                width: vpH * 0.36,
                                 child: SvgPicture.asset(
                                   'assets/illustrations/tutorial.svg',
                                   fit: BoxFit.contain,
@@ -193,10 +195,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _buildPageIndicator(),
-                ),
+                _currentPage != _numPages - 1
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _buildPageIndicator(),
+                      )
+                    : Container(),
                 _currentPage != _numPages - 1
                     ? Expanded(
                         child: Align(

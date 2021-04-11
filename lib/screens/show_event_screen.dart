@@ -203,7 +203,11 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 12),
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                top: 12,
+                                right: 15,
+                              ),
                               child: Text(
                                 widget.eventinfo.details,
                                 style: TextStyle(fontSize: vpH*0.022),

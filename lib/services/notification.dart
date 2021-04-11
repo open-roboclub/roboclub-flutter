@@ -4,7 +4,6 @@ import 'package:device_info/device_info.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 final Firestore _firestore = Firestore.instance;
@@ -53,7 +52,9 @@ class NotificationService {
         "image": img
       }
     };
-    String fcmKey = env['FCM_KEY'];
+    DocumentSnapshot fcmKeySnap =
+        await _firestore.collection("/keys").document("FCM_KEY").get();
+    String fcmKey = fcmKeySnap.data['key'];
     try {
       final http.Response response = await http.post(
           'https://fcm.googleapis.com/fcm/send',

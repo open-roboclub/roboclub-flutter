@@ -52,6 +52,12 @@ class _ProjectScreenState extends State<ProjectScreen> {
     });
   }
 
+  void addProjectCallback(Project newProject) {
+    setState(() {
+      ongoingProjectsList.add(newProject);
+    });
+  }
+
   void splitProjectsList(List<Project> projects) {
     projects.forEach((item) {
       if (item.progress == "100") {
@@ -220,6 +226,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                           builder: (BuildContext context) {
                             return ProjectForm(
                               editMode: false,
+                              callback: addProjectCallback,
                             );
                           },
                         ),

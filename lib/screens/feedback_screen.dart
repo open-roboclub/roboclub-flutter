@@ -83,17 +83,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               fillColor: Colors.white,
                               hintText: 'Write your feedback here!!',
                               border: InputBorder.none,
-                              
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               suffixIcon: Builder(
-                                builder: (context)=>IconButton(
+                                builder: (context) => IconButton(
                                   icon: Icon(
                                     Icons.send,
                                     color: Color(0xFFFF9C01),
                                   ),
-                                  onPressed: () async{
-                                    if (_feedback.isNotEmpty){
+                                  onPressed: () async {
+                                    if (_feedback.isNotEmpty) {
                                       // var _user =
                                       //     Provider.of<UserProvider>(context)
                                       //         .getUser;
@@ -136,5 +135,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

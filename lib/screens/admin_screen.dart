@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
@@ -21,21 +22,19 @@ class _AdminScreenState extends State<AdminScreen> {
   AuthService _auth = AuthService();
 
   Widget _button(String title, BuildContext context, bool isGoogle) {
-    return FlatButton(
-      color: isGoogle ? Color(0xffFF9C01) : Colors.white,
-      textColor: !isGoogle ? Color(0xffFF9C01) : Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
-      onPressed: () async {
-        if (isGoogle) {
-          setState(() {
-            _isLoading = true;
-          });
-          _auth.signInWithGoogle().then((user) {
-            if (user != null) {
-              Provider.of<UserProvider>(context, listen: false).setUser = user;
-            }
+    return PhysicalModel(
+      color: Colors.transparent,
+      shadowColor: Colors.blue.withOpacity(0.3),
+      borderRadius: BorderRadius.all(Radius.circular(50)),
+      elevation: 8.0,
+      child: FlatButton(
+        color: isGoogle ? Color(0xffFF9C01) : Colors.white,
+        textColor: !isGoogle ? Color(0xffFF9C01) : Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
+        onPressed: () async {
+          if (isGoogle) {
             setState(() {
-              _isLoading = false;
+              _isLoading = true;
             });
             if (user != null) {
               Navigator.of(context).pushReplacement(
@@ -58,41 +57,53 @@ class _AdminScreenState extends State<AdminScreen> {
                       child: Text('Ok', style: TextStyle(fontSize: vpH*0.025),),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
-                  ],
-                ),
-              );
-            }
-          });
-        } else {
-          setState(() {
-            _show = true;
-          });
-        }
-      },
-      shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(35.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          isGoogle
-              ? Image.asset(
-                  'assets/img/google_icon.png',
-                  fit: BoxFit.fitHeight,
-                  height: vpH * 0.06,
-                )
-              : Container(),
-          isGoogle
-              ? SizedBox(
-                  width: 5,
-                )
-              : Container(),
-          Text(
-            title,
-            style:
-                TextStyle(fontSize: vpH * 0.035, fontWeight: FontWeight.w600),
-          ),
-        ],
+                    actions: <Widget>[
+                      FlatButton(
+                        color: Colors.amber,
+                        child: Text('Ok'),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }).catchError((onError) {
+              print("Erorr: $onError");
+              setState(() {
+                _isLoading = false;
+              });
+            });
+          } else {
+            setState(() {
+              _show = true;
+            });
+          }
+        },
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(35.0)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            isGoogle
+                ? Image.asset(
+                    'assets/img/google_icon.png',
+                    fit: BoxFit.fitHeight,
+                    height: vpH * 0.06,
+                  )
+                : Container(),
+            isGoogle
+                ? SizedBox(
+                    width: 5,
+                  )
+                : Container(),
+            Text(
+              title,
+              style:
+                  TextStyle(fontSize: vpH * 0.035, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -145,15 +156,17 @@ class _AdminScreenState extends State<AdminScreen> {
                         Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Container(
-                            child: Image.asset(
-                              'assets/img/admin.png',
-                            ),
-                          ),
+                              height: vpH * 0.35,
+                              width: vpW,
+                              child: SvgPicture.asset(
+                                'assets/illustrations/signin.svg',
+                                fit: BoxFit.contain,
+                              )),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 50.0),
                           child: Container(
-                            child: _button("Admin Area !!", context, false),
+                            child: _button("Team SignIn", context, false),
                           ),
                         ),
                       ],

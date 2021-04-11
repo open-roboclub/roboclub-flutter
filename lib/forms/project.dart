@@ -50,6 +50,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   Project updatedProject;
+  Project newProject;
 
   String _projectName = "";
   String _description = "";
@@ -96,6 +97,36 @@ class _ProjectFormState extends State<ProjectForm> {
   final TextEditingController _linkedinId9 = new TextEditingController();
   final TextEditingController _teamMember10 = new TextEditingController();
   final TextEditingController _linkedinId10 = new TextEditingController();
+  final TextEditingController _teamMember11 = new TextEditingController();
+  final TextEditingController _linkedinId11 = new TextEditingController();
+  final TextEditingController _teamMember12 = new TextEditingController();
+  final TextEditingController _linkedinId12 = new TextEditingController();
+  final TextEditingController _teamMember13 = new TextEditingController();
+  final TextEditingController _linkedinId13 = new TextEditingController();
+  final TextEditingController _teamMember14 = new TextEditingController();
+  final TextEditingController _linkedinId14 = new TextEditingController();
+  final TextEditingController _teamMember15 = new TextEditingController();
+  final TextEditingController _linkedinId15 = new TextEditingController();
+  final TextEditingController _teamMember16 = new TextEditingController();
+  final TextEditingController _linkedinId16 = new TextEditingController();
+  final TextEditingController _teamMember17 = new TextEditingController();
+  final TextEditingController _linkedinId17 = new TextEditingController();
+  final TextEditingController _teamMember18 = new TextEditingController();
+  final TextEditingController _linkedinId18 = new TextEditingController();
+  final TextEditingController _teamMember19 = new TextEditingController();
+  final TextEditingController _linkedinId19 = new TextEditingController();
+  final TextEditingController _teamMember20 = new TextEditingController();
+  final TextEditingController _linkedinId20 = new TextEditingController();
+  final TextEditingController _teamMember21 = new TextEditingController();
+  final TextEditingController _linkedinId21 = new TextEditingController();
+  final TextEditingController _teamMember22 = new TextEditingController();
+  final TextEditingController _linkedinId22 = new TextEditingController();
+  final TextEditingController _teamMember23 = new TextEditingController();
+  final TextEditingController _linkedinId23 = new TextEditingController();
+  final TextEditingController _teamMember24 = new TextEditingController();
+  final TextEditingController _linkedinId24 = new TextEditingController();
+  final TextEditingController _teamMember25 = new TextEditingController();
+  final TextEditingController _linkedinId25 = new TextEditingController();
   List<TextEditingController> teamController;
   List<TextEditingController> linkedinController = [];
 
@@ -112,7 +143,22 @@ class _ProjectFormState extends State<ProjectForm> {
       _teamMember7,
       _teamMember8,
       _teamMember9,
-      _teamMember10
+      _teamMember10,
+      _teamMember11,
+      _teamMember12,
+      _teamMember13,
+      _teamMember14,
+      _teamMember15,
+      _teamMember16,
+      _teamMember17,
+      _teamMember18,
+      _teamMember19,
+      _teamMember20,
+      _teamMember21,
+      _teamMember22,
+      _teamMember23,
+      _teamMember24,
+      _teamMember25
     ];
     linkedinController = [
       _linkedinId1,
@@ -124,7 +170,22 @@ class _ProjectFormState extends State<ProjectForm> {
       _linkedinId7,
       _linkedinId8,
       _linkedinId9,
-      _linkedinId10
+      _linkedinId10,
+      _linkedinId11,
+      _linkedinId12,
+      _linkedinId13,
+      _linkedinId14,
+      _linkedinId15,
+      _linkedinId16,
+      _linkedinId17,
+      _linkedinId18,
+      _linkedinId19,
+      _linkedinId20,
+      _linkedinId21,
+      _linkedinId22,
+      _linkedinId23,
+      _linkedinId24,
+      _linkedinId25
     ];
     if (widget.editMode) {
       date.text = widget.genericDate;
@@ -157,7 +218,7 @@ class _ProjectFormState extends State<ProjectForm> {
         });
         fileName = '$randomName';
         setState(() {
-          showImg=true;
+          showImg = true;
         });
       }
     }).catchError((error) {
@@ -328,6 +389,7 @@ class _ProjectFormState extends State<ProjectForm> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
@@ -342,13 +404,19 @@ class _ProjectFormState extends State<ProjectForm> {
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-        widget.callback(updatedProject);
+        if (widget.editMode) {
+          widget.callback(updatedProject);
+        } else {
+          widget.callback(newProject);
+        }
       },
     );
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        widget.editMode ? "Project Updated Successfully!! " : "Project added Successfully !!",
+        widget.editMode
+            ? "Project Updated Successfully!! "
+            : "Project added Successfully !!",
         style: kLabelStyle,
       ),
       actions: [
@@ -500,21 +568,21 @@ class _ProjectFormState extends State<ProjectForm> {
                                         fontSize: vpH * 0.02,
                                         fontWeight: FontWeight.bold),
                                   )
-                                : showImg 
-                                  ?Text(
-                                    '${imgFiles.toString()}: Images Selected.',
-                                    style: TextStyle(
-                                        color: Colors.limeAccent[400],
-                                        fontSize: vpH * 0.02,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                  : Text(
-                                    'Picking Images....',
-                                    style: TextStyle(
-                                        color: Colors.limeAccent[400],
-                                        fontSize: vpH * 0.02,
-                                        fontWeight: FontWeight.bold),
-                                  ) 
+                                : showImg
+                                    ? Text(
+                                        '${imgFiles.toString()}: Images Selected.',
+                                        style: TextStyle(
+                                            color: Colors.limeAccent[400],
+                                            fontSize: vpH * 0.02,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : Text(
+                                        'Picking Images....',
+                                        style: TextStyle(
+                                            color: Colors.limeAccent[400],
+                                            fontSize: vpH * 0.02,
+                                            fontWeight: FontWeight.bold),
+                                      )
                             : imageList == null
                                 ? Text('No Image Selected.',
                                     style: TextStyle(
@@ -706,7 +774,22 @@ class _ProjectFormState extends State<ProjectForm> {
                           '7',
                           '8',
                           '9',
-                          '10'
+                          '10',
+                          '11',
+                          '12',
+                          '13',
+                          '14',
+                          '15',
+                          '16',
+                          '17',
+                          '18',
+                          '19',
+                          '20',
+                          '21',
+                          '22',
+                          '23',
+                          '24',
+                          '25',
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -808,6 +891,19 @@ class _ProjectFormState extends State<ProjectForm> {
                                     teamMembers: _teamMembers,
                                     progress: "",
                                   );
+
+                                  Map<String, dynamic> newProjectObject = {
+                                    'name': _projectName,
+                                    'projectImg': _imageUrls,
+                                    'description': _description,
+                                    'fileUrl': _fileUrl,
+                                    'link': _link,
+                                    'date': _date,
+                                    'teamMembers': _teamMembers,
+                                    'progress': "",
+                                  };
+                                  newProject =
+                                      Project.fromMap(newProjectObject);
                                   print("saved");
                                   // nameController.clear();
                                   // descriptionController.clear();

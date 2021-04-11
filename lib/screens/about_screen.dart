@@ -329,10 +329,15 @@ class _AboutScreenState extends State<AboutScreen>
                                     DeveloperCard(
                                       name: "Rishabh Sharma",
                                       img: 'assets/img/rishabh.jpg',
+                                      linkedin:
+                                          "https://www.linkedin.com/in/rishabh-sharma-11242b174/",
                                     ),
                                     DeveloperCard(
-                                        name: "Samiksha Agrawal",
-                                        img: 'assets/img/samiksha.jpeg'),
+                                      name: "Samiksha Agrawal",
+                                      img: 'assets/img/samiksha.jpeg',
+                                      linkedin:
+                                          "https://www.linkedin.com/in/samiksha-agrawal-53859b195/",
+                                    ),
                                   ],
                                 )),
                           ],
@@ -347,5 +352,11 @@ class _AboutScreenState extends State<AboutScreen>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

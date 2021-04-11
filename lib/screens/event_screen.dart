@@ -128,7 +128,7 @@ class _EventScreenState extends State<EventScreen> {
     events.forEach((item) {
       DateTime today = DateTime.now();
       DateTime _parsed = DateTime.parse(item.date);
-      if (_parsed.difference(today).inDays == 0) {
+      if (_parsed.difference(today).inDays == 0 || item.isFeatured) {
         item.date = DateFormat('MMMEd').format(_parsed);
         featuredEventsList.add(item);
       } else if (_parsed.isAfter(today)) {
@@ -179,8 +179,11 @@ class _EventScreenState extends State<EventScreen> {
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
+              ? Container(
+                  height: vpH,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 )
               : Column(
                   children: [
@@ -188,64 +191,64 @@ class _EventScreenState extends State<EventScreen> {
                       height: vpH * 0.04,
                     ),
                     _title('Featured Events', vpH, vpW),
-                    featuredEventsList.isEmpty 
-                    ?  Center(
-                      child: Padding(
-                        padding:  EdgeInsets.only(top: vpH*0.02),
-                        child: Container(
-                          height: vpH * 0.2,
-                          width: vpW * 0.6,
-                          child: SvgPicture.asset(
-                            'assets/illustrations/events.svg',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    )
-                    : Container(
-                        height: vpH * 0.34,
-                        width: vpW,
-                        child:ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: featuredEventsList.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return FeaturedEventCard(
-                                    featuredEvent: featuredEventsList[index],
-                                  );
-                                },
-                              )),
+                    featuredEventsList.isEmpty
+                        ? Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: vpH * 0.02),
+                              child: Container(
+                                height: vpH * 0.2,
+                                width: vpW * 0.6,
+                                child: SvgPicture.asset(
+                                  'assets/illustrations/events.svg',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: vpH * 0.34,
+                            width: vpW,
+                            child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: featuredEventsList.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return FeaturedEventCard(
+                                  featuredEvent: featuredEventsList[index],
+                                );
+                              },
+                            )),
                     SizedBox(
                       height: vpH * 0.04,
                     ),
                     _title('Upcoming Events', vpH, vpW),
                     upcomingEventsList.isEmpty
-                    ? Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top:vpH*0.02),
-                        child: Container(
-                          height: vpH * 0.2,
-                          width: vpW * 0.6,
-                          child: SvgPicture.asset(
-                            'assets/illustrations/calendar.svg',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    )
-                    :Container(
-                        width: vpW,
-                        child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: upcomingEventsList.length,
-                                itemBuilder: (context, index) {
-                                  return EventCard(
-                                    event: upcomingEventsList[index],
-                                  );
-                                },
-                              )),
+                        ? Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: vpH * 0.02),
+                              child: Container(
+                                height: vpH * 0.2,
+                                width: vpW * 0.6,
+                                child: SvgPicture.asset(
+                                  'assets/illustrations/calendar.svg',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            width: vpW,
+                            child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: upcomingEventsList.length,
+                              itemBuilder: (context, index) {
+                                return EventCard(
+                                  event: upcomingEventsList[index],
+                                );
+                              },
+                            )),
                     SizedBox(
                       height: vpH * 0.04,
                     ),
