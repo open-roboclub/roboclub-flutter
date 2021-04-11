@@ -146,7 +146,7 @@ class _AboutScreenState extends State<AboutScreen>
                                       vertical: vpH * 0.005),
                                   child: Text(
                                       "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
-                                      overflow: TextOverflow.ellipsis,
+                                      // overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,
                                           fontSize: vpH * 0.020)),
