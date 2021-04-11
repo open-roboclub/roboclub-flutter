@@ -256,7 +256,7 @@ class _NotificationFormState extends State<NotificationForm> {
                               title: _title,
                               msg: _msg,
                               link: _link,
-                              date: DateFormat("yyyy-MM-dd hh:mm:ss")
+                              date: DateFormat("yyyy-MM-dd HH:mm:ss")
                                   .format(DateTime.now()));
 
                           print("saved");

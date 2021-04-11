@@ -358,7 +358,7 @@ class _EventFormState extends State<EventForm> {
                           lastDate: DateTime(2030),
                         );
                         DateFormat formatter =
-                            DateFormat("yyyy-MM-dd hh:mm:ss");
+                            DateFormat("yyyy-MM-dd");
                         String formatted = formatter.format(dateTime);
                         print(formatted);
                         date.text = formatted;

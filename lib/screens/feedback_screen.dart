@@ -105,8 +105,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                             .requestFocus(new FocusNode());
                                       });
                                       Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: Text('Thanks for the Feedback!'),
-                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Color(0xFFFFFFFF),
+                                        content: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Thanks for the Feedback!', 
+                                            style:TextStyle(fontSize: vpH*0.03, fontWeight: FontWeight.w800, color:Color(0xFFFF9C01),
+                                            ),
+                                          ),
+                                        ),
+                                        duration: Duration(seconds: 5),
                                       ));
                                     }
                                   },

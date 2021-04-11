@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,14 +21,15 @@ import 'package:url_launcher/url_launcher.dart';
 class ProfileScreen extends StatefulWidget {
   final bool viewMode;
   final User member;
-
-  const ProfileScreen({Key key, this.viewMode = false, this.member})
+  final bool showInSnackBar;
+  const ProfileScreen({Key key, this.viewMode = false, this.member, this.showInSnackBar = false,})
       : super(key: key);
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool drag = false;
   User _user, _currUser;
 
@@ -40,9 +43,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _user = widget.member;
       _currUser = _userProvider.getUser;
     }
+    
     super.didChangeDependencies();
   }
 
+  // @override
+  // void didUpdateWidget(){
+
+  // }
   Widget _quickOptions(var vpH, IconData iconData, Object navigateTo) {
     return Stack(
       children: [
@@ -77,6 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -86,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       fontSize: vpH * 0.02,
       color: Colors.grey,
     );
+
 
     List<String> interests = _user.interests.split(',');
 
@@ -195,7 +205,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Container(
                       height: vpH * 0.4,
-                      child: SingleChildScrollView(
+                      child:
+                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         physics: BouncingScrollPhysics(),
                         child: ListView(

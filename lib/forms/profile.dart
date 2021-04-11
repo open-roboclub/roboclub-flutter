@@ -463,7 +463,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       textCapitalization: TextCapitalization.words,
                       initialValue: _user.interests,
                       maxLines: null,
-                      maxLength: 500,
+                      maxLength: 200,
                       maxLengthEnforced: true,
                       style: TextStyle(
                         color: Colors.purple[200],
