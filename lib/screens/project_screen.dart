@@ -97,52 +97,64 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      FlatButton(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          width: vpW * 0.3,
-                          child: Center(
-                            child: Text(
-                              'Completed',
-                              style: textStyle,
+                      PhysicalModel(
+                        color: Colors.transparent,
+                        shadowColor: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        elevation: 8.0,
+                        child: FlatButton(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            width: vpW * 0.3,
+                            child: Center(
+                              child: Text(
+                                'Completed',
+                                style: textStyle,
+                              ),
                             ),
                           ),
+                          textColor:
+                              !_ongoingPressed ? Colors.white : Colors.black,
+                          color: !_ongoingPressed
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                          onPressed: () => {
+                            setState(() {
+                              _ongoingPressed = false;
+                            })
+                          },
                         ),
-                        textColor:
-                            !_ongoingPressed ? Colors.white : Colors.black,
-                        color: !_ongoingPressed
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
-                        onPressed: () => {
-                          setState(() {
-                            _ongoingPressed = false;
-                          })
-                        },
                       ),
                       SizedBox(
                         width: vpW * 0.01,
                       ),
-                      FlatButton(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          width: vpW * 0.3,
-                          child: Center(
-                            child: Text(
-                              'Ongoing',
-                              style: textStyle,
+                      PhysicalModel(
+                        color: Colors.transparent,
+                        shadowColor: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        elevation: 8.0,
+                        child: FlatButton(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            width: vpW * 0.3,
+                            child: Center(
+                              child: Text(
+                                'Ongoing',
+                                style: textStyle,
+                              ),
                             ),
                           ),
+                          textColor:
+                              _ongoingPressed ? Colors.white : Colors.black,
+                          color: _ongoingPressed
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                          onPressed: () => {
+                            setState(() {
+                              _ongoingPressed = true;
+                            })
+                          },
                         ),
-                        textColor:
-                            _ongoingPressed ? Colors.white : Colors.black,
-                        color: _ongoingPressed
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
-                        onPressed: () => {
-                          setState(() {
-                            _ongoingPressed = true;
-                          })
-                        },
                       ),
                     ],
                   )),

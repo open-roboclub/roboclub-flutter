@@ -38,42 +38,36 @@ class _AdminScreenState extends State<AdminScreen> {
             });
             _auth.signInWithGoogle().then((user) {
               if (user != null) {
-                Provider.of<UserProvider>(context, listen: false).setUser =
-                    user;
-              }
-              setState(() {
+                Provider.of<UserProvider>(context, listen: false).setUser =user;
+            }
+            setState(() {
                 _isLoading = false;
               });
-              if (user != null) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(),
+            if (user != null) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(),
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  content: ListTile(
+                    title: Text('Access Denied!', style: TextStyle(fontSize: vpH*0.022, fontWeight: FontWeight.w700),),
+                    subtitle: Text(
+                        'Sorry! Only Core Team members are allowed for User Access and Login.', style: TextStyle(fontSize: vpH*0.02),),
                   ),
-                );
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    content: ListTile(
-                      title: Text('Access Denied!'),
-                      subtitle: Text(
-                          'Sorry! Only Core Team members are allowed for User Access and Login.'),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        color: Colors.amber,
-                        child: Text('Ok'),
-                        onPressed: () => Navigator.of(context).pop(),
+                  actions: <Widget>[
+                    FlatButton(
+                      color: Colors.amber,
+                      child: Text('Ok', style: TextStyle(fontSize: vpH*0.025),),
+                      onPressed: () => Navigator.of(context).pop(),
                       ),
                     ],
                   ),
                 );
               }
-            }).catchError((onError) {
-              print("Erorr: $onError");
-              setState(() {
-                _isLoading = false;
-              });
             });
           } else {
             setState(() {
@@ -109,6 +103,25 @@ class _AdminScreenState extends State<AdminScreen> {
       ),
     );
   }
+
+  // void showInSnackBar() {
+  //   _scaffoldKey.currentState
+  //     .showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: Color(0xFFFFFFFF),
+  //         content: Row(
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.all(5.0),
+  //               child: Text('Admin detected', style:TextStyle(fontSize: vpH*0.02, fontWeight: FontWeight.w800, color:Color(0xFFFF9C01) ) ,),
+  //             ),
+  //             Icon(Icons.admin_panel_settings, color: Color(0xFFFF9C01),)
+  //           ],
+  //         ),
+  //         duration: Duration(seconds: 5),
+  //       )
+  //     );
+  // }
 
   @override
   Widget build(BuildContext context) {

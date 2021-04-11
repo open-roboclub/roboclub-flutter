@@ -210,7 +210,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                               ),
                               child: Text(
                                 widget.eventinfo.details,
-                                textAlign: TextAlign.justify,
+                                style: TextStyle(fontSize: vpH*0.022),
                               ),
                             ),
                             SizedBox(
