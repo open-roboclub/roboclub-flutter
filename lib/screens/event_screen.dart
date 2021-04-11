@@ -128,7 +128,7 @@ class _EventScreenState extends State<EventScreen> {
     events.forEach((item) {
       DateTime today = DateTime.now();
       DateTime _parsed = DateTime.parse(item.date);
-      if (_parsed.difference(today).inDays == 0) {
+      if (_parsed.difference(today).inDays == 0 || item.isFeatured) {
         item.date = DateFormat('MMMEd').format(_parsed);
         featuredEventsList.add(item);
       } else if (_parsed.isAfter(today)) {

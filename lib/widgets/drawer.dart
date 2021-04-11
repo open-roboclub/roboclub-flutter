@@ -88,6 +88,12 @@ Drawer appdrawer(context, {String page}) {
             );
           } else if (title == "Events") {
             Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _getScreen(title),
+              ),
+            );
           } else {
             Navigator.pushReplacement(
               context,

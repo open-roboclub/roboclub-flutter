@@ -50,6 +50,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   Project updatedProject;
+  Project newProject;
 
   String _projectName = "";
   String _description = "";
@@ -403,7 +404,11 @@ class _ProjectFormState extends State<ProjectForm> {
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-        widget.callback(updatedProject);
+        if (widget.editMode) {
+          widget.callback(updatedProject);
+        } else {
+          widget.callback(newProject);
+        }
       },
     );
 
@@ -886,6 +891,19 @@ class _ProjectFormState extends State<ProjectForm> {
                                     teamMembers: _teamMembers,
                                     progress: "",
                                   );
+
+                                  Map<String, dynamic> newProjectObject = {
+                                    'name': _projectName,
+                                    'projectImg': _imageUrls,
+                                    'description': _description,
+                                    'fileUrl': _fileUrl,
+                                    'link': _link,
+                                    'date': _date,
+                                    'teamMembers': _teamMembers,
+                                    'progress': "",
+                                  };
+                                  newProject =
+                                      Project.fromMap(newProjectObject);
                                   print("saved");
                                   // nameController.clear();
                                   // descriptionController.clear();
