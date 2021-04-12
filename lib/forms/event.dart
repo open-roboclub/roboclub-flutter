@@ -29,7 +29,7 @@ class _EventFormState extends State<EventForm> {
       fileName = '',
       _regFormLink;
 
-  bool isFeatured=false;
+  bool _isFeatured=false;
   bool _loading;
   bool filePicked = false;
   File file;
@@ -516,6 +516,35 @@ class _EventFormState extends State<EventForm> {
                       ],
                     ),
                   ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                    alignment: Alignment.topLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Is it a Featured Event ?',
+                          style: kLabelStyle,
+                        ),
+                        Radio(
+                          value: true,  
+                          groupValue: _isFeatured,  
+                          toggleable: true,
+                          onChanged: (bool value) {  
+                            setState(() {  
+                              if(value!=null){
+                                _isFeatured=value;
+                              }else{
+                                _isFeatured=false;
+                              }
+                              // print(_isFeatured);
+                            });  
+                          },  
+                        ),  
+                      ],
+                    ),
+                  ),
                   _loading ?Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
@@ -558,6 +587,7 @@ class _EventFormState extends State<EventForm> {
                             endTime: _setEndTime,
                             posterURL: _posterUrl,
                             regFormLink: _regFormLink,
+                            isFeatured: _isFeatured,
                           );
 
                           print("saved");

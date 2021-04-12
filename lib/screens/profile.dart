@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -85,53 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _aboutCard (){
-    Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                'About',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black
-                        .withOpacity(0.7),
-                    fontSize: vpH * 0.03),
-              ),
-            ),
-            _user.about.isNotEmpty
-                ? Text(
-                    _user.about,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontStyle:
-                            FontStyle.italic),
-                  )
-                : Center(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: vpH * 0.2,
-                          width: vpW * 0.4,
-                          child: SvgPicture.asset(
-                            'assets/illustrations/about.svg',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Text('What about you?')
-                      ],
-                    ),
-                  ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -144,82 +96,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
     List<String> interests = _user.interests.split(',');
-
-    Widget _interestCard(){
-       Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: PhysicalModel(
-          color: Colors.transparent,
-          borderRadius:
-              BorderRadius.all(Radius.circular(10)),
-          shadowColor: Colors.blue.withOpacity(0.3),
-          elevation: 8.0,
-          child: Container(
-            width: vpW * 0.7,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        'Interests',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black
-                                .withOpacity(0.7),
-                            fontSize: vpH * 0.03),
-                      ),
-                    ),
-                    _user.interests.isNotEmpty
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: interests.length,
-                            itemBuilder:
-                                (context, index) {
-                              return Text(
-                                interests[index],
-                                textAlign:
-                                    TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontStyle:
-                                      FontStyle.italic,
-                                ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: vpH * 0.2,
-                                  width: vpW * 0.4,
-                                  child: SvgPicture.asset(
-                                    'assets/illustrations/interest.svg',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                                Text('What Interest you?')
-                              ],
-                            ),
-                          ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    List<dynamic> cards = [_aboutCard, _interestCard,  ];
 
     return SafeArea(
       child: Scaffold(
@@ -362,6 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             padding: const EdgeInsets.all(15.0),
                                             child: Text(
                                               'About',
+                                              maxLines: 10,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black
@@ -435,7 +312,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           _user.interests.isNotEmpty
                                               ? ListView.builder(
                                                   shrinkWrap: true,
-                                                  itemCount: interests.length,
+                                                  itemCount:interests.length > 10
+                                                  ? 10 : interests.length,
                                                   itemBuilder:
                                                       (context, index) {
                                                     return Text(
