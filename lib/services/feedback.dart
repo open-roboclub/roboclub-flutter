@@ -5,7 +5,7 @@ final Firestore _firestore = Firestore.instance;
 
 class FeedbackService {
   Future<bool> postFeedback(String feedback, bool isMember) async {
-    DateFormat formatter = DateFormat("yyyy-MM-dd hh:mm:ss");
+    DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm:ss");
     String date = formatter.format(DateTime.now());
     Map<String, dynamic> data = {
       "feedback": feedback,

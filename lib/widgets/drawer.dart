@@ -79,12 +79,29 @@ Drawer appdrawer(context, {String page}) {
       onTap: () {
         Navigator.of(context).pop();
         if (title != page) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => _getScreen(title),
-            ),
-          );
+          if (page == "Events") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _getScreen(title),
+              ),
+            );
+          } else if (title == "Events") {
+            Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _getScreen(title),
+              ),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _getScreen(title),
+              ),
+            );
+          }
         }
       },
       child: ListTile(
@@ -106,35 +123,37 @@ Drawer appdrawer(context, {String page}) {
 
   return Drawer(
     elevation: 10,
-    child: Column(
-      children: [
-        Container(
-          height: vpH * 0.178,
-          width: vpW,
-          // color: Colors.yellow,
-          child: Image.asset(
-            'assets/img/club_banner.jpg',
-            fit: BoxFit.cover,
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            height: vpH * 0.178,
+            width: vpW,
+            // color: Colors.yellow,
+            child: Image.asset(
+              'assets/img/club_banner.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        _tileBuilder(CustomIcons.events, "Events", page == "Events"),
-        _tileBuilder(CustomIcons.projects, "Projects", page == "Projects"),
-        _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
-        _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
-        _tileBuilder(
-            CustomIcons.contribution, "Contributors", page == "Contributors"),
-        _tileBuilder(CustomIcons.admin, "Admin Panel", page == "Admin Panel"),
-        Divider(
-          thickness: 2,
-          indent: vpW * 0.04,
-          endIndent: vpW * 0.04,
-        ),
-        SizedBox(
-          height: vpH * 0.005,
-        ),
-        _tileBuilder(CustomIcons.feedback, "Feedback", page == "Feedback"),
-        _tileBuilder(CustomIcons.info, "About us", page == "About us"),
-      ],
+          _tileBuilder(CustomIcons.events, "Events", page == "Events"),
+          _tileBuilder(CustomIcons.projects, "Projects", page == "Projects"),
+          _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
+          _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
+          _tileBuilder(
+              CustomIcons.contribution, "Contributors", page == "Contributors"),
+          _tileBuilder(CustomIcons.admin, "Admin Panel", page == "Admin Panel"),
+          Divider(
+            thickness: 2,
+            indent: vpW * 0.04,
+            endIndent: vpW * 0.04,
+          ),
+          SizedBox(
+            height: vpH * 0.005,
+          ),
+          _tileBuilder(CustomIcons.feedback, "Feedback", page == "Feedback"),
+          _tileBuilder(CustomIcons.info, "About us", page == "About us"),
+        ],
+      ),
     ),
   );
 }

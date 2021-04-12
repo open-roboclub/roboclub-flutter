@@ -111,7 +111,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                     ),
                     child: Center(
                       child: Text(
-                        'Ongoing',
+                        'Featured',
                         style: _textstyle['label'],
                       ),
                     ),
@@ -119,7 +119,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                 ),
                 Positioned(
                   left: 10,
-                  top: vpH * 0.12,
+                  top: vpH * 0.14,
                   child: PhysicalModel(
                     color: Colors.transparent,
                     // shadowColor: Colors.red,
@@ -135,7 +135,7 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 1.0, horizontal: 4),
+                            vertical: 3.0, horizontal: 4),
                         child: Center(
                           child: Text(
                             widget.featuredEvent.date,

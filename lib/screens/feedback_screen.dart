@@ -83,17 +83,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               fillColor: Colors.white,
                               hintText: 'Write your feedback here!!',
                               border: InputBorder.none,
-                              
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               suffixIcon: Builder(
-                                builder: (context)=>IconButton(
+                                builder: (context) => IconButton(
                                   icon: Icon(
                                     Icons.send,
                                     color: Color(0xFFFF9C01),
                                   ),
-                                  onPressed: () async{
-                                    if (_feedback.isNotEmpty){
+                                  onPressed: () async {
+                                    if (_feedback.isNotEmpty) {
                                       // var _user =
                                       //     Provider.of<UserProvider>(context)
                                       //         .getUser;
@@ -104,8 +103,32 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                         FocusScope.of(context)
                                             .requestFocus(new FocusNode());
                                       });
-                                      Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: Text('Thanks for the Feedback!'),
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor: Color(0xFFFF9C01),
+                                        content: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons
+                                                  .sentiment_satisfied_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Thanks for the Feedback!',
+                                                style: TextStyle(
+                                                  fontSize: vpH * 0.03,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: Color(0xFFFFFFFF),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                         duration: Duration(seconds: 3),
                                       ));
                                     }
@@ -129,5 +152,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
