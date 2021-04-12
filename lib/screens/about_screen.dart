@@ -51,13 +51,14 @@ class _AboutScreenState extends State<AboutScreen>
         ),
         body: Container(
           child: CustomScrollView(
+            shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             slivers: <Widget>[
               Container(
                 child: SliverAppBar(
                   leading: new Container(),
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  expandedHeight: vpH * 0.65,
+                  expandedHeight: vpH * 0.67,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Padding(
                       padding: EdgeInsets.symmetric(
@@ -135,15 +136,21 @@ class _AboutScreenState extends State<AboutScreen>
                               ],
                             ),
                             Container(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: vpW * 0.028,
-                                    vertical: vpH * 0.005),
-                                child: Text(
-                                    "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: vpH * 0.020)),
+                              height: vpH * 0.32,
+                              width: double.infinity,
+                              child: SingleChildScrollView(
+                                physics: BouncingScrollPhysics(),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: vpW * 0.028,
+                                      vertical: vpH * 0.005),
+                                  child: Text(
+                                      "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
+                                      // overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: vpH * 0.020)),
+                                ),
                               ),
                             ),
                           ],
@@ -329,10 +336,15 @@ class _AboutScreenState extends State<AboutScreen>
                                     DeveloperCard(
                                       name: "Rishabh Sharma",
                                       img: 'assets/img/rishabh.jpg',
+                                      linkedin:
+                                          "https://www.linkedin.com/in/rishabh-sharma-11242b174/",
                                     ),
                                     DeveloperCard(
-                                        name: "Samiksha Agrawal",
-                                        img: 'assets/img/samiksha.jpeg'),
+                                      name: "Samiksha Agrawal",
+                                      img: 'assets/img/samiksha.jpeg',
+                                      linkedin:
+                                          "https://www.linkedin.com/in/samiksha-agrawal-53859b195/",
+                                    ),
                                   ],
                                 )),
                           ],
@@ -347,5 +359,11 @@ class _AboutScreenState extends State<AboutScreen>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

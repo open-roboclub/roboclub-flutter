@@ -20,11 +20,20 @@ class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   User user;
   bool _isLoading = false;
+  ScrollController _scrollController = ScrollController();
+  double _position;
+
   @override
   void initState() {
+    _position = 40;
     widget.members.sort((a, b) => a['name'].compareTo(b['name']));
     widget.members.sort((a, b) => a['rank'].compareTo(b['rank']));
     super.initState();
+  }
+
+  void scrollToItem() {
+    _scrollController.animateTo(_position,
+        duration: Duration(milliseconds: 1000), curve: Curves.ease);
   }
 
   void updateProfile(User updatedUser) {
@@ -43,6 +52,8 @@ class _Team2ScreenState extends State<Team2Screen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
+    var _height = 3 * (vpH * 0.036);
+    var _verticalPadding = 8.0;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFFFFFFF),
@@ -69,11 +80,14 @@ class _Team2ScreenState extends State<Team2Screen> {
                       height: vpH * 0.9,
                       width: vpW,
                       child: ListView(
+                        controller: _scrollController,
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         children: [
-                          for (int i = 0; i < widget.members.length; i++)
+                          for (int index = 0;
+                              index < widget.members.length;
+                              index++)
                             GestureDetector(
                               onTap: () async {
                                 final Firestore _firestore = Firestore.instance;
@@ -82,12 +96,15 @@ class _Team2ScreenState extends State<Team2Screen> {
                                 });
                                 DocumentSnapshot snap = await _firestore
                                     .collection('/users')
-                                    .document(widget.members[i]['uid'])
+                                    .document(widget.members[index]['uid'])
                                     .get();
                                 user = User.fromMap(snap.data);
                                 setState(() {
                                   _isLoading = false;
+                                  _position =
+                                      index * (_height + 2 * _verticalPadding);
                                 });
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -96,10 +113,14 @@ class _Team2ScreenState extends State<Team2Screen> {
                                       member: user,
                                     ),
                                   ),
-                                );
+                                ).then((value) {
+                                  setState(() {
+                                    scrollToItem();
+                                  });
+                                });
                               },
                               child: Team2Card(
-                                member: widget.members[i],
+                                member: widget.members[index],
                                 callback: updateProfile,
                               ),
                             )

@@ -7,6 +7,7 @@ class Event {
   String startTime;
   String date;
   String regFormLink;
+  bool isFeatured;
 
   Event({
     this.eventName,
@@ -17,6 +18,7 @@ class Event {
     this.posterURL,
     this.endTime,
     this.regFormLink,
+    this.isFeatured,
   });
 
   Map toMap(Event event) {
@@ -28,7 +30,8 @@ class Event {
     data["date"] = event.date;
     data["posterURL"] = event.posterURL;
     data["endTime"] = event.endTime;
-    data['regFormLink'] =event.regFormLink;
+    data['regFormLink'] = event.regFormLink;
+    data['isFeatured'] = event.isFeatured;
 
     return data;
   }
@@ -43,5 +46,6 @@ class Event {
     this.posterURL = mapData['posterURL'];
     this.startTime = mapData['startTime'];
     this.regFormLink = mapData['regFormLink'];
+    this.isFeatured = mapData['isFeatured'];
   }
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/helper/custom_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../helper/dimensions.dart';
 
 class DeveloperCard extends StatelessWidget {
   final name;
   final String img;
+  final String linkedin;
 
-  const DeveloperCard({Key key, this.name, this.img}) : super(key: key);
+  const DeveloperCard({Key key, this.name, this.img, this.linkedin})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class DeveloperCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: CircleAvatar(
                       radius: vpH * 0.035,
                       backgroundColor: Colors.black,
@@ -45,7 +49,7 @@ class DeveloperCard extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    flex: 2,
+                    flex: 4,
                     fit: FlexFit.tight,
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: vpW * 0.040),
@@ -67,6 +71,17 @@ class DeveloperCard extends StatelessWidget {
                           // ),
                         ],
                       ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: IconButton(
+                      icon: Icon(SocialMedia.linkedin),
+                      iconSize: vpW * 0.070,
+                      color: Color(0xFF2867B2),
+                      onPressed: () {
+                        launch(linkedin);
+                      },
                     ),
                   ),
                 ],

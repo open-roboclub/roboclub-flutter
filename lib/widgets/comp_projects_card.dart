@@ -70,60 +70,21 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
                     ),
                   ],
                 ),
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       flex: 3,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Container(
-                              height: vpH * 0.05,
-                              child: Text(
-                                widget.completedProject.name,
-                                style: _titlestyle,
-                                overflow: TextOverflow.fade,
-                              ),
-                            ),
+                      child:Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Container(
+                          height: vpH * 0.05,
+                          child: Text(
+                            widget.completedProject.name,
+                            style: _titlestyle,
+                            overflow: TextOverflow.fade,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: vpW * 0.01),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: vpH * 0.045,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    backgroundImage:
-                                        AssetImage('assets/img/teamMember.png'),
-                                  ),
-                                ),
-                                Align(
-                                  widthFactor: vpW * 0.0004,
-                                  child: Container(
-                                    height: vpH * 0.045,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.black,
-                                      backgroundImage: AssetImage(
-                                          'assets/img/teamMember.png'),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: vpH * 0.045,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    backgroundImage:
-                                        AssetImage('assets/img/teamMember.png'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                     Expanded(
@@ -132,27 +93,34 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
                         alignment: Alignment.bottomRight,
                         child: Padding(
                           padding: EdgeInsets.all(vpH * 0.010),
-                          child: FlatButton(
-                            color: Color(0xFFFF9C01),
-                            child: Container(
-                              width: vpW * 0.12,
-                              child: Text(
-                                "View",
-                                style: TextStyle(
-                                  fontSize: vpH * 0.018,
+                          child: PhysicalModel(
+                            color: Colors.transparent,
+                            shadowColor: Colors.black.withOpacity(0.3),
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            elevation: 8.0,
+                            child: FlatButton(
+                              color: Color(0xFFFF9C01),
+                              child: Container(
+                                width: vpW * 0.12,
+                                child: Text(
+                                  "View",
+                                  style: TextStyle(
+                                    fontSize: vpH * 0.024,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
+                              textColor: Colors.white,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProjectInfo(
+                                          project: widget.completedProject)),
+                                );
+                              },
                             ),
-                            textColor: Colors.white,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProjectInfo(
-                                        project: widget.completedProject)),
-                              );
-                            },
                           ),
                         ),
                       ),

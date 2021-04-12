@@ -15,6 +15,7 @@ class EventService {
       String startTime,
       String endTime,
       String date,
+      bool isFeatured,
       String regFormLink}) async {
     Map<String, dynamic> data = {
       "eventName": eventName,
@@ -25,6 +26,7 @@ class EventService {
       "endTime": endTime,
       "place": place,
       "regFormLink": regFormLink,
+      "isFeatured": isFeatured,
     };
 
     await _firestore.collection("/events").add(data).then((value) {
