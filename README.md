@@ -44,9 +44,9 @@ samples, guidance on mobile development, and a full API reference.
 📚 Check out the completed as well as ongoing projects in the club. Contact the project members, know the project's progress and stay updated. Also, get a chance to be a part of the ongoing projects.
 
 <br><br>
-  <img src="/screenshots/6.png" width="280px" height="500px">
-  <img src="/screenshots/5.png" width="280px" height="500px">
-  <img src="/screenshots/3.png" width="280px" height="500px">
+  <img src="/screenshots/6.png" width="250px" height="470px">
+  <img src="/screenshots/5.png" width="250px" height="470px">
+  <img src="/screenshots/3.png" width="250px" height="470px">
 <br>
 
 👫 Get to know the club's super-talented core-team members and faculty advisors along with their area of expertise and contact them through different social media handles.
@@ -56,9 +56,9 @@ samples, guidance on mobile development, and a full API reference.
 🎁 The club is grateful to people who contribute to it. Know about past Contributions and add yours.
 
 <br><br>
-  <img src="/screenshots/8.png" width="280px" height="500px">
-  <img src="/screenshots/10.png" width="280px" height="500px">
-  <img src="/screenshots/9.png" width="280px" height="500px">
+  <img src="/screenshots/8.png" width="250px" height="470px">
+  <img src="/screenshots/10.png" width="250px" height="470px">
+  <img src="/screenshots/9.png" width="250px" height="470px">
 <br>
 
 ❓ Clear all your queries regarding the AMURoboclub from the FAQ’s Section.
@@ -68,9 +68,9 @@ samples, guidance on mobile development, and a full API reference.
 📤 Provide us with your valuable feedback in the Feedback section.
 
 <br><br>
-  <img src="/screenshots/1.png" width="280px" height="500px">
-  <img src="/screenshots/2.png" width="280px" height="500px">
-  <img src="/screenshots/11.png" width="280px" height="500px">
+  <img src="/screenshots/1.png" width="250px" height="470px">
+  <img src="/screenshots/2.png" width="250px" height="470px">
+  <img src="/screenshots/11.png" width="250px" height="470px">
 <br>
 
 AMURoboclub is the application that provides intact information regarding the club in a single place in an organized manner. It helps you track various events and projects and guides you in the field of Robotics and Technology. It is the epicentre of AMURoboclub's actions.
