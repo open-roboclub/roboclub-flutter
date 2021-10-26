@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:911524271284:android:57ab1baf3f0e9779",
         "android_client_info": {
-          "package_name": "amu.roboclub"
+          "package_name": "amuroboclub.roboclub_flutter"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "911524271284-g5vqou52svslevrlj9e0jt53bgdtfs26.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "amu.roboclub",
+            "package_name": "amuroboclub.roboclub_flutter",
             "certificate_hash": "0a57c687d3f0cc7edd28a54ee586bdb0f9c302aa"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "911524271284-mr81j1fetse794tuhks8g3gc8g21q4bq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "amu.roboclub",
+            "package_name": "amuroboclub.roboclub_flutter",
             "certificate_hash": "0e3da585449a12ec3b6dff61a79ac53cf67d7abd"
           }
         },
