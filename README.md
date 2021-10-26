@@ -17,7 +17,7 @@ git clone 'repository_url'
 
 - download flutter from flutter : https://flutter.dev/docs/get-started/install
 - install flutter and dart plugins for your text editor.
-- open project in your preferred text editor and download all dependencies from pubspec.yaml (automatically downloaded during first run)
+- open project in your preferred text editor and download all dependencies from pubspec.yaml (automatically downloaded during first run or run command- flutter pub get)
 - setup firebase project
 - download google-services.json and place it in /android/app directory
 - run project using command
