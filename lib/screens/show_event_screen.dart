@@ -97,7 +97,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                                   ),
                                 ),
                               ),
-                              title: Text('Hosted BY'),
+                              title: Text('Hosted By'),
                               subtitle: Text('AMURoboclub'),
                             ),
                             Divider(
@@ -210,7 +210,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                               ),
                               child: Text(
                                 widget.eventinfo.details,
-                                style: TextStyle(fontSize: vpH*0.022),
+                                style: TextStyle(fontSize: vpH * 0.022),
                               ),
                             ),
                             SizedBox(
