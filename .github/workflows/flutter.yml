@@ -28,7 +28,7 @@ jobs:
           --output $HOME/private/services.tar services.tar.gpg
           tar xvf $HOME/private/services.tar
           touch .env
-          flutter build appbundle
+          flutter build appbundle --stacktrace
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
           GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
