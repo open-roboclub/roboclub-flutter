@@ -8,51 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:911524271284:android:57ab1baf3f0e9779",
-        "android_client_info": {
-          "package_name": "amu.roboclub"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "911524271284-g5vqou52svslevrlj9e0jt53bgdtfs26.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "amu.roboclub",
-            "certificate_hash": "0a57c687d3f0cc7edd28a54ee586bdb0f9c302aa"
-          }
-        },
-        {
-          "client_id": "911524271284-mr81j1fetse794tuhks8g3gc8g21q4bq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "amu.roboclub",
-            "certificate_hash": "0e3da585449a12ec3b6dff61a79ac53cf67d7abd"
-          }
-        },
-        {
-          "client_id": "911524271284-5i9jbdmdjdejom8bujohfv2ndm4p656s.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBGdsZk49eDRH6IiSyaqc44VSFUBB3EXbs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "106708473389460873103",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:911524271284:android:27a06e4da0ec1f838073e1",
         "android_client_info": {
           "package_name": "amuroboclub.roboclub_flutter"
