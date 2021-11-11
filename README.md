@@ -1,6 +1,6 @@
 # AMURoboclub 
 AMURoboclub is the official app of AMURoboclub, a student body of ZHCET that nurtures the needs of curious and innovative minds.
-It is the nerve-centre of robotics enthusiasts who are curious and innovative and wish to come together to learn and share. With the motto 'Where Innovation Meets Implementation', it endeavors to ignite young minds with the fuel of robotics. Enabling that, the app ensures to acquaint its users with the various activities and achievements of AMURoboclub.
+It is the nerve-centre of robotics enthusiasts who are curious and innovative and wish to come together to learn and share. With the motto 'Where Innovation Meets Implementation', it endeavors to ignite young minds with the fuel of robotics. Enabling that, the app ensures to acquaint its users with the various activities and achievements of AMURoboclub
   
 ## Community app
 <br><br>
