@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: |
           mkdir $HOME/private
-          gpg --quiet --batch --yes --decrypt --passphrase="$FIREBASE_SECRET" \
+          gpg --quiet --batch --yes --decrypt --passphrase=AMURoboclub \
           --output $HOME/private/services.tar services.tar.gpg
           tar xvf $HOME/private/services.tar
           touch .env
