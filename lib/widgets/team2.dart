@@ -10,7 +10,7 @@ import '../helper/dimensions.dart';
 
 class Team2Card extends StatelessWidget {
   final dynamic member;
-  final void Function(User) callback;
+  final void Function(ModelUser) callback;
 
   const Team2Card({Key key, this.member, this.callback}) : super(key: key);
 
@@ -19,7 +19,7 @@ class Team2Card extends StatelessWidget {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var _currUser = Provider.of<UserProvider>(context).getUser;
-    User user;
+    ModelUser user;
     TextStyle _titlestyle = TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: vpH * 0.028,
@@ -50,13 +50,13 @@ class Team2Card extends StatelessWidget {
                 color: Color(0xFFFF9C01),
                 iconSize: vpW * 0.060,
                 onPressed: () async {
-                  final Firestore _firestore = Firestore.instance;
+                  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
                   DocumentSnapshot snap = await _firestore
                       .collection('/users')
-                      .document(member['uid'])
+                      .doc(member['uid'])
                       .get();
-                  user = User.fromMap(snap.data);
+                  user = ModelUser.fromMap(snap.data());
 
                   Navigator.push(
                     context,

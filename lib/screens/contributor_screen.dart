@@ -47,7 +47,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    User _user = Provider.of<UserProvider>(context).getUser;
+    ModelUser _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
       child: Scaffold(

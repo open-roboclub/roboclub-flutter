@@ -3,7 +3,7 @@ import 'package:roboclub_flutter/models/project.dart';
 
 import 'dart:async';
 
-final Firestore _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class ProjectService {
   Future<bool> postProjects({
@@ -39,10 +39,10 @@ class ProjectService {
     await _firestore
         .collection("/projects")
         .orderBy('date', descending: true)
-        .getDocuments()
+        .get()
         .then((value) {
-      value.documents.forEach((element) {
-        list.add(Project.fromMap(element.data));
+      value.docs.forEach((element) {
+        list.add(Project.fromMap(element.data()));
       });
     });
     return list;

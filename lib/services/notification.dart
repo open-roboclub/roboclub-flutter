@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-final Firestore _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class NotificationService {
   Future<Null> postDeviceToken({String fcmToken}) async {
@@ -21,15 +21,15 @@ class NotificationService {
 
     await _firestore
         .collection("/pushTokens")
-        .document(androidInfo.androidId)
-        .setData(data);
+        .doc(androidInfo.androidId)
+        .set(data);
   }
 
   Future<List<String>> getFCMTokens() async {
     List<String> list = [];
-    await _firestore.collection('/pushTokens').getDocuments().then((tokens) {
-      tokens.documents.forEach((token) {
-        list.add(token.data['deviceToken']);
+    await _firestore.collection('/pushTokens').get().then((tokens) {
+      tokens.docs.forEach((token) {
+        list.add(token.data.call()['deviceToken']);
       });
     });
     return list;
@@ -52,12 +52,14 @@ class NotificationService {
         "image": img
       }
     };
+
+    // TODO: check it
     DocumentSnapshot fcmKeySnap =
-        await _firestore.collection("/keys").document("FCM_KEY").get();
-    String fcmKey = fcmKeySnap.data['key'];
+        await _firestore.collection("/keys").doc("FCM_KEY").get();
+    String fcmKey = fcmKeySnap.get('key');
     try {
       final http.Response response = await http.post(
-          'https://fcm.googleapis.com/fcm/send',
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
           body: json.encode(body),
           headers: <String, String>{
             'authorization': "key=$fcmKey",

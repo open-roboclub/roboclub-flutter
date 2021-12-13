@@ -20,8 +20,8 @@ class EventScreen extends StatefulWidget {
   _EventScreenState createState() => _EventScreenState();
 }
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  if (message['data']['screen'] == 'notification') {
+Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
+  if (message.data['screen'] == 'notification') {
     print('inside notification screen');
   }
 
@@ -37,7 +37,7 @@ class _EventScreenState extends State<EventScreen> {
   bool isLoading = true;
   DateTime parsedDate;
 
-  final FirebaseMessaging _messaging = FirebaseMessaging();
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -52,16 +52,31 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   void initNotifications(BuildContext context) async {
-    _messaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message.data['screen'] == 'event') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EventScreen(),
+              ));
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NotificationScreen(),
+            ),
+          );
+        }
+    });
+      FirebaseMessaging.onMessage.listen((message) {
+         print("onMessage: $message");
 
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             content: ListTile(
-              title: Text(message['notification']['title']),
-              subtitle: Text(message['notification']['body']),
+              title: Text(message.data['notification']['title']),
+              subtitle: Text(message.data['notification']['body']),
             ),
             actions: <Widget>[
               FlatButton(
@@ -69,7 +84,7 @@ class _EventScreenState extends State<EventScreen> {
                 child: Text('Show'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  if (message['data']['screen'] == 'event') {
+                  if (message.data['screen'] == 'event') {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -92,35 +107,77 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         );
-      },
-      onBackgroundMessage: myBackgroundMessageHandler,
-      onLaunch: (Map<String, dynamic> message) async {
-        if (message['data']['screen'] == 'notification') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NotificationScreen(),
-            ),
-          );
-        }
-      },
-      onResume: (Map<String, dynamic> message) async {
-        if (message['data']['screen'] == 'event') {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EventScreen(),
-              ));
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NotificationScreen(),
-            ),
-          );
-        }
-      },
-    );
+      });
+      FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+    // _messaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("onMessage: $message");
+
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) => AlertDialog(
+    //         content: ListTile(
+    //           title: Text(message['notification']['title']),
+    //           subtitle: Text(message['notification']['body']),
+    //         ),
+    //         actions: <Widget>[
+    //           FlatButton(
+    //             color: Colors.amber,
+    //             child: Text('Show'),
+    //             onPressed: () {
+    //               Navigator.of(context).pop();
+    //               if (message['data']['screen'] == 'event') {
+    //                 Navigator.push(
+    //                     context,
+    //                     MaterialPageRoute(
+    //                       builder: (context) => EventScreen(),
+    //                     ));
+    //               } else {
+    //                 Navigator.push(
+    //                     context,
+    //                     MaterialPageRoute(
+    //                       builder: (context) => NotificationScreen(),
+    //                     ));
+    //               }
+    //             },
+    //           ),
+    //           FlatButton(
+    //             color: Colors.amber,
+    //             child: Text('Cancel'),
+    //             onPressed: () => Navigator.of(context).pop(),
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    //   onBackgroundMessage: myBackgroundMessageHandler,
+      // onLaunch: (Map<String, dynamic> message) async {
+      //   if (message['data']['screen'] == 'notification') {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => Notuser as ModelUserificationScreen,
+      //       ),
+      //     );
+      //   }
+      // },
+      // onResume: (Map<String, dynamic> message) async {
+      //   if (message['data']['screen'] == 'event') {
+      //     Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => EventScreen(),
+      //         ));
+      //   } else {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => NotificationScreen(),
+      //       ),
+      //     );
+      //   }
+      // },
+    // );
   }
 
   void splitEventLists(List<Event> events) {
@@ -165,7 +222,7 @@ class _EventScreenState extends State<EventScreen> {
     initNotifications(context);
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    User _user = Provider.of<UserProvider>(context).getUser;
+    ModelUser _user = Provider.of<UserProvider>(context).getUser;
 
     return SafeArea(
       child: Scaffold(

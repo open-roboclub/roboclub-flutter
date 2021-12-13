@@ -18,11 +18,11 @@ class ProjectForm extends StatefulWidget {
   final void Function(Project) callback;
 
   const ProjectForm(
-      {Key key,
-      this.currproject,
-      this.editMode,
-      this.genericDate,
-      this.callback})
+      {Key ?key,
+      required this.currproject,
+      required this.editMode,
+      required this.genericDate,
+      required this.callback})
       : super(key: key);
   @override
   _ProjectFormState createState() => _ProjectFormState();
@@ -49,8 +49,8 @@ final kLabelStyle = TextStyle(
 class _ProjectFormState extends State<ProjectForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  Project updatedProject;
-  Project newProject;
+  Project? updatedProject;
+  Project? newProject;
 
   String _projectName = "";
   String _description = "";
@@ -59,22 +59,22 @@ class _ProjectFormState extends State<ProjectForm> {
   String _fileUrl = "";
   String fileName = '';
   String pdfFileName = '';
-  File pdfFile;
+  File? pdfFile;
   int imgFiles = 0;
   List<dynamic> dynamicList = [];
-  List<dynamic> _imageUrls = List();
-  List<File> imageList = List();
-  List<dynamic> _teamMembers = List();
+  List<dynamic> _imageUrls = [];
+  List<File> imageList = [];
+  List<dynamic> _teamMembers = [];
   String dropdownValue = '1';
   bool imagePicked = false;
-  bool _loading;
+  bool? _loading;
   bool filePicked = false;
   bool showPdf = false;
   bool showImg = false;
-  StorageUploadTask uploadTask;
-  StorageUploadTask pdfUploadTask;
+  UploadTask? uploadTask;
+  UploadTask? pdfUploadTask;
   String url = "";
-  DateTime dateTime;
+  DateTime? dateTime;
   TextEditingController date = TextEditingController();
   TextEditingController nameController = TextEditingController();
   final TextEditingController _teamMember1 = new TextEditingController();
@@ -127,7 +127,7 @@ class _ProjectFormState extends State<ProjectForm> {
   final TextEditingController _linkedinId24 = new TextEditingController();
   final TextEditingController _teamMember25 = new TextEditingController();
   final TextEditingController _linkedinId25 = new TextEditingController();
-  List<TextEditingController> teamController;
+  List<TextEditingController>? teamController;
   List<TextEditingController> linkedinController = [];
 
   @override
@@ -228,10 +228,10 @@ class _ProjectFormState extends State<ProjectForm> {
 
   Future postImages(List<File> imageList, String name) async {
     for (int i = 0; i < imageList.length; i++) {
-      StorageReference storageReference =
-          FirebaseStorage().ref().child("$name$i");
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child("$name$i");
       uploadTask = storageReference.putFile(imageList[i]);
-      url = await (await uploadTask.onComplete).ref.getDownloadURL();
+      url = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
       _imageUrls.add(url);
     }
     if (widget.editMode) {
@@ -264,9 +264,9 @@ class _ProjectFormState extends State<ProjectForm> {
   }
 
   Future savePdf(List<int> asset, String name) async {
-    StorageReference reference = FirebaseStorage.instance.ref().child(name);
+    Reference reference = FirebaseStorage.instance.ref().child(name);
     pdfUploadTask = reference.putData(asset);
-    _fileUrl = await (await pdfUploadTask.onComplete).ref.getDownloadURL();
+    _fileUrl = await (await pdfUploadTask.whenComplete(() => null)).ref.getDownloadURL();
   }
 
   Widget memberField(int index) {
@@ -372,14 +372,14 @@ class _ProjectFormState extends State<ProjectForm> {
     updatedProject = Project.fromMap(projectObject);
     updatedProject.progress = project.progress;
     String id;
-    Firestore.instance.collection('/projects').getDocuments().then((projects) {
-      projects.documents.forEach((project) {
+    FirebaseFirestore.instance.collection('/projects').get().then((projects) {
+      projects.docs.forEach((project) {
         if (project['name'] == widget.currproject.name) {
-          id = project.documentID;
-          return Firestore.instance
+          id = project.id;
+          return FirebaseFirestore.instance
               .collection('/projects')
-              .document(id)
-              .updateData(projectObject)
+              .doc(id)
+              .update(projectObject)
               .then((value) {
             print("Project Updated");
             // widget.callback(updatedProject);

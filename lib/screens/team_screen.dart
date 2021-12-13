@@ -14,16 +14,16 @@ class TeamScreen extends StatefulWidget {
 class _TeamScreenState extends State<TeamScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  final Firestore _firestore = Firestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = true;
 
   List<Team> teamsList = [];
 
   @override
   void initState() {
-    _firestore.collection('/teams').getDocuments().then((teamSnaps) {
-      teamSnaps.documents.forEach((element) {
-        teamsList.add(Team.fromMap(element.data));
+    _firestore.collection('/teams').get().then((teamSnaps) {
+      teamSnaps.docs.forEach((element) {
+        teamsList.add(Team.fromMap(element.data()));
       });
       setState(() {
         _isLoading = false;

@@ -54,19 +54,19 @@ class _ProjectInfoState extends State<ProjectInfo> {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     var heading = TextStyle(fontSize: vpH * 0.03, fontWeight: FontWeight.bold);
-    User _user = Provider.of<UserProvider>(context).getUser;
+    ModelUser _user = Provider.of<UserProvider>(context).getUser;
 
     Future<void> updateProgress() async {
       widget.callback(currProject, _currprogress.toString());
       String id;
-      Firestore.instance.collection('projects').getDocuments().then((projects) {
-        projects.documents.forEach((project) {
+      FirebaseFirestore.instance.collection('projects').get().then((projects) {
+        projects.docs.forEach((project) {
           if (project['name'] == currProject.name) {
-            id = project.documentID;
-            return Firestore.instance
+            id = project.id;
+            return FirebaseFirestore.instance
                 .collection('projects')
-                .document(id)
-                .updateData({'progress': _currprogress.toString()})
+                .doc(id)
+                .update({'progress': _currprogress.toString()})
                 .then((value) => print("Progress Updated"))
                 .catchError(
                     (error) => print("Failed to update progress: $error"));
@@ -142,30 +142,32 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                                CarouselSlider.builder(
-                                  itemCount: currProject.projectImg.length,
-                                  options: CarouselOptions(
-                                    autoPlay: true,
-                                    enlargeCenterPage: true,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                        height: vpH * 0.20,
-                                        width: vpW * 0.9,
-                                        margin:
-                                            EdgeInsets.symmetric(horizontal: 5),
-                                        child: FittedBox(
-                                            fit: BoxFit.fill,
-                                            child: CachedNetworkImage(
-                                              imageUrl: widget
-                                                  .project.projectImg[index],
-                                              fadeInCurve: Curves.easeIn,
-                                              fadeInDuration:
-                                                  Duration(milliseconds: 500),
-                                              fit: BoxFit.cover,
-                                            )));
-                                  },
+                              CarouselSlider.builder(
+                                itemCount: currProject.projectImg.length,
+                                options: CarouselOptions(
+                                  autoPlay: true,
+                                  enlargeCenterPage: true,
                                 ),
+                                itemBuilder: (context, index,_) {
+                                  return Container(
+                                    height: vpH * 0.20,
+                                    width: vpW * 0.9,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: CachedNetworkImage(
+                                        imageUrl: widget
+                                            .project.projectImg[index],
+                                        fadeInCurve: Curves.easeIn,
+                                        fadeInDuration:
+                                            Duration(milliseconds: 500),
+                                        fit: BoxFit.cover,
+                                      )
+                                    )
+                                  );
+                                },
+                              ),
                               ])),
               ),
               Padding(

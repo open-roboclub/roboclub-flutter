@@ -20,7 +20,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool viewMode;
-  final User member;
+  final ModelUser member;
   // final bool showInSnackBar;
   const ProfileScreen({
     Key key,
@@ -34,7 +34,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool drag = false;
-  User _user, _currUser;
+  ModelUser _user, _currUser;
   var vpH, vpW;
 
   @override
@@ -632,7 +632,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     .then((value) {
                                   Provider.of<UserProvider>(context,
                                           listen: false)
-                                      .setUser = User();
+                                      .setUser = ModelUser();
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

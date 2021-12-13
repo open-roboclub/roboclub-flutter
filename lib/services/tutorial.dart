@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final Firestore _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class TutorialService {
   Future<bool> addTutorial(String videoId, String title) {
@@ -9,8 +9,8 @@ class TutorialService {
     };
     _firestore
         .collection('/tutorials')
-        .document(title)
-        .setData(_tutorial)
+        .doc(title)
+        .set(_tutorial)
         .then((value) {
       return Future.value(true);
     }).catchError((e) {
@@ -22,8 +22,8 @@ class TutorialService {
   Future<List<dynamic>> fetchTutorials() async {
     List<dynamic> list = [];
 
-    await _firestore.collection("/tutorials").getDocuments().then((value) {
-      value.documents.forEach((element) {
+    await _firestore.collection("/tutorials").get().then((value) {
+      value.docs.forEach((element) {
         list.add(element.data);
       });
     });

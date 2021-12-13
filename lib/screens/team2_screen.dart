@@ -18,7 +18,7 @@ class Team2Screen extends StatefulWidget {
 
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  User user;
+  ModelUser user;
   bool _isLoading = false;
   ScrollController _scrollController = ScrollController();
   double _position;
@@ -36,7 +36,7 @@ class _Team2ScreenState extends State<Team2Screen> {
         duration: Duration(milliseconds: 1000), curve: Curves.ease);
   }
 
-  void updateProfile(User updatedUser) {
+  void updateProfile(ModelUser updatedUser) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -90,15 +90,15 @@ class _Team2ScreenState extends State<Team2Screen> {
                               index++)
                             GestureDetector(
                               onTap: () async {
-                                final Firestore _firestore = Firestore.instance;
+                                final FirebaseFirestore _firestore = FirebaseFirestore.instance;
                                 setState(() {
                                   _isLoading = true;
                                 });
                                 DocumentSnapshot snap = await _firestore
                                     .collection('/users')
-                                    .document(widget.members[index]['uid'])
+                                    .doc(widget.members[index]['uid'])
                                     .get();
-                                user = User.fromMap(snap.data);
+                                user = ModelUser.fromMap(snap.data());
                                 setState(() {
                                   _isLoading = false;
                                   _position =

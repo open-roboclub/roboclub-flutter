@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
@@ -18,10 +19,13 @@ import 'package:roboclub_flutter/services/shared_prefs.dart';
 void main() async {
   // debugPaintSizeEnabled = true;
 
-  MyLocalStorage _storage = MyLocalStorage();
-  final FirebaseMessaging _messaging = FirebaseMessaging();
   WidgetsFlutterBinding.ensureInitialized();
-  await DotEnv.load(fileName: ".env");
+  await Firebase.initializeApp();
+  MyLocalStorage _storage = MyLocalStorage();
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  DotEnv.dotenv.load(fileName: ".env");
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _storage.getDeviceToken().then((value) {
     if (value == null) {
@@ -62,9 +66,9 @@ class MyApp extends StatelessWidget {
     final _userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthService().getCurrentUser().then((currUser) {
       if (currUser != null) {
-        _userProvider.setUser = currUser;
+        _userProvider.setUser = currUser as ModelUser;
       } else {
-        _userProvider.setUser = User();
+        _userProvider.setUser = ModelUser();
       }
     });
 
