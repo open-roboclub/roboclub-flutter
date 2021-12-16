@@ -44,12 +44,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final List<DocumentSnapshot> documents =
-                        snapshot.data.docs;
+                        snapshot.data!.docs;
                     return ListView(
                       physics: BouncingScrollPhysics(),
                       children: documents
                           .map(
-                            (doc) => NotificationCard(Notifications.fromMap(doc.data())))
+                            (doc) => NotificationCard(Notifications.fromMap(doc.data() as Map<String,dynamic>)))
                           .toList(),
                     );
                   } else if (snapshot.hasError) {

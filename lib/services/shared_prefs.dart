@@ -10,7 +10,7 @@ class MyLocalStorage {
   //getter functions
   Future<bool> getThemepref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('darkMode');
+    return prefs.getBool('darkMode')??false;
   }
 
   setDeviceToken(String token) async {
@@ -21,7 +21,7 @@ class MyLocalStorage {
   //getter functions
   Future<String> getDeviceToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('deviceToken');
+    return prefs.getString('deviceToken')??"";
   }
 
   setOnboarding(bool isDone) async {
@@ -32,7 +32,7 @@ class MyLocalStorage {
   //getter functions
   Future<bool> getOnboarding() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('onboarding');
+    return prefs.getBool('onboarding')??false;
   }
 
   // clear local storage

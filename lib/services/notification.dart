@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class NotificationService {
-  Future<Null> postDeviceToken({String fcmToken}) async {
+  Future<Null> postDeviceToken({String? fcmToken}) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     Map<String, dynamic> data = {
@@ -36,10 +36,10 @@ class NotificationService {
   }
 
   Future<Null> pushNotification(
-      {@required String title,
-      @required String msg,
-      @required String img,
-      @required String screen}) async {
+      {required String title,
+      required String msg,
+      required String img,
+      required String screen}) async {
     List<String> tokens = await getFCMTokens();
     final Map<String, dynamic> body = {
       // "to": token,
@@ -82,7 +82,7 @@ class NotificationService {
   }
 
   Future<bool> postNotification(
-      {String title, String msg, String link, String date}) async {
+      {String? title, String? msg, String? link, String? date}) async {
     Map<String, dynamic> data = {
       "title": title,
       "msg": msg,

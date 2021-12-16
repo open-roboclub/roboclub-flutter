@@ -18,8 +18,8 @@ class _AboutScreenState extends State<AboutScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  AnimationController _animationController;
-  Animation _animation;
+  late AnimationController _animationController;
+  late Animation _animation;
 
   void initState() {
     _animationController = AnimationController(
@@ -112,7 +112,7 @@ class _AboutScreenState extends State<AboutScreen>
                                               child: Column(
                                                 children: [
                                                   Text(
-                                                    "{ Website }",
+                                                    " Website ",
                                                     style: TextStyle(
                                                       fontSize: vpH * 0.02,
                                                       color: Theme.of(context)

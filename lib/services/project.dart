@@ -7,14 +7,14 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class ProjectService {
   Future<bool> postProjects({
-    List<dynamic> projectImg,
-    String name,
-    String description,
-    String date,
-    String link,
+    required List<dynamic> projectImg,
+    required String name,
+    required String description,
+    required String date,
+    required String link,
     String progress = "",
-    List<dynamic> teamMembers,
-    String fileUrl,
+    required List<dynamic> teamMembers,
+    required String fileUrl,
   }) async {
     Map<String, dynamic> data = {
       "name": name,

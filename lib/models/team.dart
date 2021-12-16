@@ -1,14 +1,14 @@
 class Team {
-  String teamName;
-  String description;
-  String teamImg;
-  List<dynamic> members;
+  late String teamName;
+  late String description;
+  late String teamImg;
+  late List<dynamic> members;
 
   Team({
-    this.description,
-    this.teamName,
-    this.teamImg,
-    this.members,
+    required this.description,
+    required this.teamName,
+    required this.teamImg,
+    required this.members,
   });
 
   Map toMap(Team team) {

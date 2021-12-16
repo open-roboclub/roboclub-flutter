@@ -11,17 +11,17 @@ class Team2Screen extends StatefulWidget {
   final List<dynamic> members;
   final String title;
 
-  const Team2Screen({Key key, this.members, this.title}) : super(key: key);
+  const Team2Screen({Key ?key, required this.members, required this.title}) : super(key: key);
   @override
   _Team2ScreenState createState() => _Team2ScreenState();
 }
 
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  ModelUser user;
+  late ModelUser user;
   bool _isLoading = false;
   ScrollController _scrollController = ScrollController();
-  double _position;
+  late double _position;
 
   @override
   void initState() {
@@ -98,7 +98,7 @@ class _Team2ScreenState extends State<Team2Screen> {
                                     .collection('/users')
                                     .doc(widget.members[index]['uid'])
                                     .get();
-                                user = ModelUser.fromMap(snap.data());
+                                user = ModelUser.fromMap(snap.data() as Map<String,dynamic>);
                                 setState(() {
                                   _isLoading = false;
                                   _position =

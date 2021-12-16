@@ -10,7 +10,7 @@ class OngoingProjectCard extends StatefulWidget {
   final Project ongoingProject;
   final void Function(Project, String) callback;
   final String date;
-  OngoingProjectCard({Key key, this.ongoingProject, this.callback, this.date})
+  OngoingProjectCard({Key? key, required this.ongoingProject, required this.callback, this.date=""})
       : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
             color: Colors.blueGrey[50],
             boxShadow: [
               BoxShadow(
-                  color: Colors.blueGrey[200],
+                  color: Colors.blueGrey[200]!,
                   blurRadius: 5.0,
                   spreadRadius: 1.0,
                   offset: Offset(0.0, 0.75)),
@@ -85,7 +85,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.ongoingProject.name ?? "",
+                              widget.ongoingProject.name ,
                               overflow: TextOverflow.ellipsis,
                               style: _titlestyle,
                             ),
@@ -93,7 +93,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.005),
                               child: Text(
-                                widget.ongoingProject.date ?? "",
+                                widget.ongoingProject.date ,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(fontSize: vpH * 0.018),
                               ),

@@ -4,11 +4,11 @@ import 'package:roboclub_flutter/screens/faqs.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 
 AppBar appBar(context,
-    {String strTitle,
-    bool isNotification = false,
+    {required String strTitle,
+     bool isNotification = false,
     isDrawer = false,
     isFaq =false,
-    GlobalKey<ScaffoldState> scaffoldKey}) {
+    GlobalKey<ScaffoldState>? scaffoldKey}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
   var iconcolor = isDrawer ? Theme.of(context).primaryColorLight : Colors.black;
@@ -34,7 +34,7 @@ AppBar appBar(context,
             size: vpH*0.05,),
             color: iconcolor,
             onPressed: () {
-              scaffoldKey.currentState.openDrawer();
+              scaffoldKey!.currentState!.openDrawer();
             },
           )
         : IconButton(

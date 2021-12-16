@@ -1,4 +1,4 @@
-import 'dart:ui';
+// import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:roboclub_flutter/screens/project_info.dart';
 
 class CompletedProjectCard extends StatefulWidget {
   final Project completedProject;
-  CompletedProjectCard({Key key, this.completedProject}) : super(key: key);
+  CompletedProjectCard({Key? key, required this.completedProject}) : super(key: key);
 
   @override
   _CompletedProjectCardState createState() => _CompletedProjectCardState();
@@ -63,7 +63,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey[350].withOpacity(0.96),
+                      color: Colors.grey[350]!.withOpacity(0.96),
                       // offset: Offset(2, 2),
                       blurRadius: 1.0,
                       spreadRadius: 1.0,

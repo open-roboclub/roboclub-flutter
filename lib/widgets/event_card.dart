@@ -7,7 +7,7 @@ import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
 class EventCard extends StatefulWidget {
   final Event event;
-  EventCard({Key key, this.event}) : super(key: key);
+  EventCard({Key ?key, required this.event}) : super(key: key);
 
   @override
   _EventCardState createState() => _EventCardState();

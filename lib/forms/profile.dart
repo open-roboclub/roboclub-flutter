@@ -15,9 +15,9 @@ import '../widgets/appBar.dart';
 
 class ProfileForm extends StatefulWidget {
   final ModelUser member;
-  final void Function(ModelUser) callback;
+  final void Function(ModelUser)? callback;
 
-  const ProfileForm({Key ?key,required this.member, required this.callback}) : super(key: key);
+  const ProfileForm({Key ?key,required this.member, this.callback}) : super(key: key);
   @override
   _ProfileFormState createState() => _ProfileFormState(member);
 }
@@ -43,7 +43,7 @@ class _ProfileFormState extends State<ProfileForm> {
   bool filePicked = false;
 
   late UploadTask uploadTask;
-  late File file;
+  File? file;
   String _img = "";
   String fileName = '';
   final ModelUser _user;
@@ -151,7 +151,7 @@ class _ProfileFormState extends State<ProfileForm> {
           Provider.of<UserProvider>(context, listen: false).setUser =
               updatedUser;
         } else {
-          widget.callback(updatedUser);
+          widget.callback!(updatedUser);
         }
       },
     );
@@ -201,7 +201,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           ? Container(
                               width: vpW * 0.3,
                               height: vpH * 0.3,
-                              child: Image.file(file),
+                              child: Image.file(file!),
                             )
                           : CircleAvatar(
                               radius: 80,
@@ -688,7 +688,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           _loading=true;
                         });
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), 'users/${_user.name}/$fileName');
+                          await saveImg(file!.readAsBytesSync(), 'users/${_user.name}/$fileName');
                         }
                         if (!_formKey.currentState!.validate()) {
                           print("not valid");
@@ -697,7 +697,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           });
                           return null;
                         } else {
-                          _formKey.currentState.save();
+                          _formKey.currentState!.save();
                           await updateProfile(_user, context);
                           showDialog(
                             context: context,

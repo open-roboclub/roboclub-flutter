@@ -35,9 +35,9 @@ class _EventScreenState extends State<EventScreen> {
   List<Event> upcomingEventsList = [];
   List<Event> pastEventsList = [];
   bool isLoading = true;
-  DateTime parsedDate;
+  late DateTime parsedDate;
 
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   @override
   void initState() {

@@ -23,9 +23,9 @@ class ProfileScreen extends StatefulWidget {
   final ModelUser member;
   // final bool showInSnackBar;
   const ProfileScreen({
-    Key key,
+    Key? key,
     this.viewMode = false,
-    this.member,
+    required this.member,
   }) : super(key: key);
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -34,7 +34,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool drag = false;
-  ModelUser _user, _currUser;
+  late ModelUser _user, _currUser;
   var vpH, vpW;
 
   @override
@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.didChangeDependencies();
   }
 
-  Widget _quickOptions(var vpH, IconData iconData, Object navigateTo) {
+  Widget _quickOptions(var vpH, IconData iconData, Widget navigateTo) {
     return Stack(
       children: [
         IconButton(
@@ -224,6 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     CustomIcons.projects,
                                     ProjectForm(
                                       editMode: false,
+                                      // currproject: ,
                                     )),
                                 Divider(
                                   height: vpH * 0.04,
@@ -625,7 +626,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // underline: Underline,
                             // value: "",
                             isDense: true,
-                            onChanged: (String newValue) async {
+                            onChanged: (String? newValue) async {
                               if (newValue == "Sign Out") {
                                 await AuthService()
                                     .signOutGoogle()

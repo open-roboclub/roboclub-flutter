@@ -5,7 +5,7 @@ import 'package:roboclub_flutter/helper/custom_icons.dart';
 class TutorialCard extends StatelessWidget {
   final String title;
 
-  const TutorialCard({Key key, this.title}) : super(key: key);
+  const TutorialCard({Key? key, required this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -45,7 +45,7 @@ class TutorialCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Center(
                 child: Text(
-                  title ?? " ",
+                  title ,
                   style: _style,
                   textAlign: TextAlign.center,
                 ),

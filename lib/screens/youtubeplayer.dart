@@ -7,7 +7,7 @@ class YoutubePlayerScreen extends StatefulWidget {
   final String title;
   final String url;
 
-  const YoutubePlayerScreen({Key key, this.title, this.url}) : super(key: key);
+  const YoutubePlayerScreen({Key? key, required this.title, required this.url}) : super(key: key);
 
   @override
   _YoutubePlayerScreenState createState() => _YoutubePlayerScreenState();
@@ -15,12 +15,12 @@ class YoutubePlayerScreen extends StatefulWidget {
 
 class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  YoutubePlayerController _controller;
-  String videoId;
+  late YoutubePlayerController _controller;
+  late String videoId;
 
   @override
   void initState() {
-    videoId = YoutubePlayer.convertUrlToId(widget.url);
+    videoId = YoutubePlayer.convertUrlToId(widget.url)??"";
     _controller = YoutubePlayerController(
       initialVideoId: videoId,
       flags: YoutubePlayerFlags(

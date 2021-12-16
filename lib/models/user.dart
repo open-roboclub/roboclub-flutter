@@ -1,21 +1,21 @@
 class ModelUser {
-  String uid;
-  String name;
-  String email;
-  String profileImageUrl;
-  String position;
-  String about;
-  String batch;
-  String branch;
-  String quote;
-  String cvLink;
-  String interests;
-  String contact;
-  String fbId;
-  String linkedinId;
-  String instaId;
-  bool isMember;
-  bool isAdmin;
+  late String uid;
+  late String name;
+  late String email;
+  late String profileImageUrl;
+  late String position;
+  late String about;
+  late String batch;
+  late String branch;
+  late String quote;
+  late String cvLink;
+  late String interests;
+  late String contact;
+  late String fbId;
+  late String linkedinId;
+  late String instaId;
+  late bool isMember;
+  late bool isAdmin;
 
   ModelUser({
     this.uid = "",

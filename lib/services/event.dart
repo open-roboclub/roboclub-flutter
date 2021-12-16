@@ -7,16 +7,16 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class EventService {
   Future<bool> postEvent(
-      {String eventName,
-      String details,
-      String duration,
-      String place,
-      String posterURL,
-      String startTime,
-      String endTime,
-      String date,
-      bool isFeatured,
-      String regFormLink}) async {
+      {String? eventName,
+      String? details,
+      String? duration,
+      String? place,
+      String? posterURL,
+      String? startTime,
+      String? endTime,
+      String? date,
+      bool? isFeatured,
+      String? regFormLink}) async {
     Map<String, dynamic> data = {
       "eventName": eventName,
       "details": details,

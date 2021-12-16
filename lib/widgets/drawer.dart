@@ -13,7 +13,7 @@ import 'package:roboclub_flutter/screens/project_screen.dart';
 import 'package:roboclub_flutter/screens/team_screen.dart';
 import 'package:roboclub_flutter/screens/tutorial_screen.dart';
 
-Drawer appdrawer(context, {String page}) {
+Drawer appdrawer(context, {String ?page}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
   var activeColor = Theme.of(context).primaryColor;
@@ -25,52 +25,55 @@ Drawer appdrawer(context, {String page}) {
         {
           return EventScreen();
         }
-        break;
+        // break;
       case "Projects":
         {
           return ProjectScreen();
         }
-        break;
+        // break;
       case "Teams":
         {
           return TeamScreen();
         }
-        break;
+        // break;
       case "Tutorials":
         {
           return TutorialScreen();
         }
-        break;
+        // break;
       case "Contributors":
         {
           return ContributorScreen();
         }
-        break;
+        // break;
       case "Admin Panel":
         {
           var _user = Provider.of<UserProvider>(context).getUser;
           if (_user.name.isNotEmpty) {
-            return ProfileScreen();
+            // TODO: check user
+            return ProfileScreen(
+              member: _user,
+            );
           } else {
             return AdminScreen();
           }
         }
-        break;
+        // break;
       case "Feedback":
         {
           return FeedbackScreen();
         }
-        break;
+        // break;
       case "About us":
         {
           return AboutScreen();
         }
-        break;
+        // break;
       default:
         {
           return EventScreen();
         }
-        break;
+        // break;
     }
   }
 

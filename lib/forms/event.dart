@@ -33,7 +33,7 @@ class _EventFormState extends State<EventForm> {
   bool _isFeatured=false;
   late bool _loading;
   bool filePicked = false;
-  late File? file;
+  File? file;
   late String _hour, _minute, _time, dateTime;
   TimeOfDay selectedStartTime = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedEndTime = TimeOfDay(hour: 00, minute: 00);

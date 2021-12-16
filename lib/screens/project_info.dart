@@ -16,9 +16,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProjectInfo extends StatefulWidget {
   final Project project;
-  final void Function(Project, String) callback;
+  final void Function(Project, String)? callback;
 
-  ProjectInfo({Key key, this.project, this.callback}) : super(key: key);
+  ProjectInfo({Key? key, required this.project, this.callback}) : super(key: key);
 
   @override
   _ProjectInfoState createState() => _ProjectInfoState();
@@ -30,8 +30,8 @@ class _ProjectInfoState extends State<ProjectInfo> {
   var vpH;
   var vpW;
 
-  int _currprogress;
-  Project currProject;
+  late int _currprogress;
+  late Project currProject;
 
   @override
   void initState() {
@@ -57,13 +57,13 @@ class _ProjectInfoState extends State<ProjectInfo> {
     ModelUser _user = Provider.of<UserProvider>(context).getUser;
 
     Future<void> updateProgress() async {
-      widget.callback(currProject, _currprogress.toString());
+    widget.callback!(currProject, _currprogress.toString());
       String id;
       FirebaseFirestore.instance.collection('projects').get().then((projects) {
         projects.docs.forEach((project) {
           if (project['name'] == currProject.name) {
             id = project.id;
-            return FirebaseFirestore.instance
+             FirebaseFirestore.instance
                 .collection('projects')
                 .doc(id)
                 .update({'progress': _currprogress.toString()})
@@ -257,7 +257,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                                       ),
                                       textColor: Colors.white,
                                       onPressed: () async {
-                                        if (_formKey.currentState.validate()) {
+                                        if (_formKey.currentState!.validate()) {
                                           await updateProgress();
                                           showDialog(
                                             context: context,

@@ -48,7 +48,8 @@ class _AdminScreenState extends State<AdminScreen> {
               if (user != null) {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(),
+                    // TODO: check user
+                    builder: (context) => ProfileScreen(member: Provider.of<UserProvider>(context).getUser,),
                   ),
                 );
               } else {

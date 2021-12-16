@@ -1,16 +1,16 @@
 class Contributor {
-  String name;
-  String description;
-  String representativeImg;
-  String amount;
-  String date;
+  late String name;
+  late String description;
+  late String representativeImg;
+  late String amount;
+  late String date;
 
   Contributor({
-    this.description,
-    this.name,
-    this.representativeImg,
-    this.amount,
-    this.date,
+    required this.description,
+    required this.name,
+    required this.representativeImg,
+    required this.amount,
+    required this.date,
   });
 
   Map toMap(Contributor contributor) {

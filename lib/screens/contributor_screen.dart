@@ -72,7 +72,7 @@ class _ContributorScreenState extends State<ContributorScreen> {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.blueGrey[200],
+                          color: Colors.blueGrey[200]!,
                           blurRadius: 5.0,
                           offset: Offset(0.0, 0.75)),
                     ],
@@ -154,7 +154,8 @@ class _ContributorScreenState extends State<ContributorScreen> {
             ],
           ),
         ),
-        floatingActionButton: _user != null
+        // TODO:check condition
+        floatingActionButton: _user.uid.length>3
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {

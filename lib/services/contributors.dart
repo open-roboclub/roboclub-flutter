@@ -10,11 +10,12 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 class ContributorService {
 
   Future<bool> postContributor(
-      {String name,
-      String description,
-      String amount,
-      String representativeImg,
-      String date}) async {
+      {
+      String? name,
+      String? description,
+      String? amount,
+      String? representativeImg,
+      String? date}) async {
         
     Map<String, dynamic> data = {
       "name": name,

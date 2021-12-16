@@ -7,11 +7,7 @@ class TutorialService {
     Map<String, dynamic> _tutorial = {
       'videoId': videoId,
     };
-    _firestore
-        .collection('/tutorials')
-        .doc(title)
-        .set(_tutorial)
-        .then((value) {
+    _firestore.collection('/tutorials').doc(title).set(_tutorial).then((value) {
       return Future.value(true);
     }).catchError((e) {
       return Future.value(false);
@@ -24,7 +20,8 @@ class TutorialService {
 
     await _firestore.collection("/tutorials").get().then((value) {
       value.docs.forEach((element) {
-        list.add(element.data);
+        // print(element.data());
+        list.add(element.data());
       });
     });
     return list;

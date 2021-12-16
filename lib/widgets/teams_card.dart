@@ -6,7 +6,7 @@ import '../helper/dimensions.dart';
 class TeamCard extends StatelessWidget {
   final Team team;
 
-  const TeamCard({Key key, this.team}) : super(key: key);
+  const TeamCard({Key? key, required this.team}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -53,7 +53,7 @@ class TeamCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  teamName ?? " ",
+                  teamName ,
                   style: _style,
                 ),
               ),

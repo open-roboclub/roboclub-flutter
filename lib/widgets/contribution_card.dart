@@ -7,7 +7,7 @@ import '../helper/dimensions.dart';
 class ContriCard extends StatefulWidget {
   
   final Contributor contributor;
-  ContriCard({Key key, this.contributor}): super(key: key);
+  ContriCard({Key? key, required this.contributor}): super(key: key);
 
   @override
   _ContriCardState createState() => _ContriCardState();
@@ -53,7 +53,7 @@ class _ContriCardState extends State<ContriCard> {
                           radius: vpH * 0.026,
                           backgroundColor: Colors.white,
                           backgroundImage: widget.contributor.representativeImg.isEmpty ? AssetImage('assets/img/money.png')
-                            : NetworkImage(widget.contributor.representativeImg),
+                            : NetworkImage(widget.contributor.representativeImg) as ImageProvider,
                         ),
                       )),
                   Flexible(
@@ -67,7 +67,7 @@ class _ContriCardState extends State<ContriCard> {
                         children: [
                           Container(
                             child: Text(
-                              widget.contributor.name ?? "",
+                              widget.contributor.name ,
                               style: _titlestyle,
                             ),
                           ),
@@ -75,14 +75,14 @@ class _ContriCardState extends State<ContriCard> {
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.0001)),
                           Text(
-                            widget.contributor.date?? "",
+                            widget.contributor.date,
                             style: TextStyle(fontSize: vpH * 0.015),
                           ),
                           Padding(
                               padding:
                                   EdgeInsets.symmetric(vertical: vpH * 0.006)),
                           Text(
-                            widget.contributor.description ?? "",
+                            widget.contributor.description,
 
                             style: TextStyle(fontSize: vpH * 0.015),
                           ),
@@ -104,7 +104,7 @@ class _ContriCardState extends State<ContriCard> {
                               horizontal: vpW * 0.005, vertical: vpH * 0.010),
                           child: Container(
                             child: Text(
-                              widget.contributor.amount ?? "",
+                              widget.contributor.amount ,
                               style: TextStyle(fontSize: vpH * 0.018),
                             ),
                           ),

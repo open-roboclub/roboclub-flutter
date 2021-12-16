@@ -31,13 +31,13 @@ void main() async {
     if (value == null) {
       _messaging.getToken().then((fcmToken) {
         print("fcm saved to storage!");
-        NotificationService().postDeviceToken(fcmToken: fcmToken);
+        NotificationService().postDeviceToken(fcmToken: fcmToken!);
         _storage.setDeviceToken(fcmToken);
       });
     }
   });
-  var isOnboarding = await _storage.getOnboarding() ?? false;
-  var darkModeOn = await _storage.getThemepref() ?? false;
+  var isOnboarding = await _storage.getOnboarding() ;
+  var darkModeOn = await _storage.getThemepref() ;
   runApp(
     MultiProvider(
       providers: [
@@ -58,7 +58,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isOnboarding;
 
-  const MyApp({Key key, this.isOnboarding}) : super(key: key);
+  const MyApp({Key ?key, this.isOnboarding=false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

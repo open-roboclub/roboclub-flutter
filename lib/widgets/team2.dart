@@ -12,7 +12,7 @@ class Team2Card extends StatelessWidget {
   final dynamic member;
   final void Function(ModelUser) callback;
 
-  const Team2Card({Key key, this.member, this.callback}) : super(key: key);
+  const Team2Card({Key ?key, this.member, required this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class Team2Card extends StatelessWidget {
                       .collection('/users')
                       .doc(member['uid'])
                       .get();
-                  user = ModelUser.fromMap(snap.data());
+                  user = ModelUser.fromMap(snap.data() as Map<String,dynamic>);
 
                   Navigator.push(
                     context,

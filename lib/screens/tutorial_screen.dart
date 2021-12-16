@@ -15,13 +15,14 @@ class TutorialScreen extends StatefulWidget {
 class _TutorialScreenState extends State<TutorialScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var vpH, vpW;
-  List<dynamic> playlist;
+  late List<dynamic> playlist;
   bool _isLoading = true;
 
   @override
   void initState() {
     TutorialService().fetchTutorials().then((value) {
       playlist = value;
+      // print(value);
       setState(() {
         _isLoading = false;
       });
