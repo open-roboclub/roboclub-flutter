@@ -1,37 +1,45 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
-import 'package:intl/intl.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 import '../services/contributors.dart';
 
-class ContributionForm extends StatefulWidget {
+class Membership extends StatefulWidget {
   @override
-  _ContributionFormState createState() => _ContributionFormState();
+  _MembershipState createState() => _MembershipState();
 }
 
-class _ContributionFormState extends State<ContributionForm> {
+class _MembershipState extends State<Membership> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   late String _name;
-  late String _description;
-  late String _amount;
-  String _img = "";
-  String _date = "";
+  late String _email;
+  late String _enrollNo;
+  late String _facultyNo;
+  bool isPaid = false;
+  late String _mobileNo, _collegeName, _course, _yearOfStudy;
+  late bool _loading;
   File? file;
   String fileName = '';
   bool filePicked = false;
-  late bool _loading;
+  String _img = "";
 
   final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final amountController = TextEditingController();
-  TextEditingController date = TextEditingController();
+  final emailController = TextEditingController();
+  final enrollController = TextEditingController();
+  final facultyNoController = TextEditingController();
+
+  final mobileNoController = TextEditingController();
+  final collegeNameController = TextEditingController();
+  final courseController = TextEditingController();
+  final yearOfStudyController = TextEditingController();
+  
   // upload image
 
   Future getImage() async {
@@ -41,7 +49,7 @@ class _ContributionFormState extends State<ContributionForm> {
       randomName += rng.nextInt(100).toString();
     }
     await FilePicker.platform
-        .pickFiles(type: FileType.image)
+        .pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'pdf'], allowCompression: true)
         .then((result) async {
       if (result != null) {
         filePicked = true;
@@ -63,6 +71,7 @@ class _ContributionFormState extends State<ContributionForm> {
     UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
     _img = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
   }
+
   @override
   void initState(){
     super.initState();
@@ -103,7 +112,7 @@ class _ContributionFormState extends State<ContributionForm> {
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        "Contribution made Successfully !!",
+        "Membership form Submitted Successfully",
         style: kLabelStyle,
       ),
       actions: [
@@ -116,7 +125,7 @@ class _ContributionFormState extends State<ContributionForm> {
         key: _scaffoldKey,
         appBar: appBar(
           context,
-          strTitle: "Update Contribution",
+          strTitle: "Registration Details",
           isDrawer: false,
           isNotification: false,
           scaffoldKey: _scaffoldKey,
@@ -187,7 +196,7 @@ class _ContributionFormState extends State<ContributionForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     alignment: Alignment.topLeft,
                     child: Text(
-                      'Description',
+                      'Email',
                       style: kLabelStyle,
                     ),
                   ),
@@ -197,7 +206,7 @@ class _ContributionFormState extends State<ContributionForm> {
                     child: TextFormField(
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
-                      controller: descriptionController,
+                      controller: emailController,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -217,7 +226,7 @@ class _ContributionFormState extends State<ContributionForm> {
                         return null;
                       },
                       onSaved: (value) {
-                        _description = value!;
+                        _email = value!;
                       },
                     ),
                   ),
@@ -226,7 +235,7 @@ class _ContributionFormState extends State<ContributionForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     alignment: Alignment.topLeft,
                     child: Text(
-                      'Amount',
+                      'Enrollment Number',
                       style: kLabelStyle,
                     ),
                   ),
@@ -235,7 +244,7 @@ class _ContributionFormState extends State<ContributionForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: amountController,
+                      controller: enrollController,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -250,114 +259,19 @@ class _ContributionFormState extends State<ContributionForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter some amount';
+                        if (value!.isEmpty && value.length!=6) {
+                          return 'Please enter valid Enrollment No';
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _amount = value!;
+                        _enrollNo = value!;
                       },
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Date',
-                      style: kLabelStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    child: TextFormField(
-                      controller: date,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: vpH * 0.02,
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Pick a Date',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Icon(Icons.calendar_today),
-                        ),
-                      ),
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime? dateTime = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2030),
-                        );
-                        if(dateTime!=null){
-                           DateFormat formatter = DateFormat('yyyy-MM-dd');
-                        String formatted = formatter.format(dateTime);
-                        date.text = formatted;
-                        }
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please select a date';
-                        }
-                        return null;
-                      },
-                      onSaved: (String? value) {
-                        _date = value!;
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
-                    alignment: Alignment.topLeft,
-                    child: Row(
-                      children: [
-                        Text(
-                          'Pick an Image',
-                          style: kLabelStyle,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add_a_photo),
-                          onPressed: () {
-                            getImage();
-                          },
-                        ),
-                        file == null
-                        ? Text('Image not Selected.',
-                            style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: vpH * 0.02,
-                                fontWeight: FontWeight.bold))
-                        : Text('Image Selected.',
-                            style: TextStyle(
-                                color: Colors.limeAccent[400],
-                                fontSize: vpH * 0.02,
-                                fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                  ),
-                  _loading ?Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () {} ,
-                       padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child:  CircularProgressIndicator(),
-                    )):
+                 
+                  
+                 
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
@@ -367,8 +281,8 @@ class _ContributionFormState extends State<ContributionForm> {
                         setState(() {
                           _loading = true;
                         });
-                        if (filePicked) {
-                          await saveImg(file!.readAsBytesSync(), 'contributions/${nameController.text}/$fileName');
+                         if (filePicked) {
+                          await saveImg(file!.readAsBytesSync(), 'registrionMemebers/${nameController.text}/$fileName');
                         }
                         if (!_formKey.currentState!.validate()) {
                           print("not valid");
@@ -379,15 +293,26 @@ class _ContributionFormState extends State<ContributionForm> {
                         } else {
                           _formKey.currentState!.save();
                           contributors.postContributor(
-                              amount: _amount,
-                              description: _description,
+                              enrollNo: _enrollNo,
+                              email: _email,
                               name: _name,
-                              representativeImg: _img,
-                              date: _date);
+                              facultyNo: _facultyNo,
+                              fileUrl: _img,
+                              course: _course,
+                              collegeName: _collegeName,
+                              yearOfStudy: _yearOfStudy,
+                              mobileNo: _mobileNo,
+                              dateOfReg: DateTime.now());
                           print("saved");
                           nameController.clear();
-                          descriptionController.clear();
-                          amountController.clear();
+                          emailController.clear();
+                          enrollController.clear();
+                          facultyNoController.clear();
+                          mobileNoController.clear();
+                          collegeNameController.clear();
+                          courseController.clear();
+                          yearOfStudyController.clear();
+                          
 
                           showDialog(
                             context: context,
@@ -403,7 +328,7 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                       color: Color(0xFFFF9C01),
                       child: Text(
-                        "Update",
+                        "Submit",
                         style: TextStyle(
                           color: Colors.white,
                           letterSpacing: vpW * 0.005,
