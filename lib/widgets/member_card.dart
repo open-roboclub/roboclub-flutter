@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:roboclub_flutter/models/team.dart';
+import 'package:roboclub_flutter/models/member.dart';
 import 'package:roboclub_flutter/screens/team2_screen.dart';
 import '../helper/dimensions.dart';
 
 class MemberCard extends StatelessWidget {
-  final Team team;
+  final Member member;
 
-  const MemberCard({Key? key, required this.team}) : super(key: key);
+  const MemberCard({Key? key, required this.member}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
-    String teamName = team.teamName;
+    String memberName = member.name;
     var _style = TextStyle(fontSize: vpH * 0.05, fontWeight: FontWeight.bold);
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Team2Screen(
-              members: team.members,
-              title: team.teamName,
-            ),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => Team2Screen(
+        //       members: team.members,
+        //       title: team.teamName,
+        //     ),
+        //   ),
+        // );
       },
       child: Padding(
         padding: EdgeInsets.all(20.0),
@@ -53,7 +53,7 @@ class MemberCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  teamName,
+                  memberName,
                   style: _style,
                 ),
               ),

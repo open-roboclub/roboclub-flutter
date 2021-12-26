@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
-import 'package:roboclub_flutter/models/team.dart';
+import 'package:roboclub_flutter/models/member.dart';
+import 'package:roboclub_flutter/services/member.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/member_card.dart';
@@ -15,8 +16,25 @@ class RegMembersScreen extends StatefulWidget {
 
 class _RegMembersScreenState extends State<RegMembersScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _isLoading = false;
-  List<Team> membersList = [];
+
+  bool _isLoading = true;
+  List<Member> membersList = [];
+
+  void initState() {
+    MemberService().fetchMembers().then((value) {
+      addMemberList(value);
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    super.initState();
+  }
+
+  void addMemberList(List<Member> members) {
+    members.forEach((item) {
+      membersList.add(item);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +70,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             return MemberCard(
-                              team: membersList[index],
+                              member: membersList[index],
                             );
                           },
                         ),
