@@ -117,6 +117,8 @@ class AuthService {
     return isFound ? ModelUser.fromMap(_tempUser) : null;
   }
 
+  
+
   Future signOutGoogle() async {
     await googleSignIn.signOut();
     await _auth.signOut();

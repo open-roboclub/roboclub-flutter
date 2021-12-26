@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/forms/contribution.dart';
+import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/team.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
@@ -65,7 +66,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return ContributionForm();
+                    return Membership();
                   },
                 ),
               );

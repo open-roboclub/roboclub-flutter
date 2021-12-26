@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:roboclub_flutter/services/auth.dart';
+import '../models/member.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
@@ -70,6 +72,14 @@ class _MembershipState extends State<Membership> {
     Reference reference = FirebaseStorage.instance.ref().child(name);
     UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
     _img = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
+  }
+
+  // get email
+
+  Future<String?> getEmail() async {
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+    return googleSignInAccount?.email;
   }
 
   @override
@@ -207,6 +217,10 @@ class _MembershipState extends State<Membership> {
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
+                      onTap: () {
+                        getEmail().then((value) => emailController.text= value==null?"":value);
+                      },
+                     
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -425,7 +439,7 @@ class _MembershipState extends State<Membership> {
                       },
                     ),
                   ),
-                  
+
                  
                   Container(
                     padding: EdgeInsets.all(15),
@@ -447,17 +461,17 @@ class _MembershipState extends State<Membership> {
                           return null;
                         } else {
                           _formKey.currentState!.save();
-                          contributors.postContributor(
-                              enrollNo: _enrollNo,
-                              email: _email,
-                              name: _name,
-                              facultyNo: _facultyNo,
-                              fileUrl: _img,
-                              course: _course,
-                              collegeName: _collegeName,
-                              yearOfStudy: _yearOfStudy,
-                              mobileNo: _mobileNo,
-                              dateOfReg: DateTime.now());
+                          // Member.postMembers(
+                          //     enrollNo: _enrollNo,
+                          //     email: _email,
+                          //     name: _name,
+                          //     facultyNo: _facultyNo,
+                          //     fileUrl: _img,
+                          //     course: _course,
+                          //     collegeName: _collegeName,
+                          //     yearOfStudy: _yearOfStudy,
+                          //     mobileNo: _mobileNo,
+                          //     dateOfReg: DateTime.now());
                           print("saved");
                           nameController.clear();
                           emailController.clear();
