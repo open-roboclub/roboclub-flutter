@@ -439,8 +439,49 @@ class _MembershipState extends State<Membership> {
                       },
                     ),
                   ),
-
-                 
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                    alignment: Alignment.topLeft,
+                    child: Row(
+                      children: [
+                        Text(
+                          'Pick an Image',
+                          style: kLabelStyle,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add_a_photo),
+                          onPressed: () {
+                            getImage();
+                          },
+                        ),
+                        file == null
+                        ? Text('Image not Selected.',
+                            style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold))
+                        : Text('Image Selected.',
+                            style: TextStyle(
+                                color: Colors.limeAccent[400],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                  ),
+                  _loading ?Container(
+                    padding: EdgeInsets.all(15),
+                    width: vpW * 0.5,
+                    child: RaisedButton(
+                      elevation: vpH * 0.5,
+                      onPressed: () {} ,
+                       padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Color(0xFFFF9C01),
+                      child:  CircularProgressIndicator(),
+                    )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
