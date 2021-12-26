@@ -28,7 +28,7 @@ void main() async {
   DotEnv.dotenv.load(fileName: ".env");
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _storage.getDeviceToken().then((value) {
-    if (value == null) {
+    if (value == "") {
       _messaging.getToken().then((fcmToken) {
         print("fcm saved to storage!");
         NotificationService().postDeviceToken(fcmToken: fcmToken!);
