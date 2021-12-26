@@ -95,7 +95,7 @@ class AuthService {
 
   Future<ModelUser?> getCurrentUser() async {
     late Map<String, dynamic> _tempUser;
-    final User currentUser = _auth.currentUser!;
+    final User? currentUser = _auth.currentUser;
     bool isFound = false;
     if (currentUser == null) {
       return null;
@@ -114,7 +114,7 @@ class AuthService {
         }
       });
     }
-    return isFound ? ModelUser.fromMap(_tempUser)  : null;
+    return isFound ? ModelUser.fromMap(_tempUser) : null;
   }
 
   Future signOutGoogle() async {
