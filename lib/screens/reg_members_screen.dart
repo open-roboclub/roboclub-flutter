@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:roboclub_flutter/forms/contribution.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/member.dart';
