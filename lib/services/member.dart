@@ -10,17 +10,29 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 class MemberService {
   Future<bool> postMember({
     String? name,
-    String? description,
-    String? amount,
-    String? representativeImg,
-    String? date,
+    String? email,
+    String? enrollNo,
+    String? course,
+    String? collegeName,
+    String? fileUrl,
+    String? yearOfStudy,
+    String? mobileNo,
+    DateTime? dateOfReg,
+    String? facultyNo,
+    // String? representativeImg,
+    // String? date,
   }) async {
     Map<String, dynamic> data = {
+      "enrollNo": enrollNo,
+      "email": email,
       "name": name,
-      "description": description,
-      "representativeImg": representativeImg,
-      "amount": amount,
-      "date": date,
+      "facultyNo": facultyNo,
+      "fileUrl": fileUrl,
+      "course": course,
+      "collegeName": collegeName,
+      "yearOfStudy": yearOfStudy,
+      "mobileNo": mobileNo,
+      "dateOfReg": DateTime.now()
     };
 
     await _firestore.collection("/registeredMembers").add(data).then((value) {
