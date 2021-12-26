@@ -10,10 +10,11 @@ import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/screens/feedback_screen.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
 import 'package:roboclub_flutter/screens/project_screen.dart';
+import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/screens/team_screen.dart';
 import 'package:roboclub_flutter/screens/tutorial_screen.dart';
 
-Drawer appdrawer(context, {String ?page}) {
+Drawer appdrawer(context, {String? page}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
   var activeColor = Theme.of(context).primaryColor;
@@ -25,27 +26,31 @@ Drawer appdrawer(context, {String ?page}) {
         {
           return EventScreen();
         }
-        // break;
+      // break;
       case "Projects":
         {
           return ProjectScreen();
         }
-        // break;
+      // break;
       case "Teams":
         {
           return TeamScreen();
         }
-        // break;
+      // break;
       case "Tutorials":
         {
           return TutorialScreen();
         }
-        // break;
+      // break;
       case "Contributors":
         {
           return ContributorScreen();
         }
-        // break;
+      case "Registered Members":
+        {
+          return RegMembersScreen();
+        }
+      // break;
       case "Admin Panel":
         {
           var _user = Provider.of<UserProvider>(context).getUser;
@@ -58,22 +63,22 @@ Drawer appdrawer(context, {String ?page}) {
             return AdminScreen();
           }
         }
-        // break;
+      // break;
       case "Feedback":
         {
           return FeedbackScreen();
         }
-        // break;
+      // break;
       case "About us":
         {
           return AboutScreen();
         }
-        // break;
+      // break;
       default:
         {
           return EventScreen();
         }
-        // break;
+      // break;
     }
   }
 
@@ -141,6 +146,8 @@ Drawer appdrawer(context, {String ?page}) {
           _tileBuilder(CustomIcons.events, "Events", page == "Events"),
           _tileBuilder(CustomIcons.projects, "Projects", page == "Projects"),
           _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
+          _tileBuilder(CustomIcons.teams, "Registered Members",
+              page == "Registered Members"),
           _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
           _tileBuilder(
               CustomIcons.contribution, "Contributors", page == "Contributors"),
