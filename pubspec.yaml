@@ -55,6 +55,8 @@ dependencies:
 
   
   progress_dialog: ^1.2.0
+  mailer: ^5.0.2
+
 
 dev_dependencies:
   flutter_test:
