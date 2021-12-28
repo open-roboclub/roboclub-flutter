@@ -33,8 +33,8 @@ class MemberService {
       "dateOfReg": DateTime.now()
     };
 
-    await _firestore.collection("/registeredMembers").add(data).then((value) {
-      print(value);
+    await _firestore.collection("/registeredMembers").doc(email).set(data).then((value) {
+      print("Success");
     });
     return true;
   }

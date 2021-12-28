@@ -24,7 +24,7 @@ class _MembershipState extends State<Membership> {
   late String _enrollNo;
   late String _facultyNo;
   bool isPaid = false;
-  late String _mobileNo, _collegeName, _course, _yearOfStudy;
+  String? _mobileNo, _collegeName, _course, _yearOfStudy;
   late bool _loading;
   File? file;
   bool filePicked = false;
@@ -75,7 +75,23 @@ class _MembershipState extends State<Membership> {
         await googleSignIn.signIn();
     return googleSignInAccount?.email;
   }
-
+  // List of courses in our dropdown menu
+  var courses = [    
+    'Btech',
+    'BSC',
+    'BCA',
+    'MSC',
+    'Mtech',
+    'Polytechnic',
+  ];
+  var years = [    
+    '1st',
+    '2nd',
+    '3rd',
+    '4th',
+    '5th',
+  ];  
+  
   @override
   void initState() {
     super.initState();
@@ -92,15 +108,32 @@ class _MembershipState extends State<Membership> {
 
     final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
-      fontSize: vpH * 0.024,
+      fontSize: vpH * 0.018,
       fontFamily: 'OpenSans',
     );
 
     final kLabelStyle = TextStyle(
+      // color: Theme.of(context).primaryColor,
       color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: vpH * 0.025,
+      fontWeight: FontWeight.normal,
+      fontSize: vpH * 0.02,
       fontFamily: 'OpenSans',
+    );
+
+    final formPadding =  EdgeInsets.only(
+      left: vpW * 0.05, right: vpW * 0.05, bottom: vpH * 0.008, top: 0.008,
+    );
+    final containerPadding =  EdgeInsets.only(
+      left: vpW * 0.05, right: vpW * 0.05, bottom: vpH * 0.008, top: 0.015,
+    );
+    InputDecoration formField =InputDecoration(
+      // fillColor: Color(0xFFE8EAF6),
+      fillColor: Colors.white,
+      hintStyle: kHintTextStyle,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(color: Colors.white)
+      ),
     );
 
 //     // alert after successful form submission
@@ -110,6 +143,7 @@ class _MembershipState extends State<Membership> {
         style: kLabelStyle,
       ),
       onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
     );
@@ -164,10 +198,10 @@ class _MembershipState extends State<Membership> {
               colors: [
                 Color(0xFFC5CAE9),
                 Color(0xFF9FA8DA),
-                Color(0xFF7986CB),
-                Color(0xFF5C6BC0),
+                // Color(0xFF7986CB),
+                // Color(0xFF5C6BC0),
               ],
-              stops: [0.1, 0.4, 0.7, 0.9],
+              stops: [0.1, 0.4],
             ),
           ),
           child: SingleChildScrollView(
@@ -181,7 +215,7 @@ class _MembershipState extends State<Membership> {
                       left: vpW * 0.05,
                       right: vpW * 0.05,
                       top: vpH * 0.02,
-                    ),
+                      bottom: vpH*0.008),
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Name',
@@ -189,8 +223,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding: formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: nameController,
@@ -198,13 +231,8 @@ class _MembershipState extends State<Membership> {
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: ' Enter Name',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                      decoration: formField.copyWith(
+                        hintText: " Enter Name"
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -218,8 +246,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding:containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Email',
@@ -227,26 +254,20 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding:formPadding,
                     child: TextFormField(
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
-                      // onTap: () {
-                      //   getEmail().then((value) => emailController.text= value==null?"gargdhruv7890@gmail.com":value);
-                      // },
+                      onTap: () {
+                        getEmail().then((value) => emailController.text= value==null?"gargdhruv7890@gmail.com":value);
+                      },
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: ' Enter Email',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                      decoration: formField.copyWith(
+                        hintText: "Enter Email"
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -260,8 +281,136 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding:containerPadding,
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'College',
+                      style: kLabelStyle,
+                    ),
+                  ),
+                  Padding(
+                    padding:formPadding,
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.words,
+                      controller: collegeNameController,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'OpenSans',
+                      ),
+                      keyboardType: TextInputType.text,
+                      decoration:formField.copyWith(
+                        hintText: "Enter College Name"
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your College';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _collegeName = value!;
+                      },
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: containerPadding,
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Course',
+                                style: kLabelStyle,
+                              ),
+                            ),
+                             Padding(
+                              padding: formPadding,
+                              child: FormField<String>(
+                                builder: (FormFieldState<String> state) {
+                                  return InputDecorator(
+                                   decoration: formField.copyWith(
+                                     hintText: "Enter Course Name"
+                                   ),
+                                    isEmpty: courses == [],
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton<String>(
+                                        value: _course,
+                                        isDense: true,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            _course = newValue!;
+                                            state.didChange(newValue);
+                                          });
+                                        },
+                                        items: courses.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                             Container(
+                              padding:containerPadding,
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Year Of Study',
+                                style: kLabelStyle,
+                              ),
+                            ),
+                            Padding(
+                              padding: formPadding,
+                            child: FormField<String>(
+                                builder: (FormFieldState<String> state) {
+                                  return InputDecorator(
+                                    decoration: formField.copyWith(
+                                      hintText: "Enter year of study"
+                                    ),
+                                    isEmpty: years == [],
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton<String>(
+                                        value: _yearOfStudy,
+                                        isDense: true,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            _yearOfStudy = newValue!;
+                                            state.didChange(newValue);
+                                          });
+                                        },
+                                        items: years.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                 
+                  
+                 
+                  Container(
+                    padding:containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Enrollment Number',
@@ -269,8 +418,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding:formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: enrollController,
@@ -279,13 +427,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter Enrollment No.',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                      decoration: formField.copyWith(
+                        hintText: "Enter Enrollment No"
                       ),
                       validator: (value) {
                         if (value!.isEmpty && value.length != 6) {
@@ -299,8 +442,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding: containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Faculty Number',
@@ -308,8 +450,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding:formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: facultyNoController,
@@ -318,13 +459,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter Faculty No.',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                      decoration: formField.copyWith(
+                        hintText: "Enter Faculy No"
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -338,125 +474,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Course',
-                      style: kLabelStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    child: TextFormField(
-                      textCapitalization: TextCapitalization.words,
-                      controller: courseController,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'OpenSans',
-                      ),
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter Course Name',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter the course';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _course = value!;
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'College',
-                      style: kLabelStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    child: TextFormField(
-                      textCapitalization: TextCapitalization.words,
-                      controller: collegeNameController,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'OpenSans',
-                      ),
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter College Name',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your College';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _collegeName = value!;
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Year Of Study',
-                      style: kLabelStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
-                    child: TextFormField(
-                      textCapitalization: TextCapitalization.words,
-                      controller: yearOfStudyController,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'OpenSans',
-                      ),
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter Year Of Study',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your year of study';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _yearOfStudy = value!;
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding:containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Mobile Number',
@@ -464,8 +482,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    padding: formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: mobileNoController,
@@ -474,13 +491,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter Mobile No',
-                        hintStyle: kHintTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                      decoration:formField.copyWith(
+                        hintText: "Enter Mobile No"
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {

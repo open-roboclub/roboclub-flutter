@@ -11,7 +11,7 @@ AppBar appBar(context,
     GlobalKey<ScaffoldState>? scaffoldKey}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
-  var iconcolor = isDrawer ? Theme.of(context).primaryColorLight : Colors.black;
+  var iconcolor = Theme.of(context).primaryColorLight;
   var bgcolor = Theme.of(context).primaryColor;
   var titlestyle = isDrawer
       ? TextStyle(
@@ -23,7 +23,7 @@ AppBar appBar(context,
           fontFamily: "Signatra",
           fontSize: vpH * 0.035,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          // color: Colors.black,
         );
 
   return AppBar(
@@ -79,7 +79,7 @@ AppBar appBar(context,
               :null
       ),
     ],
-    backgroundColor: isDrawer ? bgcolor : Colors.white,
+    backgroundColor:bgcolor,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(20.0),
