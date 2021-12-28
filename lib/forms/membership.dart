@@ -231,6 +231,9 @@ class _MembershipState extends State<Membership> {
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
+                      onTap: () {
+                        getEmail().then((value) => emailController.text= value==null?"":value);
+                      },
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
