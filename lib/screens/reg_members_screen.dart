@@ -42,6 +42,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
     var vpW = getViewportWidth(context);
     return SafeArea(
       child: Scaffold(
+          key: _scaffoldKey,
           drawer: appdrawer(context, page: "Registered Members"),
           appBar: appBar(
             context,

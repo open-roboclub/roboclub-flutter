@@ -19,8 +19,6 @@ class MemberService {
     String? mobileNo,
     DateTime? dateOfReg,
     String? facultyNo,
-    // String? representativeImg,
-    // String? date,
   }) async {
     Map<String, dynamic> data = {
       "enrollNo": enrollNo,
