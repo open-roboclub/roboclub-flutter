@@ -52,7 +52,10 @@ class _MembershipState extends State<Membership> {
       randomName += rng.nextInt(100).toString();
     }
     await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'pdf'], allowCompression: true)
+        .pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['jpg', 'png', 'pdf'],
+          allowCompression: true)
         .then((result) async {
       if (result != null) {
         filePicked = true;
@@ -72,7 +75,8 @@ class _MembershipState extends State<Membership> {
   Future saveImg(List<int> asset, String name) async {
     Reference reference = FirebaseStorage.instance.ref().child(name);
     UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
-    _img = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
+    _img =
+        await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
   }
 
   // get email
@@ -121,6 +125,16 @@ class _MembershipState extends State<Membership> {
       },
     );
 
+     Widget okButton1 = FlatButton(
+      child: Text(
+        "OK",
+        style: kLabelStyle,
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
     AlertDialog alert = AlertDialog(
       content: Text(
         "Membership form Submitted Successfully",
@@ -131,6 +145,15 @@ class _MembershipState extends State<Membership> {
       ],
     );
 
+    AlertDialog fileAlert = AlertDialog(
+      content: Text(
+        "Select ID Proof",
+        style: kLabelStyle,
+      ),
+      actions: [
+        okButton1,
+      ],
+    );
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -166,7 +189,9 @@ class _MembershipState extends State<Membership> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(
-                        left: vpW * 0.05, right: vpW * 0.05, top: vpH * 0.02),
+                        left: vpW * 0.05,
+                      right: vpW * 0.05,
+                      top: vpH * 0.02,),
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Name',
@@ -281,6 +306,45 @@ class _MembershipState extends State<Membership> {
                       },
                       onSaved: (value) {
                         _enrollNo = value!;
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Faculty Number',
+                      style: kLabelStyle,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: vpW * 0.05, vertical: vpH * 0.01),
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.words,
+                      controller: facultyNoController,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'OpenSans',
+                      ),
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        fillColor: Color(0xFFE8EAF6),
+                        hintText: 'Enter Faculty No.',
+                        hintStyle: kHintTextStyle,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter valid Faculty No';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _facultyNo = value!;
                       },
                     ),
                   ),
@@ -457,98 +521,119 @@ class _MembershipState extends State<Membership> {
                           },
                         ),
                         file == null
-                        ? Text('Image not Selected.',
-                            style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: vpH * 0.02,
-                                fontWeight: FontWeight.bold))
-                        : Text('Image Selected.',
-                            style: TextStyle(
-                                color: Colors.limeAccent[400],
-                                fontSize: vpH * 0.02,
-                                fontWeight: FontWeight.bold))
+                        ? Text(
+                                'File not Selected.',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: vpH * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Text(
+                                'File Selected.',
+                                style: TextStyle(
+                                  color: Colors.limeAccent[400],
+                                  fontSize: vpH * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
                       ],
                     ),
                   ),
-                  _loading ?Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () {} ,
-                       padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child:  CircularProgressIndicator(),
-                    )):
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    width: vpW * 0.5,
-                    child: RaisedButton(
-                      elevation: vpH * 0.5,
-                      onPressed: () async {
-                        setState(() {
-                          _loading = true;
-                        });
-                         if (filePicked) {
-                          await saveImg(file!.readAsBytesSync(), 'registrionMemebers/${nameController.text}/$fileName');
-                        }
-                        if (!_formKey.currentState!.validate()) {
-                          print("not valid");
-                          setState(() {
-                            _loading=false;
-                          });
-                          return null;
-                        } else {
-                          _formKey.currentState!.save();
-                          members.postMember(
-                              enrollNo: _enrollNo,
-                              email: _email,
-                              name: _name,
-                              facultyNo: _facultyNo,
-                              fileUrl: _img,
-                              course: _course,
-                              collegeName: _collegeName,
-                              yearOfStudy: _yearOfStudy,
-                              mobileNo: _mobileNo,
-                              dateOfReg: DateTime.now());
-                          print("saved");
-                          nameController.clear();
-                          emailController.clear();
-                          enrollController.clear();
-                          facultyNoController.clear();
-                          mobileNoController.clear();
-                          collegeNameController.clear();
-                          courseController.clear();
-                          yearOfStudyController.clear();
-                          
+                 _loading
+                      ? Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () {},
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Container(
+                          padding: EdgeInsets.all(15),
+                          width: vpW * 0.5,
+                          child: RaisedButton(
+                            elevation: vpH * 0.5,
+                            onPressed: () async {
+                              setState(() {
+                                _loading = true;
+                              });
+                              if (!_formKey.currentState!.validate()) {
+                                print("not valid");
+                                setState(() {
+                                  _loading = false;
+                                });
+                                return null;
+                              } else {
+                                if (filePicked) {
+                                  await saveImg(
+                                    file!.readAsBytesSync(),
+                                    'registrionMemebers/${nameController.text}_${mobileNoController.text}',
+                                  );
+                                  _formKey.currentState!.save();
+                                  members.postMember(
+                                    enrollNo: _enrollNo,
+                                    email: _email,
+                                    name: _name,
+                                    facultyNo: _facultyNo,
+                                    fileUrl: _img,
+                                    course: _course,
+                                    collegeName: _collegeName,
+                                    yearOfStudy: _yearOfStudy,
+                                    mobileNo: _mobileNo,
+                                    dateOfReg: DateTime.now(),
+                                  );
+                                  print("saved");
+                                  nameController.clear();
+                                  emailController.clear();
+                                  enrollController.clear();
+                                  facultyNoController.clear();
+                                  mobileNoController.clear();
+                                  collegeNameController.clear();
+                                  courseController.clear();
+                                  yearOfStudyController.clear();                          
 
                           showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alert;
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return alert;
+                                    },
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return fileAlert;
+                                    },
+                                  );
+                                }
+                                setState(() {
+                                  _loading = false;
+                                });
+                              }
                             },
-                          );
-                        }
-                      },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: vpW * 0.005,
-                          fontSize: vpH * 0.025,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  )
+                         padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Color(0xFFFF9C01),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: vpW * 0.005,
+                                fontSize: vpH * 0.025,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),
