@@ -1,16 +1,11 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/member.dart';
-import '../models/member.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
-import '../services/contributors.dart';
 
 class Membership extends StatefulWidget {
   @override
@@ -29,7 +24,6 @@ class _MembershipState extends State<Membership> {
   late String _mobileNo, _collegeName, _course, _yearOfStudy;
   late bool _loading;
   File? file;
-  String fileName = '';
   bool filePicked = false;
   String _img = "";
 
@@ -37,34 +31,32 @@ class _MembershipState extends State<Membership> {
   final emailController = TextEditingController();
   final enrollController = TextEditingController();
   final facultyNoController = TextEditingController();
-
   final mobileNoController = TextEditingController();
   final collegeNameController = TextEditingController();
   final courseController = TextEditingController();
   final yearOfStudyController = TextEditingController();
-  
+
   // upload image
 
   Future getImage() async {
-    var rng = new Random();
-    String randomName = "";
-    for (var i = 0; i < 20; i++) {
-      randomName += rng.nextInt(100).toString();
-    }
     await FilePicker.platform
         .pickFiles(
+<<<<<<< HEAD
           type: FileType.custom,
           allowedExtensions: ['jpg', 'png', 'pdf'],
           allowCompression: true)
+=======
+            type: FileType.custom,
+            allowedExtensions: ['jpg', 'png', 'pdf'],
+            allowCompression: true)
+>>>>>>> a1b34d61f41a9de5089179759d47cf885e9c0a7f
         .then((result) async {
       if (result != null) {
         filePicked = true;
         setState(() {
           file = File(result.paths.first!);
         });
-        fileName = '$randomName';
-      }
-      else{
+      } else {
         file = null;
       }
     }).catchError((error) {
@@ -77,6 +69,7 @@ class _MembershipState extends State<Membership> {
     UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
     _img =
         await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
+<<<<<<< HEAD
   }
 
   // get email
@@ -85,20 +78,23 @@ class _MembershipState extends State<Membership> {
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
     return googleSignInAccount?.email;
+=======
+>>>>>>> a1b34d61f41a9de5089179759d47cf885e9c0a7f
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _loading=false;
+    _loading = false;
   }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     var members = MemberService();
 
-//     // TextFormFiels styling
+    // TextFormFiels styling
 
     final kHintTextStyle = TextStyle(
       color: Color(0xFF757575),
@@ -120,7 +116,6 @@ class _MembershipState extends State<Membership> {
         style: kLabelStyle,
       ),
       onPressed: () {
-        Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
     );
@@ -243,17 +238,13 @@ class _MembershipState extends State<Membership> {
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
-                      onTap: () {
-                        getEmail().then((value) => emailController.text= value==null?"":value);
-                      },
-                     
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
                       decoration: InputDecoration(
                         fillColor: Color(0xFFE8EAF6),
-                        hintText: ' Enter Description',
+                        hintText: ' Enter Email',
                         hintStyle: kHintTextStyle,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -261,7 +252,7 @@ class _MembershipState extends State<Membership> {
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter some text';
+                          return 'Please enter valid email id';
                         }
                         return null;
                       },
@@ -292,14 +283,14 @@ class _MembershipState extends State<Membership> {
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         fillColor: Color(0xFFE8EAF6),
-                        hintText: 'Enter Amount',
+                        hintText: 'Enter Enrollment No.',
                         hintStyle: kHintTextStyle,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty && value.length!=6) {
+                        if (value!.isEmpty && value.length != 6) {
                           return 'Please enter valid Enrollment No';
                         }
                         return null;
@@ -377,7 +368,7 @@ class _MembershipState extends State<Membership> {
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty ) {
+                        if (value!.isEmpty) {
                           return 'Please enter the course';
                         }
                         return null;
@@ -401,7 +392,7 @@ class _MembershipState extends State<Membership> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: enrollController,
+                      controller: collegeNameController,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -440,7 +431,7 @@ class _MembershipState extends State<Membership> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: enrollController,
+                      controller: yearOfStudyController,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -479,7 +470,7 @@ class _MembershipState extends State<Membership> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.01),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
-                      controller: enrollController,
+                      controller: mobileNoController,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -500,18 +491,20 @@ class _MembershipState extends State<Membership> {
                         return null;
                       },
                       onSaved: (value) {
-                        _collegeName = value!;
+                        _mobileNo = value!;
                       },
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                        horizontal: vpW * 0.05, vertical: vpH * 0.005),
+                      horizontal: vpW * 0.05,
+                      vertical: vpH * 0.005,
+                    ),
                     alignment: Alignment.topLeft,
                     child: Row(
                       children: [
                         Text(
-                          'Pick an Image',
+                          'Pick your ID Proof',
                           style: kLabelStyle,
                         ),
                         IconButton(
