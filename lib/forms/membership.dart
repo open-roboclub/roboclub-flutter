@@ -196,11 +196,11 @@ class _MembershipState extends State<Membership> {
               end: Alignment.bottomCenter,
               colors: [
                 Color(0xFFC5CAE9),
-                Color(0xFF9FA8DA),
+                // Color(0xFF9FA8DA),
                 // Color(0xFF7986CB),
                 // Color(0xFF5C6BC0),
               ],
-              stops: [0.1, 0.4],
+              stops: [0.1],
             ),
           ),
           child: SingleChildScrollView(
@@ -534,7 +534,7 @@ class _MembershipState extends State<Membership> {
                             : Text(
                                 'File Selected.',
                                 style: TextStyle(
-                                  color: Colors.limeAccent[400],
+                                  color: Colors.green,
                                   fontSize: vpH * 0.02,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -553,7 +553,7 @@ class _MembershipState extends State<Membership> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
-                            color: Color(0xFFFF9C01),
+                            color: Theme.of(context).primaryColor,
                             child: CircularProgressIndicator(),
                           ),
                         )
@@ -624,7 +624,7 @@ class _MembershipState extends State<Membership> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
-                            color: Color(0xFFFF9C01),
+                            color:Theme.of(context).primaryColor,
                             child: Text(
                               "Submit",
                               style: TextStyle(
