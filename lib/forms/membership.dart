@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/member.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,15 +43,9 @@ class _MembershipState extends State<Membership> {
   Future getImage() async {
     await FilePicker.platform
         .pickFiles(
-<<<<<<< HEAD
           type: FileType.custom,
           allowedExtensions: ['jpg', 'png', 'pdf'],
           allowCompression: true)
-=======
-            type: FileType.custom,
-            allowedExtensions: ['jpg', 'png', 'pdf'],
-            allowCompression: true)
->>>>>>> a1b34d61f41a9de5089179759d47cf885e9c0a7f
         .then((result) async {
       if (result != null) {
         filePicked = true;
@@ -69,7 +65,6 @@ class _MembershipState extends State<Membership> {
     UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
     _img =
         await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
-<<<<<<< HEAD
   }
 
   // get email
@@ -78,8 +73,6 @@ class _MembershipState extends State<Membership> {
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
     return googleSignInAccount?.email;
-=======
->>>>>>> a1b34d61f41a9de5089179759d47cf885e9c0a7f
   }
 
   @override
