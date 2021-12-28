@@ -52,8 +52,7 @@ dependencies:
   percent_indicator: ^3.4.0
   cached_network_image: ^3.2.0
   device_info: ^2.0.3
-  
-  
+  razorpay_flutter: ^1.2.7
   progress_dialog: ^1.2.0
   mailer: ^5.0.2
 

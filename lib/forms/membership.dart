@@ -75,8 +75,9 @@ class _MembershipState extends State<Membership> {
         await googleSignIn.signIn();
     return googleSignInAccount?.email;
   }
+
   // List of courses in our dropdown menu
-  var courses = [    
+  var courses = [
     'Btech',
     'BSC',
     'BCA',
@@ -84,14 +85,14 @@ class _MembershipState extends State<Membership> {
     'Mtech',
     'Polytechnic',
   ];
-  var years = [    
+  var years = [
     '1st',
     '2nd',
     '3rd',
     '4th',
     '5th',
-  ];  
-  
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -120,20 +121,25 @@ class _MembershipState extends State<Membership> {
       fontFamily: 'OpenSans',
     );
 
-    final formPadding =  EdgeInsets.only(
-      left: vpW * 0.05, right: vpW * 0.05, bottom: vpH * 0.008, top: 0.008,
+    final formPadding = EdgeInsets.only(
+      left: vpW * 0.05,
+      right: vpW * 0.05,
+      bottom: vpH * 0.008,
+      top: 0.008,
     );
-    final containerPadding =  EdgeInsets.only(
-      left: vpW * 0.05, right: vpW * 0.05, bottom: vpH * 0.008, top: 0.015,
+    final containerPadding = EdgeInsets.only(
+      left: vpW * 0.05,
+      right: vpW * 0.05,
+      bottom: vpH * 0.008,
+      top: 0.015,
     );
-    InputDecoration formField =InputDecoration(
+    InputDecoration formField = InputDecoration(
       // fillColor: Color(0xFFE8EAF6),
       fillColor: Colors.white,
       hintStyle: kHintTextStyle,
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: Colors.white)
-      ),
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(color: Colors.white)),
     );
 
 //     // alert after successful form submission
@@ -212,10 +218,10 @@ class _MembershipState extends State<Membership> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(
-                      left: vpW * 0.05,
-                      right: vpW * 0.05,
-                      top: vpH * 0.02,
-                      bottom: vpH*0.008),
+                        left: vpW * 0.05,
+                        right: vpW * 0.05,
+                        top: vpH * 0.02,
+                        bottom: vpH * 0.008),
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Name',
@@ -231,9 +237,7 @@ class _MembershipState extends State<Membership> {
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
-                      decoration: formField.copyWith(
-                        hintText: " Enter Name"
-                      ),
+                      decoration: formField.copyWith(hintText: " Enter Name"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Please enter name";
@@ -246,7 +250,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding:containerPadding,
+                    padding: containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Email',
@@ -254,21 +258,20 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding:formPadding,
+                    padding: formPadding,
                     child: TextFormField(
                       maxLines: null,
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
                       onTap: () {
-                        getEmail().then((value) => emailController.text= value==null?"gargdhruv7890@gmail.com":value);
+                        getEmail().then((value) => emailController.text =
+                            value == null ? "gargdhruv7890@gmail.com" : value);
                       },
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
-                      decoration: formField.copyWith(
-                        hintText: "Enter Email"
-                      ),
+                      decoration: formField.copyWith(hintText: "Enter Email"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter valid email id';
@@ -281,7 +284,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding:containerPadding,
+                    padding: containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'College',
@@ -289,7 +292,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding:formPadding,
+                    padding: formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: collegeNameController,
@@ -298,9 +301,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration:formField.copyWith(
-                        hintText: "Enter College Name"
-                      ),
+                      decoration:
+                          formField.copyWith(hintText: "Enter College Name"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter your College';
@@ -325,14 +327,13 @@ class _MembershipState extends State<Membership> {
                                 style: kLabelStyle,
                               ),
                             ),
-                             Padding(
+                            Padding(
                               padding: formPadding,
                               child: FormField<String>(
                                 builder: (FormFieldState<String> state) {
                                   return InputDecorator(
-                                   decoration: formField.copyWith(
-                                     hintText: "Enter Course Name"
-                                   ),
+                                    decoration: formField.copyWith(
+                                        hintText: "Enter Course Name"),
                                     isEmpty: courses == [],
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<String>(
@@ -362,8 +363,8 @@ class _MembershipState extends State<Membership> {
                       Expanded(
                         child: Column(
                           children: [
-                             Container(
-                              padding:containerPadding,
+                            Container(
+                              padding: containerPadding,
                               alignment: Alignment.topLeft,
                               child: Text(
                                 'Year Of Study',
@@ -372,12 +373,11 @@ class _MembershipState extends State<Membership> {
                             ),
                             Padding(
                               padding: formPadding,
-                            child: FormField<String>(
+                              child: FormField<String>(
                                 builder: (FormFieldState<String> state) {
                                   return InputDecorator(
                                     decoration: formField.copyWith(
-                                      hintText: "Enter year of study"
-                                    ),
+                                        hintText: "Enter year of study"),
                                     isEmpty: years == [],
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<String>(
@@ -406,11 +406,8 @@ class _MembershipState extends State<Membership> {
                       )
                     ],
                   ),
-                 
-                  
-                 
                   Container(
-                    padding:containerPadding,
+                    padding: containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Enrollment Number',
@@ -418,7 +415,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding:formPadding,
+                    padding: formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: enrollController,
@@ -427,9 +424,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration: formField.copyWith(
-                        hintText: "Enter Enrollment No"
-                      ),
+                      decoration:
+                          formField.copyWith(hintText: "Enter Enrollment No"),
                       validator: (value) {
                         if (value!.isEmpty && value.length != 6) {
                           return 'Please enter valid Enrollment No';
@@ -450,7 +446,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Padding(
-                    padding:formPadding,
+                    padding: formPadding,
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: facultyNoController,
@@ -459,9 +455,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration: formField.copyWith(
-                        hintText: "Enter Faculy No"
-                      ),
+                      decoration:
+                          formField.copyWith(hintText: "Enter Faculy No"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter valid Faculty No';
@@ -474,7 +469,7 @@ class _MembershipState extends State<Membership> {
                     ),
                   ),
                   Container(
-                    padding:containerPadding,
+                    padding: containerPadding,
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Mobile Number',
@@ -491,9 +486,8 @@ class _MembershipState extends State<Membership> {
                         fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
-                      decoration:formField.copyWith(
-                        hintText: "Enter Mobile No"
-                      ),
+                      decoration:
+                          formField.copyWith(hintText: "Enter Mobile No"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter your mobile number';
@@ -594,7 +588,8 @@ class _MembershipState extends State<Membership> {
                                   );
                                   print("saved");
                                   EmailService().sendRegistrationEmail(
-                                      recipent: emailController.text);
+                                    recipent: emailController.text,
+                                  );
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();
@@ -626,7 +621,7 @@ class _MembershipState extends State<Membership> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
-                            color:Theme.of(context).primaryColor,
+                            color: Theme.of(context).primaryColor,
                             child: Text(
                               "Submit",
                               style: TextStyle(
