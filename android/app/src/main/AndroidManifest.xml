@@ -7,6 +7,13 @@
          FlutterApplication and put your custom class here. -->
          
     <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+      <intent>
+        <action android:name="android.intent.action.SENDTO" />
+        <data android:scheme="mailto" />
+      </intent>
+    </queries>
+
     <application
         android:name=".Application"
         android:label="AMURoboclub"

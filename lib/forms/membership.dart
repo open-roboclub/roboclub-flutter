@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:roboclub_flutter/services/auth.dart';
+import 'package:roboclub_flutter/services/email.dart';
 import 'package:roboclub_flutter/services/member.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -43,9 +44,9 @@ class _MembershipState extends State<Membership> {
   Future getImage() async {
     await FilePicker.platform
         .pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['jpg', 'png', 'pdf'],
-          allowCompression: true)
+            type: FileType.custom,
+            allowedExtensions: ['jpg', 'png', 'pdf'],
+            allowCompression: true)
         .then((result) async {
       if (result != null) {
         filePicked = true;
@@ -147,7 +148,7 @@ class _MembershipState extends State<Membership> {
       },
     );
 
-     Widget okButton1 = FlatButton(
+    Widget okButton1 = FlatButton(
       child: Text(
         "OK",
         style: kLabelStyle,
@@ -211,7 +212,7 @@ class _MembershipState extends State<Membership> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(
-                        left: vpW * 0.05,
+                      left: vpW * 0.05,
                       right: vpW * 0.05,
                       top: vpH * 0.02,
                       bottom: vpH*0.008),
@@ -259,7 +260,7 @@ class _MembershipState extends State<Membership> {
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
                       onTap: () {
-                        getEmail().then((value) => emailController.text= value==null?"":value);
+                        getEmail().then((value) => emailController.text= value==null?"gargdhruv7890@gmail.com":value);
                       },
                       style: TextStyle(
                         color: Colors.black,
@@ -523,7 +524,7 @@ class _MembershipState extends State<Membership> {
                           },
                         ),
                         file == null
-                        ? Text(
+                            ? Text(
                                 'File not Selected.',
                                 style: TextStyle(
                                   color: Colors.grey[600],
@@ -542,7 +543,7 @@ class _MembershipState extends State<Membership> {
                       ],
                     ),
                   ),
-                 _loading
+                  _loading
                       ? Container(
                           padding: EdgeInsets.all(15),
                           width: vpW * 0.5,
@@ -592,6 +593,8 @@ class _MembershipState extends State<Membership> {
                                     dateOfReg: DateTime.now(),
                                   );
                                   print("saved");
+                                  EmailService().sendRegistrationEmail(
+                                      recipent: emailController.text);
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();
@@ -599,9 +602,8 @@ class _MembershipState extends State<Membership> {
                                   mobileNoController.clear();
                                   collegeNameController.clear();
                                   courseController.clear();
-                                  yearOfStudyController.clear();                          
-
-                          showDialog(
+                                  yearOfStudyController.clear();
+                                  showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return alert;
@@ -620,7 +622,7 @@ class _MembershipState extends State<Membership> {
                                 });
                               }
                             },
-                         padding: EdgeInsets.all(15),
+                            padding: EdgeInsets.all(15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
