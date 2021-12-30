@@ -203,9 +203,6 @@ class _MembershipState extends State<Membership> {
               end: Alignment.bottomCenter,
               colors: [
                 Color(0xFFC5CAE9),
-                // Color(0xFF9FA8DA),
-                // Color(0xFF7986CB),
-                // Color(0xFF5C6BC0),
               ],
               stops: [0.1],
             ),
@@ -427,7 +424,7 @@ class _MembershipState extends State<Membership> {
                       decoration:
                           formField.copyWith(hintText: "Enter Enrollment No"),
                       validator: (value) {
-                        if (value!.isEmpty && value.length != 6) {
+                        if (value!.isEmpty || value.length != 6) {
                           return 'Please enter valid Enrollment No';
                         }
                         return null;

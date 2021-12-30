@@ -55,6 +55,8 @@ dependencies:
   razorpay_flutter: ^1.2.7
   progress_dialog: ^1.2.0
   mailer: ^5.0.2
+  firebase_remote_config: ^1.0.3
+  skeleton_loader: ^2.0.0+4
 
 
 dev_dependencies:
