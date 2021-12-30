@@ -97,6 +97,9 @@ class _ContributorScreenState extends State<ContributorScreen> {
                       ),
                     ),
                     Row(children: [
+                      // ListTile(
+                      //   style: ListTileStyle.list,
+                      // )
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.symmetric(

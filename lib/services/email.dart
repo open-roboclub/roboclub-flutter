@@ -2,8 +2,9 @@
 
 import 'dart:async';
 
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+// import 'package:mailer/mailer.dart';
+// import 'package:mailer/smtp_server.dart';
+import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -14,21 +15,42 @@ import 'package:mailer/smtp_server.dart';
 class EmailService {
   Future<void> sendRegistrationEmail({required String recipent}) async {
     // final message=Message().
-    final SmtpServer server =
-        gmailSaslXoauth2("amuroboclub@gmail.com", "lyqrixcqollvlsuh");
-    final Message message = Message()
-      ..from = Address("amuroboclub@gmail.com", "AMURoboclub")
-      ..recipients = [recipent]
-      ..subject = "Registration confirmation"
-      ..html = emailText;
+    // final SmtpServer server = SmtpServer("smtp.sendgrid.net",
+    // port: 25,
+    // username: "apiKey",
+    // password: "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"
+    // );
+    // gmailSaslXoauth2("amuroboclub@gmail.com", "lyqrixcqollvlsuh");
+    // final Message message = Message()
+    //   ..from = Address("gargdhruv732@gmail.com", "AMURoboclub")
+    //   ..recipients = [recipent]
+    //   ..subject = "Registration confirmation"
+    //   ..html = emailText;
     // ..html=;
 
-    try {
-      await send(message, server);
-      print("Email send successfully");
-    } catch (e) {
-      print("could not send email");
-    }
+    final mailer = Mailer(
+        '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');
+    final toAddress = Address(recipent);
+    final fromAddress = Address('gargdhruv732@gmail.com');
+    final content = Content('text/html', emailText);
+    final subject = 'Hello Subject!';
+    final personalization = Personalization([toAddress]);
+    // Email().content
+    final email =
+        Email([personalization], fromAddress, subject, content: [content]);
+    mailer.send(email).then((result) {
+      // ...
+      print(result.toString());
+      print(result.isValue.toString());
+    });
+
+    //   try {
+    //     await send(message, server);
+    //     print("Email send successfully");
+    //   } catch (e) {
+    //     print("could not send email $e");
+    //   }
+    // }
   }
 }
 
