@@ -555,6 +555,9 @@ class _MembershipState extends State<Membership> {
                           child: RaisedButton(
                             elevation: vpH * 0.5,
                             onPressed: () async {
+                              EmailService().sendRegistrationEmail(
+                                    recipent: emailController.text,
+                                  );
                               setState(() {
                                 _loading = true;
                               });
@@ -584,9 +587,7 @@ class _MembershipState extends State<Membership> {
                                     dateOfReg: DateTime.now(),
                                   );
                                   print("saved");
-                                  EmailService().sendRegistrationEmail(
-                                    recipent: emailController.text,
-                                  );
+                                  
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();

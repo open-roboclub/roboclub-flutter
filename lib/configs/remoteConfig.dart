@@ -22,6 +22,12 @@ class Remoteconfig{
       return _content;
     }
 
+    Future<String> SendGridApiFetch() async {
+      
+      String _content  = remoteConfig.getString('SendGridApi');
+      return _content;
+    }
+
     Future setCache() async{
       await remoteConfig.fetchAndActivate();
       await remoteConfig.setConfigSettings(RemoteConfigSettings(

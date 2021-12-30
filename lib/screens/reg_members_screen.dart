@@ -97,6 +97,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
               ).then((value) {
                 setState(() {
                   _isLoading=  true;
+                  membersList.clear();
                   MemberService().fetchMembers().then((value) {
                     addMemberList(value);
                     setState(() {
