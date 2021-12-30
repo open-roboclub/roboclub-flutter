@@ -30,7 +30,8 @@ class MemberService {
       "collegeName": collegeName,
       "yearOfStudy": yearOfStudy,
       "mobileNo": mobileNo,
-      "dateOfReg": DateTime.now()
+      "dateOfReg": DateTime.now(),
+      "isPaid": false
     };
 
     await _firestore.collection("/registeredMembers").doc(email).set(data).then((value) {
@@ -44,7 +45,7 @@ class MemberService {
 
     await _firestore
         .collection("/registeredMembers")
-        .orderBy('date', descending: true)
+        .orderBy('dateOfReg', descending: true)
         .get()
         .then((value) {
       value.docs.forEach((element) {

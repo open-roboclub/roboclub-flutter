@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/member.dart';
@@ -20,7 +21,13 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
   bool _isLoading = true;
   List<Member> membersList = [];
 
+  bool showButton = false;
   void initState() {
+     Remoteconfig().showMmebershipOpen().then((value) {
+       setState(() {
+         showButton = value;
+       });
+     });
     MemberService().fetchMembers().then((value) {
       addMemberList(value);
       setState(() {
@@ -79,18 +86,28 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                     ],
                   ),
                 ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: showButton? FloatingActionButton(
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return Membership();
+                    return  Membership();
                   },
                 ),
-              );
+              ).then((value) {
+                setState(() {
+                  _isLoading=  true;
+                  MemberService().fetchMembers().then((value) {
+                    addMemberList(value);
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  });
+                });
+              } );
             },
             child: Icon(Icons.add),
-          )),
+          ): null )
     );
   }
 }

@@ -1,19 +1,24 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/forms/event.dart';
+import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
+import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -39,8 +44,16 @@ class _EventScreenState extends State<EventScreen> {
 
   // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
+   bool showBanner = false;
   @override
   void initState() {
+    
+     Remoteconfig().showHomeMmebershipOpen().then((value) {
+       setState(() {
+         showBanner = value;
+       });
+     });
+  
     EventService().fetchEvents().then((value) {
       splitEventLists(value);
       isLoading = true;
@@ -244,6 +257,33 @@ class _EventScreenState extends State<EventScreen> {
                 )
               : Column(
                   children: [
+                    // SizedBox(
+                    //   height: vpH * 0.02,
+                    // ),
+                    showBanner?
+                      SkeletonLoader(
+                        direction: SkeletonDirection.rtl,
+                        highlightColor: Colors.black,
+                      builder: Container(
+                        clipBehavior: Clip.hardEdge,
+                        margin: EdgeInsets.only(left: vpW*0.04, right: vpW*0.04, top: vpH*0.02, bottom: vpH*0.01),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: ListTile(
+                          style: ListTileStyle.list,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                            tileColor: Colors.orange[400],
+                            title: Text('Applications Open for Memebership',style: TextStyle(fontWeight: FontWeight.bold,),),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return Membership();
+                              }));
+                            },
+                            leading: ImageIcon(AssetImage('assets/img/NoPath.png')),
+                          ),
+                      ),
+                    ):
                     SizedBox(
                       height: vpH * 0.04,
                     ),

@@ -203,11 +203,8 @@ class _MembershipState extends State<Membership> {
               end: Alignment.bottomCenter,
               colors: [
                 Color(0xFFC5CAE9),
-                Color(0xFF9FA8DA),
-                // Color(0xFF7986CB),
-                // Color(0xFF5C6BC0),
               ],
-              stops: [0.1, 0.4],
+              stops: [0.1],
             ),
           ),
           child: SingleChildScrollView(
@@ -427,7 +424,7 @@ class _MembershipState extends State<Membership> {
                       decoration:
                           formField.copyWith(hintText: "Enter Enrollment No"),
                       validator: (value) {
-                        if (value!.isEmpty && value.length != 6) {
+                        if (value!.isEmpty || value.length != 6) {
                           return 'Please enter valid Enrollment No';
                         }
                         return null;
@@ -529,7 +526,7 @@ class _MembershipState extends State<Membership> {
                             : Text(
                                 'File Selected.',
                                 style: TextStyle(
-                                  color: Colors.limeAccent[400],
+                                  color: Colors.green,
                                   fontSize: vpH * 0.02,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -548,7 +545,7 @@ class _MembershipState extends State<Membership> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
-                            color: Color(0xFFFF9C01),
+                            color: Theme.of(context).primaryColor,
                             child: CircularProgressIndicator(),
                           ),
                         )
@@ -588,7 +585,8 @@ class _MembershipState extends State<Membership> {
                                   );
                                   print("saved");
                                   EmailService().sendRegistrationEmail(
-                                      recipent: emailController.text);
+                                    recipent: emailController.text,
+                                  );
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();
@@ -620,7 +618,7 @@ class _MembershipState extends State<Membership> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
-                            color: Color(0xFFFF9C01),
+                            color: Theme.of(context).primaryColor,
                             child: Text(
                               "Submit",
                               style: TextStyle(

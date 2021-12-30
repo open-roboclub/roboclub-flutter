@@ -34,9 +34,9 @@ class Member {
     this.mobileNo = mapData['mobileNo'];
     this.collegeName = mapData['collegeName'];
     this.course = mapData['course'];
-    this.yearOfStudy = mapData['YearOfStudy'];
+    this.yearOfStudy = mapData['yearOfStudy'];
     this.fileUrl = mapData['fileUrl'];
-    this.date = mapData['date'].toDate();
+    this.date = mapData['dateOfReg'].toDate();
   }
 
   Map tomap() {
@@ -49,9 +49,9 @@ class Member {
     data['mobileNo'] = this.mobileNo;
     data['collegeName'] = this.collegeName;
     data['course'] = this.course;
-    data['YearOfStudy'] = this.yearOfStudy;
+    data['yearOfStudy'] = this.yearOfStudy;
     data['fileUrl'] = this.fileUrl;
-    data['date'] = this.date;
+    data['dateOfReg'] = this.date;
     return data;
   }
 }
