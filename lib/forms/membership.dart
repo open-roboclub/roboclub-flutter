@@ -261,8 +261,8 @@ class _MembershipState extends State<Membership> {
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
                       onTap: () {
-                        getEmail().then((value) => emailController.text =
-                            value == null ? "gargdhruv7890@gmail.com" : value);
+                        getEmail().then((value) =>
+                            emailController.text = value == null ? "" : value);
                       },
                       style: TextStyle(
                         color: Colors.black,
@@ -555,9 +555,6 @@ class _MembershipState extends State<Membership> {
                           child: RaisedButton(
                             elevation: vpH * 0.5,
                             onPressed: () async {
-                              EmailService().sendRegistrationEmail(
-                                recipent: emailController.text,
-                              );
                               setState(() {
                                 _loading = true;
                               });
@@ -587,7 +584,9 @@ class _MembershipState extends State<Membership> {
                                     dateOfReg: DateTime.now(),
                                   );
                                   print("saved");
-
+                                  EmailService().sendRegistrationEmail(
+                                    recipent: emailController.text,
+                                  );
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();

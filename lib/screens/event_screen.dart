@@ -47,6 +47,7 @@ class _EventScreenState extends State<EventScreen> {
   bool showBanner = false;
   @override
   void initState() {
+    Remoteconfig().isUpdateRequired();
     Remoteconfig().showHomeMmebershipOpen().then((value) {
       setState(() {
         showBanner = value;
