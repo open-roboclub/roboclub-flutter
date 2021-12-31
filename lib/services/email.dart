@@ -13,8 +13,8 @@ class EmailService {
 
     apiKey= await Remoteconfig().SendGridApiFetch();
     emailText = await Remoteconfig().fetchRegEmailTemplate();
-print(apiKey);
-print(emailText);
+
+print(recipent);
     final mailer = Mailer(apiKey);
     final toAddress = Address(recipent);
     final fromAddress = Address('gargdhruv732@gmail.com');
@@ -29,13 +29,4 @@ print(emailText);
       print(result.isValue.toString());
     });
   }
-
-  // fetchConfig() async{
-  //   apiKey= await Remoteconfig().SendGridApiFetch();
-  //   emailText = await Remoteconfig().fetchRegEmailTemplate();
-  // }
-
-  // EmailService() {
-  //   this.fetchConfig();
-  // }
 }
