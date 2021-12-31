@@ -150,7 +150,7 @@ class _MembershipState extends State<Membership> {
       ),
       onPressed: () {
         Navigator.of(context).pop();
-        Navigator.of(context).pop();
+        Navigator.of(context).pop({"success": true});
       },
     );
 
@@ -556,8 +556,8 @@ class _MembershipState extends State<Membership> {
                             elevation: vpH * 0.5,
                             onPressed: () async {
                               EmailService().sendRegistrationEmail(
-                                    recipent: emailController.text,
-                                  );
+                                recipent: emailController.text,
+                              );
                               setState(() {
                                 _loading = true;
                               });
@@ -587,7 +587,7 @@ class _MembershipState extends State<Membership> {
                                     dateOfReg: DateTime.now(),
                                   );
                                   print("saved");
-                                  
+
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();

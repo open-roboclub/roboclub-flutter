@@ -44,16 +44,15 @@ class _EventScreenState extends State<EventScreen> {
 
   // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
-   bool showBanner = false;
+  bool showBanner = false;
   @override
   void initState() {
-    
-     Remoteconfig().showHomeMmebershipOpen().then((value) {
-       setState(() {
-         showBanner = value;
-       });
-     });
-  
+    Remoteconfig().showHomeMmebershipOpen().then((value) {
+      setState(() {
+        showBanner = value;
+      });
+    });
+
     EventService().fetchEvents().then((value) {
       splitEventLists(value);
       isLoading = true;
@@ -67,61 +66,61 @@ class _EventScreenState extends State<EventScreen> {
   void initNotifications(BuildContext context) async {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message.data['screen'] == 'event') {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EventScreen(),
-              ));
-        } else {
-          Navigator.push(
+        Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NotificationScreen(),
-            ),
-          );
-        }
-    });
-      FirebaseMessaging.onMessage.listen((message) {
-         print("onMessage: $message");
-
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-              title: Text(message.data['notification']['title']),
-              subtitle: Text(message.data['notification']['body']),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                color: Colors.amber,
-                child: Text('Show'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  if (message.data['screen'] == 'event') {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EventScreen(),
-                        ));
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotificationScreen(),
-                        ));
-                  }
-                },
-              ),
-              FlatButton(
-                color: Colors.amber,
-                child: Text('Cancel'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
+              builder: (context) => EventScreen(),
+            ));
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationScreen(),
           ),
         );
-      });
-      FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+      }
+    });
+    FirebaseMessaging.onMessage.listen((message) {
+      print("onMessage: $message");
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: ListTile(
+            title: Text(message.data['notification']['title']),
+            subtitle: Text(message.data['notification']['body']),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              color: Colors.amber,
+              child: Text('Show'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (message.data['screen'] == 'event') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EventScreen(),
+                      ));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NotificationScreen(),
+                      ));
+                }
+              },
+            ),
+            FlatButton(
+              color: Colors.amber,
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    });
+    FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
     // _messaging.configure(
     //   onMessage: (Map<String, dynamic> message) async {
     //     print("onMessage: $message");
@@ -164,32 +163,32 @@ class _EventScreenState extends State<EventScreen> {
     //     );
     //   },
     //   onBackgroundMessage: myBackgroundMessageHandler,
-      // onLaunch: (Map<String, dynamic> message) async {
-      //   if (message['data']['screen'] == 'notification') {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => Notuser as ModelUserificationScreen,
-      //       ),
-      //     );
-      //   }
-      // },
-      // onResume: (Map<String, dynamic> message) async {
-      //   if (message['data']['screen'] == 'event') {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => EventScreen(),
-      //         ));
-      //   } else {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => NotificationScreen(),
-      //       ),
-      //     );
-      //   }
-      // },
+    // onLaunch: (Map<String, dynamic> message) async {
+    //   if (message['data']['screen'] == 'notification') {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => Notuser as ModelUserificationScreen,
+    //       ),
+    //     );
+    //   }
+    // },
+    // onResume: (Map<String, dynamic> message) async {
+    //   if (message['data']['screen'] == 'event') {
+    //     Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (context) => EventScreen(),
+    //         ));
+    //   } else {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => NotificationScreen(),
+    //       ),
+    //     );
+    //   }
+    // },
     // );
   }
 
@@ -260,33 +259,52 @@ class _EventScreenState extends State<EventScreen> {
                     // SizedBox(
                     //   height: vpH * 0.02,
                     // ),
-                    showBanner?
-                      SkeletonLoader(
-                        direction: SkeletonDirection.rtl,
-                        highlightColor: Colors.black,
-                      builder: Container(
-                        clipBehavior: Clip.hardEdge,
-                        margin: EdgeInsets.only(left: vpW*0.04, right: vpW*0.04, top: vpH*0.02, bottom: vpH*0.01),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: ListTile(
-                          style: ListTileStyle.list,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                            tileColor: Colors.orange[400],
-                            title: Text('Applications Open for Memebership',style: TextStyle(fontWeight: FontWeight.bold,),),
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context){
-                                return Membership();
-                              }));
-                            },
-                            leading: ImageIcon(AssetImage('assets/img/NoPath.png')),
+                    showBanner
+                        ? SkeletonLoader(
+                            baseColor: Colors.black,
+                            direction: SkeletonDirection.rtl,
+                            highlightColor: Colors.white,
+                            builder: Container(
+                              clipBehavior: Clip.hardEdge,
+                              margin: EdgeInsets.only(
+                                left: vpW * 0.04,
+                                right: vpW * 0.04,
+                                top: vpH * 0.02,
+                                bottom: vpH * 0.01,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                tileColor: Colors.orange[400],
+                                title: Text(
+                                  'Applications Open for Memebership',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return Membership();
+                                      },
+                                    ),
+                                  );
+                                },
+                                leading: ImageIcon(
+                                  AssetImage('assets/img/NoPath.png'),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            height: vpH * 0.04,
                           ),
-                      ),
-                    ):
-                    SizedBox(
-                      height: vpH * 0.04,
-                    ),
                     _title('Featured Events', vpH, vpW),
                     featuredEventsList.isEmpty
                         ? Center(

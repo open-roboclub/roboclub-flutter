@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:roboclub_flutter/models/contributor.dart';
 
 import 'dart:async';
 
@@ -34,7 +33,11 @@ class MemberService {
       "isPaid": false
     };
 
-    await _firestore.collection("/registeredMembers").doc(email).set(data).then((value) {
+    await _firestore
+        .collection("/registeredMembers")
+        .doc(email)
+        .set(data)
+        .then((value) {
       print("Success");
     });
     return true;
@@ -53,5 +56,12 @@ class MemberService {
       });
     });
     return list;
+  }
+
+  Future<void> updatePaymentStatus(Member memberData) async {
+    await _firestore
+        .collection("/registeredMembers")
+        .doc(memberData.email)
+        .update({"isPaid": true});
   }
 }

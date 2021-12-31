@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:roboclub_flutter/models/member.dart';
+import 'package:roboclub_flutter/services/member.dart';
 import '../helper/dimensions.dart';
 
 class MemberCard extends StatefulWidget {
@@ -53,11 +55,16 @@ class _MemberCardState extends State<MemberCard> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    MemberService().updatePaymentStatus(widget.member).then((value) {
+      print("Payment Status Updated ");
+      Fluttertoast.showToast(msg: "Payment Completed Successfully");
+    });
     print("Success" + response.paymentId!);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     print("Error" + response.code.toString() + " - " + response.message!);
+    Fluttertoast.showToast(msg: "Something went wrong");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {

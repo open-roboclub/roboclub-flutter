@@ -23,11 +23,11 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
 
   bool showButton = false;
   void initState() {
-     Remoteconfig().showMmebershipOpen().then((value) {
-       setState(() {
-         showButton = value;
-       });
-     });
+    Remoteconfig().showMmebershipOpen().then((value) {
+      setState(() {
+        showButton = value;
+      });
+    });
     MemberService().fetchMembers().then((value) {
       addMemberList(value);
       setState(() {
@@ -48,67 +48,71 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     return SafeArea(
-      child: Scaffold(
-          key: _scaffoldKey,
-          drawer: appdrawer(context, page: "Registered Members"),
-          appBar: appBar(
-            context,
-            strTitle: "MEMBERS",
-            isDrawer: true,
-            isNotification: false,
-            scaffoldKey: _scaffoldKey,
-          ),
-          body: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: vpH * 0.005,
-                      ),
-                      Container(
-                        height: vpH * 0.9,
-                        width: vpW,
-                        child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: membersList.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            return MemberCard(
-                              member: membersList[index],
-                            );
+        child: Scaffold(
+            key: _scaffoldKey,
+            drawer: appdrawer(context, page: "Registered Members"),
+            appBar: appBar(
+              context,
+              strTitle: "MEMBERS",
+              isDrawer: true,
+              isNotification: false,
+              scaffoldKey: _scaffoldKey,
+            ),
+            body: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: vpH * 0.005,
+                        ),
+                        Container(
+                          height: vpH * 0.9,
+                          width: vpW,
+                          child: ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: membersList.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return MemberCard(
+                                member: membersList[index],
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+            floatingActionButton: showButton
+                ? FloatingActionButton(
+                    onPressed: () async {
+                      var result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return Membership();
                           },
                         ),
-                      )
-                    ],
-                  ),
-                ),
-          floatingActionButton: showButton? FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return  Membership();
-                  },
-                ),
-              ).then((value) {
-                setState(() {
-                  _isLoading=  true;
-                  membersList.clear();
-                  MemberService().fetchMembers().then((value) {
-                    addMemberList(value);
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  });
-                });
-              } );
-            },
-            child: Icon(Icons.add),
-          ): null )
-    );
+                      );
+                      if (result != null) {
+                        if (result["success"]) {
+                          setState(() {
+                            _isLoading = true;
+                            membersList.clear();
+                            MemberService().fetchMembers().then((value) {
+                              addMemberList(value);
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            });
+                          });
+                        }
+                      }
+                    },
+                    child: Icon(Icons.add),
+                  )
+                : null));
   }
 }
