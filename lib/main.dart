@@ -23,21 +23,22 @@ void main() async {
   await Firebase.initializeApp();
   MyLocalStorage _storage = MyLocalStorage();
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  
+
   WidgetsFlutterBinding.ensureInitialized();
   DotEnv.dotenv.load(fileName: ".env");
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _storage.getDeviceToken().then((value) {
+    _messaging.subscribeToTopic('newNotification');
     if (value == "") {
       _messaging.getToken().then((fcmToken) {
-        print("fcm saved to storage!");
-        NotificationService().postDeviceToken(fcmToken: fcmToken!);
-        _storage.setDeviceToken(fcmToken);
+        // print("fcm saved to storage!");
+        // NotificationService().postDeviceToken(fcmToken: fcmToken!);
+        _storage.setDeviceToken(fcmToken!);
       });
     }
   });
-  var isOnboarding = await _storage.getOnboarding() ;
-  var darkModeOn = await _storage.getThemepref() ;
+  var isOnboarding = await _storage.getOnboarding();
+  var darkModeOn = await _storage.getThemepref();
   runApp(
     MultiProvider(
       providers: [
@@ -58,7 +59,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isOnboarding;
 
-  const MyApp({Key ?key, this.isOnboarding=false}) : super(key: key);
+  const MyApp({Key? key, this.isOnboarding = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
