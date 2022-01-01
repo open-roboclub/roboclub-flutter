@@ -65,7 +65,26 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   void initNotifications(BuildContext context) async {
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      print(message!.notification);
+      if (message.data['screen'] == 'event') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventScreen(),
+            ));
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationScreen(),
+          ),
+        );
+      }
+    });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
+      print(message.notification);
       if (message.data['screen'] == 'event') {
         Navigator.push(
             context,
@@ -83,13 +102,14 @@ class _EventScreenState extends State<EventScreen> {
     });
     FirebaseMessaging.onMessage.listen((message) {
       print("onMessage: $message");
+      // print("onMessage: ${message.notification}");
 
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: ListTile(
-            title: Text(message.data['notification']['title']),
-            subtitle: Text(message.data['notification']['body']),
+            title: Text(message.notification!.title ?? ""),
+            subtitle: Text(message.notification!.body ?? ""),
           ),
           actions: <Widget>[
             FlatButton(
@@ -241,11 +261,7 @@ class _EventScreenState extends State<EventScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: appdrawer(context, page: "Events"),
-        appBar: appBar(context,
-            strTitle: "AMURoboclub",
-            isDrawer: true,
-            isNotification: true,
-            scaffoldKey: _scaffoldKey),
+        appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: true, isNotification: true, scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: isLoading
@@ -262,17 +278,11 @@ class _EventScreenState extends State<EventScreen> {
                     // ),
                     showBanner
                         ? SkeletonLoader(
-                            baseColor: Colors.black,
                             direction: SkeletonDirection.rtl,
-                            highlightColor: Colors.white,
+                            highlightColor: Colors.black,
                             builder: Container(
                               clipBehavior: Clip.hardEdge,
-                              margin: EdgeInsets.only(
-                                left: vpW * 0.04,
-                                right: vpW * 0.04,
-                                top: vpH * 0.02,
-                                bottom: vpH * 0.01,
-                              ),
+                              margin: EdgeInsets.only(left: vpW * 0.04, right: vpW * 0.04, top: vpH * 0.02, bottom: vpH * 0.01),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -288,18 +298,11 @@ class _EventScreenState extends State<EventScreen> {
                                   ),
                                 ),
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return Membership();
-                                      },
-                                    ),
-                                  );
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                    return Membership();
+                                  }));
                                 },
-                                leading: ImageIcon(
-                                  AssetImage('assets/img/NoPath.png'),
-                                ),
+                                leading: ImageIcon(AssetImage('assets/img/NoPath.png')),
                               ),
                             ),
                           )

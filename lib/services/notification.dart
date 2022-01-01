@@ -42,12 +42,25 @@ class NotificationService {
       required String screen}) async {
     List<String> tokens = await getFCMTokens();
     final Map<String, dynamic> body = {
-      "to":"/topics/newNotification",
       // "to": 'fwGkbdNJRiSKRkOSQBMYi6:APA91bFG9P6YsOBaLJD8kEpUBd1VHn1W7SSrSehVdQ10X4hfQDxf32K2gUchpc1SYIwP78fxVOEecihsKXfxkdMDFtauaYLaFL_MHMhh4pmW36YYql_dskatPRhKuPFB6FCeD5IgQLwh',
       "registration_ids": tokens,
       // ['fwGkbdNJRiSKRkOSQBMYi6:APA91bFG9P6YsOBaLJD8kEpUBd1VHn1W7SSrSehVdQ10X4hfQDxf32K2gUchpc1SYIwP78fxVOEecihsKXfxkdMDFtauaYLaFL_MHMhh4pmW36YYql_dskatPRhKuPFB6FCeD5IgQLwh', 'c9PwIj7jT6y7GxCyx7_6o7:APA91bGnW3uxeoaoqeFM7vxrWH2DtjXHve3f6QfKcERo7dJ5U4RMr3UNbZXZ96wbN11vpliiIQf6McSWKA-7ZiSg1utj3eE1Rf0lM8UrvR4AH9ULDEY_xySMG5bEwkaS1EzopThv8Ktm', 'dCydb-A8RDGwthLK2VR5JI:APA91bH0nF2NwSoGc8B849jIJZQmYhbuGWSrCyKfW81pvwuQIdmuKA2jKAB37eZSYp76uvk1VU2fUE2aiyKwhCRRUK0GEIXhLEpUeSgeO_nwQg5DDFt8ntuHJiijfSc0NUBQ34z2n5J3', 'e4FZT9cNSj6Z8WYAqZV3oP:APA91bHUlyYJ4I9gsXdA3yS1_eAKK_GylODWgUKWvXtRZ5XnYCAbaPoG6NmgGsMnyc9ylkvr-mY3E7VgBrXTC3QKIi0VObeIUBgYBTPi_C21lscS0CdkeTg7G_3njLqNcaq4HoQwbGjL', 'd4jwa-FJTFqiZdEa8S9996:APA91bEiezr7Kkh1XuSNWMNblaapBPDRe8M3gwbKN1vNIhb0kuHqy3kzggGmuygFF1h5ntYG4H1IkUGwSC5Yqwxs5F2wcRz95xnc_QtBETXwpFWGtMRRihgKHBREu-N-IK22et6IS010'],
       "data": {"screen": screen},
       "dry_run": true,
+      "notification": {
+        "title": title,
+        "body": msg,
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "image": img,
+      }
+    };
+    final Map<String, dynamic> body2 = {
+      "to": "/topics/newNotification",
+      // "to": 'fwGkbdNJRiSKRkOSQBMYi6:APA91bFG9P6YsOBaLJD8kEpUBd1VHn1W7SSrSehVdQ10X4hfQDxf32K2gUchpc1SYIwP78fxVOEecihsKXfxkdMDFtauaYLaFL_MHMhh4pmW36YYql_dskatPRhKuPFB6FCeD5IgQLwh',
+      // "registration_ids": tokens,
+      // ['fwGkbdNJRiSKRkOSQBMYi6:APA91bFG9P6YsOBaLJD8kEpUBd1VHn1W7SSrSehVdQ10X4hfQDxf32K2gUchpc1SYIwP78fxVOEecihsKXfxkdMDFtauaYLaFL_MHMhh4pmW36YYql_dskatPRhKuPFB6FCeD5IgQLwh', 'c9PwIj7jT6y7GxCyx7_6o7:APA91bGnW3uxeoaoqeFM7vxrWH2DtjXHve3f6QfKcERo7dJ5U4RMr3UNbZXZ96wbN11vpliiIQf6McSWKA-7ZiSg1utj3eE1Rf0lM8UrvR4AH9ULDEY_xySMG5bEwkaS1EzopThv8Ktm', 'dCydb-A8RDGwthLK2VR5JI:APA91bH0nF2NwSoGc8B849jIJZQmYhbuGWSrCyKfW81pvwuQIdmuKA2jKAB37eZSYp76uvk1VU2fUE2aiyKwhCRRUK0GEIXhLEpUeSgeO_nwQg5DDFt8ntuHJiijfSc0NUBQ34z2n5J3', 'e4FZT9cNSj6Z8WYAqZV3oP:APA91bHUlyYJ4I9gsXdA3yS1_eAKK_GylODWgUKWvXtRZ5XnYCAbaPoG6NmgGsMnyc9ylkvr-mY3E7VgBrXTC3QKIi0VObeIUBgYBTPi_C21lscS0CdkeTg7G_3njLqNcaq4HoQwbGjL', 'd4jwa-FJTFqiZdEa8S9996:APA91bEiezr7Kkh1XuSNWMNblaapBPDRe8M3gwbKN1vNIhb0kuHqy3kzggGmuygFF1h5ntYG4H1IkUGwSC5Yqwxs5F2wcRz95xnc_QtBETXwpFWGtMRRihgKHBREu-N-IK22et6IS010'],
+      "data": {"screen": screen},
+      // "dry_run": true,
       "notification": {
         "title": title,
         "body": msg,
@@ -62,7 +75,7 @@ class NotificationService {
     String fcmKey = fcmKeySnap.get('key');
     try {
       final http.Response response = await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+          Uri.parse('https://fcm.googleapis.com/fcm/send'),
           body: json.encode(body),
           headers: <String, String>{
             'authorization': "key=$fcmKey",
@@ -76,6 +89,29 @@ class NotificationService {
         int success = res['success'];
         print("Success status is: ");
         print(success);
+      } else {
+        print('Invalid status code: ${response.statusCode}');
+      }
+    } catch (err) {
+      print(err);
+    }
+
+    try {
+      final http.Response response = await http.post(
+          Uri.parse('https://fcm.googleapis.com/fcm/send'),
+          body: json.encode(body2),
+          headers: <String, String>{
+            'authorization': "key=$fcmKey",
+            'Content-Type': 'application/json'
+          });
+
+      if (response.statusCode == 200) {
+        print('Notification Send Successfully');
+        final Map<String, dynamic> res = json.decode(response.body);
+
+        // int success = res['success'];
+        print("Success status is:$res ");
+        // print(success);
       } else {
         print('Invalid status code: ${response.statusCode}');
       }
