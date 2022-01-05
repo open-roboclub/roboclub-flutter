@@ -1,24 +1,22 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
-import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
-import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -45,9 +43,16 @@ class _EventScreenState extends State<EventScreen> {
   // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   bool showBanner = false;
+  bool isUpdateRequired = false;
+
   @override
   void initState() {
-    Remoteconfig().isUpdateRequired();
+    Remoteconfig().isUpdateRequired().then((value) {
+      setState(() {
+        isUpdateRequired = value;
+        if (isUpdateRequired) showUpdateBottomSheet();
+      });
+    });
     Remoteconfig().showHomeMmebershipOpen().then((value) {
       setState(() {
         showBanner = value;
@@ -66,7 +71,7 @@ class _EventScreenState extends State<EventScreen> {
 
   void initNotifications(BuildContext context) async {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      print(message!.notification);
+      if (message == null) return print(message?.notification);
       if (message.data['screen'] == 'event') {
         Navigator.push(
             context,
@@ -250,6 +255,51 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
+  void showUpdateBottomSheet() {
+    print("Hrs");
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            topRight: Radius.circular(15.0),
+          ),
+        ),
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                "Time to Update!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  launch(
+                    'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
+                  );
+                },
+                child: Text("Update"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Not now"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     initNotifications(context);
@@ -402,18 +452,19 @@ class _EventScreenState extends State<EventScreen> {
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return EventForm();
-                          },
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (BuildContext context) {
+                      //       return EventForm();
+                      //     },
+                      //   ),
+                      // );
                     },
                     child: Icon(Icons.add),
                   )
                 : null)
             : null,
+        bottomSheet: Text(""),
       ),
     );
   }

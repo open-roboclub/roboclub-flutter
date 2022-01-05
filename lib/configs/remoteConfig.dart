@@ -29,10 +29,9 @@ class Remoteconfig {
   }
 
   Future<bool> isUpdateRequired() async {
-    int latestVersion = remoteConfig.getInt('updateVerison');
+    int latestVersion = remoteConfig.getInt('updateVersion');
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     int currentAppVersion = int.parse(packageInfo.buildNumber);
-    print(currentAppVersion);
     if (latestVersion > currentAppVersion) {
       return true;
     } else {
