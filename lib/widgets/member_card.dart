@@ -23,7 +23,8 @@ class _MemberCardState extends State<MemberCard> {
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 0), () async {
-      _apps = await UpiPay.getInstalledUpiApplications(statusType: UpiApplicationDiscoveryAppStatusType.all);
+      _apps = await UpiPay.getInstalledUpiApplications(
+          statusType: UpiApplicationDiscoveryAppStatusType.all);
       setState(() {});
     });
     super.initState();
@@ -60,7 +61,8 @@ class _MemberCardState extends State<MemberCard> {
           return Wrap(
               children: _apps!.length == 0
                   ? [
-                      Text("Download any UPI APP. Follow below link to download Google Pay."),
+                      Text(
+                          "Download any UPI APP. Follow below link to download Google Pay."),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -78,19 +80,22 @@ class _MemberCardState extends State<MemberCard> {
                   : _apps!.map((ApplicationMeta appMetaData) {
                       return ListTile(
                         onTap: () async {
-                          final transactionRef = Random.secure().nextInt(1 << 32).toString();
+                          final transactionRef =
+                              Random.secure().nextInt(1 << 32).toString();
                           final response = await UpiPay.initiateTransaction(
                             app: appMetaData.upiApplication,
-                            receiverUpiAddress: "gargdhruv732@okhdfcbank",
-                            receiverName: "dhruv garg",
+                            receiverUpiAddress: "9634478754@okbizaxis",
+                            receiverName: "AMURoboclub",
                             transactionRef: transactionRef,
                             amount: "1",
                           );
                           if (response.status == UpiTransactionStatus.success) {
                             _handlePaymentSuccess();
-                          } else if (response.status == UpiTransactionStatus.failure) {
+                          } else if (response.status ==
+                              UpiTransactionStatus.failure) {
                             _handlePaymentError();
-                          } else if (response.status == UpiTransactionStatus.submitted) {
+                          } else if (response.status ==
+                              UpiTransactionStatus.submitted) {
                             Fluttertoast.showToast(
                                 msg:
                                     "Your trransaction is in process. Please contact AMURoboclub if your status is not marked as successful in 24 hours");
@@ -112,7 +117,10 @@ class _MemberCardState extends State<MemberCard> {
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);
     String memberName = widget.member.name;
-    TextStyle _titlestyle = TextStyle(fontWeight: FontWeight.bold, fontSize: vpH * 0.028, color: Colors.black);
+    TextStyle _titlestyle = TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: vpH * 0.028,
+        color: Colors.black);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -138,7 +146,11 @@ class _MemberCardState extends State<MemberCard> {
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text(widget.member.email), Text(widget.member.facultyNo + ", " + widget.member.enrollNo), Text(widget.member.mobileNo)],
+            children: [
+              Text(widget.member.email),
+              Text(widget.member.facultyNo + ", " + widget.member.enrollNo),
+              Text(widget.member.mobileNo),
+            ],
           ),
           trailing: !widget.member.isPaid
               ? ElevatedButton(
