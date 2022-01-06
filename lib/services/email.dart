@@ -5,16 +5,14 @@ import 'dart:async';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 
-
 class EmailService {
-  String apiKey='';
-  String emailText ='';
+  String apiKey = '';
+  String emailText = '';
   Future<void> sendRegistrationEmail({required String recipent}) async {
-
-    apiKey= await Remoteconfig().SendGridApiFetch();
+    apiKey = await Remoteconfig().sendGridApiFetch();
     emailText = await Remoteconfig().fetchRegEmailTemplate();
 
-print(recipent);
+    print(recipent);
     final mailer = Mailer(apiKey);
     final toAddress = Address(recipent);
     final fromAddress = Address('gargdhruv732@gmail.com');

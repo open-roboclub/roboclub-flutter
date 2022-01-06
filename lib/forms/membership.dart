@@ -150,7 +150,7 @@ class _MembershipState extends State<Membership> {
       ),
       onPressed: () {
         Navigator.of(context).pop();
-        Navigator.of(context).pop();
+        Navigator.of(context).pop({"success": true});
       },
     );
 
@@ -261,8 +261,8 @@ class _MembershipState extends State<Membership> {
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
                       onTap: () {
-                        getEmail().then((value) => emailController.text =
-                            value == null ? "" : value);
+                        getEmail().then((value) =>
+                            emailController.text = value == null ? "" : value);
                       },
                       style: TextStyle(
                         color: Colors.black,

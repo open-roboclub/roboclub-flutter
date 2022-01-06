@@ -1,24 +1,22 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
-import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
-import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -45,8 +43,16 @@ class _EventScreenState extends State<EventScreen> {
   // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   bool showBanner = false;
+  bool isUpdateRequired = false;
+
   @override
   void initState() {
+    Remoteconfig().isUpdateRequired().then((value) {
+      setState(() {
+        isUpdateRequired = value;
+        if (isUpdateRequired) showUpdateBottomSheet();
+      });
+    });
     Remoteconfig().showHomeMmebershipOpen().then((value) {
       setState(() {
         showBanner = value;
@@ -65,7 +71,7 @@ class _EventScreenState extends State<EventScreen> {
 
   void initNotifications(BuildContext context) async {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      print(message!.notification);
+      if (message == null) return print(message?.notification);
       if (message.data['screen'] == 'event') {
         Navigator.push(
             context,
@@ -100,6 +106,7 @@ class _EventScreenState extends State<EventScreen> {
       }
     });
     FirebaseMessaging.onMessage.listen((message) {
+      print("onMessage: $message");
       // print("onMessage: ${message.notification}");
 
       showDialog(
@@ -248,6 +255,51 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
+  void showUpdateBottomSheet() {
+    print("Hrs");
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            topRight: Radius.circular(15.0),
+          ),
+        ),
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                "Time to Update!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  launch(
+                    'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
+                  );
+                },
+                child: Text("Update"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Not now"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     initNotifications(context);
@@ -259,11 +311,7 @@ class _EventScreenState extends State<EventScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: appdrawer(context, page: "Events"),
-        appBar: appBar(context,
-            strTitle: "AMURoboclub",
-            isDrawer: true,
-            isNotification: true,
-            scaffoldKey: _scaffoldKey),
+        appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: true, isNotification: true, scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: isLoading
@@ -284,18 +332,14 @@ class _EventScreenState extends State<EventScreen> {
                             highlightColor: Colors.black,
                             builder: Container(
                               clipBehavior: Clip.hardEdge,
-                              margin: EdgeInsets.only(
-                                  left: vpW * 0.04,
-                                  right: vpW * 0.04,
-                                  top: vpH * 0.02,
-                                  bottom: vpH * 0.01),
+                              margin: EdgeInsets.only(left: vpW * 0.04, right: vpW * 0.04, top: vpH * 0.02, bottom: vpH * 0.01),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: ListTile(
-                                style: ListTileStyle.list,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
                                 tileColor: Colors.orange[400],
                                 title: Text(
                                   'Applications Open for Memebership',
@@ -304,13 +348,11 @@ class _EventScreenState extends State<EventScreen> {
                                   ),
                                 ),
                                 onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
                                     return Membership();
                                   }));
                                 },
-                                leading: ImageIcon(
-                                    AssetImage('assets/img/NoPath.png')),
+                                leading: ImageIcon(AssetImage('assets/img/NoPath.png')),
                               ),
                             ),
                           )
@@ -410,18 +452,19 @@ class _EventScreenState extends State<EventScreen> {
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return EventForm();
-                          },
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (BuildContext context) {
+                      //       return EventForm();
+                      //     },
+                      //   ),
+                      // );
                     },
                     child: Icon(Icons.add),
                   )
                 : null)
             : null,
+        bottomSheet: Text(""),
       ),
     );
   }
