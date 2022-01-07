@@ -1,11 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:roboclub_flutter/models/member.dart';
 import 'package:roboclub_flutter/services/member.dart';
-import 'package:upi_pay/upi_pay.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../helper/dimensions.dart';
 
 class MemberCard extends StatefulWidget {
@@ -18,104 +20,110 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
-  List<ApplicationMeta>? _apps;
+  Razorpay _razorpay = Razorpay();
+  String key = "";
+  String scrtKey = "";
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 0), () async {
-      _apps = await UpiPay.getInstalledUpiApplications(
-          statusType: UpiApplicationDiscoveryAppStatusType.all);
-      setState(() {});
-    });
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _razorpay.clear();
   }
 
-  void _handlePaymentSuccess() {
-    MemberService().updatePaymentStatus(widget.member).then((value) {
-      print("Payment Status Updated ");
-      Fluttertoast.showToast(msg: "Payment Completed Successfully");
+  Future<void> generateOrderId() async {
+    String recieptId = Random.secure().nextInt(1 << 32).toString();
+    print(recieptId);
+    final client = HttpClient();
+    final request =
+        await client.postUrl(Uri.parse('https://api.razorpay.com/v1/orders'));
+    request.headers
+        .set(HttpHeaders.contentTypeHeader, "application/json; charset=UTF-8");
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$key:$scrtKey'));
+    request.headers.set(HttpHeaders.authorizationHeader, basicAuth);
+    request.add(utf8.encode(
+        json.encode({"amount": 100, "currency": "INR", "receipt": recieptId})));
+    final response = await request.close();
+    response.transform(utf8.decoder).listen((contents) {
+      String orderId = contents.split(',')[0].split(":")[1];
+      print(contents);
+      orderId = orderId.substring(1, orderId.length - 1);
+      print(orderId);
+      Map<String, dynamic> checkoutOptions = {
+        'key': key,
+        'amount': 1 * 100,
+        "currency": "INR",
+        'name': 'AMURoboclub',
+        'description': 'Mvggfgfvf',
+        'order_id': orderId, // Generate order_id using Orders API
+        'timeout': 300,
+      };
+      try {
+        _razorpay.open(checkoutOptions);
+      } catch (e) {
+        print(e.toString());
+      }
     });
   }
 
-  void _handlePaymentError() {
+  void openCheckout() async {
+    var options = {
+      'key': key,
+      'amount': 15000,
+      'name': 'AMURoboclub',
+      'order_id': "order_id",
+      'description': 'AMURoboclub Membership Payment',
+      'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
+      "method": {
+        "netbanking": false,
+        "card": false,
+        "upi": true,
+        "wallet": false,
+      },
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print("Payment Status Updated ");
+    Fluttertoast.showToast(msg: "Payment Completed Successfully");
+    String sig = response.signature!;
+    print(response.orderId);
+    var bytes = utf8.encode(response.orderId! + "|" + response.paymentId!);
+    // var digest = sha256.convert(bytes);
+    Hmac hmac = new Hmac(sha256, utf8.encode(scrtKey));
+    var digest = hmac.convert(bytes);
+    if (digest.toString() == sig) {
+      MemberService().updatePaymentStatus(widget.member);
+    }
+    print("Success" + response.paymentId!);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print("Error" + response.code.toString() + " - " + response.message!);
     Fluttertoast.showToast(msg: "Something went wrong");
   }
 
-  void showUpdateBottomSheet() {
-    print("Hrs");
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
-        ),
-        builder: (context) {
-          return Wrap(
-              children: _apps!.length == 0
-                  ? [
-                      Text(
-                          "Download any UPI APP. Follow below link to download Google Pay."),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          try {
-                            launch(
-                              'https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user&hl=en_IN&gl=US',
-                            );
-                          } catch (e) {
-                            Fluttertoast.showToast(msg: "Unable to launch");
-                          }
-                        },
-                        child: Text("Update"),
-                      ),
-                    ]
-                  : _apps!.map((ApplicationMeta appMetaData) {
-                      return ListTile(
-                        onTap: () async {
-                          final transactionRef =
-                              Random.secure().nextInt(1 << 32).toString();
-                          final response = await UpiPay.initiateTransaction(
-                            app: appMetaData.upiApplication,
-                            receiverUpiAddress: "9634478754@okbizaxis",
-                            receiverName: "AMURoboclub",
-                            transactionRef: transactionRef,
-                            amount: "1",
-                          );
-                          if (response.status == UpiTransactionStatus.success) {
-                            _handlePaymentSuccess();
-                          } else if (response.status ==
-                              UpiTransactionStatus.failure) {
-                            _handlePaymentError();
-                          } else if (response.status ==
-                              UpiTransactionStatus.submitted) {
-                            Fluttertoast.showToast(
-                                msg:
-                                    "Your trransaction is in process. Please contact AMURoboclub if your status is not marked as successful in 24 hours");
-                          }
-                        },
-                        leading: appMetaData.iconImage(24),
-                        title: Text(appMetaData.upiApplication.appName),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                        ),
-                      );
-                    }).toList());
-        });
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    print("Expernal Wallet" + response.walletName!);
   }
 
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
-    var vpW = getViewportWidth(context);
     String memberName = widget.member.name;
     TextStyle _titlestyle = TextStyle(
         fontWeight: FontWeight.bold,
@@ -155,8 +163,10 @@ class _MemberCardState extends State<MemberCard> {
           trailing: !widget.member.isPaid
               ? ElevatedButton(
                   onPressed: !widget.member.isPaid
-                      ? () {
-                          showUpdateBottomSheet();
+                      ? () async {
+                          // showUpdateBottomSheet();
+                          await generateOrderId();
+                          // openCheckout();
                         }
                       : null,
                   style: ButtonStyle(
