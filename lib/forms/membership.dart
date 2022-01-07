@@ -586,6 +586,7 @@ class _MembershipState extends State<Membership> {
                                   print("saved");
                                   EmailService().sendRegistrationEmail(
                                     recipent: emailController.text,
+                                    payment: false,
                                   );
                                   nameController.clear();
                                   emailController.clear();

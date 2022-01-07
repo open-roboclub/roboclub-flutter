@@ -3,10 +3,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:roboclub_flutter/models/member.dart';
+import 'package:roboclub_flutter/services/email.dart';
 import 'package:roboclub_flutter/services/member.dart';
 import '../helper/dimensions.dart';
 
@@ -39,6 +41,11 @@ class _MemberCardState extends State<MemberCard> {
     _razorpay.clear();
   }
 
+  Future<void> generatePdf()async{
+    var regNo = 'RT';
+    regNo += new Random().nextInt(4).toString();
+    print(regNo);
+  }
   Future<void> generateOrderId() async {
     String recieptId = Random.secure().nextInt(1 << 32).toString();
     print(recieptId);
@@ -107,7 +114,13 @@ class _MemberCardState extends State<MemberCard> {
     Hmac hmac = new Hmac(sha256, utf8.encode(scrtKey));
     var digest = hmac.convert(bytes);
     if (digest.toString() == sig) {
-      MemberService().updatePaymentStatus(widget.member);
+      MemberService().updatePaymentStatus(widget.member).then((value) async{
+        await generatePdf();
+        EmailService().sendRegistrationEmail(
+          recipent: widget.member.email,
+          payment: true,
+        );
+      });
     }
     print("Success" + response.paymentId!);
   }
@@ -140,14 +153,6 @@ class _MemberCardState extends State<MemberCard> {
           ),
           tileColor: Colors.white,
           contentPadding: EdgeInsets.all(10),
-          // leading: CircleAvatar(
-          //   radius: vpH * 0.037,
-          //   onBackgroundImageError: (exception, stackTrace) {
-          //     print("Network Img Exception");
-          //     print(exception);
-          //   },
-          //   backgroundColor: Colors.black,
-          // ),
           title: Text(
             memberName,
             style: _titlestyle,

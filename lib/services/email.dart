@@ -1,26 +1,28 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'dart:async';
-
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 
 class EmailService {
-  String apiKey = '';
-  String emailText = '';
-  Future<void> sendRegistrationEmail({required String recipent}) async {
-    apiKey = await Remoteconfig().sendGridApiFetch();
-    emailText = await Remoteconfig().fetchRegEmailTemplate();
+  String apiKey='';
+  String regEmailText ='';
+  String payEmailText ='';
+  Future<void> sendRegistrationEmail({required String recipent, required bool payment}) async {
+
+    apiKey= await Remoteconfig().SendGridApiFetch();
+    regEmailText = await Remoteconfig().fetchRegEmailTemplate();
+    payEmailText = await Remoteconfig().fetchPaymentConfEmailTemplate();
 
     print(recipent);
     final mailer = Mailer(apiKey);
     final toAddress = Address(recipent);
-    final fromAddress = Address('gargdhruv732@gmail.com');
-    final content = Content('text/html', emailText);
-    final subject = 'Membership form submitted successfully!';
+    final fromAddress = Address('amuroboclub@gmail.com');
+    final content = payment ? Content('text/html', payEmailText) :Content('text/html', regEmailText);
+    final subject = payment? 'AMURoboclub Membership confirmation' : 'Membership form submitted successfully!';
     final personalization = Personalization([toAddress]);
+    final Attachment attachment = ;
     final email =
-        Email([personalization], fromAddress, subject, content: [content]);
+        Email([personalization], fromAddress, subject, content: [content], attachments: [attachment]);
     mailer.send(email).then((result) {
       // ...
       print(result.asValue);
