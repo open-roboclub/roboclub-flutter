@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
+import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/models/event.dart';
@@ -452,19 +453,19 @@ class _EventScreenState extends State<EventScreen> {
             ? (_user.isAdmin
                 ? FloatingActionButton(
                     onPressed: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (BuildContext context) {
-                      //       return EventForm();
-                      //     },
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return EventForm();
+                          },
+                        ),
+                      );
                     },
                     child: Icon(Icons.add),
                   )
                 : null)
             : null,
-        bottomSheet: Text(""),
+        // bottomSheet: Text(""),
       ),
     );
   }
