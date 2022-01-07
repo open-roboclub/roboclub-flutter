@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:roboclub_flutter/helper/pdf_manager.dart';
 import 'package:roboclub_flutter/models/member.dart';
 import 'package:roboclub_flutter/services/email.dart';
 import 'package:roboclub_flutter/services/member.dart';
@@ -25,6 +27,7 @@ class _MemberCardState extends State<MemberCard> {
   Razorpay _razorpay = Razorpay();
   String key = "";
   String scrtKey = "";
+  File? pdf;
 
   @override
   void initState() {
@@ -42,9 +45,12 @@ class _MemberCardState extends State<MemberCard> {
   }
 
   Future<void> generatePdf()async{
+
     var regNo = 'RT';
     regNo += new Random().nextInt(4).toString();
     print(regNo);
+    Uint8List? fileBytes = await PdfManager().createRegSlip(widget.member, regNo);
+    pdf = File.fromRawPath(fileBytes!);
   }
   Future<void> generateOrderId() async {
     String recieptId = Random.secure().nextInt(1 << 32).toString();
@@ -119,6 +125,7 @@ class _MemberCardState extends State<MemberCard> {
         EmailService().sendRegistrationEmail(
           recipent: widget.member.email,
           payment: true,
+          pdf: pdf,
         );
       });
     }

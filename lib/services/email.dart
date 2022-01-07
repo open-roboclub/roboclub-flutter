@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
@@ -7,7 +8,7 @@ class EmailService {
   String apiKey='';
   String regEmailText ='';
   String payEmailText ='';
-  Future<void> sendRegistrationEmail({required String recipent, required bool payment}) async {
+  Future<void> sendRegistrationEmail({required String recipent, required bool payment, File? pdf}) async {
 
     apiKey= await Remoteconfig().SendGridApiFetch();
     regEmailText = await Remoteconfig().fetchRegEmailTemplate();
@@ -20,7 +21,7 @@ class EmailService {
     final content = payment ? Content('text/html', payEmailText) :Content('text/html', regEmailText);
     final subject = payment? 'AMURoboclub Membership confirmation' : 'Membership form submitted successfully!';
     final personalization = Personalization([toAddress]);
-    final Attachment attachment = ;
+    final Attachment attachment = Attachment(pdf!.readAsStringSync(),'attachment');
     final email =
         Email([personalization], fromAddress, subject, content: [content], attachments: [attachment]);
     mailer.send(email).then((result) {
