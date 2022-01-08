@@ -50,7 +50,7 @@ class _MemberCardState extends State<MemberCard> {
     regNo += new Random().nextInt(4).toString();
     print(regNo);
     Uint8List? fileBytes = await PdfManager().createRegSlip(widget.member, regNo);
-    pdf = File.fromRawPath(fileBytes!);
+    pdf = File.fromRawPath(fileBytes);
   }
   Future<void> generateOrderId() async {
     String recieptId = Random.secure().nextInt(1 << 32).toString();
