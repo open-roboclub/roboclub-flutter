@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:roboclub_flutter/models/member.dart';
 import 'package:roboclub_flutter/services/member.dart';
 import '../helper/dimensions.dart';
+import 'package:string_encryption/string_encryption.dart';
 
 class MemberCard extends StatefulWidget {
   final Member member;
@@ -21,16 +24,36 @@ class MemberCard extends StatefulWidget {
 
 class _MemberCardState extends State<MemberCard> {
   Razorpay _razorpay = Razorpay();
-  String key = "";
-  String scrtKey = "";
+  String key = dotenv.env['Razorpay_key'] ?? "";
+  String scrtKey = dotenv.env['Razor_Pay_key_secret'] ?? "";
+  final cryptor = StringEncryption();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
+    super.initState();
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    super.initState();
+
+    initEncryption();
+  }
+
+  void initEncryption() async {
+    _firestore
+        .collection("/keys")
+        .doc("razorpayKey")
+        .get()
+        .then((fcmKeySnap) async {
+      String password = fcmKeySnap.get('password');
+      String salt = fcmKeySnap.get('salt');
+      print(scrtKey);
+      String? encrptyKey =
+          await cryptor.generateKeyFromPassword(password, salt);
+      scrtKey = await cryptor.decrypt(scrtKey, encrptyKey!) ?? "";
+      print("decrypted $scrtKey");
+    });
   }
 
   @override
@@ -41,6 +64,7 @@ class _MemberCardState extends State<MemberCard> {
 
   Future<void> generateOrderId() async {
     String recieptId = Random.secure().nextInt(1 << 32).toString();
+
     print(recieptId);
     final client = HttpClient();
     final request =
@@ -62,10 +86,19 @@ class _MemberCardState extends State<MemberCard> {
         'amount': 1 * 100,
         "currency": "INR",
         'name': 'AMURoboclub',
-        'description': 'Mvggfgfvf',
-        'order_id': orderId, // Generate order_id using Orders API
+        'description': 'Membership amount',
+        'order_id': orderId,
+        // 'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
+        "method": {
+          "netbanking": false,
+          "card": false,
+          "upi": true,
+          "wallet": false,
+        }, // Generate order_id using Orders API
         'timeout': 300,
       };
+      // log.call(checkoutOptions);
+      // debugPrint(checkoutOptions.toString());
       try {
         _razorpay.open(checkoutOptions);
       } catch (e) {
@@ -74,40 +107,42 @@ class _MemberCardState extends State<MemberCard> {
     });
   }
 
-  void openCheckout() async {
-    var options = {
-      'key': key,
-      'amount': 15000,
-      'name': 'AMURoboclub',
-      'order_id': "order_id",
-      'description': 'AMURoboclub Membership Payment',
-      'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
-      "method": {
-        "netbanking": false,
-        "card": false,
-        "upi": true,
-        "wallet": false,
-      },
-    };
+  // void openCheckout() async {
+  //   var options = {
+  //     'key': key,
+  //     'amount': 15000,
+  //     'name': 'AMURoboclub',
+  //     'order_id': "order_id",
+  //     'description': 'AMURoboclub Membership Payment',
+  //     'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
+  //     "method": {
+  //       "netbanking": false,
+  //       "card": false,
+  //       "upi": true,
+  //       "wallet": false,
+  //     },
+  //   };
 
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
+  //   try {
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
+  // }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print("Payment Status Updated ");
-    Fluttertoast.showToast(msg: "Payment Completed Successfully");
     String sig = response.signature!;
-    print(response.orderId);
     var bytes = utf8.encode(response.orderId! + "|" + response.paymentId!);
-    // var digest = sha256.convert(bytes);
+
     Hmac hmac = new Hmac(sha256, utf8.encode(scrtKey));
     var digest = hmac.convert(bytes);
     if (digest.toString() == sig) {
+      print("Payment Status Updated ");
+      Fluttertoast.showToast(msg: "Payment Completed Successfully");
       MemberService().updatePaymentStatus(widget.member);
+      setState(() {});
+    } else {
+      Fluttertoast.showToast(msg: "Payment not successful");
     }
     print("Success" + response.paymentId!);
   }
