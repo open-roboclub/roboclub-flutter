@@ -62,6 +62,6 @@ class MemberService {
     await _firestore
         .collection("/registeredMembers")
         .doc(memberData.email)
-        .update({"isPaid": false});
+        .update({"isPaid": true});
   }
 }

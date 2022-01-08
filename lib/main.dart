@@ -13,7 +13,7 @@ import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/screens/onboarding_screen.dart';
 import 'package:roboclub_flutter/services/auth.dart';
-import 'package:roboclub_flutter/services/notification.dart';
+// import 'package:roboclub_flutter/services/notification.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
