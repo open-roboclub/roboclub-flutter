@@ -61,6 +61,7 @@ dependencies:
   razorpay_flutter: ^1.2.7
   crypto: ^3.0.1
   pdf: ^3.6.5
+  path_provider: ^2.0.8
 
 
 dev_dependencies:

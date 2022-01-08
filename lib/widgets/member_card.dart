@@ -4,7 +4,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -27,6 +26,7 @@ class _MemberCardState extends State<MemberCard> {
   Razorpay _razorpay = Razorpay();
   String key = "";
   String scrtKey = "";
+  Uint8List? fileBytes;
   File? pdf;
 
   @override
@@ -44,14 +44,13 @@ class _MemberCardState extends State<MemberCard> {
     _razorpay.clear();
   }
 
-  Future<void> generatePdf()async{
-
+  Future<void> generatePdf() async {
     var regNo = 'RT';
-    regNo += new Random().nextInt(4).toString();
+    regNo += new Random.secure().nextInt(1 << 6).toString();
     print(regNo);
-    Uint8List? fileBytes = await PdfManager().createRegSlip(widget.member, regNo);
-    pdf = File.fromRawPath(fileBytes!);
+    pdf = await PdfManager().createRegSlip(widget.member, regNo);
   }
+
   Future<void> generateOrderId() async {
     String recieptId = Random.secure().nextInt(1 << 32).toString();
     print(recieptId);
@@ -111,16 +110,15 @@ class _MemberCardState extends State<MemberCard> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print("Payment Status Updated ");
-    Fluttertoast.showToast(msg: "Payment Completed Successfully");
     String sig = response.signature!;
     print(response.orderId);
     var bytes = utf8.encode(response.orderId! + "|" + response.paymentId!);
-    // var digest = sha256.convert(bytes);
     Hmac hmac = new Hmac(sha256, utf8.encode(scrtKey));
     var digest = hmac.convert(bytes);
     if (digest.toString() == sig) {
-      MemberService().updatePaymentStatus(widget.member).then((value) async{
+      MemberService().updatePaymentStatus(widget.member).then((value) async {
+        print("Payment Status Updated ");
+        Fluttertoast.showToast(msg: "Payment Completed Successfully");
         await generatePdf();
         EmailService().sendRegistrationEmail(
           recipent: widget.member.email,
@@ -176,9 +174,7 @@ class _MemberCardState extends State<MemberCard> {
               ? ElevatedButton(
                   onPressed: !widget.member.isPaid
                       ? () async {
-                          // showUpdateBottomSheet();
                           await generateOrderId();
-                          // openCheckout();
                         }
                       : null,
                   style: ButtonStyle(
