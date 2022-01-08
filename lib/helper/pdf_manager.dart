@@ -1,12 +1,109 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pwidget;
+import 'package:pdf/widgets.dart';
 import 'package:roboclub_flutter/models/member.dart';
 
 class PdfManager {
-  Future<Uint8List> createRegSlip(Member member, String regNo) async {
+  Widget getText(
+    String text, {
+    double fontSize = 15,
+    FontWeight fontWeight = FontWeight.normal,
+    TextDecoration decoration = TextDecoration.none,
+  }) {
+    return Text(
+      text,
+      style: TextStyle(
+        decoration: decoration,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+      ),
+    );
+  }
+
+  Widget getFieldVal(String fieldVal) {
+    return Expanded(
+      child: Column(
+        children: [
+          getText(fieldVal),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: PdfColors.black,
+                  width: 1,
+                ),
+              ),
+            ),
+            height: 5,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getFieldRow(
+    String fieldName1,
+    String fieldVal1,
+    String fieldName2,
+    String fieldVal2,
+  ) {
+    return Row(
+      children: [
+        getText(
+          fieldName1,
+          fontWeight: FontWeight.bold,
+        ),
+        getFieldVal(fieldVal1),
+        SizedBox(width: 10),
+        getText(
+          fieldName2,
+          fontWeight: FontWeight.bold,
+        ),
+        getFieldVal(fieldVal2),
+      ],
+    );
+  }
+
+  Widget getSignView(Uint8List image, String name) {
+    return Column(
+      children: [
+        Image(
+          MemoryImage(image),
+          height: 45,
+          width: 90,
+          fit: BoxFit.fill,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: PdfColors.black,
+                width: 2,
+              ),
+            ),
+          ),
+          height: 10,
+          width: 100,
+        ),
+        SizedBox(height: 10),
+        getText(
+          name,
+          fontWeight: FontWeight.bold,
+        ),
+        getText(
+          "Co-ordinator, AMURoboclub",
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
+      ],
+    );
+  }
+
+  Future<File> createRegSlip(Member member, String regNo) async {
     final logoImage = (await rootBundle.load("assets/img/amuroboclubLogo.png"))
         .buffer
         .asUint8List();
@@ -17,280 +114,110 @@ class PdfManager {
         .buffer
         .asUint8List();
 
-    final pdf = pwidget.Document();
+    final pdf = Document();
     pdf.addPage(
-      pwidget.MultiPage(
+      MultiPage(
         pageFormat: PdfPageFormat.a4,
-        build: (pwidget.Context context) => [
-          pwidget.Column(
+        build: (Context context) => [
+          Column(
             children: [
-              pwidget.Container(
-                padding: pwidget.EdgeInsets.symmetric(horizontal: 20),
-                alignment: pwidget.Alignment.center,
-                decoration: pwidget.BoxDecoration(
-                  border: pwidget.Border.all(
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(
                     color: PdfColors.black,
                     width: 2,
                   ),
                 ),
-                child: pwidget.Column(
+                child: Column(
                   children: [
-                    pwidget.Image(
-                      pwidget.MemoryImage(logoImage),
+                    Image(
+                      MemoryImage(logoImage),
                       height: 45,
                       width: 350,
-                      fit: pwidget.BoxFit.fill,
+                      fit: BoxFit.fill,
                     ),
-                    pwidget.SizedBox(height: 20),
-                    pwidget.Text(
+                    SizedBox(height: 20),
+                    getText(
                       "Registration Slip",
-                      style: pwidget.TextStyle(
-                        decoration: pwidget.TextDecoration.underline,
-                        fontSize: 15,
-                        fontWeight: pwidget.FontWeight.bold,
-                      ),
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
                     ),
-                    pwidget.SizedBox(height: 5),
-                    pwidget.Text(
+                    SizedBox(height: 5),
+                    getText(
                       "(Session 2021 - 2022)",
-                      style: pwidget.TextStyle(
-                        fontSize: 13,
-                      ),
+                      fontSize: 13,
                     ),
-                    pwidget.SizedBox(height: 20),
-                    pwidget.Row(
-                      mainAxisAlignment: pwidget.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pwidget.Text(
-                          "Name: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
-                        ),
-                        pwidget.Text(
-                          member.name,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
-                        pwidget.SizedBox(width: 10),
-                        pwidget.Text(
-                          "Course: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
-                        ),
-                        pwidget.Text(
-                          member.course,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 20),
+                    getFieldRow(
+                      "Name: ",
+                      member.name,
+                      "Course: ",
+                      member.course,
                     ),
-                    pwidget.SizedBox(height: 10),
-                    pwidget.Row(
-                      mainAxisAlignment: pwidget.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pwidget.Text(
-                          "Enroll No: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
-                        ),
-                        pwidget.Text(
-                          member.enrollNo,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
-                        pwidget.SizedBox(width: 10),
-                        pwidget.Text(
-                          "Mobile No.: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
-                        ),
-                        pwidget.Text(
-                          member.mobileNo,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 10),
+                    getFieldRow(
+                      "Enroll No.: ",
+                      member.enrollNo,
+                      "Mobile No.: ",
+                      member.mobileNo,
                     ),
-                    pwidget.SizedBox(height: 10),
-                    pwidget.Row(
-                      mainAxisAlignment: pwidget.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pwidget.Text(
-                          "Faculty No.: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
-                        ),
-                        pwidget.Text(
-                          member.facultyNo,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
-                        pwidget.SizedBox(width: 10),
-                        pwidget.Text(
-                          "Registration No.: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
-                        ),
-                        pwidget.Text(
-                          regNo,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 10),
+                    getFieldRow(
+                      "Faculty No.: ",
+                      member.facultyNo,
+                      "Registration No.: ",
+                      regNo,
                     ),
-                    pwidget.SizedBox(height: 10),
-                    pwidget.Row(
+                    SizedBox(height: 10),
+                    Row(
                       children: [
-                        pwidget.Text(
+                        getText(
                           "Email: ",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                            fontWeight: pwidget.FontWeight.bold,
-                          ),
+                          fontWeight: FontWeight.bold,
                         ),
-                        pwidget.Text(
-                          member.email,
-                          style: pwidget.TextStyle(
-                            decoration: pwidget.TextDecoration.underline,
-                            fontSize: 15,
-                          ),
-                        ),
+                        getFieldVal(member.email),
                       ],
                     ),
-                    pwidget.SizedBox(height: 10),
-                    pwidget.Column(
-                      crossAxisAlignment: pwidget.CrossAxisAlignment.start,
+                    SizedBox(height: 10),
+                    Row(
                       children: [
-                        pwidget.Text(
-                          "Total Fees Paid: Rs. 150",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        pwidget.Text(
-                          "Registration Validity: Session 2021-22",
-                          style: pwidget.TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                    pwidget.Row(
-                      mainAxisAlignment: pwidget.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pwidget.Column(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            pwidget.Image(
-                              pwidget.MemoryImage(priyankaSign),
-                              height: 45,
-                              width: 90,
-                              fit: pwidget.BoxFit.fill,
-                            ),
-                            pwidget.Container(
-                              decoration: pwidget.BoxDecoration(
-                                border: pwidget.Border(
-                                  bottom: pwidget.BorderSide(
-                                      color: PdfColors.black, width: 2),
-                                ),
-                              ),
-                              height: 10,
-                              width: 100,
-                            ),
-                            pwidget.SizedBox(height: 10),
-                            pwidget.Text(
-                              "Priyanka Gupta",
-                              style: pwidget.TextStyle(
-                                fontSize: 15,
-                                fontWeight: pwidget.FontWeight.bold,
-                              ),
-                            ),
-                            pwidget.Text(
-                              "Co-ordinator, AMURoboclub",
-                              style: pwidget.TextStyle(
-                                fontSize: 12,
-                                fontWeight: pwidget.FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        pwidget.SizedBox(width: 10),
-                        pwidget.Column(
-                          children: [
-                            pwidget.Image(
-                              pwidget.MemoryImage(rishabSign),
-                              height: 55,
-                              width: 90,
-                              fit: pwidget.BoxFit.fill,
-                            ),
-                            pwidget.Container(
-                              decoration: pwidget.BoxDecoration(
-                                border: pwidget.Border(
-                                  bottom: pwidget.BorderSide(
-                                      color: PdfColors.black, width: 2),
-                                ),
-                              ),
-                              height: 10,
-                              width: 100,
-                            ),
-                            pwidget.SizedBox(height: 10),
-                            pwidget.Text(
-                              "Rishab Sharma",
-                              style: pwidget.TextStyle(
-                                fontSize: 15,
-                                fontWeight: pwidget.FontWeight.bold,
-                              ),
-                            ),
-                            pwidget.Text(
-                              "Co-ordinator, AMURoboclub",
-                              style: pwidget.TextStyle(
-                                fontSize: 12,
-                                fontWeight: pwidget.FontWeight.bold,
-                              ),
-                            ),
+                            getText("Total Fees Paid: Rs. 150"),
+                            getText("Registration Validity: Session 2021-22"),
                           ],
                         ),
                       ],
                     ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        getSignView(priyankaSign, "Priyanka Gupta"),
+                        SizedBox(width: 10),
+                        getSignView(rishabSign, "Rishab Sharma"),
+                      ],
+                    ),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
-              pwidget.Container(
-                alignment: pwidget.Alignment.center,
-                padding: pwidget.EdgeInsets.all(10),
-                decoration: pwidget.BoxDecoration(
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
                   color: PdfColors.blue,
-                  border: pwidget.Border.all(
+                  border: Border.all(
                     color: PdfColors.black,
                     width: 2,
                   ),
                 ),
-                child: pwidget.Text(
+                child: Text(
                   "For queries contact: amuroboclub@gmail.com",
-                  style: pwidget.TextStyle(
+                  style: TextStyle(
                     color: PdfColors.white,
                     fontSize: 15,
                   ),
@@ -301,7 +228,10 @@ class PdfManager {
         ],
       ),
     );
-    Uint8List fileBytes = await pdf.save();
-    return fileBytes;
+    var path = (await getApplicationDocumentsDirectory()).path;
+    final fileName = '$path/temp.pdf';
+    final File file = File(fileName);
+    await file.writeAsBytes(await pdf.save(), flush: true);
+    return file;
   }
 }
