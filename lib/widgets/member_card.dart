@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+// import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:roboclub_flutter/helper/pdf_manager.dart';
 import 'package:roboclub_flutter/models/member.dart';
+import 'package:roboclub_flutter/services/email.dart';
 import 'package:roboclub_flutter/services/member.dart';
 import '../helper/dimensions.dart';
 import 'package:string_encryption/string_encryption.dart';
@@ -28,6 +32,7 @@ class _MemberCardState extends State<MemberCard> {
   String scrtKey = dotenv.env['Razor_Pay_key_secret'] ?? "";
   final cryptor = StringEncryption();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  File? pdf;
 
   @override
   void initState() {
@@ -60,6 +65,15 @@ class _MemberCardState extends State<MemberCard> {
   void dispose() {
     super.dispose();
     _razorpay.clear();
+  }
+
+  Future<void> generatePdf() async {
+    var regNo = 'RT';
+    regNo += new Random().nextInt(4).toString();
+    print(regNo);
+    Uint8List? fileBytes =
+        await PdfManager().createRegSlip(widget.member, regNo);
+    pdf = File.fromRawPath(fileBytes);
   }
 
   Future<void> generateOrderId() async {
@@ -139,7 +153,14 @@ class _MemberCardState extends State<MemberCard> {
     if (digest.toString() == sig) {
       print("Payment Status Updated ");
       Fluttertoast.showToast(msg: "Payment Completed Successfully");
-      MemberService().updatePaymentStatus(widget.member);
+      MemberService().updatePaymentStatus(widget.member).then((value) async {
+        await generatePdf();
+        EmailService().sendRegistrationEmail(
+          recipent: widget.member.email,
+          payment: true,
+          pdf: pdf,
+        );
+      });
       setState(() {});
     } else {
       Fluttertoast.showToast(msg: "Payment not successful");
@@ -175,14 +196,6 @@ class _MemberCardState extends State<MemberCard> {
           ),
           tileColor: Colors.white,
           contentPadding: EdgeInsets.all(10),
-          // leading: CircleAvatar(
-          //   radius: vpH * 0.037,
-          //   onBackgroundImageError: (exception, stackTrace) {
-          //     print("Network Img Exception");
-          //     print(exception);
-          //   },
-          //   backgroundColor: Colors.black,
-          // ),
           title: Text(
             memberName,
             style: _titlestyle,

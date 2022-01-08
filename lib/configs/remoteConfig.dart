@@ -22,11 +22,17 @@ class Remoteconfig {
     String _content = remoteConfig.getString('registrationEmailContent');
     return _content;
   }
+    Future<String> fetchPaymentConfEmailTemplate() async {
+      
+      String _content  = remoteConfig.getString('paymentConfirmationEmailContent');
+      return _content;
+    }
 
-  Future<String> sendGridApiFetch() async {
-    String _content = remoteConfig.getString('SendGridApi');
-    return _content;
-  }
+    Future<String> SendGridApiFetch() async {
+      
+      String _content  = remoteConfig.getString('SendGridApi');
+      return _content;
+    }
 
   Future<bool> isUpdateRequired() async {
     int latestVersion = remoteConfig.getInt('updateVersion');
