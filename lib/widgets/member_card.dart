@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
-// import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -69,11 +68,9 @@ class _MemberCardState extends State<MemberCard> {
 
   Future<void> generatePdf() async {
     var regNo = 'RT';
-    regNo += new Random().nextInt(4).toString();
+    regNo += new Random.secure().nextInt(1 << 6).toString();
     print(regNo);
-    Uint8List? fileBytes =
-        await PdfManager().createRegSlip(widget.member, regNo);
-    pdf = File.fromRawPath(fileBytes);
+    pdf = await PdfManager().createRegSlip(widget.member, regNo);
   }
 
   Future<void> generateOrderId() async {
@@ -212,9 +209,7 @@ class _MemberCardState extends State<MemberCard> {
               ? ElevatedButton(
                   onPressed: !widget.member.isPaid
                       ? () async {
-                          // showUpdateBottomSheet();
                           await generateOrderId();
-                          // openCheckout();
                         }
                       : null,
                   style: ButtonStyle(
