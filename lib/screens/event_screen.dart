@@ -312,7 +312,11 @@ class _EventScreenState extends State<EventScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: appdrawer(context, page: "Events"),
-        appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: true, isNotification: true, scaffoldKey: _scaffoldKey),
+        appBar: appBar(context,
+            strTitle: "AMURoboclub",
+            isDrawer: true,
+            isNotification: true,
+            scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: isLoading
@@ -329,11 +333,16 @@ class _EventScreenState extends State<EventScreen> {
                     // ),
                     showBanner
                         ? SkeletonLoader(
+                            baseColor: Colors.black,
                             direction: SkeletonDirection.rtl,
-                            highlightColor: Colors.black,
+                            highlightColor: Colors.grey.shade300,
                             builder: Container(
                               clipBehavior: Clip.hardEdge,
-                              margin: EdgeInsets.only(left: vpW * 0.04, right: vpW * 0.04, top: vpH * 0.02, bottom: vpH * 0.01),
+                              margin: EdgeInsets.only(
+                                  left: vpW * 0.04,
+                                  right: vpW * 0.04,
+                                  top: vpH * 0.02,
+                                  bottom: vpH * 0.01),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -349,11 +358,13 @@ class _EventScreenState extends State<EventScreen> {
                                   ),
                                 ),
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
                                     return Membership();
                                   }));
                                 },
-                                leading: ImageIcon(AssetImage('assets/img/NoPath.png')),
+                                leading: ImageIcon(
+                                    AssetImage('assets/img/NoPath.png')),
                               ),
                             ),
                           )

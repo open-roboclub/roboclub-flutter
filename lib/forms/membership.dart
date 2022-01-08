@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/email.dart';
@@ -78,11 +79,12 @@ class _MembershipState extends State<Membership> {
 
   // List of courses in our dropdown menu
   var courses = [
-    'Btech',
-    'BSC',
+    // "Enter Course Name",
+    'B.Tech',
+    'B.Sc.',
     'BCA',
-    'MSC',
-    'Mtech',
+    'M.Sc.',
+    'M.Tech',
     'Polytechnic',
   ];
   var years = [
@@ -95,6 +97,7 @@ class _MembershipState extends State<Membership> {
 
   @override
   void initState() {
+    // _course = "Enter Course Name";
     super.initState();
     _loading = false;
   }
@@ -261,8 +264,10 @@ class _MembershipState extends State<Membership> {
                       textCapitalization: TextCapitalization.words,
                       controller: emailController,
                       onTap: () {
-                        getEmail().then((value) =>
-                            emailController.text = value == null ? "" : value);
+                        getEmail().then((value) {
+                          emailController.text = value == null ? "" : value;
+                          googleSignIn.signOut();
+                        });
                       },
                       style: TextStyle(
                         color: Colors.black,
@@ -327,13 +332,24 @@ class _MembershipState extends State<Membership> {
                             Padding(
                               padding: formPadding,
                               child: FormField<String>(
+                                // key:_formKey,
+
                                 builder: (FormFieldState<String> state) {
                                   return InputDecorator(
                                     decoration: formField.copyWith(
+                                        hintStyle:
+                                            TextStyle(color: Colors.black),
                                         hintText: "Enter Course Name"),
                                     isEmpty: courses == [],
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<String>(
+                                        hint: Text(
+                                          "Course name",
+                                          style: TextStyle(fontSize: 12),
+                                          // maxLines: 1,
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         value: _course,
                                         isDense: true,
                                         onChanged: (String? newValue) {
@@ -378,6 +394,12 @@ class _MembershipState extends State<Membership> {
                                     isEmpty: years == [],
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<String>(
+                                        hint: Text(
+                                          "Course year",
+                                          maxLines: 1,
+                                          style: TextStyle(fontSize: 12),
+                                          overflow: TextOverflow.clip,
+                                        ),
                                         value: _yearOfStudy,
                                         isDense: true,
                                         onChanged: (String? newValue) {
@@ -424,7 +446,7 @@ class _MembershipState extends State<Membership> {
                       decoration:
                           formField.copyWith(hintText: "Enter Enrollment No"),
                       validator: (value) {
-                        if (value!.isEmpty || value.length != 6) {
+                        if (value!.isEmpty || value.length < 6) {
                           return 'Please enter valid Enrollment No';
                         }
                         return null;
@@ -482,12 +504,14 @@ class _MembershipState extends State<Membership> {
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.phone,
                       decoration:
                           formField.copyWith(hintText: "Enter Mobile No"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter your mobile number';
+                        } else if (value.length < 10) {
+                          return "Please enter valid mobile number";
                         }
                         return null;
                       },
@@ -546,7 +570,9 @@ class _MembershipState extends State<Membership> {
                               borderRadius: BorderRadius.circular(30.0),
                             ),
                             color: Theme.of(context).primaryColor,
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           ),
                         )
                       : Container(
@@ -558,6 +584,7 @@ class _MembershipState extends State<Membership> {
                               setState(() {
                                 _loading = true;
                               });
+
                               if (!_formKey.currentState!.validate()) {
                                 print("not valid");
                                 setState(() {
@@ -565,6 +592,22 @@ class _MembershipState extends State<Membership> {
                                 });
                                 return null;
                               } else {
+                                if (_course == null || _course!.isEmpty) {
+                                  setState(() {
+                                    _loading = false;
+                                  });
+                                  Fluttertoast.showToast(
+                                      msg: "Enter course name");
+                                  return;
+                                } else if (_yearOfStudy == null ||
+                                    _yearOfStudy!.isEmpty) {
+                                  setState(() {
+                                    _loading = false;
+                                  });
+                                  Fluttertoast.showToast(
+                                      msg: "Enter course year");
+                                }
+
                                 if (filePicked) {
                                   await saveImg(
                                     file!.readAsBytesSync(),
@@ -585,9 +628,10 @@ class _MembershipState extends State<Membership> {
                                   );
                                   print("saved");
                                   EmailService().sendRegistrationEmail(
-                                    recipent: emailController.text,
-                                    payment: false,
-                                  );
+                                      recipent: emailController.text,
+                                      payment: false,
+                                      username: "",
+                                      pdf: null);
                                   nameController.clear();
                                   emailController.clear();
                                   enrollController.clear();

@@ -55,6 +55,7 @@ class _MemberCardState extends State<MemberCard> {
       print(scrtKey);
       String? encrptyKey =
           await cryptor.generateKeyFromPassword(password, salt);
+          // encrpy=cryptor.encrypt("", key)
       scrtKey = await cryptor.decrypt(scrtKey, encrptyKey!) ?? "";
       print("decrypted $scrtKey");
     });
@@ -156,9 +157,20 @@ class _MemberCardState extends State<MemberCard> {
           recipent: widget.member.email,
           payment: true,
           pdf: pdf,
+          username: widget.member.name,
         );
       });
-      setState(() {});
+      setState(() {
+        widget.member.isPaid = true;
+      });
+      MemberService().postPaymentDetails({
+        "orderId": response.orderId,
+        "paymentId": response.paymentId,
+        "name": widget.member.name,
+        "email": widget.member.email,
+        "facultyNo": widget.member.facultyNo,
+        "mobileNo": widget.member.mobileNo
+      });
     } else {
       Fluttertoast.showToast(msg: "Payment not successful");
     }

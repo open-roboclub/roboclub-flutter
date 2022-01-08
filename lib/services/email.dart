@@ -11,13 +11,15 @@ class EmailService {
   Future<void> sendRegistrationEmail({
     required String recipent,
     required bool payment,
-    File? pdf,
+    required String username,
+    required File? pdf,
   }) async {
     apiKey = await Remoteconfig().SendGridApiFetch();
     regEmailText = await Remoteconfig().fetchRegEmailTemplate();
     payEmailText = await Remoteconfig().fetchPaymentConfEmailTemplate();
 
-    String fileAttachment = base64Encode(pdf!.readAsBytesSync());
+    String fileAttachment =
+        pdf == null ? "" : base64Encode(pdf.readAsBytesSync());
     print(recipent);
     final mailer = Mailer(apiKey);
     final toAddress = Address(recipent);
@@ -30,17 +32,20 @@ class EmailService {
         : 'Membership form submitted successfully!';
     final personalization = Personalization([toAddress]);
 
-    final Attachment attachment = Attachment(
-      fileAttachment,
-      'temp.pdf',
-    );
+    Attachment? attachment = fileAttachment == ""
+        ? null
+        : Attachment(
+            fileAttachment,
+            username + '_membership.pdf',
+          );
     final email = Email(
       [personalization],
       fromAddress,
       subject,
       content: [content],
-      attachments: [attachment],
+      attachments: attachment == null ? null : [attachment],
     );
+    print(email);
     mailer.send(email).then((result) {
       // ...
       print(result.asValue);

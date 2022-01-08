@@ -64,4 +64,8 @@ class MemberService {
         .doc(memberData.email)
         .update({"isPaid": true});
   }
+
+  Future<void> postPaymentDetails(Map<String, dynamic> memberData) async {
+    await _firestore.collection("/payments").add(memberData);
+  }
 }
