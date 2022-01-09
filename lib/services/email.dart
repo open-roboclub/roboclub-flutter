@@ -14,7 +14,7 @@ class EmailService {
     required String username,
     required File? pdf,
   }) async {
-    apiKey = await Remoteconfig().SendGridApiFetch();
+    apiKey = await Remoteconfig().sendGridApiFetch();
     regEmailText = await Remoteconfig().fetchRegEmailTemplate();
     payEmailText = await Remoteconfig().fetchPaymentConfEmailTemplate();
 

@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,7 @@ import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -50,8 +52,9 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     Remoteconfig().isUpdateRequired().then((value) {
       setState(() {
+        // print()
         isUpdateRequired = value;
-        if (isUpdateRequired) showUpdateBottomSheet();
+        if (isUpdateRequired) _showVersionDialog();
       });
     });
     Remoteconfig().showHomeMmebershipOpen().then((value) {
@@ -59,6 +62,8 @@ class _EventScreenState extends State<EventScreen> {
         showBanner = value;
       });
     });
+
+    // checkForUpdate();
 
     EventService().fetchEvents().then((value) {
       splitEventLists(value);
@@ -69,6 +74,8 @@ class _EventScreenState extends State<EventScreen> {
     });
     super.initState();
   }
+
+  
 
   void initNotifications(BuildContext context) async {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
@@ -256,49 +263,34 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
-  void showUpdateBottomSheet() {
-    print("Hrs");
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
-        ),
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Time to Update!",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
+  _showVersionDialog() async {
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        String title = "New Update Available";
+        String message =
+            "There is a newer version of app available please update it now.";
+        String btnLabel = "Update Now";
+        String btnLabelCancel = "Later";
+        return new CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(btnLabel),
+              onPressed: () => launch(
+                'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
               ),
-              SizedBox(
-                height: 50,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  launch(
-                    'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
-                  );
-                },
-                child: Text("Update"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("Not now"),
-              ),
-            ],
-          );
-        });
+            ),
+            FlatButton(
+              child: Text(btnLabelCancel),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -352,7 +344,7 @@ class _EventScreenState extends State<EventScreen> {
                                 ),
                                 tileColor: Colors.orange[400],
                                 title: Text(
-                                  'Applications Open for Memebership',
+                                  'Applications Open for Membership',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
