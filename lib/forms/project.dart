@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:roboclub_flutter/models/project.dart';
 import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
@@ -723,7 +724,7 @@ class _ProjectFormState extends State<ProjectForm> {
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1990),
-                          lastDate: DateTime(2030),
+                          lastDate: DateTime.now(),
                         );
                         if (dateTime != null) {
                           setState(() {
@@ -867,6 +868,8 @@ class _ProjectFormState extends State<ProjectForm> {
                                           'projects/$_projectName/$fileName');
                                 } else {
                                   if (!widget.editMode) {
+                                    Fluttertoast.showToast(
+                                        msg: "No image is picked");
                                     print(
                                         "Validation Error: No image is picked");
                                     _teamMembers = [];
