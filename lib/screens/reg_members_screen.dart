@@ -36,6 +36,10 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
   String scrtKey = dotenv.env['Razor_Pay_key_secret'] ?? "";
   final cryptor = StringEncryption();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  TextEditingController searchController = TextEditingController();
+  FocusNode searchFocNode = FocusNode();
+
+  List<Member> searchResult = [];
 
   bool showButton = false;
   late Member member;
@@ -203,6 +207,21 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
     });
   }
 
+  onSearchTextChanged(String text) async {
+    searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    membersList.forEach((memberDetail) {
+      if (memberDetail.name.toLowerCase().contains(text.toLowerCase()))
+        searchResult.add(memberDetail);
+    });
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -228,22 +247,89 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                         SizedBox(
                           height: vpH * 0.005,
                         ),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Card(
+                            child: TextFormField(
+                              autofocus: false,
+                              controller: searchController,
+                              focusNode: searchFocNode,
+                              onChanged: onSearchTextChanged,
+                              decoration: InputDecoration(
+                                filled: false,
+                                hintText: 'Search by name',
+                                border: InputBorder.none,
+                                suffixIcon: searchFocNode.hasFocus
+                                    ? IconButton(
+                                        onPressed: () {
+                                          searchController.clear();
+                                          onSearchTextChanged('');
+                                          searchFocNode.unfocus();
+                                        },
+                                        icon: Icon(
+                                          Icons.cancel,
+                                        ),
+                                      )
+                                    : null,
+                                prefixIcon: IconButton(
+                                  onPressed: () {
+                                    searchFocNode.requestFocus();
+                                  },
+                                  icon: Icon(
+                                    Icons.search,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         Container(
                           height: vpH * 0.9,
                           width: vpW,
-                          child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: membersList.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              return MemberCard(
-                                member: membersList[index],
-                                createOrderId: generateOrderId,
-                                // showpayment: showButton,
-                              );
-                            },
-                          ),
+                          child: searchController.text.isNotEmpty
+                              ? searchResult.length != 0
+                                  ? new ListView.builder(
+                                      physics: BouncingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: searchResult.length,
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (context, index) {
+                                        return MemberCard(
+                                          member: searchResult[index],
+                                          createOrderId: generateOrderId,
+                                        );
+                                      },
+                                    )
+                                  : Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.search_off_rounded,
+                                            size: 80,
+                                          ),
+                                          Text(
+                                            "No Result Found",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                              : ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: membersList.length,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) {
+                                    return MemberCard(
+                                      member: membersList[index],
+                                      createOrderId: generateOrderId,
+                                    );
+                                  },
+                                ),
                         )
                       ],
                     ),

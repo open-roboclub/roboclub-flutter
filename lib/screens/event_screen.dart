@@ -19,7 +19,7 @@ import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:in_app_update/in_app_update.dart';
+// import 'package:in_app_update/in_app_update.dart';
 
 class EventScreen extends StatefulWidget {
   @override
