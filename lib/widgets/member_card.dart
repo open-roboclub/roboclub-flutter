@@ -21,7 +21,8 @@ class MemberCard extends StatefulWidget {
   final Member member;
   final Function createOrderId;
   // final bool showPayment;
-  const MemberCard({Key? key, required this.member, required this.createOrderId})
+  const MemberCard(
+      {Key? key, required this.member, required this.createOrderId})
       : super(key: key);
 
   @override
@@ -36,28 +37,10 @@ class _MemberCardState extends State<MemberCard> {
   @override
   void initState() {
     super.initState();
-    // _razorpay = Razorpay();
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+ 
   }
 
-  // void initEncryption() async {
-  //   _firestore
-  //       .collection("/keys")
-  //       .doc("razorpayKey")
-  //       .get()
-  //       .then((fcmKeySnap) async {
-  //     String password = fcmKeySnap.get('password');
-  //     String salt = fcmKeySnap.get('salt');
-  //     // print(scrtKey);
-  //     String? encrptyKey =
-  //         await cryptor.generateKeyFromPassword(password, salt);
-  //     // encrpy=cryptor.encrypt("", key)
-  //     scrtKey = await cryptor.decrypt(scrtKey, encrptyKey!) ?? "";
-  //     // print("decrypted $scrtKey");
-  //   });
-  // }
+
 
   @override
   void dispose() {
@@ -65,80 +48,12 @@ class _MemberCardState extends State<MemberCard> {
     // _razorpay.clear();
   }
 
-  // Future<void> generatePdf() async {
-  //   var regNo = 'RT';
-  //   regNo += new Random.secure().nextInt(1 << 6).toString();
-  //   // print(regNo);
-  //   pdf = await PdfManager().createRegSlip(widget.member, regNo);
-  // }
+  
 
-  // Future<void> generateOrderId() async {
-  //   String recieptId = Random.secure().nextInt(1 << 32).toString();
+  
+ 
+ 
 
-  //   print(recieptId);
-  //   final client = HttpClient();
-  //   final request =
-  //       await client.postUrl(Uri.parse('https://api.razorpay.com/v1/orders'));
-  //   request.headers
-  //       .set(HttpHeaders.contentTypeHeader, "application/json; charset=UTF-8");
-  //   String basicAuth = 'Basic ' + base64Encode(utf8.encode('$key:$scrtKey'));
-  //   request.headers.set(HttpHeaders.authorizationHeader, basicAuth);
-  //   request.add(utf8.encode(json.encode(
-  //       {"amount": amount * 100, "currency": "INR", "receipt": recieptId})));
-  //   final response = await request.close();
-  //   response.transform(utf8.decoder).listen((contents) {
-  //     String orderId = contents.split(',')[0].split(":")[1];
-  //     // print(contents);
-  //     orderId = orderId.substring(1, orderId.length - 1);
-  //     // print(orderId);
-  //     Map<String, dynamic> checkoutOptions = {
-  //       'key': key,
-  //       'amount': amount * 100,
-  //       "currency": "INR",
-  //       'name': 'AMURoboclub',
-  //       'description': 'Membership amount',
-  //       'order_id': orderId,
-  //       // 'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
-  //       "method": {
-  //         "netbanking": false,
-  //         "card": false,
-  //         "upi": true,
-  //         "wallet": false,
-  //       }, // Generate order_id using Orders API
-  //       'timeout': 300,
-  //     };
-  //     // log.call(checkoutOptions);
-  //     // debugPrint(checkoutOptions.toString());
-  //     try {
-  //       _razorpay.open(checkoutOptions);
-  //     } catch (e) {
-  //       print(e.toString());
-  //     }
-  //   });
-  // }
-
-  // void openCheckout() async {
-  //   var options = {
-  //     'key': key,
-  //     'amount': 15000,
-  //     'name': 'AMURoboclub',
-  //     'order_id': "order_id",
-  //     'description': 'AMURoboclub Membership Payment',
-  //     'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
-  //     "method": {
-  //       "netbanking": false,
-  //       "card": false,
-  //       "upi": true,
-  //       "wallet": false,
-  //     },
-  //   };
-
-  //   try {
-  //     _razorpay.open(options);
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +109,7 @@ class _MemberCardState extends State<MemberCard> {
                     color: Colors.green,
                   ),
                   label: Text(
-                    "Payed",
+                    "Paid",
                     style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,

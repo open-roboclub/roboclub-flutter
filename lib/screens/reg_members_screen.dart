@@ -76,7 +76,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
 
   Future<void> generateOrderId(Member mem) async {
     member = mem;
-    print(member);
+    // print(member);
     String recieptId = Random.secure().nextInt(1 << 32).toString();
 
     print(recieptId);
@@ -85,8 +85,8 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
         await client.postUrl(Uri.parse('https://api.razorpay.com/v1/orders'));
     request.headers
         .set(HttpHeaders.contentTypeHeader, "application/json; charset=UTF-8");
-    print(key);
-    print(scrtKey);
+    // print(key);
+    // print(scrtKey);
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$key:$scrtKey'));
     request.headers.set(HttpHeaders.authorizationHeader, basicAuth);
     request.add(utf8.encode(json.encode(
@@ -94,9 +94,9 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
     final response = await request.close();
     response.transform(utf8.decoder).listen((contents) {
       String orderId = contents.split(',')[0].split(":")[1];
-      print(contents);
+      // print(contents);
       orderId = orderId.substring(1, orderId.length - 1);
-      print(orderId);
+      // print(orderId);
       Map<String, dynamic> checkoutOptions = {
         'key': key,
         'amount': amount * 100,
@@ -104,7 +104,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
         'name': 'AMURoboclub',
         'description': 'Membership amount',
         'order_id': orderId,
-        // 'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
+        'prefill': {'contact': member.mobileNo, 'email': member.email},
         "method": {
           "netbanking": false,
           "card": false,
@@ -166,7 +166,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
         );
       });
       setState(() {
-        // widget.member.isPaid = true;
+      member.isPaid = true;
       });
       MemberService().postPaymentDetails({
         "orderId": response.orderId,
