@@ -12,6 +12,7 @@ import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
+import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
@@ -74,8 +75,6 @@ class _EventScreenState extends State<EventScreen> {
     });
     super.initState();
   }
-
-  
 
   void initNotifications(BuildContext context) async {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
@@ -342,21 +341,41 @@ class _EventScreenState extends State<EventScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
+                                horizontalTitleGap: 0,
                                 tileColor: Colors.orange[400],
-                                title: Text(
-                                  'Applications Open for Membership',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                title: FittedBox(
+                                  child: Text(
+                                    'Applications Open for Membership',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return Membership();
-                                  }));
+                                onTap: () async {
+                                  var result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return Membership();
+                                      },
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    if (result["success"]) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return RegMembersScreen();
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  }
                                 },
                                 leading: ImageIcon(
-                                    AssetImage('assets/img/NoPath.png')),
+                                  AssetImage('assets/img/NoPath.png'),
+                                ),
                               ),
                             ),
                           )

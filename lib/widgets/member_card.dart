@@ -21,7 +21,8 @@ class MemberCard extends StatefulWidget {
   final Member member;
   final Function createOrderId;
   // final bool showPayment;
-  const MemberCard({Key? key, required this.member, required this.createOrderId})
+  const MemberCard(
+      {Key? key, required this.member, required this.createOrderId})
       : super(key: key);
 
   @override
@@ -166,9 +167,15 @@ class _MemberCardState extends State<MemberCard> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.member.email),
+              Text(
+                widget.member.email.replaceRange(
+                  widget.member.email.indexOf("@") - 5,
+                  widget.member.email.indexOf("@"),
+                  "XXXXX",
+                ),
+              ),
               Text(widget.member.facultyNo + ", " + widget.member.enrollNo),
-              Text(widget.member.mobileNo),
+              Text(widget.member.mobileNo.replaceRange(6, 10, "XXXX")),
             ],
           ),
           trailing: !widget.member.isPaid
