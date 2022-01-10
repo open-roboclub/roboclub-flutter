@@ -76,57 +76,51 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
 
   Future<void> generateOrderId(Member mem) async {
     member = mem;
-    EmailService().sendRegistrationEmail(
-      recipent: member.email,
-      payment: false,
-      pdf: pdf,
-      username: member.name,
-    );
     // print(member);
-    // String recieptId = Random.secure().nextInt(1 << 32).toString();
+    String recieptId = Random.secure().nextInt(1 << 32).toString();
 
-    // print(recieptId);
-    // final client = HttpClient();
-    // final request =
-    //     await client.postUrl(Uri.parse('https://api.razorpay.com/v1/orders'));
-    // request.headers
-    //     .set(HttpHeaders.contentTypeHeader, "application/json; charset=UTF-8");
+    print(recieptId);
+    final client = HttpClient();
+    final request =
+        await client.postUrl(Uri.parse('https://api.razorpay.com/v1/orders'));
+    request.headers
+        .set(HttpHeaders.contentTypeHeader, "application/json; charset=UTF-8");
     // print(key);
     // print(scrtKey);
-    // String basicAuth = 'Basic ' + base64Encode(utf8.encode('$key:$scrtKey'));
-    // request.headers.set(HttpHeaders.authorizationHeader, basicAuth);
-    // request.add(utf8.encode(json.encode(
-    //     {"amount": amount * 100, "currency": "INR", "receipt": recieptId})));
-    // final response = await request.close();
-    // response.transform(utf8.decoder).listen((contents) {
-    //   String orderId = contents.split(',')[0].split(":")[1];
-    //   print(contents);
-    //   orderId = orderId.substring(1, orderId.length - 1);
-    //   print(orderId);
-    //   Map<String, dynamic> checkoutOptions = {
-    //     'key': key,
-    //     'amount': amount * 100,
-    //     "currency": "INR",
-    //     'name': 'AMURoboclub',
-    //     'description': 'Membership amount',
-    //     'order_id': orderId,
-    //     // 'prefill': {'contact': '9634478754', 'email': 'harshtaliwal@gmail.com'},
-    //     "method": {
-    //       "netbanking": false,
-    //       "card": false,
-    //       "upi": true,
-    //       "wallet": false,
-    //     }, // Generate order_id using Orders API
-    //     'timeout': 300,
-    //   };
-    //   // log.call(checkoutOptions);
-    //   // debugPrint(checkoutOptions.toString());
-    //   try {
-    //     _razorpay.open(checkoutOptions);
-    //   } catch (e) {
-    //     print(e.toString());
-    //   }
-    // });
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$key:$scrtKey'));
+    request.headers.set(HttpHeaders.authorizationHeader, basicAuth);
+    request.add(utf8.encode(json.encode(
+        {"amount": amount * 100, "currency": "INR", "receipt": recieptId})));
+    final response = await request.close();
+    response.transform(utf8.decoder).listen((contents) {
+      String orderId = contents.split(',')[0].split(":")[1];
+      // print(contents);
+      orderId = orderId.substring(1, orderId.length - 1);
+      // print(orderId);
+      Map<String, dynamic> checkoutOptions = {
+        'key': key,
+        'amount': amount * 100,
+        "currency": "INR",
+        'name': 'AMURoboclub',
+        'description': 'Membership amount',
+        'order_id': orderId,
+        'prefill': {'contact': member.mobileNo, 'email': member.email},
+        "method": {
+          "netbanking": false,
+          "card": false,
+          "upi": true,
+          "wallet": false,
+        }, // Generate order_id using Orders API
+        'timeout': 300,
+      };
+      // log.call(checkoutOptions);
+      // debugPrint(checkoutOptions.toString());
+      try {
+        _razorpay.open(checkoutOptions);
+      } catch (e) {
+        print(e.toString());
+      }
+    });
   }
 
   void initEncryption() async {
@@ -172,7 +166,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
         );
       });
       setState(() {
-        // widget.member.isPaid = true;
+        member.isPaid = true;
       });
       MemberService().postPaymentDetails({
         "orderId": response.orderId,

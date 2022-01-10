@@ -612,7 +612,7 @@ class _MembershipState extends State<Membership> {
                                 if (filePicked) {
                                   await saveImg(
                                     file!.readAsBytesSync(),
-                                    'registrionMemebers/${nameController.text}_${mobileNoController.text}',
+                                    'registeredMembers/${nameController.text}_${mobileNoController.text}',
                                   );
                                   _formKey.currentState!.save();
                                   members.postMember(

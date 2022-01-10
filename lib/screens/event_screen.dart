@@ -42,6 +42,7 @@ class _EventScreenState extends State<EventScreen> {
   List<Event> upcomingEventsList = [];
   List<Event> pastEventsList = [];
   bool isLoading = true;
+  // bool isUpdateCanceled = true;
   late DateTime parsedDate;
 
   // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
