@@ -166,7 +166,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
         );
       });
       setState(() {
-      member.isPaid = true;
+        member.isPaid = true;
       });
       MemberService().postPaymentDetails({
         "orderId": response.orderId,
@@ -335,7 +335,9 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                     ),
                   ),
             floatingActionButton: showButton
-                ? FloatingActionButton(
+                ? FloatingActionButton.extended(
+                    icon: Icon(Icons.check_circle_rounded),
+                    label: Text("Apply now"),
                     onPressed: () async {
                       var result = await Navigator.of(context).push(
                         MaterialPageRoute(
@@ -359,7 +361,6 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                         }
                       }
                     },
-                    child: Icon(Icons.add),
                   )
                 : null));
   }

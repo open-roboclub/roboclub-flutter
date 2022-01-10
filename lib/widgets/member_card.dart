@@ -1,21 +1,6 @@
-// import 'dart:convert';
-import 'dart:io';
-// import 'dart:math';
-// import 'dart:typed_data';
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:razorpay_flutter/razorpay_flutter.dart';
-// import 'package:roboclub_flutter/configs/remoteConfig.dart';
-// import 'package:roboclub_flutter/helper/pdf_manager.dart';
 import 'package:roboclub_flutter/models/member.dart';
-// import 'package:roboclub_flutter/services/email.dart';
-// import 'package:roboclub_flutter/services/member.dart';
 import '../helper/dimensions.dart';
-// import 'package:string_encryption/string_encryption.dart';
 
 class MemberCard extends StatefulWidget {
   final Member member;
@@ -30,31 +15,6 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
-  // late Razorpay _razorpay;
-
-  File? pdf;
-  // late String amount;
-  @override
-  void initState() {
-    super.initState();
- 
-  }
-
-
-
-  @override
-  void dispose() {
-    super.dispose();
-    // _razorpay.clear();
-  }
-
-  
-
-  
- 
- 
-
-
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -81,9 +41,15 @@ class _MemberCardState extends State<MemberCard> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.member.email),
+              Text(
+                widget.member.email.replaceRange(
+                  widget.member.email.indexOf("@") - 5,
+                  widget.member.email.indexOf("@"),
+                  "XXXXX",
+                ),
+              ),
               Text(widget.member.facultyNo + ", " + widget.member.enrollNo),
-              Text(widget.member.mobileNo),
+              Text(widget.member.mobileNo.replaceRange(6, 10, "XXXX")),
             ],
           ),
           trailing: !widget.member.isPaid

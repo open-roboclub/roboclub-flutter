@@ -49,7 +49,7 @@ Drawer appdrawer(context, {String? page}) {
         {
           return ContributorScreen();
         }
-      case "Registered Members":
+      case "Members":
         {
           return RegMembersScreen();
         }
@@ -163,8 +163,7 @@ Drawer appdrawer(context, {String? page}) {
           _tileBuilder(CustomIcons.events, "Events", page == "Events"),
           _tileBuilder(CustomIcons.projects, "Projects", page == "Projects"),
           _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
-          _tileBuilder(CustomIcons.teams, "Registered Members",
-              page == "Registered Members"),
+          _tileBuilder(Icons.person_pin_rounded, "Members", page == "Members"),
           _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
           _tileBuilder(
               CustomIcons.contribution, "Contributors", page == "Contributors"),

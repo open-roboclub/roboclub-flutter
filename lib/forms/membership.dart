@@ -438,6 +438,7 @@ class _MembershipState extends State<Membership> {
                     child: TextFormField(
                       textCapitalization: TextCapitalization.words,
                       controller: enrollController,
+                      maxLength: 6,
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
@@ -446,7 +447,7 @@ class _MembershipState extends State<Membership> {
                       decoration:
                           formField.copyWith(hintText: "Enter Enrollment No"),
                       validator: (value) {
-                        if (value!.isEmpty || value.length < 6) {
+                        if (value!.isNotEmpty && value.length != 6) {
                           return 'Please enter valid Enrollment No';
                         }
                         return null;
@@ -467,6 +468,7 @@ class _MembershipState extends State<Membership> {
                   Padding(
                     padding: formPadding,
                     child: TextFormField(
+                      maxLength: 10,
                       textCapitalization: TextCapitalization.words,
                       controller: facultyNoController,
                       style: TextStyle(
@@ -475,13 +477,7 @@ class _MembershipState extends State<Membership> {
                       ),
                       keyboardType: TextInputType.text,
                       decoration:
-                          formField.copyWith(hintText: "Enter Faculy No"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter valid Faculty No';
-                        }
-                        return null;
-                      },
+                          formField.copyWith(hintText: "Enter Faculy No."),
                       onSaved: (value) {
                         _facultyNo = value!;
                       },
@@ -498,6 +494,7 @@ class _MembershipState extends State<Membership> {
                   Padding(
                     padding: formPadding,
                     child: TextFormField(
+                      maxLength: 10,
                       textCapitalization: TextCapitalization.words,
                       controller: mobileNoController,
                       style: TextStyle(
@@ -528,9 +525,13 @@ class _MembershipState extends State<Membership> {
                     alignment: Alignment.topLeft,
                     child: Row(
                       children: [
-                        Text(
-                          'Pick your ID Proof',
-                          style: kLabelStyle,
+                        Expanded(
+                          child: FittedBox(
+                            child: Text(
+                              'Pick your ID Proof\n(Admit card, ID card, etc)',
+                              style: kLabelStyle,
+                            ),
+                          ),
                         ),
                         IconButton(
                           icon: Icon(Icons.add_a_photo),
