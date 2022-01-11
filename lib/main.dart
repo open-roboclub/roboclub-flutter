@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import 'package:flutter/services.dart';
+// import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -39,6 +40,7 @@ void main() async {
   });
   var isOnboarding = await _storage.getOnboarding();
   var darkModeOn = await _storage.getThemepref();
+  // var deathScreen = await Remoteconfig().showDeathScreen();
   runApp(
     MultiProvider(
       providers: [
@@ -51,6 +53,7 @@ void main() async {
       ],
       child: MyApp(
         isOnboarding: isOnboarding,
+        // showDeathScreen: deathScreen
       ),
     ),
   );
@@ -58,6 +61,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isOnboarding;
+  // final bool showDeathScreen;
+
 
   const MyApp({Key? key, this.isOnboarding = false}) : super(key: key);
 
@@ -67,7 +72,7 @@ class MyApp extends StatelessWidget {
     final _userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthService().getCurrentUser().then((currUser) {
       if (currUser != null) {
-        _userProvider.setUser = currUser as ModelUser;
+        _userProvider.setUser = currUser;
       } else {
         _userProvider.setUser = ModelUser();
       }

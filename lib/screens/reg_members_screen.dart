@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
+import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/helper/pdf_manager.dart';
 import 'package:roboclub_flutter/models/member.dart';
@@ -176,6 +177,27 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
         "facultyNo": member.facultyNo,
         "mobileNo": member.mobileNo
       });
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(
+                "Membership Successful. You will recieve a mail with your registration slip.",
+                style: kLabelStyle,
+              ),
+              actions: [
+                FlatButton(
+                  child: Text(
+                    "OK",
+                    style: kLabelStyle,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
     } else {
       Fluttertoast.showToast(msg: "Payment not successful");
     }
@@ -242,6 +264,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                     child: CircularProgressIndicator(),
                   )
                 : SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
                     child: Column(
                       children: [
                         SizedBox(
@@ -319,6 +342,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                                       ),
                                     )
                               : ListView.builder(
+                                  padding: EdgeInsets.only(bottom: 80),
                                   physics: BouncingScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: membersList.length,
@@ -330,7 +354,10 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                                     );
                                   },
                                 ),
-                        )
+                        ),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
                       ],
                     ),
                   ),

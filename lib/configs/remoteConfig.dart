@@ -43,6 +43,10 @@ class Remoteconfig {
       return false;
     }
   }
+  Future<bool> fetchIsPaymentOpen() async {
+    bool _content = remoteConfig.getBool('isPayNowOpen');
+    return _content;
+  }
 
   Future setCache() async {
     await remoteConfig.fetchAndActivate();
@@ -56,6 +60,12 @@ class Remoteconfig {
     int _amount = remoteConfig.getInt('membershipAmount');
     return _amount;
   }
+
+  // Future<bool> showDeathScreen() async {
+  //   await remoteConfig.fetchAndActivate();
+  //   bool deathScreen = remoteConfig.getBool('DeathScreen');
+  //   return deathScreen;
+  // }
 
   Remoteconfig() {
     this.setCache();

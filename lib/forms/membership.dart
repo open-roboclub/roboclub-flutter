@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/email.dart';
 import 'package:roboclub_flutter/services/member.dart';
@@ -94,9 +95,11 @@ class _MembershipState extends State<Membership> {
     '4th',
     '5th',
   ];
+  bool isPayOpen = false;
 
   @override
   void initState() {
+   
     // _course = "Enter Course Name";
     super.initState();
     _loading = false;
@@ -169,7 +172,7 @@ class _MembershipState extends State<Membership> {
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        "Membership form Submitted Successfully",
+        "Membership form Submitted Successfully. Check your mail for confirmation",
         style: kLabelStyle,
       ),
       actions: [

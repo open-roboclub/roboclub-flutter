@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/models/member.dart';
 import '../helper/dimensions.dart';
 
 class MemberCard extends StatefulWidget {
   final Member member;
   final Function createOrderId;
+
   // final bool showPayment;
   const MemberCard(
       {Key? key, required this.member, required this.createOrderId})
@@ -15,6 +17,17 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
+  bool isPayOpen = false;
+  @override
+  void initState() {
+    super.initState();
+    Remoteconfig().fetchIsPaymentOpen().then((value) {
+      setState(() {
+        isPayOpen = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var vpH = getViewportHeight(context);
@@ -43,45 +56,65 @@ class _MemberCardState extends State<MemberCard> {
             children: [
               Text(
                 widget.member.email.replaceRange(
-                  widget.member.email.indexOf("@") - 5,
-                  widget.member.email.indexOf("@"),
-                  "XXXXX",
+                  2,
+                  10,
+                  "XXXXXXXX",
                 ),
               ),
               Text(widget.member.facultyNo + ", " + widget.member.enrollNo),
               Text(widget.member.mobileNo.replaceRange(6, 10, "XXXX")),
             ],
           ),
-          trailing: !widget.member.isPaid
-              ? ElevatedButton(
-                  onPressed: !widget.member.isPaid
-                      ? () async {
-                          await widget.createOrderId(widget.member);
-                        }
-                      : null,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).primaryColor,
+          trailing: isPayOpen
+              ? !widget.member.isPaid
+                  ? ElevatedButton(
+                      onPressed: !widget.member.isPaid
+                          ? () async {
+                              await widget.createOrderId(widget.member);
+                            }
+                          : null,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Text(
+                        "Pay Now",
+                      ),
+                    )
+                  : TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Colors.green,
+                      ),
+                      label: Text(
+                        "Paid",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+              : !widget.member.isPaid
+                  ? TextButton.icon(
+                      onPressed: () {},
+                      icon: Text("Payment due"),
+                      label: Icon(Icons.access_time_rounded))
+                  : TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Colors.green,
+                      ),
+                      label: Text(
+                        "Paid",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    "Pay Now",
-                  ),
-                )
-              : TextButton.icon(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.check_circle_outline_rounded,
-                    color: Colors.green,
-                  ),
-                  label: Text(
-                    "Paid",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
         ),
       ),
     );

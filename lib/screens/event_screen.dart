@@ -14,6 +14,7 @@ import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
+import 'package:roboclub_flutter/services/shared_prefs.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
@@ -49,16 +50,31 @@ class _EventScreenState extends State<EventScreen> {
 
   bool showBanner = false;
   bool isUpdateRequired = false;
+  MyLocalStorage prefs = MyLocalStorage();
 
   @override
   void initState() {
-    Remoteconfig().isUpdateRequired().then((value) {
-      setState(() {
-        // print()
-        isUpdateRequired = value;
-        if (isUpdateRequired) _showVersionDialog();
-      });
+    prefs.getCheckUpdate().then((lastChecked) {
+      if (lastChecked == "") {
+        Remoteconfig().isUpdateRequired().then((value) {
+          setState(() {
+            // print()
+            isUpdateRequired = value;
+            if (isUpdateRequired) _showVersionDialog();
+          });
+        });
+      } else if (DateTime.now().difference(DateTime.parse(lastChecked)).inDays >
+          2) {
+        Remoteconfig().isUpdateRequired().then((value) {
+          setState(() {
+            // print()
+            isUpdateRequired = value;
+            if (isUpdateRequired) _showVersionDialog();
+          });
+        });
+      }
     });
+
     Remoteconfig().showHomeMmebershipOpen().then((value) {
       setState(() {
         showBanner = value;
@@ -285,7 +301,10 @@ class _EventScreenState extends State<EventScreen> {
             ),
             FlatButton(
               child: Text(btnLabelCancel),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                prefs.setCheckUpdate(DateTime.now().toIso8601String());
+                Navigator.pop(context);
+              },
             ),
           ],
         );
