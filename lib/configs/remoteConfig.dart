@@ -22,17 +22,16 @@ class Remoteconfig {
     String _content = remoteConfig.getString('registrationEmailContent');
     return _content;
   }
-    Future<String> fetchPaymentConfEmailTemplate() async {
-      
-      String _content  = remoteConfig.getString('paymentConfirmationEmailContent');
-      return _content;
-    }
 
-    Future<String> SendGridApiFetch() async {
-      
-      String _content  = remoteConfig.getString('SendGridApi');
-      return _content;
-    }
+  Future<String> fetchPaymentConfEmailTemplate() async {
+    String _content = remoteConfig.getString('paymentConfirmationEmailContent');
+    return _content;
+  }
+
+  Future<String> sendGridApiFetch() async {
+    String _content = remoteConfig.getString('SendGridApi');
+    return _content;
+  }
 
   Future<bool> isUpdateRequired() async {
     int latestVersion = remoteConfig.getInt('updateVersion');
@@ -44,6 +43,10 @@ class Remoteconfig {
       return false;
     }
   }
+  Future<bool> fetchIsPaymentOpen() async {
+    bool _content = remoteConfig.getBool('isPayNowOpen');
+    return _content;
+  }
 
   Future setCache() async {
     await remoteConfig.fetchAndActivate();
@@ -52,6 +55,17 @@ class Remoteconfig {
       minimumFetchInterval: Duration(seconds: 10),
     ));
   }
+
+  int getMembershipAmount() {
+    int _amount = remoteConfig.getInt('membershipAmount');
+    return _amount;
+  }
+
+  // Future<bool> showDeathScreen() async {
+  //   await remoteConfig.fetchAndActivate();
+  //   bool deathScreen = remoteConfig.getBool('DeathScreen');
+  //   return deathScreen;
+  // }
 
   Remoteconfig() {
     this.setCache();

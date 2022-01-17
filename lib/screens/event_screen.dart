@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -11,13 +12,16 @@ import 'package:roboclub_flutter/models/event.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
+import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/services/event.dart';
+import 'package:roboclub_flutter/services/shared_prefs.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
 import 'package:roboclub_flutter/widgets/drawer.dart';
 import 'package:roboclub_flutter/widgets/event_card.dart';
 import 'package:roboclub_flutter/widgets/featured_event_card.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'package:in_app_update/in_app_update.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -39,26 +43,45 @@ class _EventScreenState extends State<EventScreen> {
   List<Event> upcomingEventsList = [];
   List<Event> pastEventsList = [];
   bool isLoading = true;
+  // bool isUpdateCanceled = true;
   late DateTime parsedDate;
 
   // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   bool showBanner = false;
   bool isUpdateRequired = false;
+  MyLocalStorage prefs = MyLocalStorage();
 
   @override
   void initState() {
-    Remoteconfig().isUpdateRequired().then((value) {
-      setState(() {
-        isUpdateRequired = value;
-        if (isUpdateRequired) showUpdateBottomSheet();
-      });
+    prefs.getCheckUpdate().then((lastChecked) {
+      if (lastChecked == "") {
+        Remoteconfig().isUpdateRequired().then((value) {
+          setState(() {
+            // print()
+            isUpdateRequired = value;
+            if (isUpdateRequired) _showVersionDialog();
+          });
+        });
+      } else if (DateTime.now().difference(DateTime.parse(lastChecked)).inDays >
+          2) {
+        Remoteconfig().isUpdateRequired().then((value) {
+          setState(() {
+            // print()
+            isUpdateRequired = value;
+            if (isUpdateRequired) _showVersionDialog();
+          });
+        });
+      }
     });
+
     Remoteconfig().showHomeMmebershipOpen().then((value) {
       setState(() {
         showBanner = value;
       });
     });
+
+    // checkForUpdate();
 
     EventService().fetchEvents().then((value) {
       splitEventLists(value);
@@ -256,49 +279,37 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
-  void showUpdateBottomSheet() {
-    print("Hrs");
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
-        ),
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Time to Update!",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
+  _showVersionDialog() async {
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        String title = "New Update Available";
+        String message =
+            "There is a newer version of app available please update it now.";
+        String btnLabel = "Update Now";
+        String btnLabelCancel = "Later";
+        return new CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(btnLabel),
+              onPressed: () => launch(
+                'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
               ),
-              SizedBox(
-                height: 50,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  launch(
-                    'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
-                  );
-                },
-                child: Text("Update"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("Not now"),
-              ),
-            ],
-          );
-        });
+            ),
+            FlatButton(
+              child: Text(btnLabelCancel),
+              onPressed: () {
+                prefs.setCheckUpdate(DateTime.now().toIso8601String());
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -312,7 +323,11 @@ class _EventScreenState extends State<EventScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: appdrawer(context, page: "Events"),
-        appBar: appBar(context, strTitle: "AMURoboclub", isDrawer: true, isNotification: true, scaffoldKey: _scaffoldKey),
+        appBar: appBar(context,
+            strTitle: "AMURoboclub",
+            isDrawer: true,
+            isNotification: true,
+            scaffoldKey: _scaffoldKey),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: isLoading
@@ -329,11 +344,16 @@ class _EventScreenState extends State<EventScreen> {
                     // ),
                     showBanner
                         ? SkeletonLoader(
+                            baseColor: Colors.black,
                             direction: SkeletonDirection.rtl,
-                            highlightColor: Colors.black,
+                            highlightColor: Colors.grey.shade300,
                             builder: Container(
                               clipBehavior: Clip.hardEdge,
-                              margin: EdgeInsets.only(left: vpW * 0.04, right: vpW * 0.04, top: vpH * 0.02, bottom: vpH * 0.01),
+                              margin: EdgeInsets.only(
+                                  left: vpW * 0.04,
+                                  right: vpW * 0.04,
+                                  top: vpH * 0.02,
+                                  bottom: vpH * 0.01),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -341,19 +361,41 @@ class _EventScreenState extends State<EventScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
+                                horizontalTitleGap: 0,
                                 tileColor: Colors.orange[400],
-                                title: Text(
-                                  'Applications Open for Memebership',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                title: FittedBox(
+                                  child: Text(
+                                    'Applications Open for Membership',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                    return Membership();
-                                  }));
+                                onTap: () async {
+                                  var result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return Membership();
+                                      },
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    if (result["success"]) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return RegMembersScreen();
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  }
                                 },
-                                leading: ImageIcon(AssetImage('assets/img/NoPath.png')),
+                                leading: ImageIcon(
+                                  AssetImage('assets/img/NoPath.png'),
+                                ),
                               ),
                             ),
                           )

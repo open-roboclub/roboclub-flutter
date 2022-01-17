@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/forms/profile.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -12,7 +13,8 @@ class Team2Card extends StatelessWidget {
   final dynamic member;
   final void Function(ModelUser) callback;
 
-  const Team2Card({Key ?key, this.member, required this.callback}) : super(key: key);
+  const Team2Card({Key? key, this.member, required this.callback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,22 +52,27 @@ class Team2Card extends StatelessWidget {
                 color: Color(0xFFFF9C01),
                 iconSize: vpW * 0.060,
                 onPressed: () async {
-                  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                  final FirebaseFirestore _firestore =
+                      FirebaseFirestore.instance;
 
                   DocumentSnapshot snap = await _firestore
                       .collection('/users')
                       .doc(member['uid'])
                       .get();
-                  user = ModelUser.fromMap(snap.data() as Map<String,dynamic>);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileForm(
-                        member: user,
-                        callback: callback,
-                      ),
-                    ),
-                  );
+                  user = ModelUser.fromMap(snap.data() as Map<String, dynamic>);
+                  user.uid != "-1"
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileForm(
+                              member: user,
+                              callback: callback,
+                            ),
+                          ),
+                        )
+                      : Fluttertoast.showToast(
+                          backgroundColor: Colors.grey.withOpacity(0.2),
+                          msg: "Profile does not exist!");
                 },
               )
             : Container(

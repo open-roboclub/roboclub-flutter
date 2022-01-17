@@ -23,7 +23,11 @@ class _TeamScreenState extends State<TeamScreen> {
   void initState() {
     _firestore.collection('/teams').get().then((teamSnaps) {
       teamSnaps.docs.forEach((element) {
-        teamsList.add(Team.fromMap(element.data()));
+        if (teamsList.length == 0) {
+          teamsList.add(Team.fromMap(element.data()));
+        } else {
+          teamsList.insert(1, Team.fromMap(element.data()));
+        }
       });
       setState(() {
         _isLoading = false;
