@@ -104,7 +104,6 @@ class _Team2ScreenState extends State<Team2Screen> {
                                   _position =
                                       index * (_height + 2 * _verticalPadding);
                                 });
-
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

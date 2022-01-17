@@ -57,7 +57,6 @@ class Team2Card extends StatelessWidget {
                       .doc(member['uid'])
                       .get();
                   user = ModelUser.fromMap(snap.data() as Map<String,dynamic>);
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(

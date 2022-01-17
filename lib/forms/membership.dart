@@ -482,7 +482,7 @@ class _MembershipState extends State<Membership> {
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                       ),
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.phone,
                       decoration:
                           formField.copyWith(hintText: "Enter Mobile No"),
                       validator: (value) {
