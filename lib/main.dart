@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 // import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,6 @@ class MyApp extends StatelessWidget {
   final bool isOnboarding;
   // final bool showDeathScreen;
 
-
   const MyApp({Key? key, this.isOnboarding = false}) : super(key: key);
 
   @override
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
       }
     });
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'AMURoboclub',
       debugShowCheckedModeBanner: false,
       theme: themeNotifier.getTheme(),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -91,12 +92,7 @@ Drawer appdrawer(context, {String? page}) {
         Navigator.of(context).pop();
         if (title != page) {
           if (page == "Events") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => _getScreen(title),
-              ),
-            );
+            Get.to(() => _getScreen(title));
           } else if (title == "Events") {
             Navigator.of(context).pop();
             Navigator.pushReplacement(
@@ -106,12 +102,10 @@ Drawer appdrawer(context, {String? page}) {
               ),
             );
           } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => _getScreen(title),
-              ),
-            );
+            Get.off(() => _getScreen(title))!.then((value) {
+              print("Then function");
+              Get.delete();
+            });
           }
         }
       },
