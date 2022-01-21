@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import 'package:flutter/services.dart';
+// import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -12,28 +14,33 @@ import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/screens/onboarding_screen.dart';
 import 'package:roboclub_flutter/services/auth.dart';
-import 'package:roboclub_flutter/services/notification.dart';
+// import 'package:roboclub_flutter/services/notification.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
   // debugPaintSizeEnabled = true;
 
-  MyLocalStorage _storage = MyLocalStorage();
-  final FirebaseMessaging _messaging = FirebaseMessaging();
   WidgetsFlutterBinding.ensureInitialized();
-  await DotEnv.load(fileName: ".env");
+  await Firebase.initializeApp();
+  MyLocalStorage _storage = MyLocalStorage();
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+
+  WidgetsFlutterBinding.ensureInitialized();
+  DotEnv.dotenv.load(fileName: ".env");
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _storage.getDeviceToken().then((value) {
-    if (value == null) {
+    _messaging.subscribeToTopic('newNotification');
+    if (value == "") {
       _messaging.getToken().then((fcmToken) {
-        print("fcm saved to storage!");
-        NotificationService().postDeviceToken(fcmToken: fcmToken);
-        _storage.setDeviceToken(fcmToken);
+        // print("fcm saved to storage!");
+        // NotificationService().postDeviceToken(fcmToken: fcmToken!);
+        _storage.setDeviceToken(fcmToken!);
       });
     }
   });
-  var isOnboarding = await _storage.getOnboarding() ?? false;
-  var darkModeOn = await _storage.getThemepref() ?? false;
+  var isOnboarding = await _storage.getOnboarding();
+  var darkModeOn = await _storage.getThemepref();
+  // var deathScreen = await Remoteconfig().showDeathScreen();
   runApp(
     MultiProvider(
       providers: [
@@ -46,6 +53,7 @@ void main() async {
       ],
       child: MyApp(
         isOnboarding: isOnboarding,
+        // showDeathScreen: deathScreen
       ),
     ),
   );
@@ -53,8 +61,10 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isOnboarding;
+  // final bool showDeathScreen;
 
-  const MyApp({Key key, this.isOnboarding}) : super(key: key);
+
+  const MyApp({Key? key, this.isOnboarding = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +74,7 @@ class MyApp extends StatelessWidget {
       if (currUser != null) {
         _userProvider.setUser = currUser;
       } else {
-        _userProvider.setUser = User();
+        _userProvider.setUser = ModelUser();
       }
     });
 

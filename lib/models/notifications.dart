@@ -1,14 +1,14 @@
 class Notifications {
-  String title;
-  String msg;
-  String link;
-  String date;
+  late String title;
+  late String msg;
+  late String link;
+  late String date;
 
   Notifications({
-    this.title,
-    this.msg,
-    this.link,
-    this.date,
+    required this.title,
+    required this.msg,
+    required this.link,
+    required this.date,
   });
 
   Map toMap(Notifications notification) {

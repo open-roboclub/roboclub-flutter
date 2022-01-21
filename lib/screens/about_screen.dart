@@ -18,8 +18,8 @@ class _AboutScreenState extends State<AboutScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  AnimationController _animationController;
-  Animation _animation;
+  late AnimationController _animationController;
+  late Animation _animation;
 
   void initState() {
     _animationController = AnimationController(
@@ -58,11 +58,13 @@ class _AboutScreenState extends State<AboutScreen>
                 child: SliverAppBar(
                   leading: new Container(),
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  expandedHeight: vpH * 0.67,
+                  expandedHeight: vpH * 0.69,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: vpW * 0.05, vertical: vpH * 0.020),
+                        horizontal: vpW * 0.05,
+                        vertical: vpH * 0.020,
+                      ),
                       child: Container(
                         width: vpW * 0.92,
                         color: Colors.white,
@@ -112,7 +114,7 @@ class _AboutScreenState extends State<AboutScreen>
                                               child: Column(
                                                 children: [
                                                   Text(
-                                                    "{ Website }",
+                                                    " Website ",
                                                     style: TextStyle(
                                                       fontSize: vpH * 0.02,
                                                       color: Theme.of(context)
@@ -135,21 +137,23 @@ class _AboutScreenState extends State<AboutScreen>
                                 ),
                               ],
                             ),
-                            Container(
-                              height: vpH * 0.32,
-                              width: double.infinity,
+                            Expanded(
+                              // height: vpH * 0.32,
+                              // width: double.infinity,
                               child: SingleChildScrollView(
-                                physics: BouncingScrollPhysics(),
+                                physics: NeverScrollableScrollPhysics(),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: vpW * 0.028,
                                       vertical: vpH * 0.005),
                                   child: Text(
-                                      "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
-                                      // overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: vpH * 0.020)),
+                                    "AMURoboclub is a student's body that nurtures the needs of curious and innovative minds. As conveyed by its motto, 'Where Innovation Meets Implementation', AMURoboclub puts forward a learning as well as a challenging environment that ignites the techie inside a person. Moreover, it provides hands-on experience with various technologies and tools which renders your knowledge and skills in the field of robotics. The club works under the supervision of our faculty advisors from various branches of Zakir Husain College of Engineering and Technology, Aligarh Muslim University. ",
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: vpH * 0.020,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

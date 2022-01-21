@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ShowEventScreen extends StatefulWidget {
   final Event eventinfo;
 
-  ShowEventScreen({Key key, this.eventinfo}) : super(key: key);
+  ShowEventScreen({Key? key, required this.eventinfo}) : super(key: key);
 
   @override
   _ShowEventScreenState createState() => _ShowEventScreenState();

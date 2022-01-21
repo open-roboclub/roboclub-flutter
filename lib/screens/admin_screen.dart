@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
 import 'package:roboclub_flutter/services/auth.dart';
@@ -39,7 +40,7 @@ class _AdminScreenState extends State<AdminScreen> {
             _auth.signInWithGoogle().then((user) {
               if (user != null) {
                 Provider.of<UserProvider>(context, listen: false).setUser =
-                    user;
+                    user as ModelUser;
               }
               setState(() {
                 _isLoading = false;
@@ -47,7 +48,8 @@ class _AdminScreenState extends State<AdminScreen> {
               if (user != null) {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(),
+                    // TODO: check user
+                    builder: (context) => ProfileScreen(member: Provider.of<UserProvider>(context).getUser,),
                   ),
                 );
               } else {

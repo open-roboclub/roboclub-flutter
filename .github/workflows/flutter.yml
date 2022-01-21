@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
           --output $HOME/private/services.tar services.tar.gpg
           tar xvf $HOME/private/services.tar
           touch .env
-          flutter build appbundle
+          flutter build appbundle --verbose
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
           GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}

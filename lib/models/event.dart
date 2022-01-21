@@ -1,24 +1,24 @@
 class Event {
-  String eventName;
-  String details;
-  String endTime;
-  String place;
-  String posterURL;
-  String startTime;
-  String date;
-  String regFormLink;
-  bool isFeatured;
+  late String eventName;
+  late String details;
+  late String endTime;
+  late String place;
+  late String posterURL;
+  late String startTime;
+  late String date;
+  late String regFormLink;
+  late bool isFeatured;
 
   Event({
-    this.eventName,
-    this.details,
-    this.place,
-    this.startTime,
-    this.date,
-    this.posterURL,
-    this.endTime,
-    this.regFormLink,
-    this.isFeatured,
+    required this.eventName,
+    required this.details,
+    required this.place,
+    required this.startTime,
+    required this.date,
+    required this.posterURL,
+    required this.endTime,
+    required this.regFormLink,
+    required this.isFeatured,
   });
 
   Map toMap(Event event) {

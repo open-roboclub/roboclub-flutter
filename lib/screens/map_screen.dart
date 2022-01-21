@@ -10,11 +10,11 @@ class MapView extends StatefulWidget {
 
 class MapViewState extends State<MapView> {
   Completer<GoogleMapController> _controller = Completer();
-  CameraPosition myPosition;
+  late CameraPosition myPosition;
   // PanelController controller = new PanelController();
   Set<Marker> markers = Set<Marker>();
-  double vpH;
-  double vpW;
+  late double vpH;
+  late double vpW;
 
   @override
   void initState() {

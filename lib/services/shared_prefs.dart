@@ -2,42 +2,63 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MyLocalStorage {
   //setter functions
+
   setTheme(bool darkMode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('darkMode', darkMode);
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    _prefs.setBool('darkMode', darkMode);
   }
 
   //getter functions
   Future<bool> getThemepref() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('darkMode');
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    return _prefs.getBool('darkMode') ?? false;
   }
 
   setDeviceToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('deviceToken', token);
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    _prefs.setString('deviceToken', token);
   }
 
   //getter functions
   Future<String> getDeviceToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('deviceToken');
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    return _prefs.getString('deviceToken') ?? "";
   }
 
   setOnboarding(bool isDone) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('onboarding', isDone);
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    _prefs.setBool('onboarding', isDone);
   }
 
   //getter functions
   Future<bool> getOnboarding() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('onboarding');
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    return _prefs.getBool('onboarding') ?? false;
+  }
+
+  setCheckUpdate(String lastChecked) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    _prefs.setString('update', lastChecked);
+  }
+
+  //getter functions
+  Future<String> getCheckUpdate() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    return _prefs.getString('update') ?? "";
   }
 
   // clear local storage
   clearPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove("darkMode");
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    _prefs.remove("darkMode");
   }
 }

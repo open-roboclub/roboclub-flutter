@@ -13,10 +13,10 @@ class _NotificationFormState extends State<NotificationForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  String _title;
-  String _msg;
+  late String _title;
+  late String _msg;
   String _link = "";
-  bool _loading;
+  late bool _loading;
   TextEditingController date = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController msgController = TextEditingController();
@@ -139,13 +139,13 @@ class _NotificationFormState extends State<NotificationForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter title";
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _title = value;
+                        _title = value!;
                       },
                     ),
                   ),
@@ -179,13 +179,13 @@ class _NotificationFormState extends State<NotificationForm> {
                           ),
                         ),
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Please enter some message';
                           }
                           return null;
                         },
                         onSaved: (value) {
-                          _msg = value;
+                          _msg = value!;
                         },
                       ),
                     ),
@@ -219,7 +219,7 @@ class _NotificationFormState extends State<NotificationForm> {
                         ),
                       ),
                       onSaved: (value) {
-                        _link = value;
+                        _link = value!;
                       },
                     ),
                   ),
@@ -245,14 +245,14 @@ class _NotificationFormState extends State<NotificationForm> {
                         setState(() {
                           _loading =true;
                         });
-                        if (!_formKey.currentState.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           print("not valid");
                           setState(() {
                             _loading=false;
                           });
                           return null;
                         } else {
-                          _formKey.currentState.save();
+                          _formKey.currentState!.save();
                           notifications.postNotification(
                               title: _title,
                               msg: _msg,

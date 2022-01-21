@@ -10,7 +10,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class PlaylistScreen extends StatefulWidget {
   final List<dynamic> videos;
 
-  const PlaylistScreen({Key key, this.videos}) : super(key: key);
+  const PlaylistScreen({Key? key, required this.videos}) : super(key: key);
   @override
   _PlaylistScreenState createState() => _PlaylistScreenState();
 }
@@ -20,7 +20,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   @override
   void initState() {
     widget.videos.forEach((element) {
-      String videoId = YoutubePlayer.convertUrlToId(element['url']);
+      String videoId = YoutubePlayer.convertUrlToId(element['url'])??"";
       element['videoId'] = videoId;
     });
     super.initState();

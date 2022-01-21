@@ -7,7 +7,7 @@ import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
 class EventCard extends StatefulWidget {
   final Event event;
-  EventCard({Key key, this.event}) : super(key: key);
+  EventCard({Key ?key, required this.event}) : super(key: key);
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -40,14 +40,6 @@ class _EventCardState extends State<EventCard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Theme.of(context).cardColor,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.black12,
-              //     offset: Offset(3, 8),
-              //     blurRadius: 1.0,
-              //     spreadRadius: 2.0,
-              //   ),
-              // ],
             ),
             child: Row(
               children: [

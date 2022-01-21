@@ -3,20 +3,20 @@ import 'package:roboclub_flutter/models/event.dart';
 
 import 'dart:async';
 
-final Firestore _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class EventService {
   Future<bool> postEvent(
-      {String eventName,
-      String details,
-      String duration,
-      String place,
-      String posterURL,
-      String startTime,
-      String endTime,
-      String date,
-      bool isFeatured,
-      String regFormLink}) async {
+      {String? eventName,
+      String? details,
+      String? duration,
+      String? place,
+      String? posterURL,
+      String? startTime,
+      String? endTime,
+      String? date,
+      bool? isFeatured,
+      String? regFormLink}) async {
     Map<String, dynamic> data = {
       "eventName": eventName,
       "details": details,
@@ -41,10 +41,10 @@ class EventService {
     await _firestore
         .collection("/events")
         .orderBy('date', descending: true)
-        .getDocuments()
+        .get()
         .then((value) {
-      value.documents.forEach((element) {
-        list.add(Event.fromMap(element.data));
+      value.docs.forEach((element) {
+        list.add(Event.fromMap(element.data()));
       });
     });
     return list;

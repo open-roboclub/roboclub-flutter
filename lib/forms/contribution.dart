@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
@@ -17,15 +18,15 @@ class _ContributionFormState extends State<ContributionForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  String _name;
-  String _description;
-  String _amount;
+  late String _name;
+  late String _description;
+  late String _amount;
   String _img = "";
   String _date = "";
-  File file;
+  File? file;
   String fileName = '';
   bool filePicked = false;
-  bool _loading;
+  late bool _loading;
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -45,9 +46,12 @@ class _ContributionFormState extends State<ContributionForm> {
       if (result != null) {
         filePicked = true;
         setState(() {
-          file = File(result.files.single.path);
+          file = File(result.paths.first!);
         });
         fileName = '$randomName';
+      }
+      else{
+        file = null;
       }
     }).catchError((error) {
       print("Error: " + error.toString());
@@ -55,9 +59,9 @@ class _ContributionFormState extends State<ContributionForm> {
   }
 
   Future saveImg(List<int> asset, String name) async {
-    StorageReference reference = FirebaseStorage.instance.ref().child(name);
-    StorageUploadTask uploadTask = reference.putData(asset);
-    _img = await (await uploadTask.onComplete).ref.getDownloadURL();
+    Reference reference = FirebaseStorage.instance.ref().child(name);
+    UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
+    _img = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
   }
   @override
   void initState(){
@@ -168,13 +172,13 @@ class _ContributionFormState extends State<ContributionForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter name";
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _name = value;
+                        _name = value!;
                       },
                     ),
                   ),
@@ -207,13 +211,13 @@ class _ContributionFormState extends State<ContributionForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter some text';
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _description = value;
+                        _description = value!;
                       },
                     ),
                   ),
@@ -246,13 +250,13 @@ class _ContributionFormState extends State<ContributionForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter some amount';
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _amount = value;
+                        _amount = value!;
                       },
                     ),
                   ),
@@ -288,25 +292,26 @@ class _ContributionFormState extends State<ContributionForm> {
                       ),
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime dateTime = await showDatePicker(
+                        DateTime? dateTime = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1990),
                           lastDate: DateTime(2030),
                         );
-
-                        DateFormat formatter = DateFormat('yyyy-MM-dd');
+                        if(dateTime!=null){
+                           DateFormat formatter = DateFormat('yyyy-MM-dd');
                         String formatted = formatter.format(dateTime);
                         date.text = formatted;
+                        }
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please select a date';
                         }
                         return null;
                       },
-                      onSaved: (String value) {
-                        _date = value;
+                      onSaved: (String? value) {
+                        _date = value!;
                       },
                     ),
                   ),
@@ -327,16 +332,16 @@ class _ContributionFormState extends State<ContributionForm> {
                           },
                         ),
                         file == null
-                            ? Text('Image not Selected.',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
-                            : Text('Image Selected.',
-                                style: TextStyle(
-                                    color: Colors.limeAccent[400],
-                                    fontSize: vpH * 0.02,
-                                    fontWeight: FontWeight.bold))
+                        ? Text('Image not Selected.',
+                            style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold))
+                        : Text('Image Selected.',
+                            style: TextStyle(
+                                color: Colors.limeAccent[400],
+                                fontSize: vpH * 0.02,
+                                fontWeight: FontWeight.bold))
                       ],
                     ),
                   ),
@@ -363,16 +368,16 @@ class _ContributionFormState extends State<ContributionForm> {
                           _loading = true;
                         });
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), 'contributions/${nameController.text}/$fileName');
+                          await saveImg(file!.readAsBytesSync(), 'contributions/${nameController.text}/$fileName');
                         }
-                        if (!_formKey.currentState.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           print("not valid");
                           setState(() {
                             _loading=false;
                           });
                           return null;
                         } else {
-                          _formKey.currentState.save();
+                          _formKey.currentState!.save();
                           contributors.postContributor(
                               amount: _amount,
                               description: _description,

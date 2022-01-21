@@ -1,23 +1,23 @@
-class User {
-  String uid;
-  String name;
-  String email;
-  String profileImageUrl;
-  String position;
-  String about;
-  String batch;
-  String branch;
-  String quote;
-  String cvLink;
-  String interests;
-  String contact;
-  String fbId;
-  String linkedinId;
-  String instaId;
-  bool isMember;
-  bool isAdmin;
+class ModelUser {
+  late String uid;
+  late String name;
+  late String email;
+  late String profileImageUrl;
+  late String position;
+  late String about;
+  late String batch;
+  late String branch;
+  late String quote;
+  late String cvLink;
+  late String interests;
+  late String contact;
+  late String fbId;
+  late String linkedinId;
+  late String instaId;
+  late bool isMember;
+  late bool isAdmin;
 
-  User({
+  ModelUser({
     this.uid = "",
     this.name = "",
     this.email = "",
@@ -37,7 +37,7 @@ class User {
     this.position = "",
   });
 
-  Map toMap(User user) {
+  Map toMap(ModelUser user) {
     var data = Map<String, dynamic>();
     data['uid'] = user.uid;
     data['name'] = user.name;
@@ -61,7 +61,7 @@ class User {
   }
 
   // Named constructor
-  User.fromMap(Map<String, dynamic> mapData) {
+  ModelUser.fromMap(Map<String, dynamic> mapData) {
     this.uid = mapData['uid'];
     this.name = mapData['name'];
     this.email = mapData['email'];

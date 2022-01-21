@@ -5,16 +5,17 @@ import 'dart:async';
 
 
 
-final Firestore _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class ContributorService {
 
   Future<bool> postContributor(
-      {String name,
-      String description,
-      String amount,
-      String representativeImg,
-      String date}) async {
+      {
+      String? name,
+      String? description,
+      String? amount,
+      String? representativeImg,
+      String? date}) async {
         
     Map<String, dynamic> data = {
       "name": name,
@@ -36,11 +37,11 @@ class ContributorService {
 
     await _firestore.collection("/contributors")
       .orderBy('date', descending: true)
-      .getDocuments()
+      .get()
       .then((value) {
 
-      value.documents.forEach((element) {
-        list.add(Contributor.fromMap(element.data));
+      value.docs.forEach((element) {
+        list.add(Contributor.fromMap(element.data()));
       });
     });
     return list;

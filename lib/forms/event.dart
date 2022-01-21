@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,7 @@ class _EventFormState extends State<EventForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  String _eventName,
+  late String _eventName,
       _details,
       _posterUrl = "",
       _setEndTime,
@@ -30,11 +31,10 @@ class _EventFormState extends State<EventForm> {
       _regFormLink;
 
   bool _isFeatured=false;
-  bool _loading;
+  late bool _loading;
   bool filePicked = false;
-  File file;
-  String _hour, _minute, _time;
-  String dateTime;
+  File? file;
+  late String _hour, _minute, _time, dateTime;
   TimeOfDay selectedStartTime = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedEndTime = TimeOfDay(hour: 00, minute: 00);
 
@@ -47,7 +47,7 @@ class _EventFormState extends State<EventForm> {
   TextEditingController regFormController = TextEditingController();
 
   Future<Null> _selectStartTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedStartTime,
     );
@@ -66,7 +66,7 @@ class _EventFormState extends State<EventForm> {
   }
 
   Future<Null> _selectEndTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedEndTime,
     );
@@ -109,7 +109,7 @@ class _EventFormState extends State<EventForm> {
       if (result != null) {
         filePicked = true;
         setState(() {
-          file = File(result.files.single.path);
+          file = File(result.files.first.path!);
         });
         fileName = '$randomName';
       }
@@ -119,9 +119,9 @@ class _EventFormState extends State<EventForm> {
   }
 
   Future saveImg(List<int> asset, String name) async {
-    StorageReference reference = FirebaseStorage.instance.ref().child(name);
-    StorageUploadTask uploadTask = reference.putData(asset);
-    _posterUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    Reference reference = FirebaseStorage.instance.ref().child(name);
+    UploadTask uploadTask = reference.putData(Uint8List.fromList(asset));
+    _posterUrl = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
   }
 
   @override
@@ -233,13 +233,13 @@ class _EventFormState extends State<EventForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter Event name";
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _eventName = value;
+                        _eventName = value!;
                       },
                     ),
                   ),
@@ -272,13 +272,13 @@ class _EventFormState extends State<EventForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter some text';
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _details = value;
+                        _details = value!;
                       },
                     ),
                   ),
@@ -310,13 +310,13 @@ class _EventFormState extends State<EventForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter some text';
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        _place = value;
+                        _place = value!;
                       },
                     ),
                   ),
@@ -352,26 +352,29 @@ class _EventFormState extends State<EventForm> {
                       ),
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime dateTime = await showDatePicker(
+                        DateTime? dateTime = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1990),
                           lastDate: DateTime(2030),
                         );
-                        DateFormat formatter =
+                        if(dateTime!=null){
+                          DateFormat formatter =
                             DateFormat("yyyy-MM-dd");
-                        String formatted = formatter.format(dateTime);
-                        print(formatted);
-                        date.text = formatted;
+                          String formatted = formatter.format(dateTime);
+                          print(formatted);
+                          date.text = formatted;
+                        }
+                        
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please select date';
                         }
                         return null;
                       },
-                      onSaved: (String value) {
-                        _date = value;
+                      onSaved: (String? value) {
+                        _date = value!;
                       },
                     ),
                   ),
@@ -390,8 +393,8 @@ class _EventFormState extends State<EventForm> {
                     child: TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _startTimeController,
-                      onSaved: (String value) {
-                        _setStartTime = value;
+                      onSaved: (String? value) {
+                        _setStartTime = value!;
                       },
                       style: TextStyle(
                         color: Colors.black,
@@ -429,8 +432,8 @@ class _EventFormState extends State<EventForm> {
                     child: TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _endTimeController,
-                      onSaved: (String value) {
-                        _setEndTime = value;
+                      onSaved: (String? value) {
+                        _setEndTime = value!;
                       },
                       style: TextStyle(
                         color: Colors.black,
@@ -481,7 +484,7 @@ class _EventFormState extends State<EventForm> {
                         ),
                       ),
                       onSaved: (value) {
-                        _regFormLink = value;
+                        _regFormLink = value!;
                       },
                     ),
                   ),
@@ -531,7 +534,7 @@ class _EventFormState extends State<EventForm> {
                           value: true,  
                           groupValue: _isFeatured,  
                           toggleable: true,
-                          onChanged: (bool value) {  
+                          onChanged: (bool? value) {  
                             setState(() {  
                               if(value!=null){
                                 _isFeatured=value;
@@ -568,16 +571,16 @@ class _EventFormState extends State<EventForm> {
                           _loading=true;
                         });
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), 'events/${eventNameController.text}/$fileName');
+                          await saveImg(file!.readAsBytesSync(), 'events/${eventNameController.text}/$fileName');
                         }
-                        if (!_formKey.currentState.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           print("not valid");
                           setState(() {
                             _loading=false;
                           });
                           return null;
                         } else {
-                          _formKey.currentState.save();
+                          _formKey.currentState!.save();
                           await events.postEvent(
                             eventName: _eventName,
                             details: _details,

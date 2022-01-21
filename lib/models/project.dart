@@ -1,22 +1,22 @@
 class Project {
-  List<dynamic> projectImg;
-  String name;
-  String description;
-  String date;
+  late List<dynamic> projectImg;
+  late String name;
+  late String description;
+  late String date;
   String progress = "";
-  List<dynamic> teamMembers;
-  String fileUrl;
-  String link;
+  late List<dynamic> teamMembers;
+  late String fileUrl;
+  late String link;
 
   Project({
-    this.projectImg,
-    this.description,
-    this.name,
-    this.date,
+    required this.projectImg,
+    required this.description,
+    required this.name,
+    required this.date,
     this.progress = "",
-    this.teamMembers,
-    this.fileUrl,
-    this.link,
+    required this.teamMembers,
+    required this.fileUrl,
+    required this.link,
   });
 
   Map toMap(Project project) {

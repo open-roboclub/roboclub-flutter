@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
 import 'package:roboclub_flutter/widgets/appBar.dart';
@@ -11,17 +12,18 @@ class Team2Screen extends StatefulWidget {
   final List<dynamic> members;
   final String title;
 
-  const Team2Screen({Key key, this.members, this.title}) : super(key: key);
+  const Team2Screen({Key? key, required this.members, required this.title})
+      : super(key: key);
   @override
   _Team2ScreenState createState() => _Team2ScreenState();
 }
 
 class _Team2ScreenState extends State<Team2Screen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  User user;
+  late ModelUser user;
   bool _isLoading = false;
   ScrollController _scrollController = ScrollController();
-  double _position;
+  late double _position;
 
   @override
   void initState() {
@@ -36,7 +38,7 @@ class _Team2ScreenState extends State<Team2Screen> {
         duration: Duration(milliseconds: 1000), curve: Curves.ease);
   }
 
-  void updateProfile(User updatedUser) {
+  void updateProfile(ModelUser updatedUser) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -90,21 +92,31 @@ class _Team2ScreenState extends State<Team2Screen> {
                               index++)
                             GestureDetector(
                               onTap: () async {
-                                final Firestore _firestore = Firestore.instance;
+                                if (widget.members[index]['uid'] == '-1') {
+                                  Fluttertoast.showToast(
+                                      // backgroundColor: Colors.pink,
+                                      msg: "Profile does not exist!");
+                                  return;
+                                }
+                                final FirebaseFirestore _firestore =
+                                    FirebaseFirestore.instance;
                                 setState(() {
                                   _isLoading = true;
                                 });
+
                                 DocumentSnapshot snap = await _firestore
                                     .collection('/users')
-                                    .document(widget.members[index]['uid'])
+                                    .doc(widget.members[index]['uid'])
                                     .get();
-                                user = User.fromMap(snap.data);
+                                print(widget.members[index]['uid']);
+                                // if (snap.data() == null) {}
+                                user = ModelUser.fromMap(
+                                    snap.data() as Map<String, dynamic>);
                                 setState(() {
                                   _isLoading = false;
                                   _position =
                                       index * (_height + 2 * _verticalPadding);
                                 });
-
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

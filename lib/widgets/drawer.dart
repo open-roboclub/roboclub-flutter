@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
@@ -10,14 +11,17 @@ import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/screens/feedback_screen.dart';
 import 'package:roboclub_flutter/screens/profile.dart';
 import 'package:roboclub_flutter/screens/project_screen.dart';
+import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/screens/team_screen.dart';
 import 'package:roboclub_flutter/screens/tutorial_screen.dart';
+import 'package:roboclub_flutter/services/shared_prefs.dart';
 
-Drawer appdrawer(context, {String page}) {
+Drawer appdrawer(context, {String? page}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
   var activeColor = Theme.of(context).primaryColor;
   var inActiveColor = Theme.of(context).unselectedWidgetColor;
+  bool _isDark = false;
 
   Widget _getScreen(String title) {
     switch (title) {
@@ -25,52 +29,59 @@ Drawer appdrawer(context, {String page}) {
         {
           return EventScreen();
         }
-        break;
+      // break;
       case "Projects":
         {
           return ProjectScreen();
         }
-        break;
+      // break;
       case "Teams":
         {
           return TeamScreen();
         }
-        break;
+      // break;
       case "Tutorials":
         {
           return TutorialScreen();
         }
-        break;
+      // break;
       case "Contributors":
         {
           return ContributorScreen();
         }
-        break;
+      case "Members":
+        {
+          return RegMembersScreen();
+        }
+      // break;
       case "Admin Panel":
         {
           var _user = Provider.of<UserProvider>(context).getUser;
           if (_user.name.isNotEmpty) {
-            return ProfileScreen();
+            // TODO: check user
+            return ProfileScreen(
+              member: _user,
+            );
           } else {
             return AdminScreen();
           }
         }
-        break;
+      // break;
       case "Feedback":
         {
           return FeedbackScreen();
         }
-        break;
+      // break;
       case "About us":
         {
           return AboutScreen();
         }
-        break;
+      // break;
       default:
         {
           return EventScreen();
         }
-        break;
+      // break;
     }
   }
 
@@ -135,9 +146,24 @@ Drawer appdrawer(context, {String page}) {
               fit: BoxFit.cover,
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 80),
+          //   child: CupertinoSwitch(
+          //     value: false,
+          //     onChanged: (v) {
+          //       // setState(() {
+          //       // _isDark = !_isDark;
+          //       // });
+          //       _isDark = !_isDark;
+          //       print(v);
+          //       MyLocalStorage().setTheme(false);
+          //     },
+          //   ),
+          // ),
           _tileBuilder(CustomIcons.events, "Events", page == "Events"),
           _tileBuilder(CustomIcons.projects, "Projects", page == "Projects"),
           _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
+          _tileBuilder(Icons.person_pin_rounded, "Members", page == "Members"),
           _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
           _tileBuilder(
               CustomIcons.contribution, "Contributors", page == "Contributors"),

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,10 +14,10 @@ import '../helper/dimensions.dart';
 import '../widgets/appBar.dart';
 
 class ProfileForm extends StatefulWidget {
-  final User member;
-  final void Function(User) callback;
+  final ModelUser member;
+  final void Function(ModelUser)? callback;
 
-  const ProfileForm({Key key, this.member, this.callback}) : super(key: key);
+  const ProfileForm({Key ?key,required this.member, this.callback}) : super(key: key);
   @override
   _ProfileFormState createState() => _ProfileFormState(member);
 }
@@ -24,7 +25,7 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  User updatedUser;
+  late ModelUser updatedUser;
 
   String _name = "";
   String _batch = "";
@@ -38,14 +39,14 @@ class _ProfileFormState extends State<ProfileForm> {
   String _linkedinId = "";
   String _position = "";
   String _quote = "";
-  bool _loading;
+  late bool _loading;
   bool filePicked = false;
 
-  StorageUploadTask uploadTask;
-  File file;
+  late UploadTask uploadTask;
+  File? file;
   String _img = "";
   String fileName = '';
-  final User _user;
+  final ModelUser _user;
 
   _ProfileFormState(this._user);
   // upload image
@@ -64,7 +65,7 @@ class _ProfileFormState extends State<ProfileForm> {
         if (result != null) {
           filePicked = true;
           setState(() {
-            file = File(result.files.single.path);
+            file = File(result.files.first.path!);
           });
           fileName = '$randomName';
         }
@@ -75,14 +76,14 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   Future saveImg(List<int> asset, String name) async {
-    StorageReference reference = FirebaseStorage.instance.ref().child(name);
+    Reference reference = FirebaseStorage.instance.ref().child(name);
     setState(() {
-      uploadTask = reference.putData(asset);
+      uploadTask = reference.putData(Uint8List.fromList(asset));
     });
-    _img = await (await uploadTask.onComplete).ref.getDownloadURL();
+    _img = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
   }
 
-  Future<void> updateProfile(User user, BuildContext context) async {
+  Future<void> updateProfile(ModelUser user, BuildContext context) async {
     Map<String, dynamic> userObject = {
       'about': _about.isEmpty ? user.about : _about,
       'batch': _batch.isEmpty ? user.batch : _batch,
@@ -102,12 +103,12 @@ class _ProfileFormState extends State<ProfileForm> {
     userObject['uid'] = widget.member.uid;
     userObject['email'] = widget.member.email;
     userObject['isMember'] = widget.member.isMember;
-    updatedUser = User.fromMap(userObject);
+    updatedUser = ModelUser.fromMap(userObject);
 
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection('/users')
-        .document(user.uid)
-        .updateData(userObject)
+        .doc(user.uid)
+        .update(userObject)
         .then((value) => print("User Profile Updated"))
         .catchError((error) => print("Failed to update profile: $error"));
   }
@@ -150,7 +151,7 @@ class _ProfileFormState extends State<ProfileForm> {
           Provider.of<UserProvider>(context, listen: false).setUser =
               updatedUser;
         } else {
-          widget.callback(updatedUser);
+          widget.callback!(updatedUser);
         }
       },
     );
@@ -200,7 +201,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           ? Container(
                               width: vpW * 0.3,
                               height: vpH * 0.3,
-                              child: Image.file(file),
+                              child: Image.file(file!),
                             )
                           : CircleAvatar(
                               radius: 80,
@@ -208,7 +209,7 @@ class _ProfileFormState extends State<ProfileForm> {
                               ? AssetImage('assets/img/teamMember.png')
                               : CachedNetworkImageProvider(
                                   _user.profileImageUrl,
-                              ),
+                              ) as ImageProvider,
                             ),
                         ),
                       ),
@@ -253,7 +254,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter name";
                         }
                         return null;
@@ -294,7 +295,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter position";
                         }
                         return null;
@@ -687,16 +688,16 @@ class _ProfileFormState extends State<ProfileForm> {
                           _loading=true;
                         });
                         if (filePicked) {
-                          await saveImg(file.readAsBytesSync(), 'users/${_user.name}/$fileName');
+                          await saveImg(file!.readAsBytesSync(), 'users/${_user.name}/$fileName');
                         }
-                        if (!_formKey.currentState.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           print("not valid");
                           setState(() {
                             _loading=false;
                           });
                           return null;
                         } else {
-                          _formKey.currentState.save();
+                          _formKey.currentState!.save();
                           await updateProfile(_user, context);
                           showDialog(
                             context: context,

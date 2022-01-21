@@ -7,7 +7,7 @@ import 'package:roboclub_flutter/screens/show_event_screen.dart';
 
 class FeaturedEventCard extends StatefulWidget {
   final Event featuredEvent;
-  FeaturedEventCard({Key key, this.featuredEvent}) : super(key: key);
+  FeaturedEventCard({Key ?key, required this.featuredEvent}) : super(key: key);
 
   @override
   _FeaturedEventCardState createState() => _FeaturedEventCardState();
@@ -22,8 +22,8 @@ class _FeaturedEventCardState extends State<FeaturedEventCard> {
       "label": Theme.of(context).splashColor,
     };
     Map<String, TextStyle> _textstyle = {
-      "location": Theme.of(context).textTheme.subtitle1,
-      "label": Theme.of(context).primaryTextTheme.subtitle1,
+      "location": Theme.of(context).textTheme.subtitle1!,
+      "label": Theme.of(context).primaryTextTheme.subtitle1!,
     };
     var vpH = getViewportHeight(context);
     var vpW = getViewportWidth(context);

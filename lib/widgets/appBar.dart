@@ -4,14 +4,14 @@ import 'package:roboclub_flutter/screens/faqs.dart';
 import 'package:roboclub_flutter/screens/notification_screen.dart';
 
 AppBar appBar(context,
-    {String strTitle,
-    bool isNotification = false,
+    {required String strTitle,
+     bool isNotification = false,
     isDrawer = false,
     isFaq =false,
-    GlobalKey<ScaffoldState> scaffoldKey}) {
+    GlobalKey<ScaffoldState>? scaffoldKey}) {
   var vpH = getViewportHeight(context);
   var vpW = getViewportWidth(context);
-  var iconcolor = isDrawer ? Theme.of(context).primaryColorLight : Colors.black;
+  var iconcolor = Theme.of(context).primaryColorLight;
   var bgcolor = Theme.of(context).primaryColor;
   var titlestyle = isDrawer
       ? TextStyle(
@@ -23,7 +23,7 @@ AppBar appBar(context,
           fontFamily: "Signatra",
           fontSize: vpH * 0.035,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          // color: Colors.black,
         );
 
   return AppBar(
@@ -34,7 +34,7 @@ AppBar appBar(context,
             size: vpH*0.05,),
             color: iconcolor,
             onPressed: () {
-              scaffoldKey.currentState.openDrawer();
+              scaffoldKey!.currentState!.openDrawer();
             },
           )
         : IconButton(
@@ -79,7 +79,7 @@ AppBar appBar(context,
               :null
       ),
     ],
-    backgroundColor: isDrawer ? bgcolor : Colors.white,
+    backgroundColor:bgcolor,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(20.0),

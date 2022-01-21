@@ -8,7 +8,7 @@ class DeveloperCard extends StatelessWidget {
   final String img;
   final String linkedin;
 
-  const DeveloperCard({Key key, this.name, this.img, this.linkedin})
+  const DeveloperCard({Key? key, this.name, required this.img, required this.linkedin})
       : super(key: key);
 
   @override

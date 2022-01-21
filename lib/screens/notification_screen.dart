@@ -24,7 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
-    User _user = Provider.of<UserProvider>(context).getUser;
+    ModelUser _user = Provider.of<UserProvider>(context).getUser;
     return SafeArea(
       child: Scaffold(
         appBar: appBar(
@@ -39,17 +39,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
               height: vpH * 0.9,
               width: vpW,
               child: StreamBuilder<QuerySnapshot>(
-                stream: Firestore.instance.collection('/notifications')
+                stream: FirebaseFirestore.instance.collection('/notifications')
                 .orderBy('date', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final List<DocumentSnapshot> documents =
-                        snapshot.data.documents;
+                        snapshot.data!.docs;
                     return ListView(
                       physics: BouncingScrollPhysics(),
                       children: documents
                           .map(
-                            (doc) => NotificationCard(Notifications.fromMap(doc.data)))
+                            (doc) => NotificationCard(Notifications.fromMap(doc.data() as Map<String,dynamic>)))
                           .toList(),
                     );
                   } else if (snapshot.hasError) {
