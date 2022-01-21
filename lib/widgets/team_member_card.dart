@@ -9,11 +9,11 @@ import 'package:roboclub_flutter/models/user.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import '../helper/dimensions.dart';
 
-class Team2Card extends StatelessWidget {
+class TeamMemberCard extends StatelessWidget {
   final dynamic member;
   final void Function(ModelUser) callback;
 
-  const Team2Card({Key? key, this.member, required this.callback})
+  const TeamMemberCard({Key? key, this.member, required this.callback})
       : super(key: key);
 
   @override
