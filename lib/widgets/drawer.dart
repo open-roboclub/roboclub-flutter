@@ -15,7 +15,6 @@ import 'package:roboclub_flutter/screens/project_screen.dart';
 import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/screens/team_screen.dart';
 import 'package:roboclub_flutter/screens/tutorial_screen.dart';
-import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 Drawer appdrawer(context, {String? page}) {
   var vpH = getViewportHeight(context);
@@ -92,6 +91,7 @@ Drawer appdrawer(context, {String? page}) {
         Navigator.of(context).pop();
         if (title != page) {
           if (page == "Events") {
+            print(_getScreen(title));
             Get.to(() => _getScreen(title));
           } else if (title == "Events") {
             Navigator.of(context).pop();
@@ -102,10 +102,8 @@ Drawer appdrawer(context, {String? page}) {
               ),
             );
           } else {
-            Get.off(() => _getScreen(title))!.then((value) {
-              print("Then function");
-              Get.delete();
-            });
+            //TODO: Not able to go to new screen without preventDuplicates
+            Get.off(() => _getScreen(title), preventDuplicates: false);
           }
         }
       },
