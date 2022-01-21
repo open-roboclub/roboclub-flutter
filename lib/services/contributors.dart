@@ -8,8 +8,8 @@ import 'dart:async';
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class ContributorService extends GetxController {
-  var contributorsList = [].obs;
-  var isLoading = false.obs;
+  final List<Contributor> contributorsList = <Contributor>[].obs;
+  final isLoading = false.obs;
 
   @override
   void onInit() {
@@ -49,7 +49,7 @@ class ContributorService extends GetxController {
         Contributor contributor = Contributor.fromMap(element.data());
         DateTime _parsed = DateTime.parse(contributor.date);
         contributor.date = DateFormat('yMMMd').format(_parsed);
-        contributorsList.add(Contributor.fromMap(element.data()));
+        contributorsList.add(contributor);
       });
       isLoading(false);
     });
