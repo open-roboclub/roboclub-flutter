@@ -56,7 +56,7 @@ Drawer appdrawer(context, {String? page}) {
           return RegMembersScreen();
         }
       // break;
-      case "PCB Slots Booking":
+      case "Book PCB Slots":
         {
           return PcbSlots();
         }
@@ -171,8 +171,8 @@ Drawer appdrawer(context, {String? page}) {
           _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
           _tileBuilder(Icons.person_pin_rounded, "Members", page == "Members"),
           _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
-          _tileBuilder(Icons.book_online, "PCB Slots Booking",
-              page == "PCB Slots Booking"),
+          _tileBuilder(
+              Icons.book_online, "Book PCB Slots", page == "Book PCB Slots"),
           _tileBuilder(
               CustomIcons.contribution, "Contributors", page == "Contributors"),
           _tileBuilder(CustomIcons.admin, "Admin Panel", page == "Admin Panel"),
