@@ -18,10 +18,9 @@ import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
-  // debugPaintSizeEnabled = true;
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   MyLocalStorage _storage = MyLocalStorage();
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
@@ -32,15 +31,12 @@ void main() async {
     _messaging.subscribeToTopic('newNotification');
     if (value == "") {
       _messaging.getToken().then((fcmToken) {
-        // print("fcm saved to storage!");
-        // NotificationService().postDeviceToken(fcmToken: fcmToken!);
         _storage.setDeviceToken(fcmToken!);
       });
     }
   });
   var isOnboarding = await _storage.getOnboarding();
   var darkModeOn = await _storage.getThemepref();
-  // var deathScreen = await Remoteconfig().showDeathScreen();
   runApp(
     MultiProvider(
       providers: [

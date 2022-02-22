@@ -43,9 +43,19 @@ class Remoteconfig {
       return false;
     }
   }
+
   Future<bool> fetchIsPaymentOpen() async {
     bool _content = remoteConfig.getBool('isPayNowOpen');
     return _content;
+  }
+  // Future<bool> fetchIsSlot() async {
+  //   bool _content = remoteConfig.getBool('isPayNowOpen');
+  //   return _content;
+  // }
+
+  bool fetchBookSlots() {
+    bool _pcbSlot = remoteConfig.getBool('pcb_booking');
+    return _pcbSlot;
   }
 
   Future setCache() async {
