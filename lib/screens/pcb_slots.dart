@@ -1,6 +1,8 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 // import 'package:roboclub_flutter/forms/project.dart';
 import 'package:roboclub_flutter/services/auth.dart';
@@ -18,6 +20,7 @@ class PcbSlots extends StatefulWidget {
 class _PcbSlotsState extends State<PcbSlots> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final SlotService _slotService = SlotService();
+  final Remoteconfig remoteConfig = Remoteconfig();
   List slotValue = [];
   Map slot = {};
   bool eligible = true;
@@ -31,12 +34,13 @@ class _PcbSlotsState extends State<PcbSlots> {
     _slotService.fetch().then((value) {
       setState(() {
         slot = value;
-        print(slot);
+        // print(slot);
       });
     });
   }
 
-  void checkForEligibility(String email, String slotKey) {
+  void checkForEligibility(String email, String slotKey) async {
+    eligible = true;
     slotValue = slot[slotKey] as List;
     if (slotValue.length == 15) {
       setState(() {
@@ -53,14 +57,53 @@ class _PcbSlotsState extends State<PcbSlots> {
           });
         }
       });
-      slot[slotKey].add(email);
     }
     if (email == "") {
       setState(() {
         eligible = false;
       });
-    } else {
+    } else if (await _slotService.isMember(email)) {
+      setState(() {
+        slot[slotKey].add(email);
+      });
       bookSlot(slot, update);
+    } else {
+      setState(() {
+        eligible = false;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Text(
+                "This registration is for members of AMURoboclub only!",
+                style: TextStyle(
+                  // color: Theme.of(context).primaryColor,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: vpH * 0.02,
+                  fontFamily: 'OpenSans',
+                ),
+              ),
+              actions: [
+                FlatButton(
+                  child: Text(
+                    "OK",
+                    style: TextStyle(
+                      // color: Theme.of(context).primaryColor,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: vpH * 0.02,
+                      fontFamily: 'OpenSans',
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 
@@ -140,6 +183,26 @@ class _PcbSlotsState extends State<PcbSlots> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Align(
+            //     alignment: Alignment.topCenter,
+            //     // margin: EdgeInsets.only(top: vpH / 4),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //       children: [
+            //         Text(
+            //           "Book slots for :",
+            //           style: TextStyle(fontWeight: FontWeight.bold),
+            //         ),
+
+            //       ],
+            //     )),
+            Text(
+              remoteConfig.fetchSlotDate(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            // SizedBox(
+            //   height: vpH / 4,
+            // ),
             ...List.generate(slot.keys.length, (index) {
               return Center(
                 child: Padding(

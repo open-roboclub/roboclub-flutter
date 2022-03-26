@@ -57,8 +57,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isOnboarding;
-  // final bool showDeathScreen;
-
 
   const MyApp({Key? key, this.isOnboarding = false}) : super(key: key);
 

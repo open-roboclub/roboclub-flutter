@@ -33,6 +33,11 @@ class Remoteconfig {
     return _content;
   }
 
+  String fetchSlotDate() {
+    String _content = remoteConfig.getString('slot_date');
+    return _content;
+  }
+
   Future<bool> isUpdateRequired() async {
     int latestVersion = remoteConfig.getInt('updateVersion');
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
