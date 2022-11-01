@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/models/user.dart';
@@ -393,7 +394,8 @@ class _ProfileFormState extends State<ProfileForm> {
                       initialValue: _user.about,
                       maxLines: null,
                       maxLength: 500,
-                      maxLengthEnforced: true,
+                      // maxLengthEnforced: true,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(
                         color: Colors.purple[200],
                         fontFamily: 'OpenSans',
@@ -465,7 +467,8 @@ class _ProfileFormState extends State<ProfileForm> {
                       initialValue: _user.interests,
                       maxLines: null,
                       maxLength: 200,
-                      maxLengthEnforced: true,
+                      // maxLengthEnforced: true,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(
                         color: Colors.purple[200],
                         fontFamily: 'OpenSans',
@@ -500,7 +503,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         horizontal: vpW * 0.05, vertical: vpH * 0.002),
                     child: TextFormField(
                       maxLength: 10,
-                      maxLengthEnforced: true,
+                      // maxLengthEnforced: true,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       initialValue: _user.contact,
                       style: TextStyle(
                         color: Colors.purple[200],
@@ -643,7 +647,8 @@ class _ProfileFormState extends State<ProfileForm> {
                     child: TextFormField(
                       initialValue: _user.quote,
                       maxLength: 100,
-                      maxLengthEnforced: true,
+                      // maxLengthEnforced: true,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(
                         color: Colors.purple[200],
                         fontFamily: 'OpenSans',

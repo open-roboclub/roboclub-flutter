@@ -34,8 +34,8 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
         child: Stack(
-          overflow: Overflow.visible,
-          children: [
+          clipBehavior: Clip.none,
+           children: [
             Container(
               height: vpH * 0.15,
               width: vpW * 0.818,
