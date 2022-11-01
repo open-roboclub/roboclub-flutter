@@ -333,24 +333,37 @@ class _AboutScreenState extends State<AboutScreen>
                               ),
                             ),
                             Container(
-                                height: vpH * 0.25,
-                                width: vpW,
-                                child: Column(
-                                  children: [
-                                    DeveloperCard(
-                                      name: "Rishabh Sharma",
-                                      img: 'assets/img/rishabh.jpg',
-                                      linkedin:
-                                          "https://www.linkedin.com/in/rishabh-sharma-11242b174/",
-                                    ),
-                                    DeveloperCard(
-                                      name: "Samiksha Agrawal",
-                                      img: 'assets/img/samiksha.jpeg',
-                                      linkedin:
-                                          "https://www.linkedin.com/in/samiksha-agrawal-53859b195/",
-                                    ),
-                                  ],
-                                )),
+                              height: vpH * 0.25,
+                              width: vpW,
+                              child: Column(
+                                children: [
+                                  DeveloperCard(
+                                    name: "Rishabh Sharma",
+                                    img: 'assets/img/rishabh.jpg',
+                                    linkedin:
+                                        "https://www.linkedin.com/in/rishabh-sharma-11242b174/",
+                                  ),
+                                  DeveloperCard(
+                                    name: "Samiksha Agrawal",
+                                    img: 'assets/img/samiksha.jpeg',
+                                    linkedin:
+                                        "https://www.linkedin.com/in/samiksha-agrawal-53859b195/",
+                                  ),
+                                  DeveloperCard(
+                                    name: "Dhruv Garg",
+                                    img: 'assets/img/dhruv.jpeg',
+                                    linkedin:
+                                        "https://www.linkedin.com/in/dhruv-garg-aa9781202/",
+                                  ),
+                                  DeveloperCard(
+                                    name: "Harsh Taliwal",
+                                    img: 'assets/img/harsh.jpeg',
+                                    linkedin:
+                                        "https://www.linkedin.com/in/harsh-taliwal-1a3b23195/",
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
