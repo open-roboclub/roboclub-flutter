@@ -8,7 +8,8 @@ class DeveloperCard extends StatelessWidget {
   final String img;
   final String linkedin;
 
-  const DeveloperCard({Key? key, this.name, required this.img, required this.linkedin})
+  const DeveloperCard(
+      {Key? key, this.name, required this.img, required this.linkedin})
       : super(key: key);
 
   @override
@@ -18,7 +19,7 @@ class DeveloperCard extends StatelessWidget {
     TextStyle _titlestyle = TextStyle(
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.italic,
-      fontSize: vpH * 0.026,
+      fontSize: 18,
     );
     return Padding(
       padding:
@@ -56,11 +57,9 @@ class DeveloperCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          FittedBox(
-                            child: Text(
-                              name,
-                              style: _titlestyle,
-                            ),
+                          Text(
+                            name,
+                            style: _titlestyle,
                           ),
                           // Padding(padding: EdgeInsets.symmetric(vertical:vpH*0.006),
                           //   child:Text(

@@ -176,12 +176,12 @@ class _AboutScreenState extends State<AboutScreen>
                           color: Colors.white,
                         ),
                         width: vpW * 0.01,
-                        height: vpH * 0.85,
+                        height: vpH,
                         child: Column(
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 20.0),
+                                  horizontal: 10.0, vertical: 15.0),
                               child: Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
@@ -332,10 +332,11 @@ class _AboutScreenState extends State<AboutScreen>
                                 ),
                               ),
                             ),
-                            Container(
-                              height: vpH * 0.25,
-                              width: vpW,
-                              child: Column(
+                            Expanded(
+                              // height: vpH * 0.4,
+                              // width: vpW,
+                              child: ListView(
+                                physics: ClampingScrollPhysics(),
                                 children: [
                                   DeveloperCard(
                                     name: "Rishabh Sharma",
