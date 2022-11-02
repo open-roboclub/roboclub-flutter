@@ -1,6 +1,12 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
+import 'package:roboclub_flutter/helper/pdf_manager.dart';
 import 'package:roboclub_flutter/models/member.dart';
+import 'package:roboclub_flutter/services/email.dart';
+import 'package:roboclub_flutter/services/member.dart';
 import '../helper/dimensions.dart';
 
 class MemberCard extends StatefulWidget {
@@ -18,6 +24,8 @@ class MemberCard extends StatefulWidget {
 
 class _MemberCardState extends State<MemberCard> {
   bool isPayOpen = false;
+  File? pdf;
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +34,13 @@ class _MemberCardState extends State<MemberCard> {
         isPayOpen = value;
       });
     });
+  }
+
+  Future<void> generatePdf() async {
+    var regNo = 'RT';
+    regNo += new Random.secure().nextInt(1 << 6).toString();
+    // print(regNo);
+    pdf = await PdfManager().createRegSlip(widget.member, regNo);
   }
 
   @override
@@ -98,7 +113,22 @@ class _MemberCardState extends State<MemberCard> {
                     )
               : !widget.member.isPaid
                   ? TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await MemberService()
+                            .updatePaymentStatus(widget.member)
+                            .then((value) async {
+                          await generatePdf();
+                          EmailService().sendRegistrationEmail(
+                            recipent: widget.member.email,
+                            payment: true,
+                            pdf: pdf,
+                            username: widget.member.name,
+                          );
+                        });
+                        setState(() {
+                          widget.member.isPaid = true;
+                        });
+                      },
                       icon: Text("Payment due"),
                       label: Icon(Icons.access_time_rounded))
                   : TextButton.icon(

@@ -1,22 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:roboclub_flutter/models/contributor.dart';
 
 import 'dart:async';
 
-
-
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-class ContributorService {
+class ContributorService extends GetxController {
+  final List<Contributor> contributorsList = <Contributor>[].obs;
+  final isLoading = false.obs;
 
-  Future<bool> postContributor(
-      {
-      String? name,
-      String? description,
-      String? amount,
-      String? representativeImg,
-      String? date}) async {
-        
+  @override
+  void onInit() {
+    isLoading(true);
+    fetchContributors();
+    super.onInit();
+  }
+
+  Future<bool> postContributor({
+    String? name,
+    String? description,
+    String? amount,
+    String? representativeImg,
+    String? date,
+  }) async {
     Map<String, dynamic> data = {
       "name": name,
       "description": description,
@@ -26,24 +34,24 @@ class ContributorService {
     };
 
     await _firestore.collection("/contributors").add(data).then((value) {
-
       print(value);
     });
     return true;
   }
 
-  Future<List<Contributor>> fetchContributors() async {
-    List<Contributor> list = [];
-
-    await _firestore.collection("/contributors")
-      .orderBy('date', descending: true)
-      .get()
-      .then((value) {
-
+  Future<void> fetchContributors() async {
+    await _firestore
+        .collection("/contributors")
+        .orderBy('date', descending: true)
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
-        list.add(Contributor.fromMap(element.data()));
+        Contributor contributor = Contributor.fromMap(element.data());
+        DateTime _parsed = DateTime.parse(contributor.date);
+        contributor.date = DateFormat('yMMMd').format(_parsed);
+        contributorsList.add(contributor);
       });
+      isLoading(false);
     });
-    return list;
   }
 }

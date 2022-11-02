@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/helper/custom_icons.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
@@ -15,6 +17,9 @@ import 'package:roboclub_flutter/screens/reg_members_screen.dart';
 import 'package:roboclub_flutter/screens/team_screen.dart';
 import 'package:roboclub_flutter/screens/tutorial_screen.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
+
+import '../screens/pcb_slots.dart';
 
 Drawer appdrawer(context, {String? page}) {
   var vpH = getViewportHeight(context);
@@ -22,7 +27,7 @@ Drawer appdrawer(context, {String? page}) {
   var activeColor = Theme.of(context).primaryColor;
   var inActiveColor = Theme.of(context).unselectedWidgetColor;
   bool _isDark = false;
-
+  var config = Remoteconfig();
   Widget _getScreen(String title) {
     switch (title) {
       case "Events":
@@ -54,6 +59,10 @@ Drawer appdrawer(context, {String? page}) {
           return RegMembersScreen();
         }
       // break;
+      case "Book PCB Slots":
+        {
+          return PcbSlots();
+        }
       case "Admin Panel":
         {
           var _user = Provider.of<UserProvider>(context).getUser;
@@ -91,12 +100,8 @@ Drawer appdrawer(context, {String? page}) {
         Navigator.of(context).pop();
         if (title != page) {
           if (page == "Events") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => _getScreen(title),
-              ),
-            );
+            print(_getScreen(title));
+            Get.to(() => _getScreen(title));
           } else if (title == "Events") {
             Navigator.of(context).pop();
             Navigator.pushReplacement(
@@ -106,12 +111,8 @@ Drawer appdrawer(context, {String? page}) {
               ),
             );
           } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => _getScreen(title),
-              ),
-            );
+            //TODO: Not able to go to new screen without preventDuplicates
+            Get.off(() => _getScreen(title), preventDuplicates: false);
           }
         }
       },
@@ -128,6 +129,20 @@ Drawer appdrawer(context, {String? page}) {
             fontSize: vpH * 0.023,
           ),
         ),
+        trailing: title == "Book PCB Slots"
+            ? SizedBox(
+                width: 25,
+                height: 25,
+                child: SkeletonLoader(
+                    baseColor: Colors.amber,
+                    direction: SkeletonDirection.rtl,
+                    highlightColor: Colors.grey.shade300,
+                    builder: ImageIcon(
+                      AssetImage("assets/img/Vercera.png"),
+                      color: Colors.amber,
+                    )),
+              )
+            : null,
       ),
     );
   }
@@ -165,6 +180,10 @@ Drawer appdrawer(context, {String? page}) {
           _tileBuilder(CustomIcons.teams, "Teams", page == "Teams"),
           _tileBuilder(Icons.person_pin_rounded, "Members", page == "Members"),
           _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
+          config.fetchBookSlots()
+              ? _tileBuilder(
+                  Icons.book_online, "Book PCB Slots", page == "Book PCB Slots")
+              : SizedBox(),
           _tileBuilder(
               CustomIcons.contribution, "Contributors", page == "Contributors"),
           _tileBuilder(CustomIcons.admin, "Admin Panel", page == "Admin Panel"),

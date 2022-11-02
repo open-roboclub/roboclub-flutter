@@ -251,7 +251,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
     return SafeArea(
         child: Scaffold(
             key: _scaffoldKey,
-            drawer: appdrawer(context, page: "Registered Members"),
+            drawer: appdrawer(context, page: "Members"),
             appBar: appBar(
               context,
               strTitle: "MEMBERS",

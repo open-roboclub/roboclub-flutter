@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 // import 'package:roboclub_flutter/configs/remoteConfig.dart';
 import 'package:roboclub_flutter/helper/themes.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +19,9 @@ import 'package:roboclub_flutter/services/auth.dart';
 import 'package:roboclub_flutter/services/shared_prefs.dart';
 
 void main() async {
-  // debugPaintSizeEnabled = true;
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   MyLocalStorage _storage = MyLocalStorage();
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
@@ -32,15 +32,12 @@ void main() async {
     _messaging.subscribeToTopic('newNotification');
     if (value == "") {
       _messaging.getToken().then((fcmToken) {
-        // print("fcm saved to storage!");
-        // NotificationService().postDeviceToken(fcmToken: fcmToken!);
         _storage.setDeviceToken(fcmToken!);
       });
     }
   });
   var isOnboarding = await _storage.getOnboarding();
   var darkModeOn = await _storage.getThemepref();
-  // var deathScreen = await Remoteconfig().showDeathScreen();
   runApp(
     MultiProvider(
       providers: [
@@ -63,7 +60,6 @@ class MyApp extends StatelessWidget {
   final bool isOnboarding;
   // final bool showDeathScreen;
 
-
   const MyApp({Key? key, this.isOnboarding = false}) : super(key: key);
 
   @override
@@ -78,7 +74,7 @@ class MyApp extends StatelessWidget {
       }
     });
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'AMURoboclub',
       debugShowCheckedModeBanner: false,
       theme: themeNotifier.getTheme(),
