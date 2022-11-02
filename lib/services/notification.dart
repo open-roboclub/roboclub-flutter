@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:device_info/device_info.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,12 +15,12 @@ class NotificationService {
       "deviceToken": fcmToken,
       "createdAt": FieldValue.serverTimestamp(),
       "platform": Platform.operatingSystem,
-      "androidId": androidInfo.androidId,
+      "androidId": androidInfo.id,
     };
 
     await _firestore
         .collection("/pushTokens")
-        .doc(androidInfo.androidId)
+        .doc(androidInfo.id)
         .set(data);
   }
 

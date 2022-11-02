@@ -107,10 +107,10 @@ class PdfManager {
     final logoImage = (await rootBundle.load("assets/img/amuroboclubLogo.png"))
         .buffer
         .asUint8List();
-    final priyankaSign = (await rootBundle.load("assets/img/priyanka_sign.png"))
+    final maazSign = (await rootBundle.load("assets/img/priyanka_sign.png"))
         .buffer
         .asUint8List();
-    final rishabSign = (await rootBundle.load("assets/img/rishab_sign.png"))
+    final zaidSign = (await rootBundle.load("assets/img/rishab_sign.png"))
         .buffer
         .asUint8List();
 
@@ -146,7 +146,7 @@ class PdfManager {
                     ),
                     SizedBox(height: 5),
                     getText(
-                      "(Session 2021 - 2022)",
+                      "(Session 2022 - 2023)",
                       fontSize: 13,
                     ),
                     SizedBox(height: 20),
@@ -186,8 +186,8 @@ class PdfManager {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            getText("Total Fees Paid: Rs. 150"),
-                            getText("Registration Validity: Session 2021-22"),
+                            getText("Total Fees Paid: Rs. 200"),
+                            getText("Registration Validity: Session 2022-23"),
                           ],
                         ),
                       ],
@@ -196,9 +196,9 @@ class PdfManager {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        getSignView(priyankaSign, "Priyanka Gupta"),
+                        getSignView(maazSign, "Maaz Bin Asad"),
                         SizedBox(width: 10),
-                        getSignView(rishabSign, "Rishab Sharma"),
+                        getSignView(zaidSign, "Zaid Akhtar"),
                       ],
                     ),
                     SizedBox(height: 10),
