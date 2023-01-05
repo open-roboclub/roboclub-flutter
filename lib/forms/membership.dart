@@ -87,6 +87,7 @@ class _MembershipState extends State<Membership> {
     'M.Sc.',
     'M.Tech',
     'Polytechnic',
+    'BE',
   ];
   var years = [
     '1st',
