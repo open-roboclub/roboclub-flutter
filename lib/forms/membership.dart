@@ -151,7 +151,7 @@ class _MembershipState extends State<Membership> {
     );
 
 //     // alert after successful form submission
-    Widget okButton = FlatButton(
+    Widget okButton = TextButton(
       child: Text(
         "OK",
         style: kLabelStyle,
@@ -162,7 +162,7 @@ class _MembershipState extends State<Membership> {
       },
     );
 
-    Widget okButton1 = FlatButton(
+    Widget okButton1 = TextButton(
       child: Text(
         "OK",
         style: kLabelStyle,
@@ -568,14 +568,17 @@ class _MembershipState extends State<Membership> {
                       ? Container(
                           padding: EdgeInsets.all(15),
                           width: vpW * 0.5,
-                          child: RaisedButton(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
                             elevation: vpH * 0.5,
-                            onPressed: () {},
+                          
                             padding: EdgeInsets.all(15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
-                            color: Theme.of(context).primaryColor,
+                            primary: Theme.of(context).primaryColor,
+                            ),
+                              onPressed: () {},
                             child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
@@ -584,8 +587,17 @@ class _MembershipState extends State<Membership> {
                       : Container(
                           padding: EdgeInsets.all(15),
                           width: vpW * 0.5,
-                          child: RaisedButton(
+                          child: ElevatedButton(
+
+                            style: ElevatedButton.styleFrom(
                             elevation: vpH * 0.5,
+
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            primary: Theme.of(context).primaryColor,
+                            ),
                             onPressed: () async {
                               setState(() {
                                 _loading = true;
@@ -665,11 +677,7 @@ class _MembershipState extends State<Membership> {
                                 });
                               }
                             },
-                            padding: EdgeInsets.all(15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            color: Theme.of(context).primaryColor,
+                           
                             child: Text(
                               "Submit",
                               style: TextStyle(

@@ -241,8 +241,11 @@ class _ProjectInfoState extends State<ProjectInfo> {
                                         },
                                       ),
                                     ),
-                                    FlatButton(
-                                      color: Color(0xFFFF9C01),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                      primary: Color(0xFFFF9C01),
+                                      onSurface: Colors.white,
+                                      ),
                                       child: Container(
                                         width: vpW * 0.32,
                                         child: Padding(
@@ -255,7 +258,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                                           ),
                                         ),
                                       ),
-                                      textColor: Colors.white,
+                                      
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()) {
                                           await updateProgress();

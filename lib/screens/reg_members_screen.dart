@@ -186,7 +186,7 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                 style: kLabelStyle,
               ),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text(
                     "OK",
                     style: kLabelStyle,

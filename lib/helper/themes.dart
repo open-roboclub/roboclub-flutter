@@ -33,9 +33,6 @@ final ThemeData lightTheme = ThemeData(
   buttonColor: Color(0xff6739d6),
   toggleableActiveColor: Color(0xff4a23a9),
   secondaryHeaderColor: Color(0xffefeafb),
-  textSelectionColor: Color(0xffbeabed),
-  cursorColor: Color(0xff6739d6),
-  textSelectionHandleColor: Color(0xff9d80e5),
   backgroundColor: Color(0xffbeabed),
   dialogBackgroundColor: Color(0xffffffff),
   indicatorColor: Color(0xff5c2cd3),
@@ -478,7 +475,7 @@ final ThemeData lightTheme = ThemeData(
         style: BorderStyle.none,
       ),
     ),
-  ),
+  ), textSelectionTheme: TextSelectionThemeData(cursorColor: Color(0xff6739d6), selectionColor: Color(0xffbeabed), selectionHandleColor: Color(0xff9d80e5),),
   // dialogTheme: DialogTheme(
   //   shape: StadiumBorder(
   //     side: BorderSide(
@@ -523,9 +520,6 @@ final ThemeData darkTheme = ThemeData(
   buttonColor: Color(0xff6739d6),
   toggleableActiveColor: Color(0xff673bd6),
   secondaryHeaderColor: Color(0xff616161),
-  textSelectionColor: Color(0xff6739d6),
-  cursorColor: Color(0xff6739d6),
-  textSelectionHandleColor: Color(0xff6739d6),
   backgroundColor: Color(0xff616161),
   dialogBackgroundColor: Color(0xff424242),
   indicatorColor: Color(0xff673ad6),
@@ -983,5 +977,5 @@ final ThemeData darkTheme = ThemeData(
         style: BorderStyle.none,
       ),
     ),
-  ),
+  ), textSelectionTheme: TextSelectionThemeData(cursorColor: Color(0xff6739d6), selectionColor: Color(0xff6739d6), selectionHandleColor: Color(0xff6739d6),),
 );

@@ -24,14 +24,19 @@ class _AdminScreenState extends State<AdminScreen> {
 
   Widget _button(String title, BuildContext context, bool isGoogle) {
     return PhysicalModel(
-      color: Colors.transparent,
+      color: Colors.blue,
       shadowColor: Colors.blue.withOpacity(0.3),
       borderRadius: BorderRadius.all(Radius.circular(50)),
       elevation: 8.0,
-      child: FlatButton(
-        color: isGoogle ? Color(0xffFF9C01) : Colors.white,
-        textColor: !isGoogle ? Color(0xffFF9C01) : Colors.white,
+      child: TextButton(
+        style: TextButton.styleFrom(
+        primary: isGoogle ? Color(0xffFF9C01) : Colors.white,
+        onSurface: !isGoogle ? Color(0xffFF9C01) : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
+
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(35.0)),
+        ),
         onPressed: () async {
           if (isGoogle) {
             setState(() {
@@ -68,11 +73,12 @@ class _AdminScreenState extends State<AdminScreen> {
                       ),
                     ),
                     actions: <Widget>[
-                      FlatButton(
-                        color: Colors.amber,
+                      TextButton(
+                         style: TextButton.styleFrom(foregroundColor: Colors.amber, fixedSize: vpH * 0.025,
+                         ),
                         child: Text(
                           'Ok',
-                          style: TextStyle(fontSize: vpH * 0.025),
+                         
                         ),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
@@ -92,8 +98,7 @@ class _AdminScreenState extends State<AdminScreen> {
             });
           }
         },
-        shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(35.0)),
+        
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,

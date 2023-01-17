@@ -141,8 +141,10 @@ class _EventScreenState extends State<EventScreen> {
             subtitle: Text(message.notification!.body ?? ""),
           ),
           actions: <Widget>[
-            FlatButton(
-              color: Colors.amber,
+            TextButton(
+              style: TextButton.styleFrom(
+              primary: Colors.amber,
+              ),
               child: Text('Show'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -161,8 +163,10 @@ class _EventScreenState extends State<EventScreen> {
                 }
               },
             ),
-            FlatButton(
-              color: Colors.amber,
+            TextButton(
+              style: TextButton.styleFrom(
+              primary: Colors.amber,
+              ),
               child: Text('Cancel'),
               onPressed: () => Navigator.of(context).pop(),
             ),
@@ -293,13 +297,13 @@ class _EventScreenState extends State<EventScreen> {
           title: Text(title),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(btnLabel),
               onPressed: () => launch(
                 'https://play.google.com/store/apps/details?id=amuroboclub.roboclub_flutter',
               ),
             ),
-            FlatButton(
+            TextButton(
               child: Text(btnLabelCancel),
               onPressed: () {
                 prefs.setCheckUpdate(DateTime.now().toIso8601String());

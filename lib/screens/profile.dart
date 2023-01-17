@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void callSnakBar(BuildContext context) {
     Timer(
       Duration(seconds: 1),
-      () => Scaffold.of(context).showSnackBar(
+      () => ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Color(0xFFFF9C01),
           content: Row(
@@ -551,11 +551,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: vpW * 0.08,
                                   vertical: vpH * 0.005),
-                              child: FlatButton(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4.0)),
-                                textColor: Colors.white,
-                                color: Color(0xff6739d6),
+                                onSurface: Colors.white,
+                                primary: Color(0xff6739d6),
+                                ),
                                 onPressed: () {
                                   launch(_user.cvLink);
                                 },
