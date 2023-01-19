@@ -42,7 +42,7 @@ class ProjectService {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        list.add(Project.fromMap(element.data()));
+       list.add(Project.fromMap(element.data()));
       });
     });
     return list;
