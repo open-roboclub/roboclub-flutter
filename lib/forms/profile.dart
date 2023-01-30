@@ -139,7 +139,7 @@ class _ProfileFormState extends State<ProfileForm> {
     );
 
     // alert after successful form submission
-    Widget okButton = FlatButton(
+    Widget okButton = TextButton(
       child: Text(
         "OK",
         style: kLabelStyle,
@@ -673,21 +673,31 @@ class _ProfileFormState extends State<ProfileForm> {
                   _loading ?Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                       elevation: vpH * 0.5,
-                      onPressed: () {} ,
                        padding: EdgeInsets.all(15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      color: Color(0xFFFF9C01),
+                      primary: Color(0xFFFF9C01),
+                      ),
+                      onPressed: () {} ,
                       child:  CircularProgressIndicator(),
                     )):
                   Container(
                     width: vpW * 0.5,
                     padding: EdgeInsets.all(15),
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                       elevation: vpH * 0.5,
+
+                      padding: EdgeInsets.all(12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      primary: Color(0xFFFF9C01),
+                    ),
                       onPressed: () async {
                         setState(() {
                           _loading=true;
@@ -712,11 +722,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           );
                         }
                       },
-                      padding: EdgeInsets.all(12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
+                      
                       child: Text(
                         "Save",
                         style: TextStyle(

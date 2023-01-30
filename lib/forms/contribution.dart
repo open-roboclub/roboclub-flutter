@@ -90,7 +90,7 @@ class _ContributionFormState extends State<ContributionForm> {
     );
 
     // alert after successful form submission
-    Widget okButton = FlatButton(
+    Widget okButton = TextButton(
       child: Text(
         "OK",
         style: kLabelStyle,
@@ -348,21 +348,31 @@ class _ContributionFormState extends State<ContributionForm> {
                   _loading ?Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                       elevation: vpH * 0.5,
-                      onPressed: () {} ,
                        padding: EdgeInsets.all(15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      color: Color(0xFFFF9C01),
+                      primary: Color(0xFFFF9C01),
+                      ),
+                      onPressed: () {} ,
                       child:  CircularProgressIndicator(),
                     )):
                   Container(
                     padding: EdgeInsets.all(15),
                     width: vpW * 0.5,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                       elevation: vpH * 0.5,
+
+                      padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      primary: Color(0xFFFF9C01),
+                      ),
                       onPressed: () async {
                         setState(() {
                           _loading = true;
@@ -397,11 +407,7 @@ class _ContributionFormState extends State<ContributionForm> {
                           );
                         }
                       },
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Color(0xFFFF9C01),
+                      
                       child: Text(
                         "Update",
                         style: TextStyle(

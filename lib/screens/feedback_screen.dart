@@ -103,7 +103,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                         FocusScope.of(context)
                                             .requestFocus(new FocusNode());
                                       });
-                                      Scaffold.of(context)
+                                      ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                         backgroundColor: Color(0xFFFF9C01),
                                         content: Row(

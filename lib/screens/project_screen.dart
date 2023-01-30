@@ -98,42 +98,19 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       PhysicalModel(
-                        color: Colors.transparent,
+                        color: Color.fromARGB(255, 87, 84, 199),
                         shadowColor: Colors.black.withOpacity(0.3),
                         borderRadius: BorderRadius.all(Radius.circular(50)),
                         elevation: 8.0,
-                        child: FlatButton(
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            width: vpW * 0.3,
-                            child: Center(
-                              child: Text(
-                                'Completed',
-                                style: textStyle,
-                              ),
-                            ),
-                          ),
-                          textColor:
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                             foregroundColor:
                               !_ongoingPressed ? Colors.white : Colors.black,
-                          color: !_ongoingPressed
+                          primary: !_ongoingPressed
                               ? Theme.of(context).primaryColor
-                              : Colors.white,
-                          onPressed: () => {
-                            setState(() {
-                              _ongoingPressed = false;
-                            })
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: vpW * 0.01,
-                      ),
-                      PhysicalModel(
-                        color: Colors.transparent,
-                        shadowColor: Colors.black.withOpacity(0.3),
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        elevation: 8.0,
-                        child: FlatButton(
+                              : Colors.black,
+
+                          ),
                           child: Container(
                             padding: EdgeInsets.all(10),
                             width: vpW * 0.3,
@@ -144,14 +121,44 @@ class _ProjectScreenState extends State<ProjectScreen> {
                               ),
                             ),
                           ),
-                          textColor:
-                              _ongoingPressed ? Colors.white : Colors.black,
-                          color: _ongoingPressed
-                              ? Theme.of(context).primaryColor
-                              : Colors.white,
+                         
                           onPressed: () => {
                             setState(() {
                               _ongoingPressed = true;
+                            })
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: vpW * 0.01,
+                      ),
+                      PhysicalModel(
+                        color: Color.fromARGB(255, 71, 80, 201),
+                        shadowColor: Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        elevation: 8.0,
+                        child: TextButton(
+                         style: TextButton.styleFrom(
+                          foregroundColor:
+                              _ongoingPressed ? Colors.white : Colors.black,
+                          primary: _ongoingPressed
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                         ),
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            width: vpW * 0.3,
+                            child: Center(
+                              child: Text(
+                                'Completed',
+                                style: textStyle,
+                              ),
+                            ),
+                          ),
+                          
+                          onPressed: () => {
+                            setState(() {
+                              _ongoingPressed = false;
                             })
                           },
                         ),

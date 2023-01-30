@@ -98,8 +98,11 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
                             shadowColor: Colors.black.withOpacity(0.3),
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             elevation: 8.0,
-                            child: FlatButton(
-                              color: Color(0xFFFF9C01),
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                onSurface: Colors.white,
+                              primary: Color(0xFFFF9C01),
+                              ),
                               child: Container(
                                 width: vpW * 0.12,
                                 child: Text(
@@ -111,7 +114,7 @@ class _CompletedProjectCardState extends State<CompletedProjectCard> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              textColor: Colors.white,
+                              
                               onPressed: () {
                                 Navigator.push(
                                   context,
