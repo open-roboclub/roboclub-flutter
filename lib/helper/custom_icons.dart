@@ -18,6 +18,7 @@
 ///         Homepage:  https://primer.style/octicons/
 ///
 import 'package:flutter/widgets.dart';
+import 'package:roboclub_flutter/screens/componentsIssued_screen.dart';
 
 class CustomIcons {
   CustomIcons._();
@@ -27,6 +28,7 @@ class CustomIcons {
 
   static const IconData admin = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData contribution = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ComponentIssued = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData events = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData feedback = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData projects = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);

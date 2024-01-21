@@ -52,7 +52,7 @@ class _OngoingProjectCardState extends State<OngoingProjectCard> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(6.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

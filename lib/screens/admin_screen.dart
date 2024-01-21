@@ -30,8 +30,7 @@ class _AdminScreenState extends State<AdminScreen> {
       elevation: 8.0,
       child: TextButton(
         style: TextButton.styleFrom(
-        primary: isGoogle ? Color(0xffFF9C01) : Colors.white,
-        onSurface: !isGoogle ? Color(0xffFF9C01) : Colors.white,
+        foregroundColor: isGoogle ? Color(0xffFF9C01) : Colors.white, disabledForegroundColor: !isGoogle ? Color(0xffFF9C01) : Colors.white.withOpacity(0.38),
         padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
 
         shape: new RoundedRectangleBorder(
@@ -45,6 +44,7 @@ class _AdminScreenState extends State<AdminScreen> {
             _auth.signInWithGoogle().then((user) {
               if (user != null) {
                 Provider.of<UserProvider>(context, listen: false).setUser =
+                    
                     user as ModelUser;
               }
               setState(() {

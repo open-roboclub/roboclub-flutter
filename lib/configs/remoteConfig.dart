@@ -2,7 +2,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Remoteconfig {
-  RemoteConfig remoteConfig = RemoteConfig.instance;
+  final remoteConfig = FirebaseRemoteConfig.instance;
 
   Future<bool> showHomeMmebershipOpen() async {
     await remoteConfig.fetchAndActivate();
@@ -25,6 +25,11 @@ class Remoteconfig {
 
   Future<String> fetchPaymentConfEmailTemplate() async {
     String _content = remoteConfig.getString('paymentConfirmationEmailContent');
+    return _content;
+  }
+
+  Future<String> fetchComponentsConfirmationEmail() async {
+    String _content = remoteConfig.getString('ComponentsIssuedConfirmationEmail');
     return _content;
   }
 

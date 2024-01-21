@@ -8,6 +8,7 @@ class EmailService {
   String apiKey = '';
   String regEmailText = '';
   String payEmailText = '';
+ // String compIssueConf = '';
   Future<void> sendRegistrationEmail({
     required String recipent,
     required bool payment,
@@ -17,6 +18,7 @@ class EmailService {
     apiKey = await Remoteconfig().sendGridApiFetch();
     regEmailText = await Remoteconfig().fetchRegEmailTemplate();
     payEmailText = await Remoteconfig().fetchPaymentConfEmailTemplate();
+   // compIssueConf = await Remoteconfig().fetchComponentsConfirmationEmail();
 
     String fileAttachment =
         pdf == null ? "" : base64Encode(pdf.readAsBytesSync());

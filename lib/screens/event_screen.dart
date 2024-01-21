@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:roboclub_flutter/configs/remoteConfig.dart';
+import 'package:roboclub_flutter/forms/RegisteredForComponents.dart';
 import 'package:roboclub_flutter/forms/event.dart';
 import 'package:roboclub_flutter/forms/membership.dart';
 import 'package:roboclub_flutter/helper/dimensions.dart';
@@ -435,6 +436,70 @@ class _EventScreenState extends State<EventScreen> {
                                 );
                               },
                             )),
+                    SizedBox(
+                      height: vpH * 0.04,
+                    ),
+                    
+                    showBanner
+                        ? SkeletonLoader(
+                            baseColor: Colors.black,
+                            direction: SkeletonDirection.rtl,
+                            highlightColor: Colors.cyan,
+                            builder: Container(
+                              clipBehavior: Clip.hardEdge,
+                              margin: EdgeInsets.only(
+                                  left: vpW * 0.10,
+                                  right: vpW * 0.10,
+                                  top: vpH * 0.0,
+                                  bottom: vpH * 0.04),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                horizontalTitleGap: 0,
+                                tileColor: Color.fromARGB(255, 114, 208, 222),
+                                title: FittedBox(
+                                  child: Text(
+                                    'Register For Components',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: vpH*0.01
+                                    ),
+                                  ),
+                                ),
+                                onTap: () async {
+                                  var result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return RegisteredForComponents();
+                                      },
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    if (result["success"]) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return RegMembersScreen();
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                                leading: ImageIcon(
+                                  AssetImage('assets/img/ard1.png'),
+                                ),
+                              ),
+                            ),
+                          ):
+
+
                     SizedBox(
                       height: vpH * 0.04,
                     ),

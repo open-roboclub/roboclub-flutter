@@ -361,8 +361,8 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                       ],
                     ),
                   ),
-            floatingActionButton: showButton
-                ? FloatingActionButton.extended(
+                 floatingActionButton: showButton
+                 ? FloatingActionButton.extended(
                     icon: Icon(Icons.check_circle_rounded),
                     label: Text("Apply now"),
                     onPressed: () async {
@@ -389,6 +389,8 @@ class _RegMembersScreenState extends State<RegMembersScreen> {
                       }
                     },
                   )
-                : null));
+                : null
+                )
+                );
   }
 }

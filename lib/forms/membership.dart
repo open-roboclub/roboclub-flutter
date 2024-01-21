@@ -88,7 +88,6 @@ class _MembershipState extends State<Membership> {
     'M.Tech',
     'Polytechnic',
     'BE',
-    
   ];
   var years = [
     '1st',
@@ -101,7 +100,6 @@ class _MembershipState extends State<Membership> {
 
   @override
   void initState() {
-   
     // _course = "Enter Course Name";
     super.initState();
     _loading = false;
@@ -570,15 +568,13 @@ class _MembershipState extends State<Membership> {
                           width: vpW * 0.5,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                            elevation: vpH * 0.5,
-                          
-                            padding: EdgeInsets.all(15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              elevation: vpH * 0.5, backgroundColor: Theme.of(context).primaryColor,
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
                             ),
-                            primary: Theme.of(context).primaryColor,
-                            ),
-                              onPressed: () {},
+                            onPressed: () {},
                             child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
@@ -588,15 +584,13 @@ class _MembershipState extends State<Membership> {
                           padding: EdgeInsets.all(15),
                           width: vpW * 0.5,
                           child: ElevatedButton(
-
                             style: ElevatedButton.styleFrom(
-                            elevation: vpH * 0.5,
-
-                            padding: EdgeInsets.all(15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            primary: Theme.of(context).primaryColor,
+                              elevation: vpH * 0.5,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
                             ),
                             onPressed: () async {
                               setState(() {
@@ -677,7 +671,6 @@ class _MembershipState extends State<Membership> {
                                 });
                               }
                             },
-                           
                             child: Text(
                               "Submit",
                               style: TextStyle(

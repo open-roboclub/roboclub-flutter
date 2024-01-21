@@ -108,8 +108,9 @@ class _AboutScreenState extends State<AboutScreen>
                                           builder: (context, _) {
                                             return GestureDetector(
                                               onTap: () {
+                                                // ignore: deprecated_member_use
                                                 launch(
-                                                    'https://amuroboclub.in/');
+                                                    'https://www.amuroboclub.tech/');
                                               },
                                               child: Column(
                                                 children: [
@@ -361,6 +362,12 @@ class _AboutScreenState extends State<AboutScreen>
                                     img: 'assets/img/harsh.jpeg',
                                     linkedin:
                                         "https://www.linkedin.com/in/harsh-taliwal-1a3b23195/",
+                                  ),
+                                  DeveloperCard(
+                                    name: "Siddique Ahmad",
+                                    img: 'assets/img/siddique.jpeg',
+                                    linkedin:
+                                        "https://www.linkedin.com/in/siddique-ahmad-10747a223/",
                                   ),
                                 ],
                               ),

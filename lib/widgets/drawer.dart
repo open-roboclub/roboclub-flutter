@@ -6,6 +6,7 @@ import 'package:roboclub_flutter/helper/dimensions.dart';
 import 'package:roboclub_flutter/provider/user_provider.dart';
 import 'package:roboclub_flutter/screens/about_screen.dart';
 import 'package:roboclub_flutter/screens/admin_screen.dart';
+import 'package:roboclub_flutter/screens/componentsIssued_screen.dart';
 import 'package:roboclub_flutter/screens/contributor_screen.dart';
 import 'package:roboclub_flutter/screens/event_screen.dart';
 import 'package:roboclub_flutter/screens/feedback_screen.dart';
@@ -48,6 +49,11 @@ Drawer appdrawer(context, {String? page}) {
       case "Contributors":
         {
           return ContributorScreen();
+        }
+      //break;
+      case "Issued Components":
+        {
+          return ComponentIssued();
         }
       case "Members":
         {
@@ -167,6 +173,8 @@ Drawer appdrawer(context, {String? page}) {
           _tileBuilder(CustomIcons.tutorials, "Tutorials", page == "Tutorials"),
           _tileBuilder(
               CustomIcons.contribution, "Contributors", page == "Contributors"),
+           _tileBuilder(
+              CustomIcons.ComponentIssued, "Issued Components", page == "Issued Components"),    
           _tileBuilder(CustomIcons.admin, "Admin Panel", page == "Admin Panel"),
           Divider(
             thickness: 2,
