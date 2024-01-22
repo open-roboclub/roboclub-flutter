@@ -243,8 +243,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                                     ),
                                     TextButton(
                                       style: TextButton.styleFrom(
-                                      primary: Color(0xFFFF9C01),
-                                      onSurface: Colors.white,
+                                      foregroundColor: Color(0xFFFF9C01), disabledForegroundColor: Colors.white.withOpacity(0.38),
                                       ),
                                       child: Container(
                                         width: vpW * 0.32,
@@ -391,6 +390,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            // ignore: deprecated_member_use
                             launch(currProject.link);
                           },
                           child: Padding(
